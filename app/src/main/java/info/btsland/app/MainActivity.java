@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     }
     protected void show(){
         System.out.print("测试");
+        System.out.print("测试2");
     }
 
 }

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--顶部导航栏-->
+    <TextView
+        android:id="@+id/tv_nav_title"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@android:color/holo_blue_light"
+        android:text="标题"
+        android:gravity="center"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/iv_nav_user"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginLeft="10dp"
+        android:background="@mipmap/ic_btsland"
+        app:layout_constraintLeft_toLeftOf="@id/tv_nav_title"
+        app:layout_constraintTop_toTopOf="@id/tv_nav_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_nav_title"/>
+    <TextView
+        android:id="@+id/tv_nav_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintRight_toRightOf="@id/tv_nav_title"
+        app:layout_constraintTop_toTopOf="@id/tv_nav_title"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_nav_title"/>
+    <!--底部导航栏-->
+
+    <TextView
+        android:id="@+id/tv_nav_home"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="首页"
+        android:gravity="center"
+        android:background="@drawable/tv_border"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_nav_market"/>
+    <TextView
+        android:id="@+id/tv_nav_market"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="行情"
+        android:gravity="center"
+        android:background="@drawable/tv_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_nav_purse"
+        app:layout_constraintLeft_toRightOf="@+id/tv_nav_home" />
+    <TextView
+        android:id="@+id/tv_nav_purse"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="钱包"
+        android:gravity="center"
+        android:background="@drawable/tv_border"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_nav_market"/>
+
+
+</android.support.constraint.ConstraintLayout>

@@ -28,6 +28,7 @@ public class MainActivity extends Activity {
         System.out.print("测试");
         System.out.print("测试2");
         System.out.print("测试3");
+        System.out.print("测试4");
     }
 
 }

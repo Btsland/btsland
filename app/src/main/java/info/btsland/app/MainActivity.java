@@ -30,5 +30,8 @@ public class MainActivity extends Activity {
         System.out.print("测试3");
         System.out.print("测试4");
     }
+    private void test(){
+        System.out.print("test1");
+    }
 
 }

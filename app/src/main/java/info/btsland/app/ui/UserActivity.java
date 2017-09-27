@@ -1,16 +1,17 @@
 package info.btsland.app.ui;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
-
 import info.btsland.app.R;
 
+/**
+ * 作者：谢建华
+ * 创建时间：2017/09/27
+ * 完成时间：
+ */
 public class UserActivity extends Activity {
     private TextView tvUserInfo;
     private TextView tvUserWhiteList;
@@ -23,7 +24,6 @@ public class UserActivity extends Activity {
         setContentView(R.layout.activity_user);
         init();
     }
-
     /**
      * 初始化
      */
@@ -35,27 +35,16 @@ public class UserActivity extends Activity {
         tvUserRecent=(TextView)findViewById(R.id.tv_user_recent);
         tvUserEntrust=(TextView)findViewById(R.id.tv_user_entrust);
         //绑定监听器
-        tvUserInfo.setOnTouchListener(new TextViewListener());
-        tvUserWhiteList.setOnTouchListener(new TextViewListener());
-        tvUserPower.setOnTouchListener(new TextViewListener());
-        tvUserRecent.setOnTouchListener(new TextViewListener());
-        tvUserEntrust.setOnTouchListener(new TextViewListener());
+        tvUserInfo.setOnTouchListener(new TextViewOnTouchListener());
+        tvUserWhiteList.setOnTouchListener(new TextViewOnTouchListener());
+        tvUserPower.setOnTouchListener(new TextViewOnTouchListener());
+        tvUserRecent.setOnTouchListener(new TextViewOnTouchListener());
+        tvUserEntrust.setOnTouchListener(new TextViewOnTouchListener());
     }
-
     /**
-     * 单击特效
-     * @param textView 被单击的tv
-     * @param motionEvent 当前状态
+     * 选项操作效果
      */
-    protected void touchColor(TextView textView,MotionEvent motionEvent){
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackgroundResource(R.color.colorAccent);
-        }
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackgroundResource(R.color.color_white);
-        }
-    }
-    class TextViewListener implements View.OnTouchListener{
+    class TextViewOnTouchListener implements View.OnTouchListener{
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (view.getId()) {
@@ -76,6 +65,20 @@ public class UserActivity extends Activity {
                     break;
             }
             return true;
+        }
+
+        /**
+         * 单击特效
+         * @param textView 被单击的控件
+         * @param motionEvent 当前状态
+         */
+        protected void touchColor(TextView textView,MotionEvent motionEvent){
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                textView.setBackgroundResource(R.color.colorAccent);
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                textView.setBackgroundResource(R.color.color_white);
+            }
         }
     }
 }

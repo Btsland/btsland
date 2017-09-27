@@ -1,11 +1,12 @@
-package info.btsland.app;
+package info.btsland.app.ui;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import info.btsland.app.R;
 
 public class MainActivity extends Activity {
     private ImageView ivNavUser ;

@@ -54,7 +54,7 @@ public class MarketServiceImpl implements MarketService {
         /**
          * bitCNY测试数据
          */
-        List<Market> listbitCNY =new ArrayList<>();
+        List<Market> listbitCNY =new ArrayList<Market>();
         listbitCNY.add(new Market("BTC","bitCNY","27490.00171","26999.99919","27489.99802","156.95k","10.27%"));
         listbitCNY.add(new Market("BTS","bitCNY","0.576000","0.573000","0.576300","3.44M","13.18%"));
         listbitCNY.add(new Market("bitUSD","bitCNY","6.80921","6.78063","6.80850","94.02k","1.76%"));

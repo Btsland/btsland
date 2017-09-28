@@ -35,14 +35,14 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
         init();
 
         //Setting
-//        tvNavSet = (TextView)findViewById(R.id.tv_nav_set);
-//        tvNavSet.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        tvNavSet = (TextView)findViewById(R.id.tv_nav_set);
+        tvNavSet.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     /**

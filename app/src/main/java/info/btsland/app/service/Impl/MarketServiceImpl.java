@@ -16,19 +16,9 @@ import info.btsland.app.service.MarketService;
  */
 
 public class MarketServiceImpl implements MarketService {
-    /**
-     *
-     * @param leftCoin 左边货币
-     * @param rightCoin 右边货币
-     * @param newPrice 最新成交价
-     * @param bestBid 最高买价
-     * @param bestAsk 最低卖价
-     * @param volume 成交量
-     * @param turnover 成交额
-     * @param fluctuation 涨/跌幅
-     */
+
     @Override
-    public List getallinformation() {
+    public Map<String,List<Market>> getallinformation() {
 
     /*    Market market =new Market();
         market.setLeftCoin("BTS");
@@ -51,10 +41,20 @@ public class MarketServiceImpl implements MarketService {
         listBTS.add(new Market("bitUSD","BTS","11.93180","11.80174","11.92885","346.71k","-10.71%"));
         listBTS.add(new Market("ETH","BTS","3504.27338","3536.06789","3577.92045","186.82k","-4.95%"));
         listBTS.add(new Market("IMIAO","BTS","1","1","1","1","0%"));
+        listBTS.add(new Market("BTC","BTS","0.00002109","0.00002105","0.00002121","20.734","+3.11%"));
+        listBTS.add(new Market("bitCNY","BTS","1.76806","1.77905","1.77937","6.31M","-9.02%"));
+        listBTS.add(new Market("bitUSD","BTS","11.93180","11.80174","11.92885","346.71k","-10.71%"));
+        listBTS.add(new Market("ETH","BTS","3504.27338","3536.06789","3577.92045","186.82k","-4.95%"));
+        listBTS.add(new Market("IMIAO","BTS","1","1","1","1","0%"));
+        listBTS.add(new Market("BTC","BTS","0.00002109","0.00002105","0.00002121","20.734","+3.11%"));
+        listBTS.add(new Market("bitCNY","BTS","1.76806","1.77905","1.77937","6.31M","-9.02%"));
+        listBTS.add(new Market("bitUSD","BTS","11.93180","11.80174","11.92885","346.71k","-10.71%"));
+        listBTS.add(new Market("ETH","BTS","3504.27338","3536.06789","3577.92045","186.82k","-4.95%"));
+        listBTS.add(new Market("IMIAO","BTS","1","1","1","1","0%"));
         /**
          * bitCNY测试数据
          */
-        List<Market> listbitCNY =new ArrayList<>();
+        List<Market> listbitCNY =new ArrayList<Market>();
         listbitCNY.add(new Market("BTC","bitCNY","27490.00171","26999.99919","27489.99802","156.95k","10.27%"));
         listbitCNY.add(new Market("BTS","bitCNY","0.576000","0.573000","0.576300","3.44M","13.18%"));
         listbitCNY.add(new Market("bitUSD","bitCNY","6.80921","6.78063","6.80850","94.02k","1.76%"));
@@ -81,13 +81,13 @@ public class MarketServiceImpl implements MarketService {
         listbitUSD.add(new Market("IMIAO","bitUSD","1","1","1","1","0%"));
 
 
-        Map<String,List>  map=new HashMap<String,List>();
+        Map<String,List<Market>>  map=new HashMap<String,List<Market>>();
         map.put("BTC",listBTS);
         map.put("bitCNY",listbitCNY);
         map.put("BTS",listBTC);
         map.put("bitUSD",listbitUSD);
 
-        return null;
+        return map;
     }
 
 

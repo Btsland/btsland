@@ -1,6 +1,7 @@
 package info.btsland.app.service;
 
 import java.util.List;
+import java.util.Map;
 
 import info.btsland.app.model.Market;
 
@@ -16,5 +17,5 @@ public interface MarketService {
      *获取最新成交价
      */
     List getnewprice();
-    List getallinformation();
+    Map<String,List<Market>> getallinformation();
 }

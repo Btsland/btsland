@@ -96,66 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:gravity="center"
-                android:textSize="20sp"
-                android:text="最新成交价/涨幅/Imiao"/>
+
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

@@ -1,9 +1,12 @@
 package info.btsland.app.ui;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.MotionEvent;
@@ -12,13 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import info.btsland.app.R;
+import info.btsland.app.ui.fragment.MarketFragment;
 
 /**
  * 作者：谢建华
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements MarketFragment.OnFragmentInteractionListener {
     private ImageView ivNavUser ;
     private TextView tvNavHome;
     private TextView tvNavMarket;
@@ -45,6 +49,11 @@ public class MainActivity extends Activity {
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 
     /**
@@ -84,6 +93,7 @@ public class MainActivity extends Activity {
             textView2.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
         }
     }
+
 
     /**
      * 单击事件功能实现

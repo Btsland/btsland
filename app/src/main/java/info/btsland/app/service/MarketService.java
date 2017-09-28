@@ -15,5 +15,6 @@ public interface MarketService {
      *
      *获取最新成交价
      */
-    List getnewprice(String newprice);
+    List getnewprice();
+    List getallinformation();
 }

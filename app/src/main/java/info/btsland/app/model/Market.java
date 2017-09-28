@@ -8,50 +8,43 @@ package info.btsland.app.model;
 
 public class Market {
     /*
-     * 商品货币
+     * 左边货币
      */
-    private String gcoin;
+    private String leftCoin;
     /**
-     * 交易货币
+     * 右边货币
      */
-    private  String coin;
+    private  String rightCoin;
 
     /**
      * 最新成交价
      */
-    private String newprice;
+    private String newPrice;
 
 
 
     /**
      * 最高买价
      */
-    private  String bestbid;
+    private  String bestBid;
 
     /**
      * 最低卖价
      */
-    private  String bestask;
+    private  String bestAsk;
 
     /**
      * 成交量
      */
     private  String  volume;
 
-    /**
-     * 成交额
-     */
-    private  String  Turnover;
 
     /**
      * 涨/跌幅
      */
     private String fluctuation;
 
-    /**
-     * 余额
-     */
-    private  String balance;
+
 
 
 
@@ -59,71 +52,79 @@ public class Market {
 
     }
 
-    public Market(String gcoin, String coin, String newprice, String bestbid, String bestask, String volume, String turnover, String fluctuation, String balance) {
-        this.gcoin = gcoin;
-        this.coin = coin;
-        this.newprice = newprice;
-        this.bestbid = bestbid;
-        this.bestask = bestask;
+    /**
+     *
+     * @param leftCoin 左边货币
+     * @param rightCoin 右边货币
+     * @param newPrice 最新成交价
+     * @param bestBid 最高买价
+     * @param bestAsk 最低卖价
+     * @param volume 成交量
+     * @param fluctuation 涨/跌幅
+     */
+    public Market(String leftCoin, String rightCoin, String newPrice, String bestBid, String bestAsk, String volume, String fluctuation) {
+        this.leftCoin = leftCoin;
+        this.rightCoin = rightCoin;
+        this.newPrice = newPrice;
+        this.bestBid = bestBid;
+        this.bestAsk = bestAsk;
         this.volume = volume;
-        Turnover = turnover;
         this.fluctuation = fluctuation;
-        this.balance = balance;
+
     }
 
     @Override
-    public String toString() {
-        return "MarketService{" +
-                "gcoin='" + gcoin + '\'' +
-                ", coin='" + coin + '\'' +
-                ", newprice='" + newprice + '\'' +
-                ", bestbid='" + bestbid + '\'' +
-                ", bestask='" + bestask + '\'' +
+    public String
+    toString() {
+        return "Market{" +
+                "leftCoin='" + leftCoin + '\'' +
+                ", rightCoin='" + rightCoin + '\'' +
+                ", newPrice='" + newPrice + '\'' +
+                ", bestBid='" + bestBid + '\'' +
+                ", bestAsk='" + bestAsk + '\'' +
                 ", volume='" + volume + '\'' +
-                ", Turnover='" + Turnover + '\'' +
                 ", fluctuation='" + fluctuation + '\'' +
-                ", balance='" + balance + '\'' +
                 '}';
     }
 
-    public String getGcoin() {
-        return gcoin;
+    public String getLeftCoin() {
+        return leftCoin;
     }
 
-    public void setGcoin(String gcoin) {
-        this.gcoin = gcoin;
+    public void setLeftCoin(String leftCoin) {
+        this.leftCoin = leftCoin;
     }
 
-    public String getCoin() {
-        return coin;
+    public String getRightCoin() {
+        return rightCoin;
     }
 
-    public void setCoin(String coin) {
-        this.coin = coin;
+    public void setRightCoin(String rightCoin) {
+        this.rightCoin = rightCoin;
     }
 
-    public String getNewprice() {
-        return newprice;
+    public String getNewPrice() {
+        return newPrice;
     }
 
-    public void setNewprice(String newprice) {
-        this.newprice = newprice;
+    public void setNewPrice(String newPrice) {
+        this.newPrice = newPrice;
     }
 
-    public String getBestbid() {
-        return bestbid;
+    public String getBestBid() {
+        return bestBid;
     }
 
-    public void setBestbid(String bestbid) {
-        this.bestbid = bestbid;
+    public void setBestBid(String bestBid) {
+        this.bestBid = bestBid;
     }
 
-    public String getBestask() {
-        return bestask;
+    public String getBestAsk() {
+        return bestAsk;
     }
 
-    public void setBestask(String bestask) {
-        this.bestask = bestask;
+    public void setBestAsk(String bestAsk) {
+        this.bestAsk = bestAsk;
     }
 
     public String getVolume() {
@@ -134,14 +135,6 @@ public class Market {
         this.volume = volume;
     }
 
-    public String getTurnover() {
-        return Turnover;
-    }
-
-    public void setTurnover(String turnover) {
-        Turnover = turnover;
-    }
-
     public String getFluctuation() {
         return fluctuation;
     }
@@ -150,11 +143,5 @@ public class Market {
         this.fluctuation = fluctuation;
     }
 
-    public String getBalance() {
-        return balance;
-    }
 
-    public void setBalance(String balance) {
-        this.balance = balance;
-    }
 }

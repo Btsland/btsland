@@ -1,4 +1,4 @@
-package info.btsland.app;
+package info.btsland.app.ui;
 
 import android.app.Activity;
 import android.graphics.drawable.Drawable;
@@ -8,6 +8,9 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+
+import info.btsland.app.R;
+
 
 public class UserActivity extends Activity {
     private TextView tvUserInfo;

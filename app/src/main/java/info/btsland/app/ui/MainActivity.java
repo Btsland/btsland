@@ -27,12 +27,22 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
+    private TextView tvNavSet;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
 
+        //Setting
+//        tvNavSet = (TextView)findViewById(R.id.tv_nav_set);
+//        tvNavSet.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
+//                startActivity(intent);
+//            }
+//        });
     }
 
     /**
@@ -49,6 +59,8 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
+
+
     }
 
     @Override

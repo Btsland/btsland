@@ -53,7 +53,6 @@ public class UserActivity extends Activity {
             textView.setBackgroundResource(R.color.color_white);
         }
     }
-
     class TextViewListener implements View.OnTouchListener{
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {

@@ -1,0 +1,10 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="welcomeTheme" parent="android:Theme.Translucent.NoTitleBar">
+
+    </style>
+    <style name="welcomeTheme.TranslucentStatus">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+</resources>

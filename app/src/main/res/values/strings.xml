@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">btsland</string>
     <string name="font_size">16sp</string>
+    <string name="font_color_gray">#beb9bb</string>
 </resources>

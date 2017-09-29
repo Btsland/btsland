@@ -42,7 +42,7 @@ public class Market {
     /**
      * 涨/跌幅
      */
-    private String fluctuation;
+    private float fluctuation;
 
 
 
@@ -62,7 +62,7 @@ public class Market {
      * @param volume 成交量
      * @param fluctuation 涨/跌幅
      */
-    public Market(String leftCoin, String rightCoin, String newPrice, String bestBid, String bestAsk, String volume, String fluctuation) {
+    public Market(String leftCoin, String rightCoin, String newPrice, String bestBid, String bestAsk, String volume, float fluctuation) {
         this.leftCoin = leftCoin;
         this.rightCoin = rightCoin;
         this.newPrice = newPrice;
@@ -135,11 +135,11 @@ public class Market {
         this.volume = volume;
     }
 
-    public String getFluctuation() {
+    public float getFluctuation() {
         return fluctuation;
     }
 
-    public void setFluctuation(String fluctuation) {
+    public void setFluctuation(float fluctuation) {
         this.fluctuation = fluctuation;
     }
 

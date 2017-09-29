@@ -1,5 +1,7 @@
 package info.btsland.app.model;
 
+import java.util.Objects;
+
 /**
  * Created by Administrator on 2017/9/27.
  */
@@ -33,11 +35,5 @@ public class User {
         this.pwd = pwd;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "name='" + name + '\'' +
-                ", pwd='" + pwd + '\'' +
-                '}';
-    }
+  
 }

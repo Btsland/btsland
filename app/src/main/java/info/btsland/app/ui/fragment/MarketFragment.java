@@ -269,7 +269,7 @@ public class MarketFragment extends Fragment {
 
                 //设定值
                 coinName.setText(market.getLeftCoin());
-                fluctuation.setText(market.getFluctuation());
+                fluctuation.setText( String.valueOf(market.getFluctuation()));
                 price.setText(market.getNewPrice());
                 String a="";
                 bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>卖出:&nbsp;&nbsp;</font>"+market.getBestAsk()));

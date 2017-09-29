@@ -9,13 +9,19 @@
         android:roundIcon="@mipmap/ic_btsland"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".ui.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UserActivity">
+        <activity android:name=".ui.UserActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.USER" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.SettingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.USER" />
                 <category android:name="android.intent.category.LAUNCHER" />

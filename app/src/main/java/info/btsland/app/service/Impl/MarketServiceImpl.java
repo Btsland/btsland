@@ -82,9 +82,9 @@ public class MarketServiceImpl implements MarketService {
 
 
         Map<String,List<Market>>  map=new HashMap<String,List<Market>>();
-        map.put("BTC",listBTC);
+        map.put("BTC",listBTS);
         map.put("bitCNY",listbitCNY);
-        map.put("BTS",listBTS);
+        map.put("BTS",listBTC);
         map.put("bitUSD",listbitUSD);
 
         return map;

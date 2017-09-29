@@ -8,6 +8,15 @@ public class User {
     private String name;
     private String pwd;
 
+
+    public User() {
+    }
+
+    public User(String name, String pwd) {
+        this.name = name;
+        this.pwd = pwd;
+    }
+
     public String getName() {
         return name;
     }
@@ -22,5 +31,13 @@ public class User {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "name='" + name + '\'' +
+                ", pwd='" + pwd + '\'' +
+                '}';
     }
 }

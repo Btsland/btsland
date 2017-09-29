@@ -8,11 +8,15 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.content.res.ResourcesCompat;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.MarketFragment;
@@ -108,7 +112,7 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
 
 
     /**
-     * 单击事件功能实现
+     * 头像单击事件功能实现
      */
     class ivNavUserOnClick implements View.OnClickListener{
         @Override
@@ -119,4 +123,43 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
         }
     }
 
+    /**
+     * 标识是否关闭程序
+     */
+    private boolean isExit=false;
+    /**
+     * 检测物理按键
+     * @param keyCode
+     * @param event
+     * @return
+     */
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            exit();
+            return false;
+        } else {
+            return super.onKeyDown(keyCode, event);
+        }
+    }
+    private void exit(){
+        if (isExit) {
+            Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_HOME);
+            startActivity(intent);
+            System.exit(0);
+        } else {
+            isExit = true;
+            Toast.makeText(this, "再按一次退出程序", Toast.LENGTH_SHORT).show();
+            mHandler.sendEmptyMessageDelayed(0, 2000);
+        }
+
+    }
+    Handler mHandler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            isExit = false;
+        }
+    };
 }

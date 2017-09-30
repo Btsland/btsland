@@ -111,11 +111,29 @@ public class MarketServiceImpl implements MarketService {
         listbitUSD.add(new Market("IMIAO","bitUSD","1","1","1","1",0f));
 
 
+        List<Market> listETH =new ArrayList<Market>();
+        listETH.add(new Market("BTC","ETH","13.99164550","14.0074603","14.28569275","3.358",-0.63f));
+        listETH.add(new Market("bitUSD","ETH","0.00354500","0.00347075","20.00353766","4.052",3.68f));
+        listETH.add(new Market("bitCNY","ETH","0.00028378","0.00028327","0.00028503","26.012",-0.70f));
+        listETH.add(new Market("BTS","ETH","301.16279","284.39281","301.44213","308.734k",50.58f));
+        listETH.add(new Market("IMIAO","ETH","1","1","1","1",0f));
+        listETH.add(new Market("BTC","ETH","13.99164550","14.0074603","14.28569275","3.358",-0.63f));
+        listETH.add(new Market("bitUSD","ETH","0.00354500","0.00347075","20.00353766","4.052",3.68f));
+        listETH.add(new Market("bitCNY","ETH","0.00028378","0.00028327","0.00028503","26.012",-0.70f));
+        listETH.add(new Market("BTS","ETH","301.16279","284.39281","301.44213","308.734k",50.58f));
+        listETH.add(new Market("IMIAO","ETH","1","1","1","1",0f));
+        listETH.add(new Market("BTC","ETH","13.99164550","14.0074603","14.28569275","3.358",-0.63f));
+        listETH.add(new Market("bitUSD","ETH","0.00354500","0.00347075","20.00353766","4.052",3.68f));
+        listETH.add(new Market("bitCNY","ETH","0.00028378","0.00028327","0.00028503","26.012",-0.70f));
+        listETH.add(new Market("BTS","ETH","301.16279","284.39281","301.44213","308.734k",50.58f));
+        listETH.add(new Market("IMIAO","ETH","1","1","1","1",0f));
+
         Map<String,List<Market>>  map=new HashMap<String,List<Market>>();
         map.put("BTS",listBTS);
         map.put("bitCNY",listbitCNY);
         map.put("BTC",listBTC);
         map.put("bitUSD",listbitUSD);
+        map.put("ETH",listETH);
 
         return map;
     }

@@ -18,6 +18,7 @@ public class UserActivity extends Activity {
     private TextView tvUserPower;
     private TextView tvUserRecent;
     private TextView tvUserEntrust;
+    private TextView tvUserSeting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,12 +36,14 @@ public class UserActivity extends Activity {
         tvUserPower=(TextView)findViewById(R.id.tv_user_power);
         tvUserRecent=(TextView)findViewById(R.id.tv_user_recent);
         tvUserEntrust=(TextView)findViewById(R.id.tv_user_entrust);
+        tvUserSeting=(TextView)findViewById(R.id.tv_user_set);
         //绑定监听器
         tvUserInfo.setOnTouchListener(new TextViewListener());
         tvUserWhiteList.setOnTouchListener(new TextViewListener());
         tvUserPower.setOnTouchListener(new TextViewListener());
         tvUserRecent.setOnTouchListener(new TextViewListener());
         tvUserEntrust.setOnTouchListener(new TextViewListener());
+        tvUserSeting.setOnTouchListener(new TextViewListener());
     }
 
     /**
@@ -50,10 +53,10 @@ public class UserActivity extends Activity {
      */
     protected void touchColor(TextView textView,MotionEvent motionEvent){
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackgroundResource(R.color.colorAccent);
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_user_row_touch,null));
         }
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackgroundResource(R.color.color_white);
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_user_row,null));
         }
     }
     class TextViewListener implements View.OnTouchListener{
@@ -74,6 +77,9 @@ public class UserActivity extends Activity {
                     break;
                 case R.id.tv_user_entrust:
                     touchColor(tvUserEntrust,motionEvent);
+                    break;
+                case R.id.tv_user_set:
+                    touchColor(tvUserSeting,motionEvent);
                     break;
             }
             return true;

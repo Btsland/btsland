@@ -4,6 +4,6 @@
     <string name="font_color_white">#ffffff</string>
     <string name="font_color_gray">#5D5D5D</string>
     <string name="font_color_lightGrey">#8D8D8D</string>
-    <string name="font_color_green">#00ff00</string>
+    <string name="font_color_green">#458B00</string>
     <string name="font_color_red">#ff0000</string>
 </resources>

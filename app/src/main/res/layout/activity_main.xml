@@ -10,7 +10,7 @@
         android:id="@+id/tv_nav_title"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@android:color/holo_blue_light"
+        android:background="@color/color_dullRed1"
         android:text="标题"
         android:gravity="center"
         android:textColor="#FFFFFF"

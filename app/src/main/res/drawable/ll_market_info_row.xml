@@ -1,13 +1,18 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape>
-            <solid android:color="@color/colorAccent" />
+            <solid  />
+            <!--<corners android:topLeftRadius="10dp" android:topRightRadius="10dp"-->
+                <!--android:bottomRightRadius="10dp" android:bottomLeftRadius="10dp" />-->
+            <!--<stroke android:color="@color/color_Grey" />-->
         </shape>
     </item>
-
-    <item android:bottom="1dp">
-        <shape >
-            <solid android:color="@color/color_white"     />
+    <item >
+        <shape>
+            <solid android:color="@color/color_darkGrey" />
+            <corners android:topLeftRadius="10dp" android:topRightRadius="10dp"
+                android:bottomRightRadius="10dp" android:bottomLeftRadius="10dp" />
+            <strok android:color="@color/color_darkGrey" />
         </shape>
     </item>
 </layer-list>

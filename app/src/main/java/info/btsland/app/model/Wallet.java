@@ -7,6 +7,10 @@ package info.btsland.app.model;
  */
 
 public class Wallet {
+
+
+
+
     /**
      * 资产
      */
@@ -22,16 +26,14 @@ public class Wallet {
      */
     private  String supplyShare;
 
-    /**
+  /*  *//**
      * 转账操作
-     */
+     *//*
     private String transfer;
 
 
-    /**
-     * 市场操作
-     */
-    private  String operate;
+    */
+
 
     @Override
     public String toString() {
@@ -39,21 +41,26 @@ public class Wallet {
                 "assets='" + assets + '\'' +
                 ", scaledValue='" + scaledValue + '\'' +
                 ", supplyShare='" + supplyShare + '\'' +
-                ", transfer='" + transfer + '\'' +
-                ", operate='" + operate + '\'' +
                 '}';
+    }
+
+    /**
+     * 市场操作
+     *//*
+    private  String operate;*/
+
+
+
+
+    public Wallet(String assets, String scaledValue, String supplyShare) {
+        this.assets = assets;
+        this.scaledValue = scaledValue;
+        this.supplyShare = supplyShare;
     }
 
     public Wallet() {
     }
 
-    public Wallet(String assets, String scaledValue, String supplyShare, String transfer, String operate) {
-        this.assets = assets;
-        this.scaledValue = scaledValue;
-        this.supplyShare = supplyShare;
-        this.transfer = transfer;
-        this.operate = operate;
-    }
 
     public String getAssets() {
         return assets;
@@ -77,21 +84,5 @@ public class Wallet {
 
     public void setSupplyShare(String supplyShare) {
         this.supplyShare = supplyShare;
-    }
-
-    public String getTransfer() {
-        return transfer;
-    }
-
-    public void setTransfer(String transfer) {
-        this.transfer = transfer;
-    }
-
-    public String getOperate() {
-        return operate;
-    }
-
-    public void setOperate(String operate) {
-        this.operate = operate;
     }
 }

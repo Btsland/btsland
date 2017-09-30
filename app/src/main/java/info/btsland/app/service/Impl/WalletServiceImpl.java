@@ -7,8 +7,8 @@ import info.btsland.app.model.Wallet;
 import info.btsland.app.service.WalletService;
 
 /**
- * author：
- * function：
+ * author：lw1000
+ * function：钱包接口的实现
  * 2017/9/30.
  */
 
@@ -31,4 +31,78 @@ public class WalletServiceImpl implements WalletService {
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

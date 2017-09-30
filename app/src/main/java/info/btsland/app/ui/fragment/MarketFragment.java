@@ -201,19 +201,19 @@ public class MarketFragment extends Fragment {
             List list=null;
             switch (leftCoin.getId()){
                 case R.id.tv_market_left_coin1:
-                    list = market.get("BTC");
+                    list = market.get("bitCNY");
                     break;
                 case R.id.tv_market_left_coin2:
-                    list = market.get("bitCNY");
+                    list = market.get("BTS");
                     break;
                 case R.id.tv_market_left_coin3:
                     list = market.get("bitUSD");
                     break;
                 case R.id.tv_market_left_coin4:
-                    list = market.get("BTS");
+                    list = market.get("BTC");
                     break;
                 case R.id.tv_market_left_coin5:
-                    list =new ArrayList();
+                    list = market.get("ETH");
                     break;
             }
             return list;
@@ -232,7 +232,7 @@ public class MarketFragment extends Fragment {
                 //生成左侧linear
                 LinearLayout left = new LinearLayout(getActivity());
                 left.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
+                LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.5f);
                 left.setLayoutParams(leftParams);
                 TextView fluct = new TextView(getActivity());
                 LinearLayout.LayoutParams fluctParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
@@ -258,7 +258,7 @@ public class MarketFragment extends Fragment {
 
                 //生成中间textView
                 TextView price = new TextView(getActivity());
-                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.5f);
+                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.2f);
                 price.setLayoutParams(priceParams);
                 price.setGravity(Gravity.CENTER);
                 price.setTextSize(30);
@@ -279,7 +279,7 @@ public class MarketFragment extends Fragment {
                 bestAsk.setGravity(Gravity.LEFT);
                 bestAsk.setTextSize(12);
                 bestAsk.setLines(1);
-                bestAsk.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
+                bestAsk.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 bestAsk.setSingleLine(true);
 
 
@@ -291,7 +291,7 @@ public class MarketFragment extends Fragment {
                 bestBid.setGravity(Gravity.LEFT);
                 bestBid.setTextSize(12);
                 bestBid.setLines(1);;
-                bestBid.setFilters(new InputFilter[]{new InputFilter.LengthFilter(14)});
+                bestBid.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
                 bestBid.setSingleLine(true);
 
                 //设定值

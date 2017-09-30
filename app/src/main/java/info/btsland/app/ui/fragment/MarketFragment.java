@@ -177,20 +177,22 @@ public class MarketFragment extends Fragment {
          */
         private void setDownBack(TextView TextView){
             TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch,null));
+            TextView.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_yellow,null));
         }
         /**
          * 设置未选中时的背景样式
          * @param TextView
          */
         private void setUpBack(TextView TextView){
-            TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin,null));
+            TextView.setBackground(getView().getResources().getDrawable(R.color.color_darkGrey,null));
+            TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_white,null));
         }
 
         private void setMarket(View leftCoin){
             LinearLayout linearLayout=getActivity().findViewById(R.id.ll_market_info);
             linearLayout.removeAllViews();
             List<Market> markets=readMarket(leftCoin);
-            createCol(linearLayout,markets);
+            createCol(leftCoin,linearLayout,markets);
         }
 
         private List<Market> readMarket(View leftCoin){
@@ -216,13 +218,14 @@ public class MarketFragment extends Fragment {
             }
             return list;
         }
-        private void createCol(LinearLayout Linear,List<Market> markets){
+        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
             Market market=null;
             for (int i = 0; i < markets.size(); i++) {
                 market=markets.get(i);
                 //生成一行
                 LinearLayout row = new LinearLayout(getActivity());
-                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),60f));
+                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),70f));
+                rowParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f),DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f));
                 row.setOrientation(LinearLayout.HORIZONTAL);
                 row.setLayoutParams(rowParams);
                 row.setBackground(getActivity().getDrawable(R.drawable.ll_market_info_row));
@@ -231,6 +234,9 @@ public class MarketFragment extends Fragment {
                 left.setOrientation(LinearLayout.VERTICAL);
                 LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1f);
                 left.setLayoutParams(leftParams);
+                TextView fluct = new TextView(getActivity());
+                LinearLayout.LayoutParams fluctParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+                fluct.setLayoutParams(fluctParams);
                 //货币名称
                 TextView coinName = new TextView(getActivity());
                 LinearLayout.LayoutParams coinNameParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2f);
@@ -246,7 +252,7 @@ public class MarketFragment extends Fragment {
                 LinearLayout.LayoutParams fluctuationParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
                 fluctuation.setLayoutParams(fluctuationParams);
                 fluctuation.setGravity(Gravity.CENTER);
-                fluctuation.setTextSize(12);
+                fluctuation.setTextSize(14);
                 fluctuation.setLines(1);
 
 
@@ -268,7 +274,7 @@ public class MarketFragment extends Fragment {
                 //最低卖价
                 TextView bestAsk = new TextView(getActivity());
                 LinearLayout.LayoutParams bestBidParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                bestBidParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),5f),0,0);
+                bestBidParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
                 bestAsk.setLayoutParams(bestBidParams);
                 bestAsk.setGravity(Gravity.LEFT);
                 bestAsk.setTextSize(12);
@@ -280,7 +286,7 @@ public class MarketFragment extends Fragment {
                 //最高买价
                 TextView bestBid = new TextView(getActivity());
                 LinearLayout.LayoutParams bestAskParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                bestAskParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),5f),0,0);
+                bestAskParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
                 bestBid.setLayoutParams(bestAskParams);
                 bestBid.setGravity(Gravity.LEFT);
                 bestBid.setTextSize(12);
@@ -289,13 +295,19 @@ public class MarketFragment extends Fragment {
                 bestBid.setSingleLine(true);
 
                 //设定值
-                coinName.setText(market.getLeftCoin());
-                fluctuation.setText( String.valueOf(market.getFluctuation()));
-                price.setText(market.getNewPrice());
+                coinName.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_white)+"'>"+market.getLeftCoin()+"</font>"));
+                float fluctuat=market.getFluctuation();
+                if (fluctuat>0){
+                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getNewPrice()+"</font>"));
+                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getFluctuation()+"%</font>"));
+                }else {
+                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getNewPrice()+"</font>"));
+                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getFluctuation()+"%</font>"));
+                }
                 String a="";
-                bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>卖出:&nbsp;&nbsp;</font>"+market.getBestAsk()));
-                bestBid.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>买入:&nbsp;&nbsp;</font>"+market.getBestBid()));
-
+                bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>卖出:&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestAsk()+"</font>"));
+                bestBid.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>买入:&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestBid()+"</font>"));
+                left.addView(fluct);
                 left.addView(coinName);
                 left.addView(fluctuation);
                 right.addView(bestAsk);

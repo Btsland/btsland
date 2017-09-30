@@ -2,13 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_Grey">
     <!--K图部分-->
     <View
         android:id="@+id/K"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:background="@color/color_yellow"
+        android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
@@ -35,7 +36,7 @@
         android:text="BTC"
         android:textSize="16sp"
         android:gravity="center"
-        android:background="@drawable/tv_market_left_coin"
+        android:background="@color/color_darkGrey"
         app:layout_constraintTop_toBottomOf="@+id/K"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_market_left_coin2"/>
@@ -46,7 +47,7 @@
         android:text="CNY"
         android:textSize="16sp"
         android:gravity="center"
-        android:background="@drawable/tv_market_left_coin"
+        android:background="@color/color_darkGrey"
         app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin1"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_market_left_coin3"/>
@@ -57,7 +58,7 @@
         android:text="USD"
         android:textSize="16sp"
         android:gravity="center"
-        android:background="@drawable/tv_market_left_coin"
+        android:background="@color/color_darkGrey"
         app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin2"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_market_left_coin4"/>
@@ -68,7 +69,7 @@
         android:text="BTS"
         android:textSize="16sp"
         android:gravity="center"
-        android:background="@drawable/tv_market_left_coin"
+        android:background="@color/color_darkGrey"
         app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin3"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_market_left_coin5"/>
@@ -79,7 +80,8 @@
         android:text="ETH"
         android:textSize="16sp"
         android:gravity="center"
-        android:background="@drawable/tv_market_left_coin"
+        android:textColor="@color/color_white"
+        android:background="@color/color_darkGrey"
         app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin4"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -95,7 +97,8 @@
             android:id="@+id/ll_market_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:background="@color/color_Grey">
 
         </LinearLayout>
     </ScrollView>

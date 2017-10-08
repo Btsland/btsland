@@ -258,10 +258,10 @@ public class MarketFragment extends Fragment {
 
                 //生成中间textView
                 TextView price = new TextView(getActivity());
-                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.2f);
+                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.3f);
                 price.setLayoutParams(priceParams);
                 price.setGravity(Gravity.CENTER);
-                price.setTextSize(30);
+                price.setTextSize(26);
                 price.setLines(1);
                 price.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
                 price.setSingleLine(true);

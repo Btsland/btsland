@@ -5,29 +5,32 @@
     android:layout_height="match_parent"
     android:background="@color/color_Grey">
     <!--K图部分-->
-    <View
+    <TextView
         android:id="@+id/K"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:text="K图建设中。。"
+        android:gravity="center"
+        android:textSize="30sp"
         android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>
 
-    <TextView
-        android:id="@+id/tv_market_dual"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BTC:CNY"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="4dp"
-        android:gravity="center"
-        android:background="@color/color_green"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_dual"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="BTC:CNY"-->
+        <!--android:paddingLeft="8dp"-->
+        <!--android:paddingRight="8dp"-->
+        <!--android:paddingTop="4dp"-->
+        <!--android:paddingBottom="4dp"-->
+        <!--android:gravity="center"-->
+        <!--android:background="@color/color_green"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toRightOf="parent"/>-->
     <!--交易对-->
     <TextView
         android:id="@+id/tv_market_left_coin1"

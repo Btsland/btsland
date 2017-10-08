@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/color_dullRed1"
-        android:text="标题"
+        android:text="Btsland"
         android:gravity="center"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

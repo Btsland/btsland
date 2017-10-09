@@ -44,7 +44,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //加载news_title_frag.xml 布局
+        //加载fragment_newstitle.xml 布局
         View view = inflater.inflate(R.layout.fragment_newstitle, container, false);
         //得到ListView的实例
         newsTitleListView = (ListView) view.findViewById(R.id.news_title_list_view);
@@ -75,10 +75,14 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         List<News> newsList = new ArrayList<News>();
         News news1 = new News();
         news1.setTitle("Succeed in College as a Learning Disabled Student");
+        news1.setDate("2017-10-09");
+        news1.setTitleContent("College freshmen will soon learn to live with a roommate,adjust to a new social scene and survive less-than-stellae dining ball food.Students with learning disabilities will face these transitions while also grappling with a few more hurdles.");
         news1.setContent("College freshmen will soon learn to live with a roommate,adjust to a new social scene and survive less-than-stellae dining ball food.Students with learning disabilities will face these transitions while also grappling with a few more hurdles.");
         newsList.add(news1);
         News new2 = new News();
         new2.setTitle("Google Android exec poached by China's Xiaomi");
+        new2.setDate("2017-10-09");
+        new2.setTitleContent("China's Xiaomi has poached a key google executive involed in the tech giant's Android phones,in a move seen as a coup for the rapidly growing Chinese smartphone market.");
         new2.setContent("China's Xiaomi has poached a key google executive involed in the tech giant's Android phones,in a move seen as a coup for the rapidly growing Chinese smartphone market.");
         newsList.add(new2);
         return newsList;

@@ -34,16 +34,25 @@ public class NewsAdapter extends ArrayAdapter<News> {
         News news = (News) getItem(position);
         View view;
         if (convertView == null) {
-            //为实例加载布局（即为news_item.xml的布局，ListView子项的布局）
+            //为实例加载布局（即为activity_newsitem.xml的布局，ListView子项的布局）
             view = LayoutInflater.from(getContext()).inflate(resourceId, null);
         } else {
             //convertView参数：这个参数用于将之前加载好的布局进行缓存，提高ListView的运行效率
             view = convertView;
         }
+        //实例化时间
+        TextView newsDateText = (TextView) view.findViewById(R.id.news_date);
         //实例化新闻标题
         TextView newsTitleText = (TextView) view.findViewById(R.id.news_title);
+        //实例化新闻内容
+        TextView newsTitleContentText = (TextView) view.findViewById(R.id.news_titlecontent);
         //让新闻的标题在列表中进行显示
         newsTitleText.setText(news.getTitle());
+        //让日期在列表中进行显示
+        newsDateText.setText(news.getDate());
+        //让新闻的内容在列表中进行显示
+        newsTitleContentText.setText(news.getTitleContent());
+
         return view;
     }
 }

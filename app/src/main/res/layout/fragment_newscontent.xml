@@ -1,0 +1,39 @@
+<!-- Created by zyf on 2017/10/8.
+编写新闻内容部分的代码
+头部显示完整的新闻标题,正文部分显示新闻内容,
+中间使用一条细线分隔开 -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- android:visibility 设置布局的可见性，invisibe为不可见 -->
+    <LinearLayout
+        android:id="@+id/visibility_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible">
+
+        <TextView
+            android:id="@+id/news_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="10dp"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/news_content"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:padding="15dp"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:scaleType="fitXY" />"
+</RelativeLayout>

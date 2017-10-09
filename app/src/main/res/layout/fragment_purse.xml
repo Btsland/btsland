@@ -1,18 +1,123 @@
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:id="@+id/tv"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+    android:layout_height="match_parent"
+    android:background="@color/color_Grey"
+    tools:context="info.btsland.app.ui.UserActivity">
+    <View
+        android:id="@+id/v_purse_back"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@color/colorAccent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:text="钱包" />
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_purse_convert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="折合总金额:666666CNY"
+        android:textSize="24sp"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toTopOf="@+id/v_purse_back"
+        app:layout_constraintBottom_toTopOf="@+id/tv_purse_hang"
+        app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
+        app:layout_constraintRight_toRightOf="@+id/v_purse_back"
+        android:layout_marginTop="24dp" />
+    <TextView
+        android:id="@+id/tv_purse_hang"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="可用额:555555CNY"
+        android:textSize="22sp"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_convert"
+        app:layout_constraintBottom_toTopOf="@+id/tv_purse_remain"
+        app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
+        app:layout_constraintRight_toRightOf="@+id/v_purse_back"/>
+    <TextView
+        android:id="@+id/tv_purse_remain"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="挂单数:1000"
+        android:textSize="20sp"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_hang"
+        app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
+        app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
+        app:layout_constraintRight_toRightOf="@+id/v_purse_back"
+        android:layout_marginBottom="24dp" />
+    <TextView
+        android:id="@+id/tv_purse_allAsset"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="全部资产"
+        android:gravity="center_vertical"
+        android:paddingLeft="8dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/v_purse_back"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_purse_rw"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="充提记录"
+        android:paddingLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_allAsset"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_purse_deal"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="交易记录"
+        android:paddingLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_rw"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_purse_allRemain"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="全部挂单"
+        android:paddingLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_deal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_purse_backup"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="钱包备份"
+        android:paddingLeft="8dp"
+        android:gravity="center_vertical"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_allRemain"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

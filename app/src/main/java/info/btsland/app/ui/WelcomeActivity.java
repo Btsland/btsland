@@ -12,6 +12,8 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 
+import org.json.JSONArray;
+
 import info.btsland.app.R;
 
 public class WelcomeActivity extends Activity {

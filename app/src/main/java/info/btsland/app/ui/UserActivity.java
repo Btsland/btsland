@@ -1,12 +1,14 @@
 package info.btsland.app.ui;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import info.btsland.app.R;
@@ -19,11 +21,15 @@ public class UserActivity extends Activity {
     private TextView tvUserRecent;
     private TextView tvUserEntrust;
     private TextView tvUserSeting;
+
+    private String name;
+    private String img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
         init();
+
     }
 
     /**
@@ -53,10 +59,10 @@ public class UserActivity extends Activity {
      */
     protected void touchColor(TextView textView,MotionEvent motionEvent){
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_user_row_touch,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
         }
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_user_row,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
         }
     }
     class TextViewListener implements View.OnTouchListener{

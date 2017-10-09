@@ -2,7 +2,7 @@ package info.btsland.app.ui.fragment;
 
 /**
  * Created by zyf on 2017/10/8.
- * 与news_content_frag.xml相对应,通过 findViewById()方法分别获取到新闻的标题和内容控件
+ * 与fragment_newscontent.xml相对应,通过 findViewById()方法分别获取到新闻的标题和内容控件
  */
 
 import android.app.Fragment;

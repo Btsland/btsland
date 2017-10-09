@@ -1,6 +1,6 @@
 <!-- Created by zyf on 2017/10/8.
 创建一个在活动中使用的新闻内容布局,引入了 NewsContentFragment,
-相当于把 news_content_frag 布局的内容自动加了进来 -->
+相当于把 fragment_newscontent 布局的内容自动加了进来 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"

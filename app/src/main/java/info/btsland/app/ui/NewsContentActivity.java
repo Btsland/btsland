@@ -2,7 +2,7 @@ package info.btsland.app.ui;
 
 /**
  * Created by zyf on 2017/10/8.
- * 显示新闻内容的活动，与news_content.xml相对应
+ * 显示新闻内容的活动，与activity_newscontent.xml相对应
  */
 
 import android.app.Activity;

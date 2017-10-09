@@ -2,7 +2,7 @@ package info.btsland.app.ui.fragment;
 
 /**
  * Created by zyf on 2017/10/8.
- * 与news_title_frag.xml相对应
+ * 与fragment_newstitle.xml相对应
  * 根据碎片的生命周期,onAttach()方法会首先执行,因此在这里做了一些数据初始化的操作,比如调用 getNews()方法获取几
  条新闻数据,以及完成 NewsAdapter 的创建。然后在 onCreateView()方法中加载了news_title_frag 布局,
  并给新闻列表的 ListView 注册了点击事件。

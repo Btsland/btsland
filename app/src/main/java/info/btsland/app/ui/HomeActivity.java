@@ -2,7 +2,7 @@ package info.btsland.app.ui;
 
 /**
  * Created by zyf on 2017/10/8.
- * 把标题栏去除掉.与activity_main.xml相对应
+ * 把标题栏去除掉.与fragment_home.xml相对应
  */
 
 import android.app.Activity;

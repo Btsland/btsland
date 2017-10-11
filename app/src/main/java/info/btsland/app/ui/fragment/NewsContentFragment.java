@@ -31,7 +31,7 @@ public class NewsContentFragment extends Fragment {
     public void refresh(News news) {
         View visibilityLayout =getActivity().findViewById(R.id.visibility_layout);
         visibilityLayout.setVisibility(View.VISIBLE);
-        //接收新闻信息冰刷新新闻内容
+        //接收新闻信息并刷新新闻内容
         TextView newsTitleText = (TextView)getActivity().findViewById(R.id.news_title);//得到新闻标题控件的实例
         TextView newsContentText = (TextView)getActivity().findViewById(R.id.news_content);//得到新闻内容控件的实例
         newsTitleText.setText(news.getTitle());//刷新新闻的标题

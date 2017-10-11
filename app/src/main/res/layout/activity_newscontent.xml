@@ -5,7 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_news_head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
 
+    </FrameLayout>
     <fragment
         android:id="@+id/news_content_fragment"
         android:name="info.btsland.app.ui.fragment.NewsContentFragment"

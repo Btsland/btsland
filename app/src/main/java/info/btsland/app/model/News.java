@@ -1,11 +1,13 @@
 package info.btsland.app.model;
 
+import java.io.Serializable;
+
 /**
  * Created by zyf on 2017/10/8.
  * 新闻实体类,title表示新闻标题,content表示新闻内容
  */
 
-public class News {
+public class News implements Serializable {
     private String title;
     private String content;
     private String date;    //新闻日期

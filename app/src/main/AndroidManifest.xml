@@ -31,7 +31,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.WelcomeActivity"
+            android:name=".ui.activtiy.WelcomeActivity"
             android:theme="@style/welcomeTheme.TranslucentStatus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,13 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.HomeActivity">
+        <activity android:name=".ui.HomeActivity" />
+        <activity android:name=".ui.NewsContentActivity">
+            //注册NewsContentActivity活动
         </activity>
-
-        <activity android:name=".ui.NewsContentActivity">//注册NewsContentActivity活动
-        </activity>
-
     </application>
 
 </manifest>

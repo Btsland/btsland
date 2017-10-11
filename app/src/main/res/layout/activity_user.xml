@@ -7,17 +7,17 @@
     android:layout_height="match_parent"
     android:background="@color/color_Grey"
     tools:context="info.btsland.app.ui.UserActivity">
-    <TextView
-        android:id="@+id/tv_user_title"
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_user_head"
         android:layout_width="0dp"
         android:layout_height="50dp"
-        android:background="@color/color_dullRed1"
-        android:gravity="center"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/v_user_back">
+
+    </FrameLayout>
     <View
         android:id="@+id/v_user_back"
         android:layout_width="0dp"
@@ -25,7 +25,7 @@
         android:background="@color/color_frenchGrey"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_user_title" />
+        app:layout_constraintTop_toBottomOf="@+id/fra_user_head" />
     <ImageView
         android:id="@+id/iv_user_pho"
         android:layout_width="100dp"
@@ -50,8 +50,7 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
         app:layout_constraintBottom_toTopOf="@+id/tv_user_anotherName"
         app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintRight_toRightOf="@+id/v_user_back"
-        android:layout_marginStart="13dp" />
+        app:layout_constraintRight_toRightOf="@+id/v_user_back"/>
     <TextView
         android:id="@+id/tv_user_anotherName"
         android:layout_width="120dp"
@@ -62,8 +61,7 @@
         android:layout_marginLeft="13dp"
         android:textColor="@color/color_white"
         app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintBottom_toBottomOf="@+id/v_user_back"
-        android:layout_marginStart="13dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/v_user_back"/>
     <TextView
         android:id="@+id/tv_user_info"
         android:layout_width="0dp"

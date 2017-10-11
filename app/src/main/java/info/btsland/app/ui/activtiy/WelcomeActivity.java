@@ -1,4 +1,4 @@
-package info.btsland.app.ui;
+package info.btsland.app.ui.activtiy;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,12 +9,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.view.Window;
-import android.view.WindowManager;
-
-import org.json.JSONArray;
 
 import info.btsland.app.R;
+import info.btsland.app.ui.MainActivity;
 
 public class WelcomeActivity extends Activity {
 

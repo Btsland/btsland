@@ -1,17 +1,21 @@
 package info.btsland.app.ui;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import info.btsland.app.R;
+import info.btsland.app.ui.fragment.HeadFragment;
 
 
 public class UserActivity extends Activity {
@@ -21,15 +25,15 @@ public class UserActivity extends Activity {
     private TextView tvUserRecent;
     private TextView tvUserEntrust;
     private TextView tvUserSeting;
+    private HeadFragment headFragment;
 
-    private String name;
-    private String img;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user);
+        Log.i("UserActivity", "onCreate: ");
+        fillInHead();
         init();
-
     }
 
     /**
@@ -51,7 +55,17 @@ public class UserActivity extends Activity {
         tvUserEntrust.setOnTouchListener(new TextViewListener());
         tvUserSeting.setOnTouchListener(new TextViewListener());
     }
-
+    /**
+     * 装载顶部导航
+     */
+    private void fillInHead(){
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if (headFragment==null){
+            headFragment=new HeadFragment();
+            transaction.add(R.id.fra_user_head,headFragment);
+        }
+        transaction.commit();
+    }
     /**
      * 单击特效
      * @param textView 被单击的tv

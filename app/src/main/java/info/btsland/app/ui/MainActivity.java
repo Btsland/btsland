@@ -2,29 +2,20 @@ package info.btsland.app.ui;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.res.ResourcesCompat;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-
-import org.json.JSONObject;
-
 import info.btsland.app.R;
+import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
@@ -34,31 +25,22 @@ import info.btsland.app.ui.fragment.PurseFragment;
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends Activity implements MarketFragment.OnFragmentInteractionListener,
-        HomeFragment.OnFragmentInteractionListener,PurseFragment.OnFragmentInteractionListener {
-    private ImageView ivNavUser ;
+public class MainActivity extends Activity{
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
-    private TextView tvNavSet;
     private Fragment marketFragment;
     private Fragment homeFragment;
     private Fragment purseFragment;
+    private HeadFragment headFragment;
+    private TextView tvHeadLeft;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        fillInHead();
+        fillInBody();
         init();
-
-        //Setting
-        tvNavSet = (TextView)findViewById(R.id.tv_nav_set);
-        tvNavSet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(MainActivity.this,SettingActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     /**
@@ -66,35 +48,82 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
      */
     protected void init(){
         //初始化
-        ivNavUser=(ImageView)findViewById(R.id.iv_nav_user);
         tvNavHome=(TextView)findViewById(R.id.tv_nav_home);
         tvNavMarket=(TextView)findViewById(R.id.tv_nav_market);
         tvNavPurse=(TextView)findViewById(R.id.tv_nav_purse);
         //绑定监听器
-        ivNavUser.setOnClickListener(new ivNavUserOnClick());
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
-        //初始化fragment
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        if (marketFragment==null){
-            marketFragment=new MarketFragment();
-            transaction.add(R.id.fragment,marketFragment);
-        }
-        hideFragment(transaction);
-        //默认显示行情页
-        transaction.show(marketFragment);
-        transaction.commit();
-    }
 
-    @Override
-    public void onFragmentInteraction(Uri uri) {
-
+        touchColor(tvNavMarket,tvNavHome,tvNavPurse);//选中行情控件
+        showFragment(tvNavMarket);//显示行情页面
     }
 
     /**
+     * 装载顶部导航
+     */
+    private void fillInHead(){
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if (headFragment==null){
+            headFragment=new HeadFragment();
+            headFragment.setType(HeadFragment.HeadType.USER_SET);
+            transaction.add(R.id.fra_main_head,headFragment);
+        }
+        transaction.commit();
+    }
+    /**
+     * 装载主体内容
+     */
+    private void fillInBody(){
+        //初始化fra_main_body
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if (marketFragment==null){
+            marketFragment=new MarketFragment();
+            transaction.add(R.id.fra_main_body,marketFragment);
+        };
+        transaction.commit();
+    }
+
+
+
+    /**
+     * 根据底部导航栏选定的控件进行切换fra
+     * @param textView 选定的控件
+     */
+    private void showFragment(TextView textView){
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        switch (textView.getId()){
+            case R.id.tv_nav_home:
+                if (homeFragment==null){
+                    homeFragment=new HomeFragment();
+                    transaction.add(R.id.fra_main_body,homeFragment);
+                }
+                hideFragment(transaction);
+                transaction.show(homeFragment);
+                break;
+            case R.id.tv_nav_market:
+                if (marketFragment==null){
+                    marketFragment=new MarketFragment();
+                    transaction.add(R.id.fra_main_body,marketFragment);
+                }
+                hideFragment(transaction);
+                transaction.show(marketFragment);
+                break;
+            case R.id.tv_nav_purse:
+                if (purseFragment==null){
+                    purseFragment=new PurseFragment();
+                    transaction.add(R.id.fra_main_body,purseFragment);
+                }
+                hideFragment(transaction);
+                transaction.show(purseFragment);
+                break;
+        }
+        transaction.commit();
+    }
+    /**
      * 隐藏所有fragment
-      * @param transaction
+     * @param transaction
      */
     private void hideFragment(FragmentTransaction transaction){
         if(marketFragment != null){
@@ -106,37 +135,6 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
         if(purseFragment != null){
             transaction.hide(purseFragment);
         }
-    }
-    private void showFragment(TextView textView){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        switch (textView.getId()){
-            case R.id.tv_nav_home:
-                if (homeFragment==null){
-                    homeFragment=new HomeFragment();
-                    transaction.add(R.id.fragment,homeFragment);
-                }
-                hideFragment(transaction);
-                transaction.show(homeFragment);
-                break;
-            case R.id.tv_nav_market:
-                if (marketFragment==null){
-                    marketFragment=new MarketFragment();
-                    transaction.add(R.id.fragment,marketFragment);
-                }
-                hideFragment(transaction);
-                transaction.show(marketFragment);
-                break;
-            case R.id.tv_nav_purse:
-                if (purseFragment==null){
-                    purseFragment=new PurseFragment();
-                    transaction.add(R.id.fragment,purseFragment);
-                }
-                hideFragment(transaction);
-                transaction.show(purseFragment);
-                break;
-        }
-
-        transaction.commit();
     }
     /**
      * 底部导航栏操作效果
@@ -160,20 +158,21 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
             }
         }
 
-        /**
-         * 导航栏交互特效
-         * @param facingTextView 当前的控件
-         * @param textView1
-         * @param textView2
-         */
-        protected void touchColor(TextView facingTextView,TextView textView1,TextView textView2){
-            facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
-            textView1.setBackground(getDrawable(R.drawable.tv_border));
-            textView2.setBackground(getDrawable(R.drawable.tv_border));
-            facingTextView.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_yellow_red,null));
-            textView1.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
-            textView2.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
-        }
+
+    }
+    /**
+     * 导航栏交互特效
+     * @param facingTextView 当前的控件
+     * @param textView1
+     * @param textView2
+     */
+    protected void touchColor(TextView facingTextView,TextView textView1,TextView textView2){
+        facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
+        textView1.setBackground(getDrawable(R.drawable.tv_border));
+        textView2.setBackground(getDrawable(R.drawable.tv_border));
+        facingTextView.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_yellow_red,null));
+        textView1.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
+        textView2.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
     }
 
 
@@ -183,7 +182,6 @@ public class MainActivity extends Activity implements MarketFragment.OnFragmentI
     class ivNavUserOnClick implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-
             Intent intent=new Intent(MainActivity.this,UserActivity.class);
             MainActivity.this.startActivity(intent);
         }

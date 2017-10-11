@@ -62,10 +62,10 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         if (isTwoPane) {
             NewsContentFragment newsContentFragment = (NewsContentFragment) getFragmentManager().findFragmentById(R.id.news_content_fragment);
             //如果是双页模式（平板），就更新新闻内容碎片里数据
-            newsContentFragment.refresh(news.getTitle(), news.getContent());
+            newsContentFragment.refresh(news);
         } else {
             //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-            NewsContentActivity.actionStart(getActivity(), news.getTitle(), news.getContent());
+            NewsContentActivity.actionStart(getActivity(), news);
         }
     }
 

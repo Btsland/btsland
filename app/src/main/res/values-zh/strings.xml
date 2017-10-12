@@ -1,0 +1,5 @@
+<resources>
+    <string name="language">语言</string>
+    <string name="theme">主题</string>
+    <string name="set">设置</string>
+</resources>

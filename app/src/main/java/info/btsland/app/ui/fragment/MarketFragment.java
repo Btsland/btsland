@@ -1,6 +1,7 @@
 package info.btsland.app.ui.fragment;
 
 import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
@@ -24,6 +25,7 @@ import info.btsland.app.util.DensityUtil;
 
 public class MarketFragment extends Fragment {
     private MarketService marketService;
+    private MarketSimpleKFragment simpleKFragment;
 
     private TextView tvMarketLeftCoin_1;
     private TextView tvMarketLeftCoin_2;
@@ -57,6 +59,7 @@ public class MarketFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        fillInSimpleK();
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
@@ -76,6 +79,17 @@ public class MarketFragment extends Fragment {
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
     }
 
+    /**
+     * 装载简易K图
+     */
+    private void fillInSimpleK(){
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        if (simpleKFragment==null){
+            simpleKFragment=new MarketSimpleKFragment();;
+            transaction.add(R.id.fra_market_simple,simpleKFragment);
+        }
+        transaction.commit();
+    }
     class LeftCoinOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {

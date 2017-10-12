@@ -22,7 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="#FFFFFF"
-        android:text="语言"
+        android:text="@string/language"
         android:layout_marginTop="10dp"/>
 
     <Button
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:background="#FFFFFF"
-        android:text="主题"
+        android:text="@string/theme"
         android:layout_marginTop="10dp"/>
 
     <Button

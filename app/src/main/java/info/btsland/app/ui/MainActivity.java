@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
@@ -41,6 +42,8 @@ public class MainActivity extends Activity{
         fillInHead();
         fillInBody();
         init();
+
+        Log.i("MainActivity", "onCreate: ");
     }
 
     /**

@@ -1,22 +1,40 @@
 package info.btsland.app.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.Toast;
+
+import java.util.Locale;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.util.PreferenceUtil;
+
 
 
 public class SettingActivity extends Activity {
     private HeadFragment headFragment;
+
+    private Button button;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(info.btsland.app.R.layout.activity_setting);
         Log.i("SettingActivity", "onCreate: ");
+        PreferenceUtil.init(this);
+
+        switchLanguage(PreferenceUtil.getString("language","zh"));
         fillInHead();
         init();
     }
@@ -25,6 +43,13 @@ public class SettingActivity extends Activity {
      * 初始化
      */
     private void init(){
+        button=findViewById(R.id.btn);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showListDialog();
+            }
+        });
 
     }
     /**
@@ -33,10 +58,55 @@ public class SettingActivity extends Activity {
     private void fillInHead(){
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (headFragment==null){
-            headFragment=new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
+            headFragment.setTitleName(getString(R.string.set));
+            
             transaction.add(R.id.fra_set_head,headFragment);
         }
         transaction.commit();
+    }
+    private void showListDialog() {
+        final String[] items = { "中文","英文"};
+        AlertDialog.Builder listDialog =
+                new AlertDialog.Builder(SettingActivity.this);
+        listDialog.setTitle("我是一个列表Dialog");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(items[which]=="中文"){
+                    switchLanguage("zh");
+                }else if(items[which]=="英文"){
+                    switchLanguage("en");
+                }
+                finish();
+                Intent intent=new Intent(SettingActivity.this,SettingActivity.class);
+                startActivity(intent);
+
+            }
+        });
+        listDialog.show();
+    }
+    /**
+     * <切换语言>
+     *
+     * @param language
+     */
+
+    protected void switchLanguage(String language) {
+        // 设置应用语言类型
+        Resources resources = getResources();
+        Configuration config = resources.getConfiguration();
+        DisplayMetrics dm = resources.getDisplayMetrics();
+
+        if (language.equals("en")){
+            config.locale = Locale.ENGLISH;
+        }else{
+            config.locale = Locale.SIMPLIFIED_CHINESE;
+        }
+        resources.updateConfiguration(config, dm);
+
+        // 保存设置语言的类型
+        PreferenceUtil.commitString("language",language);
+
     }
 }

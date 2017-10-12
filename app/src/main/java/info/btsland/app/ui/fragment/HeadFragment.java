@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import java.io.Serializable;
 import info.btsland.app.R;
+import info.btsland.app.model.Market;
+import info.btsland.app.model.News;
 import info.btsland.app.ui.SettingActivity;
 import info.btsland.app.ui.UserActivity;
 
@@ -21,7 +23,17 @@ import info.btsland.app.ui.UserActivity;
  */
 public class HeadFragment extends Fragment {
 
-    private int type=1;
+    private int type=HeadType.BACK_SET;
+
+    private String titleName;
+
+    public String getTitleName() {
+        return titleName;
+    }
+
+    public void setTitleName(String titleName) {
+        this.titleName = titleName;
+    }
 
     public int getType() {
         return type;
@@ -35,20 +47,22 @@ public class HeadFragment extends Fragment {
     private TextView rightTextView;
     private TextView titleTextView;
 
-    public TextView getLeftTextView() {
-        return leftTextView;
-    }
-
-    public TextView getRightTextView() {
-        return rightTextView;
-    }
-
-    public TextView getTitleTextView() {
-        return titleTextView;
-    }
 
     public HeadFragment() {
         super();
+    }
+
+    public HeadFragment(int type, String titleName) {
+        this.type = type;
+        this.titleName = titleName;
+    }
+
+    public HeadFragment(int type) {
+        this.type = type;
+    }
+
+    public HeadFragment(String titleName) {
+        this.titleName = titleName;
     }
 
     /**
@@ -98,9 +112,10 @@ public class HeadFragment extends Fragment {
     class ToUserOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-
             Intent intent = new Intent(getActivity(), UserActivity.class);
             getActivity().startActivity(intent);
+            News news=new News();
+            Market market=new Market();
         }
     }
     class ToSettingOnClickListener implements View.OnClickListener{
@@ -122,7 +137,6 @@ public class HeadFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_head, container, false);
-
         return view;
     }
 

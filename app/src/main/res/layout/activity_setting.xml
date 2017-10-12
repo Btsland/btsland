@@ -1,53 +1,97 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#EEEEEE"
-    android:orientation="vertical">
-
+<android.support.constraint.ConstraintLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:background="@color/color_Grey"
+tools:context="info.btsland.app.ui.UserActivity">
 
     <!--顶部导航栏-->
     <FrameLayout
         android:id="@+id/fra_set_head"
-        android:layout_width="match_parent"
-        android:layout_height="50dp">
-
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
     </FrameLayout>
 
-    <Button
-        android:id="@+id/btn"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
+    <View
+        android:id="@+id/v_set_back"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:background="@drawable/welcome2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fra_set_head"
+        app:layout_constraintHorizontal_bias="0.0" />
+
+    <TextView
+        android:id="@+id/tv_set_language"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:text="@string/language"
-        android:layout_marginTop="10dp"/>
-
-    <Button
-        android:id="@+id/btn2"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/v_set_back"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="5dp" />
+    <TextView
+        android:id="@+id/tv_set_theme"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
         android:text="@string/theme"
-        android:layout_marginTop="10dp"/>
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_set_language"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/btn3"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
-        android:text="使用指南"
-        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/tv_set_guide"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="@string/guide"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_set_theme"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/btn4"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="#FFFFFF"
-        android:text="关于我们"
-        android:layout_marginTop="10dp"/>
+    <TextView
+        android:id="@+id/tv_set_we"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="@string/we"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_set_guide"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_set_edition"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="@string/edition"
+        android:gravity="center"
+        android:layout_margin="5dp"
+        android:background="@drawable/tv_row"
+        android:textColor="@color/color_white"
+        app:layout_constraintTop_toBottomOf="@+id/tv_set_we"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -85,6 +85,7 @@ public class UserActivity extends Activity {
             switch (view.getId()) {
                 case R.id.tv_user_info:
                     touchColor(tvUserInfo,motionEvent);
+
                     break;
                 case R.id.tv_user_whiteList:
                     touchColor(tvUserWhiteList,motionEvent);
@@ -102,7 +103,7 @@ public class UserActivity extends Activity {
                     touchColor(tvUserSeting,motionEvent);
                     break;
             }
-            return true;
+            return false;
         }
     }
 }

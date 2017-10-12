@@ -43,7 +43,6 @@ public class MainActivity extends Activity{
         fillInBody();
         init();
 
-        Log.i("MainActivity", "onCreate: ");
     }
 
     /**

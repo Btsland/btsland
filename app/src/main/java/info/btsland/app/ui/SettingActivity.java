@@ -150,7 +150,7 @@ public class SettingActivity extends Activity {
         resources.updateConfiguration(config, dm);
 
         // 保存设置语言的类型
-        PreferenceUtil.commitString("language",language);
+            PreferenceUtil.commitString("language",language);
 
     }
     /**
@@ -183,7 +183,7 @@ public class SettingActivity extends Activity {
                     touchColor(tvSetWe,motionEvent);
                     break;
                 case R.id.tv_set_edition:
-                    touchColor(tvSetWe,motionEvent);
+                    touchColor(tvSetEdition,motionEvent);
                     break;
             }
             return false;

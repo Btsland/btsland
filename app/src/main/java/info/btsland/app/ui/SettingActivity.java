@@ -25,7 +25,7 @@ import info.btsland.app.util.PreferenceUtil;
 
 
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends BaseActivity {
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -39,9 +39,6 @@ public class SettingActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(info.btsland.app.R.layout.activity_setting);
         Log.i("SettingActivity", "onCreate: ");
-
-        PreferenceUtil.init(this);
-        switchLanguage(PreferenceUtil.getString("language","zh"));
         fillInHead();
         init();
     }
@@ -123,35 +120,16 @@ public class SettingActivity extends Activity {
                 }
                 finish();
 
-                Intent intent=new Intent(SettingActivity.this,SettingActivity.class);
+                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+                //开始新的activity同时移除之前所有的activity
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
         listDialog.show();
     }
-    /**
-     * <切换语言>
-     *
-     * @param language
-     */
 
-    protected void switchLanguage(String language) {
-        // 设置应用语言类型
-        Resources resources = getResources();
-        Configuration config = resources.getConfiguration();
-        DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (language.equals("en")){
-            config.locale = Locale.ENGLISH;
-        }else{
-            config.locale = Locale.SIMPLIFIED_CHINESE;
-        }
-        resources.updateConfiguration(config, dm);
-
-        // 保存设置语言的类型
-        PreferenceUtil.commitString("language",language);
-
-    }
     /**
      * 单击特效
      * @param textView 被单击的tv
@@ -182,7 +160,7 @@ public class SettingActivity extends Activity {
                     touchColor(tvSetWe,motionEvent);
                     break;
                 case R.id.tv_set_edition:
-                    touchColor(tvSetWe,motionEvent);
+                    touchColor(tvSetEdition,motionEvent);
                     break;
             }
             return false;

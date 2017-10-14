@@ -7,6 +7,11 @@ import android.support.test.runner.AndroidJUnit4;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import info.btsland.app.model.News;
+
 import static org.junit.Assert.*;
 
 /**
@@ -23,4 +28,45 @@ public class ExampleInstrumentedTest {
 
         assertEquals("info.btsland.app", appContext.getPackageName());
     }
+
+
+    @Test
+    public List<News> getNews(){
+
+        List<News> nlist =new ArrayList<News>();
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+        nlist.add(new News("标题","内容","新闻日期","标题内容"));
+
+
+        return nlist;
+    }
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

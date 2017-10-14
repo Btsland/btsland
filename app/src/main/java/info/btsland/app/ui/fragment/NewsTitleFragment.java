@@ -11,6 +11,7 @@ package info.btsland.app.ui.fragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,14 +60,10 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
     //ListView子项目的点击事件
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         News news = newsList.get(position);
-        if (isTwoPane) {
-            NewsContentFragment newsContentFragment = (NewsContentFragment) getFragmentManager().findFragmentById(R.id.news_content_fragment);
-            //如果是双页模式（平板），就更新新闻内容碎片里数据
-            newsContentFragment.refresh(news);
-        } else {
             //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-            NewsContentActivity.actionStart(getActivity(), news);
-        }
+        Intent intent=new Intent(getActivity(),NewsContentActivity.class);
+        intent.putExtra("news",news);
+        getActivity().startActivity(intent);
     }
 
 

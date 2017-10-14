@@ -1,5 +1,6 @@
 package info.btsland.app.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,7 @@ import info.btsland.app.ui.UserActivity;
  * 2017/10/10
  * 可通过getXXX()获得内部控件进行定制
  */
+@SuppressLint("ValidFragment")
 public class HeadFragment extends Fragment {
 
     private int type=HeadType.BACK_SET;

@@ -32,9 +32,9 @@ public class MainActivity extends Activity{
     private TextView tvNavPurse;
     private Fragment marketFragment;
     private Fragment homeFragment;
+    private Fragment myNewsFragment;
     private Fragment purseFragment;
     private HeadFragment headFragment;
-    private TextView tvHeadLeft;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +42,6 @@ public class MainActivity extends Activity{
         fillInHead();
         fillInBody();
         init();
-
     }
 
     /**
@@ -97,9 +96,9 @@ public class MainActivity extends Activity{
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         switch (textView.getId()){
             case R.id.tv_nav_home:
-                if (homeFragment==null){
-                    homeFragment=new HomeFragment();
-                    transaction.add(R.id.fra_main_body,homeFragment);
+                if (myNewsFragment==null){
+                    myNewsFragment=new HeadFragment();
+                    transaction.add(R.id.fra_main_body,myNewsFragment);
                 }
                 hideFragment(transaction);
                 transaction.show(homeFragment);

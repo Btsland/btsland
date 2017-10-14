@@ -1,5 +1,9 @@
 package info.btsland.app.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * author：lys
  * function：行情类

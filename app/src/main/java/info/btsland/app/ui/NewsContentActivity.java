@@ -26,7 +26,6 @@ public class NewsContentActivity extends Activity {
         Intent intent = new Intent(context, NewsContentActivity.class);
         //将参数新闻标题、新闻内容（参数）保存到intent中
         intent.putExtra("news", news);
-
         context.startActivity(intent);
     }
 

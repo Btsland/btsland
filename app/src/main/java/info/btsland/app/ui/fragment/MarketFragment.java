@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,12 +22,12 @@ import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.view.RowLinearLayout;
 import info.btsland.app.util.DensityUtil;
 
 public class MarketFragment extends Fragment {
     private MarketService marketService;
     private MarketSimpleKFragment simpleKFragment;
-
     private TextView tvMarketLeftCoin_1;
     private TextView tvMarketLeftCoin_2;
     private TextView tvMarketLeftCoin_3;
@@ -37,6 +38,8 @@ public class MarketFragment extends Fragment {
     private List marketsUSD;
     private List marketsBTS;
     private List marketsETH;
+    private String[] shops;
+
     private Map<String,List<Market>> market;
     public MarketFragment() {
         // Required empty public constructor
@@ -77,6 +80,8 @@ public class MarketFragment extends Fragment {
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
+        shops= getResources().getStringArray(R.array.shops);//得到需要显示的市场
+
     }
 
     /**
@@ -194,7 +199,7 @@ public class MarketFragment extends Fragment {
             for (int i = 0; i < markets.size(); i++) {
                 market=markets.get(i);
                 //生成一行
-                LinearLayout row = new LinearLayout(getActivity());
+                RowLinearLayout row = new RowLinearLayout(getActivity());
                 LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),70f));
                 rowParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f),DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f));
                 row.setOrientation(LinearLayout.HORIZONTAL);
@@ -287,6 +292,14 @@ public class MarketFragment extends Fragment {
                 row.addView(left);
                 row.addView(price);
                 row.addView(right);
+                row.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        RowLinearLayout layout= (RowLinearLayout) view;
+                        String leftCoin = layout.getLeftCoin();
+                        String rightCoin = layout.getRightCoin();
+                    }
+                });
                 Linear.addView(row);
             }
 

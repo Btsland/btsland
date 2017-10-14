@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
@@ -34,6 +35,8 @@ public class WelcomeActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            Log.i("getColor", "getColor: "+getResources().getColor(R.color.color_Grey));
+            Log.i("getColor", "getString: "+getResources().getString(R.string.font_color_gray));
             Intent intent = new Intent();
             intent.setClass(WelcomeActivity.this, MainActivity.class);
             startActivity(intent);

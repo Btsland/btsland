@@ -1,10 +1,33 @@
 <resources>
 
+    <string name="homepage">Home</string>
+
+    <string name="themarket">Market</string>
+    <string name="buy">Buy</string>
+    <string name="sell">Sell</string>
+
+    <string name="wallet">Wallet</string>
+    <string name="asset">Asset</string>
+    <string name="accessrecord">AccessRecord</string>
+    <string name="tradingrecord">TradingRecord</string>
+    <string name="entryorders">EntryOrders</string>
+    <string name="walletbackup">WalletBackup</string>
+
     <string name="set">Set</string>
     <string name="language">LanguAge</string>
     <string name="theme">Theme</string>
     <string name="guide">UseGuide</string>
     <string name="we">AboutUs</string>
     <string name="edition">Edition</string>
+
+    <string name="username">UserName:btsland</string>
+    <string name="alias">Alias:#404801</string>
+    <string name="personage">Personage</string>
+    <string name="whitelist">WhiteList</string>
+    <string name="privilege">Privilege</string>
+    <string name="activity">Activity</string>
+    <string name="entrust">Entrust</string>
+
+    <string name="accountset">AccountSet</string>
 
 </resources>

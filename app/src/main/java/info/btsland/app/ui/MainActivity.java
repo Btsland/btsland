@@ -20,13 +20,14 @@ import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
+import info.btsland.app.util.PreferenceUtil;
 
 /**
  * 作者：谢建华
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends Activity{
+public class MainActivity extends BaseActivity{
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
@@ -38,7 +39,12 @@ public class MainActivity extends Activity{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 初始化PreferenceUtil
+        PreferenceUtil.init(this);
+        // 依据上次的语言设置，又一次设置语言
+        switchLanguage(PreferenceUtil.getString("language", "zh"));
         setContentView(R.layout.activity_main);
+
         fillInHead();
         fillInBody();
         init();
@@ -51,6 +57,7 @@ public class MainActivity extends Activity{
     protected void init(){
         //初始化
         tvNavHome=(TextView)findViewById(R.id.tv_nav_home);
+        Log.i("init", "init: tvNavHome.getText()"+tvNavHome.getText());
         tvNavMarket=(TextView)findViewById(R.id.tv_nav_market);
         tvNavPurse=(TextView)findViewById(R.id.tv_nav_purse);
         //绑定监听器

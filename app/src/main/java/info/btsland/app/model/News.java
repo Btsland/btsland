@@ -43,4 +43,32 @@ public class News implements Serializable {
     public void setContent(String content) {
         this.content = content;
     }
+
+    public News() {
+    }
+
+    public News(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
+    public News(String title, String content, String date, String titleContent) {
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.titleContent = titleContent;
+    }
+
+    @Override
+    public String toString() {
+        return "News{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }
+
+
+
+
+

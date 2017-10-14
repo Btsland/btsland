@@ -41,6 +41,7 @@ public class SettingActivity extends Activity {
         Log.i("SettingActivity", "onCreate: ");
 
         PreferenceUtil.init(this);
+
         switchLanguage(PreferenceUtil.getString("language","zh"));
         fillInHead();
         init();

@@ -24,10 +24,35 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
+
+    <string name="homepage">首页</string>
+
+    <string name="themarket">行情</string>
+    <string name="buy">买入</string>
+    <string name="sell">卖出</string>
+
+    <string name="wallet">钱包</string>
+    <string name="asset">全部资产</string>
+    <string name="accessrecord">充提记录</string>
+    <string name="tradingrecord">交易记录</string>
+    <string name="entryorders">全部挂单</string>
+    <string name="walletbackup">钱包备份</string>
+
     <string name="set">设置</string>
     <string name="language">语言</string>
     <string name="theme">主题</string>
     <string name="guide">使用指南</string>
     <string name="we">关于我们</string>
     <string name="edition">版本信息</string>
+
+    <string name="username">用户名:btsland</string>
+    <string name="alias">别名:#404801</string>
+    <string name="personage">个人信息</string>
+    <string name="whitelist">白名单</string>
+    <string name="privilege">权限</string>
+    <string name="activity">近期活动</string>
+    <string name="entrust">委单</string>
+
+    <string name="accountset">账户设置</string>
+
 </resources>

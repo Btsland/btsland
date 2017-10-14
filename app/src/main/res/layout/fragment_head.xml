@@ -33,7 +33,7 @@
         android:id="@+id/tv_head_right"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:text="设置"
+        android:text="@string/set"
         android:textColor="#FFFFFF"
         android:textSize="18sp"
         android:gravity="center"

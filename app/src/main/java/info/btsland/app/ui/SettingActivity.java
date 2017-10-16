@@ -1,6 +1,5 @@
 package info.btsland.app.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
@@ -38,7 +37,6 @@ public class SettingActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(info.btsland.app.R.layout.activity_setting);
-        Log.i("SettingActivity", "onCreate: ");
         fillInHead();
         init();
     }
@@ -47,11 +45,11 @@ public class SettingActivity extends BaseActivity {
      * 初始化
      */
     private void init(){
-        tvSetLanguage=findViewById(R.id.tv_set_language);
-        tvSetTheme=findViewById(R.id.tv_set_theme);
-        tvSetGuide=findViewById(R.id.tv_set_guide);
-        tvSetWe=findViewById(R.id.tv_set_we);
-        tvSetEdition=findViewById(R.id.tv_set_edition);
+        tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
+        tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
+        tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
+        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
+        tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
         //绑定特效事件
         TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
@@ -93,7 +91,7 @@ public class SettingActivity extends BaseActivity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName(getString(R.string.set));

@@ -1,13 +1,13 @@
 package info.btsland.app.ui;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -26,13 +26,13 @@ import info.btsland.app.ui.fragment.PurseFragment;
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends Activity{
+public class MainActivity extends AppCompatActivity {
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
-    private Fragment marketFragment;
-    private Fragment homeFragment;
-    private Fragment purseFragment;
+    private MarketFragment marketFragment;
+    private HomeFragment homeFragment;
+    private PurseFragment purseFragment;
     private HeadFragment headFragment;
     private TextView tvHeadLeft;
     @Override
@@ -43,7 +43,6 @@ public class MainActivity extends Activity{
         fillInBody();
         init();
 
-        Log.i("MainActivity", "onCreate: ");
     }
 
     /**
@@ -67,7 +66,7 @@ public class MainActivity extends Activity{
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.USER_SET);
@@ -80,7 +79,7 @@ public class MainActivity extends Activity{
      */
     private void fillInBody(){
         //初始化fra_main_body
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (marketFragment==null){
             marketFragment=new MarketFragment();
             transaction.add(R.id.fra_main_body,marketFragment);
@@ -95,7 +94,7 @@ public class MainActivity extends Activity{
      * @param textView 选定的控件
      */
     private void showFragment(TextView textView){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (textView.getId()){
             case R.id.tv_nav_home:
                 if (homeFragment==null){

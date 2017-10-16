@@ -1,12 +1,16 @@
 package info.btsland.app.model;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
 /**
  * author：lys
  * function：行情类
  * 2017/9/27.
  */
 
-public class Market {
+public class Market implements Serializable {
     /*
      * 左边货币
      */

@@ -6,10 +6,11 @@ package info.btsland.app.ui;
  */
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.widget.TextView;
 
@@ -18,7 +19,7 @@ import info.btsland.app.model.News;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.NewsContentFragment;
 
-public class NewsContentActivity extends Activity {
+public class NewsContentActivity extends AppCompatActivity {
     private HeadFragment headFragment;
     private TextView textView;
     //actionStart()方法，将启动NewsActivity所需要的参数导入进来
@@ -26,7 +27,6 @@ public class NewsContentActivity extends Activity {
         Intent intent = new Intent(context, NewsContentActivity.class);
         //将参数新闻标题、新闻内容（参数）保存到intent中
         intent.putExtra("news", news);
-
         context.startActivity(intent);
     }
 
@@ -47,7 +47,7 @@ public class NewsContentActivity extends Activity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);

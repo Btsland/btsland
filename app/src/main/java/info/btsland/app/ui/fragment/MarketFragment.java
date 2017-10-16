@@ -1,32 +1,37 @@
 package info.btsland.app.ui.fragment;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.text.Html;
 import android.text.InputFilter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import info.btsland.app.Adapter.MarketRowAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.view.RowLinearLayout;
 import info.btsland.app.util.DensityUtil;
 
 public class MarketFragment extends Fragment {
     private MarketService marketService;
     private MarketSimpleKFragment simpleKFragment;
-
     private TextView tvMarketLeftCoin_1;
     private TextView tvMarketLeftCoin_2;
     private TextView tvMarketLeftCoin_3;
@@ -37,6 +42,11 @@ public class MarketFragment extends Fragment {
     private List marketsUSD;
     private List marketsBTS;
     private List marketsETH;
+    private String[] shops;
+
+    private ListView lvMarketInfo;
+
+
     private Map<String,List<Market>> market;
     public MarketFragment() {
         // Required empty public constructor
@@ -71,12 +81,15 @@ public class MarketFragment extends Fragment {
         tvMarketLeftCoin_3=getActivity().findViewById(R.id.tv_market_left_coin3);
         tvMarketLeftCoin_4=getActivity().findViewById(R.id.tv_market_left_coin4);
         tvMarketLeftCoin_5=getActivity().findViewById(R.id.tv_market_left_coin5);
+        lvMarketInfo=getActivity().findViewById(R.id.lv_market_info);
         LeftCoinOnClickListener onClickListener=new LeftCoinOnClickListener();
         tvMarketLeftCoin_1.setOnClickListener(onClickListener);
         tvMarketLeftCoin_2.setOnClickListener(onClickListener);
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
+        shops= getResources().getStringArray(R.array.shops);//得到需要显示的市场
+
     }
 
     /**
@@ -85,7 +98,7 @@ public class MarketFragment extends Fragment {
     private void fillInSimpleK(){
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (simpleKFragment==null){
-            simpleKFragment=new MarketSimpleKFragment();;
+            simpleKFragment=new MarketSimpleKFragment();
             transaction.add(R.id.fra_market_simple,simpleKFragment);
         }
         transaction.commit();
@@ -160,10 +173,14 @@ public class MarketFragment extends Fragment {
         }
 
         private void setMarket(View leftCoin){
-            LinearLayout linearLayout=getActivity().findViewById(R.id.ll_market_info);
-            linearLayout.removeAllViews();
+            Log.i("setMarket", String.valueOf("lvMarketInfo: "+lvMarketInfo==null));
+//            if(lvMarketInfo!=null){
+//                lvMarketInfo.removeAllViews();
+//            }
+
             List<Market> markets=readMarket(leftCoin);
-            createCol(leftCoin,linearLayout,markets);
+            MarketRowAdapter rowAdapter=new MarketRowAdapter(getActivity(),markets);
+            lvMarketInfo.setAdapter(rowAdapter);
         }
 
         private List<Market> readMarket(View leftCoin){
@@ -189,110 +206,117 @@ public class MarketFragment extends Fragment {
             }
             return list;
         }
-        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
-            Market market=null;
-            for (int i = 0; i < markets.size(); i++) {
-                market=markets.get(i);
-                //生成一行
-                LinearLayout row = new LinearLayout(getActivity());
-                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),70f));
-                rowParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f),DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f));
-                row.setOrientation(LinearLayout.HORIZONTAL);
-                row.setLayoutParams(rowParams);
-                row.setBackground(getActivity().getDrawable(R.drawable.ll_market_info_row));
-                //生成左侧linear
-                LinearLayout left = new LinearLayout(getActivity());
-                left.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.5f);
-                left.setLayoutParams(leftParams);
-                TextView fluct = new TextView(getActivity());
-                LinearLayout.LayoutParams fluctParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                fluct.setLayoutParams(fluctParams);
-                //货币名称
-                TextView coinName = new TextView(getActivity());
-                LinearLayout.LayoutParams coinNameParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2f);
-                coinName.setLayoutParams(coinNameParams);
-                coinName.setGravity(Gravity.CENTER);
-                coinName.setTextSize(18);
-                coinName.setLines(1);
+//        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
+//            for (int i = 0; i < markets.size(); i++) {
+//                market=markets.get(i);
+//                //生成一行
+//                RowLinearLayout row = new RowLinearLayout(getActivity());
+//                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),70f));
+//                rowParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f),DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f));
+//                row.setOrientation(LinearLayout.HORIZONTAL);
+//                row.setLayoutParams(rowParams);
+//                row.setBackground(getActivity().getDrawable(R.drawable.ll_market_info_row));
+//                //生成左侧linear
+//                LinearLayout left = new LinearLayout(getActivity());
+//                left.setOrientation(LinearLayout.VERTICAL);
+//                LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.5f);
+//                left.setLayoutParams(leftParams);
+//                TextView fluct = new TextView(getActivity());
+//                LinearLayout.LayoutParams fluctParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+//                fluct.setLayoutParams(fluctParams);
+//                //货币名称
+//                TextView coinName = new TextView(getActivity());
+//                LinearLayout.LayoutParams coinNameParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2f);
+//                coinName.setLayoutParams(coinNameParams);
+//                coinName.setGravity(Gravity.CENTER);
+//                coinName.setTextSize(18);
+//                coinName.setLines(1);
+//
+//
+//
+//                //涨跌幅
+//                TextView fluctuation = new TextView(getActivity());
+//                LinearLayout.LayoutParams fluctuationParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+//                fluctuation.setLayoutParams(fluctuationParams);
+//                fluctuation.setGravity(Gravity.CENTER);
+//                fluctuation.setTextSize(14);
+//                fluctuation.setLines(1);
+//
+//
+//                //生成中间textView
+//                TextView price = new TextView(getActivity());
+//                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.3f);
+//                price.setLayoutParams(priceParams);
+//                price.setGravity(Gravity.CENTER);
+//                price.setTextSize(26);
+//                price.setLines(1);
+//                price.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
+//                price.setSingleLine(true);
+//
+//                //生成右侧linear
+//                LinearLayout right = new LinearLayout(getActivity());
+//                right.setOrientation(LinearLayout.VERTICAL);
+//                LinearLayout.LayoutParams rightParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.8f);
+//                right.setLayoutParams(rightParams);
+//                //最低卖价
+//                TextView bestAsk = new TextView(getActivity());
+//                LinearLayout.LayoutParams bestBidParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+//                bestBidParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
+//                bestAsk.setLayoutParams(bestBidParams);
+//                bestAsk.setGravity(Gravity.LEFT);
+//                bestAsk.setTextSize(12);
+//                bestAsk.setLines(1);
+//                bestAsk.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+//                bestAsk.setSingleLine(true);
+//
+//
+//                //最高买价
+//                TextView bestBid = new TextView(getActivity());
+//                LinearLayout.LayoutParams bestAskParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
+//                bestAskParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
+//                bestBid.setLayoutParams(bestAskParams);
+//                bestBid.setGravity(Gravity.LEFT);
+//                bestBid.setTextSize(12);
+//                bestBid.setLines(1);;
+//                bestBid.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
+//                bestBid.setSingleLine(true);
+//
+//                //设定值
+//                coinName.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_white)+"'>"+market.getLeftCoin()+"</font>"));
+//                float fluctuat=market.getFluctuation();
+//                if (fluctuat>0){
+//                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getNewPrice()+"</font>"));
+//                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getFluctuation()+"%</font>"));
+//                }else {
+//                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getNewPrice()+"</font>"));
+//                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getFluctuation()+"%</font>"));
+//                }
+//
+//                String buy=getResources().getString(R.string.buy);
+//                String sell=getResources().getString(R.string.sell);
+//                bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+sell+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestAsk()+"</font>"));
+//                bestBid.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+buy+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestBid()+"</font>"));
+//                left.addView(fluct);
+//                left.addView(coinName);
+//                left.addView(fluctuation);
+//                right.addView(bestAsk);
+//                right.addView(bestBid);
+//
+//                row.addView(left);
+//                row.addView(price);
+//                row.addView(right);
+//                row.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        RowLinearLayout layout= (RowLinearLayout) view;
+//                        String leftCoin = layout.getLeftCoin();
+//                        String rightCoin = layout.getRightCoin();
+//                    }
+//                });
+//                Linear.addView(row);
+//            }
 
-
-
-                //涨跌幅
-                TextView fluctuation = new TextView(getActivity());
-                LinearLayout.LayoutParams fluctuationParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                fluctuation.setLayoutParams(fluctuationParams);
-                fluctuation.setGravity(Gravity.CENTER);
-                fluctuation.setTextSize(14);
-                fluctuation.setLines(1);
-
-
-                //生成中间textView
-                TextView price = new TextView(getActivity());
-                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.3f);
-                price.setLayoutParams(priceParams);
-                price.setGravity(Gravity.CENTER);
-                price.setTextSize(26);
-                price.setLines(1);
-                price.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-                price.setSingleLine(true);
-
-                //生成右侧linear
-                LinearLayout right = new LinearLayout(getActivity());
-                right.setOrientation(LinearLayout.VERTICAL);
-                LinearLayout.LayoutParams rightParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.8f);
-                right.setLayoutParams(rightParams);
-                //最低卖价
-                TextView bestAsk = new TextView(getActivity());
-                LinearLayout.LayoutParams bestBidParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                bestBidParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
-                bestAsk.setLayoutParams(bestBidParams);
-                bestAsk.setGravity(Gravity.LEFT);
-                bestAsk.setTextSize(12);
-                bestAsk.setLines(1);
-                bestAsk.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-                bestAsk.setSingleLine(true);
-
-
-                //最高买价
-                TextView bestBid = new TextView(getActivity());
-                LinearLayout.LayoutParams bestAskParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-                bestAskParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
-                bestBid.setLayoutParams(bestAskParams);
-                bestBid.setGravity(Gravity.LEFT);
-                bestBid.setTextSize(12);
-                bestBid.setLines(1);;
-                bestBid.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-                bestBid.setSingleLine(true);
-
-                //设定值
-                coinName.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_white)+"'>"+market.getLeftCoin()+"</font>"));
-                float fluctuat=market.getFluctuation();
-                if (fluctuat>0){
-                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getNewPrice()+"</font>"));
-                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getFluctuation()+"%</font>"));
-                }else {
-                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getNewPrice()+"</font>"));
-                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getFluctuation()+"%</font>"));
-                }
-
-                String buy=getResources().getString(R.string.buy);
-                String sell=getResources().getString(R.string.sell);
-                bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+sell+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestAsk()+"</font>"));
-                bestBid.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+buy+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestBid()+"</font>"));
-                left.addView(fluct);
-                left.addView(coinName);
-                left.addView(fluctuation);
-                right.addView(bestAsk);
-                right.addView(bestBid);
-
-                row.addView(left);
-                row.addView(price);
-                row.addView(right);
-                Linear.addView(row);
-            }
-
-        }
+//        }
 
 
     @Override

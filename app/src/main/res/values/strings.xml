@@ -6,6 +6,20 @@
     <string name="font_color_lightGrey">#8D8D8D</string>
     <string name="font_color_green">#458B00</string>
     <string name="font_color_red">#ff0000</string>
+    <string-array name="shops">
+        <item>BTC</item>
+        <item>ETH</item>
+        <item>BTS</item>
+        <item>LTC</item>
+        <item>OMG</item>
+        <item>STEEM</item>
+        <item>VEN</item>
+        <item>HPB</item>
+        <item>OCT</item>
+        <item>YOYOW</item>
+        <item>DOGE</item>
+        <item>HASH</item>
+    </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

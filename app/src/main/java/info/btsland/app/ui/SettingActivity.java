@@ -1,14 +1,14 @@
 package info.btsland.app.ui;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,7 +25,7 @@ import info.btsland.app.util.PreferenceUtil;
 
 
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -39,10 +39,12 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(info.btsland.app.R.layout.activity_setting);
         Log.i("SettingActivity", "onCreate: ");
+<<<<<<<<< Temporary merge branch 1
 
         PreferenceUtil.init(this);
-
         switchLanguage(PreferenceUtil.getString("language","zh"));
+=========
+>>>>>>>>> Temporary merge branch 2
         fillInHead();
         init();
     }
@@ -51,11 +53,11 @@ public class SettingActivity extends AppCompatActivity {
      * 初始化
      */
     private void init(){
-        tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
-        tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
-        tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
-        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
-        tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
+        tvSetLanguage=findViewById(R.id.tv_set_language);
+        tvSetTheme=findViewById(R.id.tv_set_theme);
+        tvSetGuide=findViewById(R.id.tv_set_guide);
+        tvSetWe=findViewById(R.id.tv_set_we);
+        tvSetEdition=findViewById(R.id.tv_set_edition);
 
         //绑定特效事件
         TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
@@ -97,7 +99,7 @@ public class SettingActivity extends AppCompatActivity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName(getString(R.string.set));
@@ -124,35 +126,16 @@ public class SettingActivity extends AppCompatActivity {
                 }
                 finish();
 
-                Intent intent=new Intent(SettingActivity.this,SettingActivity.class);
+                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+                //开始新的activity同时移除之前所有的activity
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }
         });
         listDialog.show();
     }
-    /**
-     * <切换语言>
-     *
-     * @param language
-     */
 
-    protected void switchLanguage(String language) {
-        // 设置应用语言类型
-        Resources resources = getResources();
-        Configuration config = resources.getConfiguration();
-        DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (language.equals("en")){
-            config.locale = Locale.ENGLISH;
-        }else{
-            config.locale = Locale.SIMPLIFIED_CHINESE;
-        }
-        resources.updateConfiguration(config, dm);
-
-        // 保存设置语言的类型
-        PreferenceUtil.commitString("language",language);
-
-    }
     /**
      * 单击特效
      * @param textView 被单击的tv
@@ -183,7 +166,7 @@ public class SettingActivity extends AppCompatActivity {
                     touchColor(tvSetWe,motionEvent);
                     break;
                 case R.id.tv_set_edition:
-                    touchColor(tvSetWe,motionEvent);
+                    touchColor(tvSetEdition,motionEvent);
                     break;
             }
             return false;

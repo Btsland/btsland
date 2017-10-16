@@ -1,12 +1,12 @@
 package info.btsland.app.ui.activtiy;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -14,7 +14,7 @@ import android.view.ViewTreeObserver;
 import info.btsland.app.R;
 import info.btsland.app.ui.MainActivity;
 
-public class WelcomeActivity extends Activity {
+public class WelcomeActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class WelcomeActivity extends Activity {
 
 
 
-    public static void scaleImage(final Activity activity, final View view, int drawableResId) {
+    public static void scaleImage(final AppCompatActivity activity, final View view, int drawableResId) {
 
         // 获取屏幕的高宽
         Point outSize = new Point();

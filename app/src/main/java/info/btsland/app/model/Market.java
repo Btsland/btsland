@@ -10,7 +10,7 @@ import java.io.Serializable;
  * 2017/9/27.
  */
 
-public class Market {
+public class Market implements Serializable {
     /*
      * 左边货币
      */

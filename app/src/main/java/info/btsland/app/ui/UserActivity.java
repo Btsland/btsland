@@ -1,24 +1,18 @@
 package info.btsland.app.ui;
 
-import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 
-public class UserActivity extends Activity {
+public class UserActivity extends AppCompatActivity {
     private TextView tvUserInfo;
     private TextView tvUserWhiteList;
     private TextView tvUserPower;
@@ -59,7 +53,7 @@ public class UserActivity extends Activity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment();
             transaction.add(R.id.fra_user_head,headFragment);
@@ -85,7 +79,6 @@ public class UserActivity extends Activity {
             switch (view.getId()) {
                 case R.id.tv_user_info:
                     touchColor(tvUserInfo,motionEvent);
-
                     break;
                 case R.id.tv_user_whiteList:
                     touchColor(tvUserWhiteList,motionEvent);

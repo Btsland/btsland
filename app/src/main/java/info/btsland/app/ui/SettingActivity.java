@@ -1,14 +1,14 @@
 package info.btsland.app.ui;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -25,7 +25,7 @@ import info.btsland.app.util.PreferenceUtil;
 
 
 
-public class SettingActivity extends Activity {
+public class SettingActivity extends AppCompatActivity {
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -51,11 +51,11 @@ public class SettingActivity extends Activity {
      * 初始化
      */
     private void init(){
-        tvSetLanguage=findViewById(R.id.tv_set_language);
-        tvSetTheme=findViewById(R.id.tv_set_theme);
-        tvSetGuide=findViewById(R.id.tv_set_guide);
-        tvSetWe=findViewById(R.id.tv_set_we);
-        tvSetEdition=findViewById(R.id.tv_set_edition);
+        tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
+        tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
+        tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
+        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
+        tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
         //绑定特效事件
         TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
@@ -97,7 +97,7 @@ public class SettingActivity extends Activity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName(getString(R.string.set));

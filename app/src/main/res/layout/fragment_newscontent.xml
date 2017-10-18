@@ -5,7 +5,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical">
     <!-- android:visibility 设置布局的可见性，invisibe为不可见 -->
     <LinearLayout
         android:id="@+id/visibility_layout"
@@ -30,7 +36,7 @@
             android:padding="15dp"
             android:textSize="18sp" />
     </LinearLayout>
-
+    </ScrollView>
     <ImageView
         android:layout_width="1dp"
         android:layout_height="match_parent"

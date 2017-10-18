@@ -1,25 +1,16 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
-import info.btsland.app.ui.fragment.MarketRowFragment;
 
 /**
  * Created by Administrator on 2017/10/16.

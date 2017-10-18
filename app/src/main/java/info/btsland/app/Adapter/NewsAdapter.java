@@ -20,7 +20,7 @@ import info.btsland.app.model.News;
 
 public class NewsAdapter extends ArrayAdapter<News> {
     private int resourceId;
-
+    private LayoutInflater inflater;
     public NewsAdapter(Context context, int textViewResourceId, List<News> objects) {
         super(context, textViewResourceId, objects);
         // 重写父类ArrayAdapter的方法 ,textViewResourceId即为news_item.xml布局的id(ListView子项布局的id)

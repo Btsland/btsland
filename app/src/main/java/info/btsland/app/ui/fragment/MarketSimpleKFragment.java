@@ -34,6 +34,8 @@ import java.util.Random;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
+import info.btsland.app.service.Impl.MarketServiceImpl;
+import info.btsland.app.service.MarketService;
 import info.btsland.app.util.DensityUtil;
 
 
@@ -45,7 +47,11 @@ public class MarketSimpleKFragment extends Fragment {
     private TextView count;
     private LineChart simpleK;
 
-    public String dealStr;
+    private String leftCoin="BTS";
+    private String rightCoin="CNY";
+
+    private Market market;
+
     private String highStr;
     private String lowStr;
     private String countStr;
@@ -55,14 +61,21 @@ public class MarketSimpleKFragment extends Fragment {
     public MarketSimpleKFragment() {
         // Required empty public constructor
     }
-
+    public static MarketSimpleKFragment newInstance(Market market){
+        MarketSimpleKFragment simpleKFragment=new MarketSimpleKFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("market",market);
+        simpleKFragment.setArguments(args);
+        return simpleKFragment;
+    }
     private void init(){
         deal=getActivity().findViewById(R.id.tv_market_simple_deal);
         high=getActivity().findViewById(R.id.tv_market_simple_high);
         low=getActivity().findViewById(R.id.tv_market_simple_low);
         count=getActivity().findViewById(R.id.tv_market_simple_count);
         simpleK=getActivity().findViewById(R.id.lc_market_simple_K);
-        deal.setText(dealStr);
+        Log.i("init", "init: leftCoin+\":\"+rightCoin"+leftCoin+":"+rightCoin);
+        deal.setText(leftCoin+":"+rightCoin);
         ReceiveMarkets receiveMarkets =new ReceiveMarkets();
         receiveMarkets.start();
 //        simpleK.setDescription("BTC:CNY");
@@ -159,8 +172,8 @@ public class MarketSimpleKFragment extends Fragment {
     private class ReceiveMarkets extends Thread{
         @Override
         public void run() {
-            List<Market> markets=new ArrayList<Market>();
-            markets.add(new Market());
+            MarketService marketService=new MarketServiceImpl();
+            List<Market> markets = marketService.queryMarkets(leftCoin,rightCoin,"");
             Message message=Message.obtain();
             message.what=1;
             message.obj=markets;
@@ -204,6 +217,9 @@ public class MarketSimpleKFragment extends Fragment {
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(setComp1);
         ArrayList<String> xVals = new ArrayList<String>();
+        if(Entrys==null){
+            return;
+        }
         for (int i=0;i<Entrys.size();i++){
             xVals.add(i+"");
         }
@@ -215,12 +231,6 @@ public class MarketSimpleKFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        init();
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
@@ -228,7 +238,22 @@ public class MarketSimpleKFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_market_simple_k, container, false);
+        View view=null;
+        view=inflater.inflate(R.layout.fragment_market_simple_k, container, false);
+        if (getArguments()!=null) {
+            if(getArguments().getSerializable("market")!=null){
+                market = (Market)getArguments().getSerializable("market") ;
+                leftCoin=market.getLeftCoin();
+                rightCoin=market.getRightCoin();
+            }
+        }
+        return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        init();
     }
 
     @Override

@@ -69,7 +69,7 @@ public class MarketFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        fillInSimpleK();
+        fillInSimpleK(null);
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
@@ -95,10 +95,10 @@ public class MarketFragment extends Fragment {
     /**
      * 装载简易K图
      */
-    private void fillInSimpleK(){
+    private void fillInSimpleK(Market market){
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (simpleKFragment==null){
-            simpleKFragment=new MarketSimpleKFragment();
+            simpleKFragment=MarketSimpleKFragment.newInstance(market);
             transaction.add(R.id.fra_market_simple,simpleKFragment);
         }
         transaction.commit();

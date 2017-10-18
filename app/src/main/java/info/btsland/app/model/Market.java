@@ -1,7 +1,5 @@
 package info.btsland.app.model;
 
-import android.os.Parcelable;
-
 import java.io.Serializable;
 
 /**

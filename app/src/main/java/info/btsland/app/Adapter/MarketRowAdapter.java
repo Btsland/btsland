@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.List;
 
 import info.btsland.app.R;
@@ -54,9 +55,11 @@ public class MarketRowAdapter extends BaseAdapter {
 
             tvCoin.setText(market.getLeftCoin());
             tvFluctuation.setText(String.valueOf(market.getFluctuation()));
-            tvNewPrice.setText(market.getNewPrice());
-            tvBestAskNum.setText(market.getBestAsk());
-            tvBestAskNum.setText(market.getBestBid());
+            DecimalFormat df = new DecimalFormat();
+            df.applyPattern("0.00000000");
+            tvNewPrice.setText(df.format(market.getNewPrice()));
+            tvBestAskNum.setText(df.format(market.getBestAsk()));
+            tvBestAskNum.setText(df.format(market.getBestBid()));
             if (market.getFluctuation()>=0){
                 ;
                 tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));

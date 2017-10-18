@@ -1,12 +1,6 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
-import android.os.Build;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +8,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
-import info.btsland.app.ui.fragment.MarketRowFragment;
 
 /**
  * Created by Administrator on 2017/10/16.
@@ -51,7 +44,7 @@ public class MarketRowAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
+    public View getView(final int i, View convertView, ViewGroup viewGroup) {
         Market market=markets.get(i);
         if (convertView==null){
             convertView=inflater.inflate(R.layout.fragment_market_row,null);
@@ -63,9 +56,14 @@ public class MarketRowAdapter extends BaseAdapter {
 
             tvCoin.setText(market.getLeftCoin());
             tvFluctuation.setText(String.valueOf(market.getFluctuation()));
-            tvNewPrice.setText(market.getNewPrice());
-            tvBestAskNum.setText(market.getBestAsk());
-            tvBestAskNum.setText(market.getBestBid());
+            DecimalFormat df = new DecimalFormat();
+            df.applyPattern("0.00000000");
+            df.format(market.getNewPrice());
+            Log.i("getView", "df.format(market.getNewPrice()): "+df.format(market.getNewPrice()));
+            Log.i("getView", "String.valueOf(market.getNewPrice()): "+String.valueOf(market.getNewPrice()));
+            tvNewPrice.setText(df.format(market.getNewPrice()));
+            tvBestAskNum.setText(df.format(market.getBestAsk()));
+            tvBestAskNum.setText(df.format(market.getBestBid()));
             if (market.getFluctuation()>=0){
                 ;
                 tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));
@@ -78,6 +76,7 @@ public class MarketRowAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    Market market1 = (Market) getItem(i);
 
                 }
             });

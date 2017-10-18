@@ -23,24 +23,21 @@ public class Market implements Serializable {
     /**
      * 最新成交价
      */
-    private String newPrice;
-
-
-
+    private float newPrice;
     /**
      * 最高买价
      */
-    private  String bestBid;
+    private  float bestBid;
 
     /**
      * 最低卖价
      */
-    private  String bestAsk;
+    private  float bestAsk;
 
     /**
      * 成交量
      */
-    private  String  volume;
+    private  float  volume;
 
 
     /**
@@ -57,7 +54,6 @@ public class Market implements Serializable {
     }
 
     /**
-     *
      * @param leftCoin 左边货币
      * @param rightCoin 右边货币
      * @param newPrice 最新成交价
@@ -66,7 +62,7 @@ public class Market implements Serializable {
      * @param volume 成交量
      * @param fluctuation 涨/跌幅
      */
-    public Market(String leftCoin, String rightCoin, String newPrice, String bestBid, String bestAsk, String volume, float fluctuation) {
+    public Market(String leftCoin, String rightCoin, float newPrice, float bestBid, float bestAsk, float volume, float fluctuation) {
         this.leftCoin = leftCoin;
         this.rightCoin = rightCoin;
         this.newPrice = newPrice;
@@ -107,35 +103,35 @@ public class Market implements Serializable {
         this.rightCoin = rightCoin;
     }
 
-    public String getNewPrice() {
+    public float getNewPrice() {
         return newPrice;
     }
 
-    public void setNewPrice(String newPrice) {
+    public void setNewPrice(float newPrice) {
         this.newPrice = newPrice;
     }
 
-    public String getBestBid() {
+    public float getBestBid() {
         return bestBid;
     }
 
-    public void setBestBid(String bestBid) {
+    public void setBestBid(float bestBid) {
         this.bestBid = bestBid;
     }
 
-    public String getBestAsk() {
+    public float getBestAsk() {
         return bestAsk;
     }
 
-    public void setBestAsk(String bestAsk) {
+    public void setBestAsk(float bestAsk) {
         this.bestAsk = bestAsk;
     }
 
-    public String getVolume() {
+    public float getVolume() {
         return volume;
     }
 
-    public void setVolume(String volume) {
+    public void setVolume(float volume) {
         this.volume = volume;
     }
 

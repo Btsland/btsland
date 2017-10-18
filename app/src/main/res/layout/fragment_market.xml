@@ -90,6 +90,7 @@
         android:id="@+id/lv_market_info"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:divider="@null"
         app:layout_constraintTop_toBottomOf="@+id/fra_market_simple"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

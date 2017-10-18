@@ -20,13 +20,14 @@ import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
+import info.btsland.app.util.PreferenceUtil;
 
 /**
  * 作者：谢建华
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
@@ -38,12 +39,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // 初始化PreferenceUtil
+        PreferenceUtil.init(this);
+        // 依据上次的语言设置，又一次设置语言
+        switchLanguage(PreferenceUtil.getString("language", "zh"));
         setContentView(R.layout.activity_main);
         fillInHead();
         fillInBody();
         init();
 
     }
+
+
 
     /**
      * 初始化

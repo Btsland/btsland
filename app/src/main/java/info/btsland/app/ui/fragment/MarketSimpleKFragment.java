@@ -170,9 +170,11 @@ public class MarketSimpleKFragment extends Fragment {
         if (market!=null){
             Log.i("startReceiveMarkets", "startReceiveMarkets: market1:"+market.getLeftCoin()+":"+market.getRightCoin());
             if (market.getRightCoin()==rightCoin&&market.getLeftCoin()==leftCoin){
+                Log.i("startReceiveMarkets", "startReceiveMarkets: 111111111111");
                 Intent intent=new Intent(getActivity(), MarketDetailedActivity.class);
                 intent.putExtra("market",market);
                 getActivity().startActivity(intent);
+                return;
             }
         }
         ReceiveMarkets receiveMarkets =new ReceiveMarkets(market);
@@ -236,7 +238,7 @@ public class MarketSimpleKFragment extends Fragment {
         }
         return Entrys;
     }
-    private void draw(List<Market> markets){
+    private void draw(final List<Market> markets){
         ArrayList<Entry> entries = toEntry(markets);
         LineDataSet setComp1 = new LineDataSet(entries, "最新成交价");
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
@@ -258,6 +260,19 @@ public class MarketSimpleKFragment extends Fragment {
         XAxis xAxis=simpleK.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setDrawGridLines(false);
+        //simpleK.setTouchEnabled(false);
+//        simpleK.setDragEnabled(false);
+//        simpleK.setScaleEnabled(false);
+//        simpleK.setScaleXEnabled(false);
+//        simpleK.setScaleYEnabled(false);
+        simpleK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), MarketDetailedActivity.class);
+                intent.putExtra("market",markets.get(0));
+                getActivity().startActivity(intent);
+            }
+        });
         simpleK.setData(data);
         simpleK.setDescription(markets.get(0).getLeftCoin()+":"+markets.get(0).getRightCoin());
         simpleK.setDescriptionTextSize(14);

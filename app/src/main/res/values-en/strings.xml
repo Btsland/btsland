@@ -29,5 +29,9 @@
     <string name="entrust">Entrust</string>
 
     <string name="accountset">AccountSet</string>
+    
+    <string name="selectlanguage">SelectSystemLanguage </string>
+    <string name="stringzh">中文</string>
+    <string name="stringen">English</string>
 
 </resources>

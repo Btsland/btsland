@@ -1,6 +1,7 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,20 @@ import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
+import info.btsland.app.ui.fragment.MarketFragment;
+import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
 /**
  * Created by Administrator on 2017/10/16.
  */
 
 public class MarketRowAdapter extends BaseAdapter {
+    private MarketSimpleKFragment simpleKFragment;
     private List<Market> markets;
     private LayoutInflater inflater;
     private Context context;
-    public MarketRowAdapter(Context context, List<Market> markets) {
+    public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context, List<Market> markets) {
+        this.simpleKFragment=simpleKFragment;
         this.markets = markets;
         this.context=context;
         this.inflater=LayoutInflater.from(context);
@@ -43,8 +48,8 @@ public class MarketRowAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int i, View convertView, ViewGroup viewGroup) {
-        Market market=markets.get(i);
+    public View getView(final int i, View convertView, ViewGroup viewGroup) {
+        final Market market=markets.get(i);
         if (convertView==null){
             convertView=inflater.inflate(R.layout.fragment_market_row,null);
             TextView tvCoin=convertView.findViewById(R.id.tv_coin);
@@ -72,7 +77,8 @@ public class MarketRowAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Log.i("onClick", "onClick: market1:"+market.getLeftCoin()+":"+market.getRightCoin());
+                    simpleKFragment.startReceiveMarkets(market);
                 }
             });
         }

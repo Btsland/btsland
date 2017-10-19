@@ -2,8 +2,8 @@ package info.btsland.app.ui.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,28 +15,25 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.charts.PieRadarChartBase;
-import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.DefaultXAxisValueFormatter;
 import com.github.mikephil.charting.formatter.XAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
-import info.btsland.app.util.DensityUtil;
+import info.btsland.app.ui.MarketDetailedActivity;
 
 
 public class MarketSimpleKFragment extends Fragment {
@@ -48,9 +45,8 @@ public class MarketSimpleKFragment extends Fragment {
     private LineChart simpleK;
 
     private String leftCoin="BTS";
-    private String rightCoin="CNY";
+    private String rightCoin="btsCNY";
 
-    private Market market;
 
     private String highStr;
     private String lowStr;
@@ -62,6 +58,7 @@ public class MarketSimpleKFragment extends Fragment {
         // Required empty public constructor
     }
     public static MarketSimpleKFragment newInstance(Market market){
+        Log.i("newInstance", "newInstance: ");
         MarketSimpleKFragment simpleKFragment=new MarketSimpleKFragment();
         Bundle args = new Bundle();
         args.putSerializable("market",market);
@@ -69,6 +66,7 @@ public class MarketSimpleKFragment extends Fragment {
         return simpleKFragment;
     }
     private void init(){
+        Log.i("init", "init: ");
         deal=getActivity().findViewById(R.id.tv_market_simple_deal);
         high=getActivity().findViewById(R.id.tv_market_simple_high);
         low=getActivity().findViewById(R.id.tv_market_simple_low);
@@ -76,8 +74,7 @@ public class MarketSimpleKFragment extends Fragment {
         simpleK=getActivity().findViewById(R.id.lc_market_simple_K);
         Log.i("init", "init: leftCoin+\":\"+rightCoin"+leftCoin+":"+rightCoin);
         deal.setText(leftCoin+":"+rightCoin);
-        ReceiveMarkets receiveMarkets =new ReceiveMarkets();
-        receiveMarkets.start();
+        startReceiveMarkets(null);
 //        simpleK.setDescription("BTC:CNY");
 //        simpleK.setDescriptionTextSize(DensityUtil.dip2px(getActivity(),20f));
 //        simpleK.setDrawGridBackground(false);
@@ -169,11 +166,40 @@ public class MarketSimpleKFragment extends Fragment {
             return XValue;
         }
     }
-    private class ReceiveMarkets extends Thread{
+    public void startReceiveMarkets(Market market){
+        if (market!=null){
+            Log.i("startReceiveMarkets", "startReceiveMarkets: market1:"+market.getLeftCoin()+":"+market.getRightCoin());
+            if (market.getRightCoin()==rightCoin&&market.getLeftCoin()==leftCoin){
+                Intent intent=new Intent(getActivity(), MarketDetailedActivity.class);
+                intent.putExtra("market",market);
+                getActivity().startActivity(intent);
+            }
+        }
+        ReceiveMarkets receiveMarkets =new ReceiveMarkets(market);
+        receiveMarkets.start();
+    }
+
+    public class ReceiveMarkets extends Thread{
+        private String left;
+        private String right;
+        public ReceiveMarkets(Market market){
+            Log.i("ReceiveMarkets", "ReceiveMarkets: ");
+            if (market!=null) {
+                left=market.getLeftCoin();
+                right=market.getRightCoin();
+            }else {
+                left=leftCoin;
+                right=rightCoin;
+            }
+        }
+
         @Override
         public void run() {
+            Log.i("run", "run: ");
+            Log.i("run", "run: Left:"+left+"+right:"+right);
             MarketService marketService=new MarketServiceImpl();
-            List<Market> markets = marketService.queryMarkets(leftCoin,rightCoin,"");
+            List<Market> markets = marketService.queryMarkets(left,right,"");
+            Log.i("run", "run: markets.size():"+markets.size());
             Message message=Message.obtain();
             message.what=1;
             message.obj=markets;
@@ -186,8 +212,10 @@ public class MarketSimpleKFragment extends Fragment {
         public void handleMessage(Message msg) {
 
             List<Market> markets= (List<Market>) msg.obj;
-            ArrayList<Entry> Entrys = toEntry(markets);
-            draw(Entrys);
+            draw(markets);
+            leftCoin=markets.get(0).getLeftCoin();
+            rightCoin=markets.get(0).getRightCoin();
+            deal.setText(markets.get(0).getLeftCoin()+":"+markets.get(0).getRightCoin());
         }
     };
     private ArrayList<Entry> toEntry(List<Market> markets) {
@@ -202,14 +230,15 @@ public class MarketSimpleKFragment extends Fragment {
             Market market=markets.get(i);
             if (i==0) {
             }
-            //将market生成entry对象
-            //Entry entry=new Entry(market.getNewPrice(),index);
-            //Entrys.add(entry);
+//            将market生成entry对象
+            Entry entry=new Entry(market.getNewPrice(),i);
+            Entrys.add(entry);
         }
         return Entrys;
     }
-    private void draw(ArrayList<Entry> Entrys ){
-        LineDataSet setComp1 = new LineDataSet(Entrys, "最新成交价");
+    private void draw(List<Market> markets){
+        ArrayList<Entry> entries = toEntry(markets);
+        LineDataSet setComp1 = new LineDataSet(entries, "最新成交价");
         setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
         setComp1.setColor(Color.RED);
         setComp1.setCircleSize(0f);//设置焦点圆心的大小
@@ -217,16 +246,22 @@ public class MarketSimpleKFragment extends Fragment {
         ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
         dataSets.add(setComp1);
         ArrayList<String> xVals = new ArrayList<String>();
-        if(Entrys==null){
+        if(entries==null){
             return;
         }
-        for (int i=0;i<Entrys.size();i++){
-            xVals.add(i+"");
+        SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
+        for (int i=0;i<entries.size();i++){
+            xVals.add(df.format(markets.get(i).getDate()));
         }
         LineData data = new LineData(xVals,dataSets);
         data.setDrawValues(false);
+        XAxis xAxis=simpleK.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(false);
         simpleK.setData(data);
-        simpleK.setVisibleXRangeMaximum(30f);
+        simpleK.setDescription(markets.get(0).getLeftCoin()+":"+markets.get(0).getRightCoin());
+        simpleK.setDescriptionTextSize(14);
+        simpleK.setVisibleXRangeMaximum(entries.size());
         simpleK.invalidate(); // refresh
     }
 
@@ -238,15 +273,17 @@ public class MarketSimpleKFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.i("", "onCreateView: ");
         View view=null;
         view=inflater.inflate(R.layout.fragment_market_simple_k, container, false);
         if (getArguments()!=null) {
             if(getArguments().getSerializable("market")!=null){
-                market = (Market)getArguments().getSerializable("market") ;
+                Market market = (Market)getArguments().getSerializable("market") ;
                 leftCoin=market.getLeftCoin();
                 rightCoin=market.getRightCoin();
             }
         }
+
         return view;
     }
 

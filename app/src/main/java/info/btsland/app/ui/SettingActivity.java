@@ -5,12 +5,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.util.PreferenceUtil;
 
 
 public class SettingActivity extends BaseActivity {
@@ -122,8 +124,6 @@ public class SettingActivity extends BaseActivity {
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-
-
                 if(items[which]==getString(R.string.stringzh)){
                     switchLanguage("zh");
                 }else if(items[which]==getString(R.string.stringen)){

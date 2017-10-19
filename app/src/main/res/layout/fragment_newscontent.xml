@@ -25,16 +25,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:textColor="#FFFFFF"
             android:padding="10dp"
-            android:textSize="24sp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/news_content"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:textColor="#FFFFFF"
             android:padding="15dp"
-            android:textSize="18sp" />
+            android:textSize="12sp" />
     </LinearLayout>
     </ScrollView>
     <ImageView

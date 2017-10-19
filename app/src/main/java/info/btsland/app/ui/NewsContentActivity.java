@@ -5,13 +5,11 @@ package info.btsland.app.ui;
  * 显示新闻内容的活动，与activity_newscontent.xml相对应
  */
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Window;
 import android.widget.TextView;
 
 import info.btsland.app.R;

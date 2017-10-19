@@ -1,9 +1,16 @@
 package info.btsland.app.service.Impl;
 
+import android.util.Log;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 import info.btsland.app.model.Market;
@@ -145,7 +152,50 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public List<Market> queryMarkets(String LeftCoin, String rightCoin, String date) {
-        return null;
+        Log.i("queryMarkets", "queryMarkets: LeftCoin:"+LeftCoin+"rightCoin:"+rightCoin);
+        List<Market> markets=new ArrayList<Market>();
+        Date date1=new Date();
+        int max=60;
+        int min=1;
+        Random random = new Random();
+        int a = random.nextInt(max)%(max-min+1) + min;
+        int b = random.nextInt(max)%(max-min+1) + min;
+        int c = random.nextInt(max)%(max-min+1) + min;
+        int d = random.nextInt(max)%(max-min+1) + min;
+        int[] h={a,b,c,d};
+        Arrays.sort(h);
+        Calendar beforeTime = Calendar.getInstance();
+        float price=301.16279f;
+        beforeTime.add(Calendar.MINUTE, -(60*5));
+        for (int i=60;i>=1;i--){
+            float newPrice=0;
+            float price2=random.nextFloat()*100;
+            Market market=null;
+            beforeTime.add(Calendar.MINUTE, +5);
+            Date beforeD = beforeTime.getTime();
+            Log.i("queryMarkets", "queryMarkets: beforeD:"+beforeD);
+            if(i>d){
+                newPrice=price-price2;
+                market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
+            }else if(i>c){
+                newPrice=price+price2;
+                market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
+            } else if(i>b){
+                newPrice=price-price2;
+                market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
+            } else if(i>a){
+                newPrice=price+price2;
+                market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
+            }else {
+                newPrice=price-price2;
+                market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
+            }
+            Log.i("queryMarkets", "queryMarkets: market:"+market.toString());
+            markets.add(market);
+        }
+
+        Log.i("queryMarkets", "queryMarkets: markets.size():"+markets.size());
+        return markets;
     }
 
     @Override

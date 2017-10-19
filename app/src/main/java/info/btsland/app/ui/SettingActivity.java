@@ -1,27 +1,16 @@
 package info.btsland.app.ui;
 
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.Locale;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.util.PreferenceUtil;
-
 
 
 public class SettingActivity extends BaseActivity {

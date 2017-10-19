@@ -9,15 +9,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:paddingTop="12dp"
         android:paddingBottom="12dp"
+        android:textColor="#FFFFFF"
         android:text="最新资讯"/>
 
     <ListView
         android:id="@+id/news_title_list_view"
         android:divider="#FFFFFF"
         android:layout_width="match_parent"
+        android:listSelector="@android:color/transparent"
         android:layout_height="match_parent">
 
     </ListView>

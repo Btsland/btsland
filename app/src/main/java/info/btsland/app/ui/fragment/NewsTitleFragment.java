@@ -26,7 +26,7 @@ import java.util.List;
 import info.btsland.app.Adapter.NewsAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.News;
-import info.btsland.app.ui.NewsContentActivity;
+import info.btsland.app.ui.activity.NewsContentActivity;
 
 
 public class NewsTitleFragment extends Fragment implements OnItemClickListener {

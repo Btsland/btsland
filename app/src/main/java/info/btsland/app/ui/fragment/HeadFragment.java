@@ -13,8 +13,8 @@ import android.widget.TextView;
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.News;
-import info.btsland.app.ui.SettingActivity;
-import info.btsland.app.ui.UserActivity;
+import info.btsland.app.ui.activity.SettingActivity;
+import info.btsland.app.ui.activity.UserActivity;
 
 /**
  * 通用顶部导航栏碎片类

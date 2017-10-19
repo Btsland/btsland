@@ -1,4 +1,4 @@
-package info.btsland.app.ui;
+package info.btsland.app.ui.activity;
 
 /**
  * Created by zyf on 2017/10/8.

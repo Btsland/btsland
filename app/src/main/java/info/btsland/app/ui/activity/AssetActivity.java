@@ -1,8 +1,7 @@
 package info.btsland.app.ui.activity;
 
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -29,7 +28,7 @@ public class AssetActivity extends AppCompatActivity {
      * 装载顶部导航
      */
     private void fillInHead(){
-        android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);

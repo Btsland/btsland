@@ -1,4 +1,4 @@
-package info.btsland.app.ui.activtiy;
+package info.btsland.app.ui.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;

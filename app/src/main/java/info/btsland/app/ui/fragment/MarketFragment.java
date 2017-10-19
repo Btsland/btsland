@@ -96,6 +96,7 @@ public class MarketFragment extends Fragment {
      * 装载简易K图
      */
     private void fillInSimpleK(Market market){
+        Log.i("fillInSimpleK", "fillInSimpleK: ");
         FragmentTransaction transaction=getFragmentManager().beginTransaction();
         if (simpleKFragment==null){
             simpleKFragment=MarketSimpleKFragment.newInstance(market);
@@ -179,7 +180,7 @@ public class MarketFragment extends Fragment {
 //            }
 
             List<Market> markets=readMarket(leftCoin);
-            MarketRowAdapter rowAdapter=new MarketRowAdapter(getActivity(),markets);
+            MarketRowAdapter rowAdapter=new MarketRowAdapter(simpleKFragment,getActivity(),markets);
             lvMarketInfo.setAdapter(rowAdapter);
         }
 

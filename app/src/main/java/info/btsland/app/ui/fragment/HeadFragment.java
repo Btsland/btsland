@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import java.io.Serializable;
+
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.News;

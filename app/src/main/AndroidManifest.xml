@@ -9,21 +9,24 @@
         android:roundIcon="@mipmap/ic_black"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.HOME" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.UserActivity">
+        <activity android:name=".ui.UserActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.USER" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.SettingActivity">
+        <activity android:name=".ui.SettingActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.SETING" />
 
@@ -31,7 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activtiy.WelcomeActivity"
+            android:name=".ui.activity.WelcomeActivity"
             android:theme="@style/welcomeTheme.TranslucentStatus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,14 +42,24 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.AssetActivity">
+        <activity android:name=".ui.AssetActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.ASSET" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.NewsContentActivity">
+        <activity android:name=".ui.MarketDetailedActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MARKET_D" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.NewsContentActivity"
+            android:screenOrientation="portrait">
             //注册NewsContentActivity活动
         </activity>
     </application>

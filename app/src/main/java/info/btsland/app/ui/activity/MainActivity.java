@@ -1,4 +1,4 @@
-package info.btsland.app.ui;
+package info.btsland.app.ui.activity;
 
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;

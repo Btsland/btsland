@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_Grey"
-    tools:context="info.btsland.app.ui.UserActivity">
+    tools:context="info.btsland.app.ui.activity.UserActivity">
     <!--顶部导航栏-->
     <FrameLayout
         android:id="@+id/fra_user_head"

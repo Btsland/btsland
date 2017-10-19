@@ -12,7 +12,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import info.btsland.app.R;
-import info.btsland.app.ui.MainActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
 

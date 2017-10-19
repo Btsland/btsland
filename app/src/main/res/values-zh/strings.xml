@@ -29,5 +29,9 @@
     <string name="entrust">委单</string>
 
     <string name="accountset">账户设置</string>
+
+    <string name="selectlanguage">请选择系统语言 </string>
+    <string name="stringzh">中文</string>
+    <string name="stringen">English</string>
     
 </resources>

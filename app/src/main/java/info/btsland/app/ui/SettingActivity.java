@@ -25,6 +25,7 @@ import info.btsland.app.util.PreferenceUtil;
 
 
 public class SettingActivity extends BaseActivity {
+
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -62,6 +63,16 @@ public class SettingActivity extends BaseActivity {
         //绑定点击事件
         TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
+
+        //判断checkedItem的值
+        String lo = PreferenceUtil.getString("language", "zh");
+        Log.i("init", "init: "+lo);
+        if (lo.equals("zh")){
+            index=0;
+        }else if (lo.equals("en")){
+            index=1;
+        }
+        Log.i("init", "init: "+index);
     }
 
     /*
@@ -103,19 +114,33 @@ public class SettingActivity extends BaseActivity {
     /**
      * 跳出Dialog窗口
      */
-    private void showListDialog() {
-        final String[] items = { "中文","英文"};
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
 
-        listDialog.setTitle("请选择语言");
-        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+    int index = 0 ;//设置默认选项，作为checkedItem参数传入。
+
+    private void showListDialog() {
+
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
+        listDialog.setTitle(getString(R.string.selectlanguage));
+
+        listDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+        final String[] items={"中文","英文"};
+        items[0]=getString(R.string.stringzh);
+        items[1]=getString(R.string.stringen);
+
+
+        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
+
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(items[which]=="中文"){
+
+
+                if(items[which]==getString(R.string.stringzh)){
                     switchLanguage("zh");
-                }else if(items[which]=="英文"){
+                }else if(items[which]==getString(R.string.stringen)){
                     switchLanguage("en");
                 }
+                dialog.dismiss();
                 finish();
 
                 Intent intent=new Intent(SettingActivity.this,MainActivity.class);

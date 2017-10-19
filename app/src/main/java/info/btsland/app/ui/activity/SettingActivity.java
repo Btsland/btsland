@@ -1,4 +1,4 @@
-package info.btsland.app.ui;
+package info.btsland.app.ui.activity;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;

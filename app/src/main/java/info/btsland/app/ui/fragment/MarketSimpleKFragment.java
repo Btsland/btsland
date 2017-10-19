@@ -33,7 +33,7 @@ import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
-import info.btsland.app.ui.MarketDetailedActivity;
+import info.btsland.app.ui.activity.MarketDetailedActivity;
 
 
 public class MarketSimpleKFragment extends Fragment {

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import info.btsland.app.R;
-import info.btsland.app.ui.AssetActivity;
+import info.btsland.app.ui.activity.AssetActivity;
 
 /**
  * A simple {@link Fragment} subclass.

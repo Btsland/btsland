@@ -88,7 +88,6 @@ public class SettingActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 装载顶部导航
      */

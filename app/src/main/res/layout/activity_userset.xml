@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <FrameLayout
+        android:id="@+id/fra_user_head"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+    >
+
+    </FrameLayout>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+    <TextView
+        android:id="@+id/asset"
+        android:layout_width="70dp"
+        android:layout_height="20dp"
+        android:text="资产"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/job"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:text="换算值"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/addr"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:text="供给占比"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/student"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:text="转账操作"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/isworking"
+        android:layout_width="80dp"
+        android:layout_height="20dp"
+        android:text="市场操作"
+        android:textSize="20sp" />
+
+        </LinearLayout>
+
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" >
+    </ListView>
+
+
+</LinearLayout>

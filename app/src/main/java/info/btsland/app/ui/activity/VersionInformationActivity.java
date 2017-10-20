@@ -33,6 +33,7 @@ public class VersionInformationActivity extends AppCompatActivity {
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment.setTitleName("版本信息");
             transaction.add(R.id.fra_version_head,headFragment);
         }
         transaction.commit();

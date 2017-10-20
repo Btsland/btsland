@@ -12,57 +12,50 @@
     <!-- android:singleLine设置为True表示让这个TextView只能单行显示 -->
     <!-- android:ellipsize 设定当文本内容超出控件宽度时，文本的缩略方式，这里指定成end表示在尾部进行缩略 -->
 
+
+
     <TextView
         android:id="@+id/news_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#212121"
+        android:background="#FFFFFF"
         android:ellipsize="end"
         android:paddingBottom="2dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="12dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="#FFFFFF"
+        android:textColor="#212121"
         android:singleLine="true"
+        android:textStyle="bold"
         android:textSize="16sp" />
 
     <TextView
         android:id="@+id/news_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#212121"
+        android:background="#FFFFFF"
         android:ellipsize="end"
         android:paddingBottom="2dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:paddingTop="2dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="#FFFFFF"
+        android:textColor="#212121"
         android:singleLine="true"
-        android:textSize="8sp" />
+        android:textSize="12sp" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1.2dp"
-        />
     <TextView
         android:id="@+id/news_titlecontent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#212121"
+        android:background="#FFFFFF"
         android:ellipsize="end"
         android:paddingBottom="2dp"
         android:paddingLeft="11dp"
         android:paddingRight="11dp"
         android:paddingTop="2dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginLeft="15dp"
-        android:textColor="#FFFFFF"
+        android:textColor="#212121"
         android:singleLine="true"
-        android:textSize="12sp" />
+        android:textSize="14sp" />
     <View
         android:layout_width="match_parent"
         android:layout_height="10dp"

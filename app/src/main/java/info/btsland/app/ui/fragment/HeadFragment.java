@@ -25,7 +25,7 @@ public class HeadFragment extends Fragment {
 
     private int type=HeadType.BACK_SET;
 
-    private String titleName;
+    private String titleName="btsland";
 
     public String getTitleName() {
         return titleName;
@@ -83,6 +83,7 @@ public class HeadFragment extends Fragment {
         BackOnClickListener back=new BackOnClickListener();
         ToUserOnClickListener toUser=new ToUserOnClickListener();
         ToSettingOnClickListener toSetting=new ToSettingOnClickListener();
+        titleTextView.setText(titleName);
         switch (type){
             case HeadType.BACK_NULL:
                 leftTextView.setOnClickListener(back);

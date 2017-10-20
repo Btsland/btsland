@@ -49,6 +49,7 @@ public class NewsContentActivity extends AppCompatActivity {
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment.setTitleName("资讯详情");
             transaction.add(R.id.fra_news_head,headFragment);
         }
         transaction.commit();

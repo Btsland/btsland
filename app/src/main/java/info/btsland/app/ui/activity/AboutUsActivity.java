@@ -33,6 +33,7 @@ public class AboutUsActivity extends AppCompatActivity {
         if (headFragment==null){
             headFragment=new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment.setTitleName("关于我们");
             transaction.add(R.id.fra_about_head,headFragment);
         }
         transaction.commit();

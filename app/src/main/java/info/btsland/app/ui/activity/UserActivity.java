@@ -57,6 +57,7 @@ public class UserActivity extends AppCompatActivity {
         if (headFragment==null){
             headFragment=new HeadFragment();
             transaction.add(R.id.fra_user_head,headFragment);
+            headFragment.setTitleName("用户中心");
         }
         transaction.commit();
     }

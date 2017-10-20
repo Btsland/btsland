@@ -12,11 +12,11 @@ import android.widget.TextView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.util.PreferenceUtil;
+
+import static info.btsland.app.R.id.tv_set_we;
 
 
 public class SettingActivity extends BaseActivity {
-
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -40,7 +40,7 @@ public class SettingActivity extends BaseActivity {
         tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
         tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
         tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
-        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
+        tvSetWe= (TextView) findViewById(tv_set_we);
         tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
         //绑定特效事件
@@ -54,16 +54,9 @@ public class SettingActivity extends BaseActivity {
         //绑定点击事件
         TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
-
-        //判断checkedItem的值
-        String lo = PreferenceUtil.getString("language", "zh");
-        Log.i("init", "init: "+lo);
-        if (lo.equals("zh")){
-            index=0;
-        }else if (lo.equals("en")){
-            index=1;
-        }
-        Log.i("init", "init: "+index);
+        tvSetGuide.setOnClickListener(OnClickListener);
+        tvSetWe.setOnClickListener(OnClickListener);
+        tvSetEdition.setOnClickListener(OnClickListener);
     }
 
     /*
@@ -79,14 +72,22 @@ public class SettingActivity extends BaseActivity {
                 case R.id.tv_set_theme:
                     break;
                 case R.id.tv_set_guide:
+                    Intent iii = new Intent(SettingActivity.this , UsersGuidanceActivity.class);
+                    startActivity(iii);
                     break;
-                case R.id.tv_set_we:
+                case tv_set_we:
+                    Log.i("dddddd", "onClick: ");
+                    Intent i = new Intent(SettingActivity.this , AboutUsActivity.class);
+                    startActivity(i);
                     break;
                 case R.id.tv_set_edition:
+                    Intent ii = new Intent(SettingActivity.this , VersionInformationActivity.class);
+                    startActivity(ii);
                     break;
             }
         }
     }
+
 
     /**
      * 装载顶部导航
@@ -104,31 +105,19 @@ public class SettingActivity extends BaseActivity {
     /**
      * 跳出Dialog窗口
      */
-
-    int index = 0 ;//设置默认选项，作为checkedItem参数传入。
-
     private void showListDialog() {
-
+        final String[] items = { "中文","英文"};
         AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
-        listDialog.setTitle(getString(R.string.selectlanguage));
 
-        listDialog.setIcon(android.R.drawable.ic_dialog_info);
-
-        final String[] items={"中文","英文"};
-        items[0]=getString(R.string.stringzh);
-        items[1]=getString(R.string.stringen);
-
-
-        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
-
+        listDialog.setTitle("请选择语言");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if(items[which]==getString(R.string.stringzh)){
+                if(items[which]=="中文"){
                     switchLanguage("zh");
-                }else if(items[which]==getString(R.string.stringen)){
+                }else if(items[which]=="英文"){
                     switchLanguage("en");
                 }
-                dialog.dismiss();
                 finish();
 
                 Intent intent=new Intent(SettingActivity.this,MainActivity.class);
@@ -167,9 +156,10 @@ public class SettingActivity extends BaseActivity {
                 case R.id.tv_set_guide:
                     touchColor(tvSetGuide,motionEvent);
                     break;
-                case R.id.tv_set_we:
+                case tv_set_we:
                     touchColor(tvSetWe,motionEvent);
                     break;
+
                 case R.id.tv_set_edition:
                     touchColor(tvSetEdition,motionEvent);
                     break;

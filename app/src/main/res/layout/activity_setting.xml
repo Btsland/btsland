@@ -67,8 +67,9 @@ tools:context="info.btsland.app.ui.activity.UserActivity">
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <TextView
+    <Button
         android:id="@+id/tv_set_we"
+        android:clickable="true"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:text="@string/we"

@@ -64,6 +64,24 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.UsersGuidanceActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.USERSGUI" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.VersionInformationActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VERSION" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.activity.MarketDetailedActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -77,8 +95,6 @@
             android:screenOrientation="portrait">
             //注册NewsContentActivity活动
         </activity>
-        <activity android:name=".ui.activity.UsersGuidanceActivity" />
-        <activity android:name=".ui.activity.VersionInformationActivity"></activity>
     </application>
 
 </manifest>

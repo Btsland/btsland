@@ -80,6 +80,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.activity.VersionInformationActivity"
             android:screenOrientation="portrait">
@@ -89,6 +90,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".ui.activity.UserSetActity"
+            android:screenOrientation="portrait">
+
+
+        </activity>
+
     </application>
 
 </manifest>

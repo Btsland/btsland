@@ -103,6 +103,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
                 "Kelimbetov说，该国领导已经授权AIFC作为新兴金融技术发展的专业中心。为了实现这一目标，AIFC不久将“加入由国际高新技术中心组成的联盟，其中就包括一些正在研究国家和地区加密货币以及区块链技术方案的大型国际银行”。\n" +
                 "\n" +
                 "本月早些时候，AIFC与微软签署谅解备忘录，旨在建立该国的区块链创新中心，促进DLT初创公司的创新发展。今年7月，AIFC宣布，其与德勤和Waves将为加密货币、区块链以及金融科技企业制定宽松的监管框架。");
+        newsList.add(new16);
 
         News new15 = new News();
         new15.setTitle("微软CEO对话SWIFT：构建‘有意义的’区块链应用");
@@ -131,6 +132,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
                 "\n" +
                 "自从我进入这一行之后，我们一直都在研究可信的分布式数据库，旨在达成多个组织间的合作。\n" +
                 "显然，我认为区块链及其底层分布式账本是一种非常创新的部署，这种技术将产生重大影响。");
+        newsList.add(new15);
 
         News new12 = new News();
         new12.setTitle("俄罗斯最大的银行Sberbank加入企业以太坊联盟");

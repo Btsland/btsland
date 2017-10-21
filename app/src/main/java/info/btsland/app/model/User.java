@@ -1,7 +1,5 @@
 package info.btsland.app.model;
 
-import java.util.Objects;
-
 /**
  * Created by Administrator on 2017/9/27.
  */
@@ -35,5 +33,5 @@ public class User {
         this.pwd = pwd;
     }
 
-  
+
 }

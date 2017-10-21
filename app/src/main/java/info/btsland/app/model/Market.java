@@ -19,7 +19,7 @@ public class Market implements Serializable {
     /**
      * 右边货币
      */
-    private  String rightCoin;
+    private String rightCoin;
 
     /**
      * 最新成交价
@@ -28,17 +28,17 @@ public class Market implements Serializable {
     /**
      * 最高买价
      */
-    private  float bestBid;
+    private float bestBid;
 
     /**
      * 最低卖价
      */
-    private  float bestAsk;
+    private float bestAsk;
 
     /**
      * 成交量
      */
-    private  float  volume;
+    private float volume;
 
 
     /**
@@ -47,20 +47,17 @@ public class Market implements Serializable {
     private float fluctuation;
 
 
-
-
-
     public Market() {
 
     }
 
     /**
-     * @param leftCoin 左边货币
-     * @param rightCoin 右边货币
-     * @param newPrice 最新成交价
-     * @param bestBid 最高买价
-     * @param bestAsk 最低卖价
-     * @param volume 成交量
+     * @param leftCoin    左边货币
+     * @param rightCoin   右边货币
+     * @param newPrice    最新成交价
+     * @param bestBid     最高买价
+     * @param bestAsk     最低卖价
+     * @param volume      成交量
      * @param fluctuation 涨/跌幅
      */
     public Market(String leftCoin, String rightCoin, float newPrice, float bestBid, float bestAsk, float volume, float fluctuation) {
@@ -73,17 +70,18 @@ public class Market implements Serializable {
         this.fluctuation = fluctuation;
 
     }
+
     /**
-     * @param leftCoin 左边货币
-     * @param rightCoin 右边货币
-     * @param newPrice 最新成交价
-     * @param bestBid 最高买价
-     * @param bestAsk 最低卖价
-     * @param volume 成交量
+     * @param leftCoin    左边货币
+     * @param rightCoin   右边货币
+     * @param newPrice    最新成交价
+     * @param bestBid     最高买价
+     * @param bestAsk     最低卖价
+     * @param volume      成交量
      * @param fluctuation 涨/跌幅
      */
-    public Market(Date date,String leftCoin, String rightCoin, float newPrice, float bestBid, float bestAsk, float volume, float fluctuation) {
-        this.date=date;
+    public Market(Date date, String leftCoin, String rightCoin, float newPrice, float bestBid, float bestAsk, float volume, float fluctuation) {
+        this.date = date;
         this.leftCoin = leftCoin;
         this.rightCoin = rightCoin;
         this.newPrice = newPrice;

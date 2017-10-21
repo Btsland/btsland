@@ -1,6 +1,5 @@
 package info.btsland.app.ui.activity;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -15,7 +14,7 @@ import info.btsland.app.util.PreferenceUtil;
  * Created by Administrator on 2017/10/13 0013.
  */
 
-public class BaseActivity extends AppCompatActivity{
+public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +33,15 @@ public class BaseActivity extends AppCompatActivity{
         Configuration config = resources.getConfiguration();
         DisplayMetrics dm = resources.getDisplayMetrics();
 
-        if (language.equals("en")){
+        if (language.equals("en")) {
             config.locale = Locale.ENGLISH;
-        }else{
+        } else {
             config.locale = Locale.SIMPLIFIED_CHINESE;
         }
         resources.updateConfiguration(config, dm);
 
         // 保存设置语言的类型
-        PreferenceUtil.commitString("language",language);
+        PreferenceUtil.commitString("language", language);
 
     }
 }

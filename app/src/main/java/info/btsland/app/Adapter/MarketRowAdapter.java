@@ -13,7 +13,6 @@ import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
-import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
 /**
@@ -25,11 +24,12 @@ public class MarketRowAdapter extends BaseAdapter {
     private List<Market> markets;
     private LayoutInflater inflater;
     private Context context;
+
     public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context, List<Market> markets) {
-        this.simpleKFragment=simpleKFragment;
+        this.simpleKFragment = simpleKFragment;
         this.markets = markets;
-        this.context=context;
-        this.inflater=LayoutInflater.from(context);
+        this.context = context;
+        this.inflater = LayoutInflater.from(context);
     }
 
     @Override
@@ -49,14 +49,14 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
-        final Market market=markets.get(i);
-        if (convertView==null){
-            convertView=inflater.inflate(R.layout.fragment_market_row,null);
-            TextView tvCoin=convertView.findViewById(R.id.tv_coin);
-            TextView tvFluctuation=convertView.findViewById(R.id.tv_fluctuation);
-            TextView tvNewPrice=convertView.findViewById(R.id.tv_newPrice);
-            TextView tvBestAskNum=convertView.findViewById(R.id.tv_bestAskNum);
-            TextView tvBestBidNum=convertView.findViewById(R.id.tv_bestBidNum);
+        final Market market = markets.get(i);
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.fragment_market_row, null);
+            TextView tvCoin = convertView.findViewById(R.id.tv_coin);
+            TextView tvFluctuation = convertView.findViewById(R.id.tv_fluctuation);
+            TextView tvNewPrice = convertView.findViewById(R.id.tv_newPrice);
+            TextView tvBestAskNum = convertView.findViewById(R.id.tv_bestAskNum);
+            TextView tvBestBidNum = convertView.findViewById(R.id.tv_bestBidNum);
 
             tvCoin.setText(market.getLeftCoin());
             tvFluctuation.setText(String.valueOf(market.getFluctuation()));
@@ -65,11 +65,11 @@ public class MarketRowAdapter extends BaseAdapter {
             tvNewPrice.setText(df.format(market.getNewPrice()));
             tvBestAskNum.setText(df.format(market.getBestAsk()));
             tvBestAskNum.setText(df.format(market.getBestBid()));
-            if (market.getFluctuation()>=0){
+            if (market.getFluctuation() >= 0) {
                 ;
                 tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));
                 tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_green));
-            }else{
+            } else {
                 tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_font_red));
                 tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_font_red));
             }
@@ -77,7 +77,7 @@ public class MarketRowAdapter extends BaseAdapter {
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Log.i("onClick", "onClick: market1:"+market.getLeftCoin()+":"+market.getRightCoin());
+                    Log.i("onClick", "onClick: market1:" + market.getLeftCoin() + ":" + market.getRightCoin());
                     simpleKFragment.startReceiveMarkets(market);
                 }
             });

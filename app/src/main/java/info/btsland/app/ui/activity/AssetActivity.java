@@ -10,6 +10,7 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 public class AssetActivity extends AppCompatActivity {
     private HeadFragment headFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,21 +19,23 @@ public class AssetActivity extends AppCompatActivity {
         fillInHead();
         init();
     }
+
     /**
      * 初始化
      */
-    private void init(){
+    private void init() {
 
     }
+
     /**
      * 装载顶部导航
      */
-    private void fillInHead(){
+    private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (headFragment==null){
-            headFragment=new HeadFragment();
+        if (headFragment == null) {
+            headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            transaction.add(R.id.fra_asset_head,headFragment);
+            transaction.add(R.id.fra_asset_head, headFragment);
         }
         transaction.commit();
     }

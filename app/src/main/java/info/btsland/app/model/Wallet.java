@@ -9,12 +9,10 @@ package info.btsland.app.model;
 public class Wallet {
 
 
-
-
     /**
      * 资产
      */
-        private String assets;
+    private String assets;
 
     /**
      * 换算值
@@ -24,17 +22,17 @@ public class Wallet {
     /**
      * 供给占比
      */
-    private  String supplyShare;
+    private String supplyShare;
 
-  /*  *//**
+  /*  */
+
+    /**
      * 转账操作
      *//*
     private String transfer;
 
 
     */
-
-
     @Override
     public String toString() {
         return "Wallet{" +
@@ -48,10 +46,6 @@ public class Wallet {
      * 市场操作
      *//*
     private  String operate;*/
-
-
-
-
     public Wallet(String assets, String scaledValue, String supplyShare) {
         this.assets = assets;
         this.scaledValue = scaledValue;

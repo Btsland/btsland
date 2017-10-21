@@ -1,4 +1,5 @@
 package info.btsland.app.util;
+
 import android.content.Context;
 
 public class DensityUtil {

@@ -5,19 +5,13 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
-import android.text.Html;
-import android.text.InputFilter;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,8 +20,6 @@ import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
-import info.btsland.app.ui.view.RowLinearLayout;
-import info.btsland.app.util.DensityUtil;
 
 public class MarketFragment extends Fragment {
     private MarketService marketService;
@@ -47,11 +39,11 @@ public class MarketFragment extends Fragment {
     private ListView lvMarketInfo;
 
 
-    private Map<String,List<Market>> market;
+    private Map<String, List<Market>> market;
+
     public MarketFragment() {
         // Required empty public constructor
     }
-
 
 
     @Override
@@ -62,7 +54,7 @@ public class MarketFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_market, container, false);
+        View view = inflater.inflate(R.layout.fragment_market, container, false);
         return view;
     }
 
@@ -75,138 +67,144 @@ public class MarketFragment extends Fragment {
         setMarket(tvMarketLeftCoin_1);//设置数据
     }
 
-    private void init(){
-        tvMarketLeftCoin_1=getActivity().findViewById(R.id.tv_market_left_coin1);
-        tvMarketLeftCoin_2=getActivity().findViewById(R.id.tv_market_left_coin2);
-        tvMarketLeftCoin_3=getActivity().findViewById(R.id.tv_market_left_coin3);
-        tvMarketLeftCoin_4=getActivity().findViewById(R.id.tv_market_left_coin4);
-        tvMarketLeftCoin_5=getActivity().findViewById(R.id.tv_market_left_coin5);
-        lvMarketInfo=getActivity().findViewById(R.id.lv_market_info);
-        LeftCoinOnClickListener onClickListener=new LeftCoinOnClickListener();
+    private void init() {
+        tvMarketLeftCoin_1 = getActivity().findViewById(R.id.tv_market_left_coin1);
+        tvMarketLeftCoin_2 = getActivity().findViewById(R.id.tv_market_left_coin2);
+        tvMarketLeftCoin_3 = getActivity().findViewById(R.id.tv_market_left_coin3);
+        tvMarketLeftCoin_4 = getActivity().findViewById(R.id.tv_market_left_coin4);
+        tvMarketLeftCoin_5 = getActivity().findViewById(R.id.tv_market_left_coin5);
+        lvMarketInfo = getActivity().findViewById(R.id.lv_market_info);
+        LeftCoinOnClickListener onClickListener = new LeftCoinOnClickListener();
         tvMarketLeftCoin_1.setOnClickListener(onClickListener);
         tvMarketLeftCoin_2.setOnClickListener(onClickListener);
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
-        shops= getResources().getStringArray(R.array.shops);//得到需要显示的市场
+        shops = getResources().getStringArray(R.array.shops);//得到需要显示的市场
 
     }
 
     /**
      * 装载简易K图
      */
-    private void fillInSimpleK(Market market){
+    private void fillInSimpleK(Market market) {
         Log.i("fillInSimpleK", "fillInSimpleK: ");
-        FragmentTransaction transaction=getFragmentManager().beginTransaction();
-        if (simpleKFragment==null){
-            simpleKFragment=MarketSimpleKFragment.newInstance(market);
-            transaction.add(R.id.fra_market_simple,simpleKFragment);
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        if (simpleKFragment == null) {
+            simpleKFragment = MarketSimpleKFragment.newInstance(market);
+            transaction.add(R.id.fra_market_simple, simpleKFragment);
         }
         transaction.commit();
     }
-    class LeftCoinOnClickListener implements View.OnClickListener{
+
+    class LeftCoinOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             touchColor((TextView) view);//交互特效
             setMarket(view);//设置数据
         }
     }
-        /**
-         * 左侧导航栏交互特效
-         * @param facingTextView 当前的控件
-         */
-        protected void touchColor(TextView facingTextView){
 
-            switch (facingTextView.getId()){
-                case R.id.tv_market_left_coin1:
-                    setDownBack(tvMarketLeftCoin_1);
-                    setUpBack(tvMarketLeftCoin_2);
-                    setUpBack(tvMarketLeftCoin_3);
-                    setUpBack(tvMarketLeftCoin_4);
-                    setUpBack(tvMarketLeftCoin_5);
-                    break;
-                case R.id.tv_market_left_coin2:
-                    setDownBack(tvMarketLeftCoin_2);
-                    setUpBack(tvMarketLeftCoin_1);
-                    setUpBack(tvMarketLeftCoin_3);
-                    setUpBack(tvMarketLeftCoin_4);
-                    setUpBack(tvMarketLeftCoin_5);
-                    break;
-                case R.id.tv_market_left_coin3:
-                    setDownBack(tvMarketLeftCoin_3);
-                    setUpBack(tvMarketLeftCoin_2);
-                    setUpBack(tvMarketLeftCoin_1);
-                    setUpBack(tvMarketLeftCoin_4);
-                    setUpBack(tvMarketLeftCoin_5);
-                    break;
-                case R.id.tv_market_left_coin4:
-                    setDownBack(tvMarketLeftCoin_4);
-                    setUpBack(tvMarketLeftCoin_2);
-                    setUpBack(tvMarketLeftCoin_3);
-                    setUpBack(tvMarketLeftCoin_1);
-                    setUpBack(tvMarketLeftCoin_5);
-                    break;
-                case R.id.tv_market_left_coin5:
-                    setDownBack(tvMarketLeftCoin_5);
-                    setUpBack(tvMarketLeftCoin_2);
-                    setUpBack(tvMarketLeftCoin_3);
-                    setUpBack(tvMarketLeftCoin_4);
-                    setUpBack(tvMarketLeftCoin_1);
-                    break;
-            }
-        }
+    /**
+     * 左侧导航栏交互特效
+     *
+     * @param facingTextView 当前的控件
+     */
+    protected void touchColor(TextView facingTextView) {
 
-        /**
-         * 设置选中时的背景样式
-         * @param TextView
-         */
-        private void setDownBack(TextView TextView){
-            TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch,null));
-            TextView.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_yellow,null));
+        switch (facingTextView.getId()) {
+            case R.id.tv_market_left_coin1:
+                setDownBack(tvMarketLeftCoin_1);
+                setUpBack(tvMarketLeftCoin_2);
+                setUpBack(tvMarketLeftCoin_3);
+                setUpBack(tvMarketLeftCoin_4);
+                setUpBack(tvMarketLeftCoin_5);
+                break;
+            case R.id.tv_market_left_coin2:
+                setDownBack(tvMarketLeftCoin_2);
+                setUpBack(tvMarketLeftCoin_1);
+                setUpBack(tvMarketLeftCoin_3);
+                setUpBack(tvMarketLeftCoin_4);
+                setUpBack(tvMarketLeftCoin_5);
+                break;
+            case R.id.tv_market_left_coin3:
+                setDownBack(tvMarketLeftCoin_3);
+                setUpBack(tvMarketLeftCoin_2);
+                setUpBack(tvMarketLeftCoin_1);
+                setUpBack(tvMarketLeftCoin_4);
+                setUpBack(tvMarketLeftCoin_5);
+                break;
+            case R.id.tv_market_left_coin4:
+                setDownBack(tvMarketLeftCoin_4);
+                setUpBack(tvMarketLeftCoin_2);
+                setUpBack(tvMarketLeftCoin_3);
+                setUpBack(tvMarketLeftCoin_1);
+                setUpBack(tvMarketLeftCoin_5);
+                break;
+            case R.id.tv_market_left_coin5:
+                setDownBack(tvMarketLeftCoin_5);
+                setUpBack(tvMarketLeftCoin_2);
+                setUpBack(tvMarketLeftCoin_3);
+                setUpBack(tvMarketLeftCoin_4);
+                setUpBack(tvMarketLeftCoin_1);
+                break;
         }
-        /**
-         * 设置未选中时的背景样式
-         * @param TextView
-         */
-        private void setUpBack(TextView TextView){
-            TextView.setBackground(getView().getResources().getDrawable(R.color.color_darkGrey,null));
-            TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_white,null));
-        }
+    }
 
-        private void setMarket(View leftCoin){
-            Log.i("setMarket", String.valueOf("lvMarketInfo: "+lvMarketInfo==null));
+    /**
+     * 设置选中时的背景样式
+     *
+     * @param TextView
+     */
+    private void setDownBack(TextView TextView) {
+        TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch, null));
+        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow, null));
+    }
+
+    /**
+     * 设置未选中时的背景样式
+     *
+     * @param TextView
+     */
+    private void setUpBack(TextView TextView) {
+        TextView.setBackground(getView().getResources().getDrawable(R.color.color_darkGrey, null));
+        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_white, null));
+    }
+
+    private void setMarket(View leftCoin) {
+        Log.i("setMarket", String.valueOf("lvMarketInfo: " + lvMarketInfo == null));
 //            if(lvMarketInfo!=null){
 //                lvMarketInfo.removeAllViews();
 //            }
 
-            List<Market> markets=readMarket(leftCoin);
-            MarketRowAdapter rowAdapter=new MarketRowAdapter(simpleKFragment,getActivity(),markets);
-            lvMarketInfo.setAdapter(rowAdapter);
-        }
+        List<Market> markets = readMarket(leftCoin);
+        MarketRowAdapter rowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), markets);
+        lvMarketInfo.setAdapter(rowAdapter);
+    }
 
-        private List<Market> readMarket(View leftCoin){
-            marketService=new MarketServiceImpl();
-            market = marketService.getallinformation();
-            List list=null;
-            switch (leftCoin.getId()){
-                case R.id.tv_market_left_coin1:
-                    list = market.get("bitCNY");
-                    break;
-                case R.id.tv_market_left_coin2:
-                    list = market.get("BTS");
-                    break;
-                case R.id.tv_market_left_coin3:
-                    list = market.get("bitUSD");
-                    break;
-                case R.id.tv_market_left_coin4:
-                    list = market.get("BTC");
-                    break;
-                case R.id.tv_market_left_coin5:
-                    list = market.get("ETH");
-                    break;
-            }
-            return list;
+    private List<Market> readMarket(View leftCoin) {
+        marketService = new MarketServiceImpl();
+        market = marketService.getallinformation();
+        List list = null;
+        switch (leftCoin.getId()) {
+            case R.id.tv_market_left_coin1:
+                list = market.get("bitCNY");
+                break;
+            case R.id.tv_market_left_coin2:
+                list = market.get("BTS");
+                break;
+            case R.id.tv_market_left_coin3:
+                list = market.get("bitUSD");
+                break;
+            case R.id.tv_market_left_coin4:
+                list = market.get("BTC");
+                break;
+            case R.id.tv_market_left_coin5:
+                list = market.get("ETH");
+                break;
         }
+        return list;
+    }
 //        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
 //            for (int i = 0; i < markets.size(); i++) {
 //                market=markets.get(i);

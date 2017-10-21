@@ -22,7 +22,7 @@ public class NewsContentActivity extends AppCompatActivity {
     private TextView textView;
 
     //actionStart()方法，将启动NewsActivity所需要的参数导入进来
-    public static void actionStart(Context context,News news) {
+    public static void actionStart(Context context, News news) {
         Intent intent = new Intent(context, NewsContentActivity.class);
         //将参数新闻标题、新闻内容（参数）保存到intent中
         intent.putExtra("news", news);
@@ -37,21 +37,23 @@ public class NewsContentActivity extends AppCompatActivity {
         init();//初始化
         showNews();//展示新闻
     }
+
     /**
      * 初始化
      */
-    private void init(){
+    private void init() {
     }
+
     /**
      * 装载顶部导航
      */
-    private void fillInHead(){
+    private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (headFragment==null){
-            headFragment=new HeadFragment();
+        if (headFragment == null) {
+            headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName("资讯详情");
-            transaction.add(R.id.fra_news_head,headFragment);
+            transaction.add(R.id.fra_news_head, headFragment);
         }
         transaction.commit();
     }
@@ -59,7 +61,7 @@ public class NewsContentActivity extends AppCompatActivity {
     /**
      * 展示新闻详细信息
      */
-    private void showNews(){
+    private void showNews() {
         //取出Intent中保存的参数(即为新闻的标题、新闻的内容)
         News news = (News) getIntent().getSerializableExtra("news");
         NewsContentFragment newsContentFragment = (NewsContentFragment) getFragmentManager().findFragmentById(R.id.news_content_fragment);

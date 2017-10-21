@@ -40,6 +40,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     /**
      * 初始化
      */
+
     private void init(){
         tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
         tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
@@ -47,8 +48,9 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvSetWe= (TextView) findViewById(R.id.tv_set_we);
         tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
+
         //绑定特效事件
-        TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
+        TextViewOnTouchListener OnTouchListener = new TextViewOnTouchListener();
         tvSetLanguage.setOnTouchListener(OnTouchListener);
         tvSetTheme.setOnTouchListener(OnTouchListener);
         tvSetGuide.setOnTouchListener(OnTouchListener);
@@ -56,7 +58,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvSetEdition.setOnTouchListener(OnTouchListener);
 
         //绑定点击事件
-        TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
+        TextViewOnClickListener OnClickListener = new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
         tvSetGuide.setOnClickListener(OnClickListener);
         tvSetWe.setOnClickListener(OnClickListener);
@@ -66,26 +68,26 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     /*
      *点击事件
      */
-    class TextViewOnClickListener implements View.OnClickListener{
+    class TextViewOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            switch (view.getId()){
+            switch (view.getId()) {
                 case R.id.tv_set_language:
                     showListDialog();
                     break;
                 case R.id.tv_set_theme:
                     break;
                 case R.id.tv_set_guide:
-                    Intent iii = new Intent(SettingActivity.this , UsersGuidanceActivity.class);
+                    Intent iii = new Intent(SettingActivity.this, UsersGuidanceActivity.class);
                     startActivity(iii);
                     break;
                 case R.id.tv_set_we:
                     Log.i("dddddd", "onClick: ");
-                    Intent i = new Intent(SettingActivity.this , AboutUsActivity.class);
+                    Intent i = new Intent(SettingActivity.this, AboutUsActivity.class);
                     startActivity(i);
                     break;
                 case R.id.tv_set_edition:
-                    Intent ii = new Intent(SettingActivity.this , VersionInformationActivity.class);
+                    Intent ii = new Intent(SettingActivity.this, VersionInformationActivity.class);
                     startActivity(ii);
                     break;
             }
@@ -96,12 +98,12 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     /**
      * 装载顶部导航
      */
-    private void fillInHead(){
+    private void fillInHead() {
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (headFragment==null){
-            headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
+        if (headFragment == null) {
+            headFragment = new HeadFragment(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName(getString(R.string.set));
-            transaction.add(R.id.fra_set_head,headFragment);
+            transaction.add(R.id.fra_set_head, headFragment);
         }
         transaction.commit();
     }
@@ -110,6 +112,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
      * 跳出Dialog窗口
      */
     private void showListDialog() {
+
         //创建Dialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
         //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
@@ -124,6 +127,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
         dialog.setView(layout);
         dialog.show();
+
     }
     //框内控件
     @Override
@@ -146,36 +150,40 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
 
     /**
      * 单击特效
-     * @param textView 被单击的tv
+     *
+     * @param textView    被单击的tv
      * @param motionEvent 当前状态
      */
-    protected void touchColor(TextView textView,MotionEvent motionEvent){
+    protected void touchColor(TextView textView, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch, null));
         }
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row, null));
         }
     }
-    class TextViewOnTouchListener implements View.OnTouchListener{
+
+    class TextViewOnTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (view.getId()) {
                 case R.id.tv_set_language:
-                    touchColor(tvSetLanguage,motionEvent);
+                    touchColor(tvSetLanguage, motionEvent);
                     break;
                 case R.id.tv_set_theme:
-                    touchColor(tvSetTheme,motionEvent);
+                    touchColor(tvSetTheme, motionEvent);
                     break;
                 case R.id.tv_set_guide:
-                    touchColor(tvSetGuide,motionEvent);
+                    touchColor(tvSetGuide, motionEvent);
                     break;
+
                 case R.id.tv_set_we:
                     touchColor(tvSetWe,motionEvent);
+
                     break;
 
                 case R.id.tv_set_edition:
-                    touchColor(tvSetEdition,motionEvent);
+                    touchColor(tvSetEdition, motionEvent);
                     break;
             }
             return false;

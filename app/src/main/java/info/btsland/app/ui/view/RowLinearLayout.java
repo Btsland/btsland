@@ -1,9 +1,9 @@
 package info.btsland.app.ui.view;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
-import android.util.AttributeSet;
-import android.widget.LinearLayout;
+        import android.content.Context;
+        import android.support.annotation.Nullable;
+        import android.util.AttributeSet;
+        import android.widget.LinearLayout;
 
 /**
  * Created by Administrator on 2017/10/14.
@@ -46,6 +46,4 @@ public class RowLinearLayout extends LinearLayout {
         this.rightCoin = rightCoin;
         return this;
     }
-
-
 }

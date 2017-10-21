@@ -1,22 +1,23 @@
 package info.btsland.app.ui.activity;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-import static info.btsland.app.R.id.tv_set_we;
 
-
-public class SettingActivity extends BaseActivity {
+public class SettingActivity extends BaseActivity implements View.OnClickListener{
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -25,23 +26,28 @@ public class SettingActivity extends BaseActivity {
     private TextView tvSetWe;
     private TextView tvSetEdition;
 
+
+
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(info.btsland.app.R.layout.activity_setting);
         fillInHead();
         init();
-    }
+}
 
     /**
      * 初始化
      */
-    private void init() {
-        tvSetLanguage = (TextView) findViewById(R.id.tv_set_language);
-        tvSetTheme = (TextView) findViewById(R.id.tv_set_theme);
-        tvSetGuide = (TextView) findViewById(R.id.tv_set_guide);
-        tvSetWe = (TextView) findViewById(tv_set_we);
-        tvSetEdition = (TextView) findViewById(R.id.tv_set_edition);
+
+    private void init(){
+        tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
+        tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
+        tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
+        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
+        tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
+
 
         //绑定特效事件
         TextViewOnTouchListener OnTouchListener = new TextViewOnTouchListener();
@@ -75,7 +81,7 @@ public class SettingActivity extends BaseActivity {
                     Intent iii = new Intent(SettingActivity.this, UsersGuidanceActivity.class);
                     startActivity(iii);
                     break;
-                case tv_set_we:
+                case R.id.tv_set_we:
                     Log.i("dddddd", "onClick: ");
                     Intent i = new Intent(SettingActivity.this, AboutUsActivity.class);
                     startActivity(i);
@@ -106,29 +112,41 @@ public class SettingActivity extends BaseActivity {
      * 跳出Dialog窗口
      */
     private void showListDialog() {
-        final String[] items = {"中文", "英文"};
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
 
-        listDialog.setTitle("请选择语言");
-        listDialog.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (items[which] == "中文") {
-                    switchLanguage("zh");
-                } else if (items[which] == "英文") {
-                    switchLanguage("en");
-                }
-                finish();
+        //创建Dialog
+        AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
+        //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.fragment_language, (LinearLayout) findViewById(R.id.language_dialog));
 
-                Intent intent = new Intent(SettingActivity.this, MainActivity.class);
-                //开始新的activity同时移除之前所有的activity
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-            }
-        });
-        listDialog.show();
+        //获得参数
+        RadioButton chinese = layout.findViewById(R.id.select_chinese);
+        RadioButton english = layout.findViewById(R.id.select_english);
+        chinese.setOnClickListener(SettingActivity.this);
+        english.setOnClickListener(SettingActivity.this);
+
+        dialog.setView(layout);
+        dialog.show();
+
     }
+    //框内控件
+    @Override
+    public void onClick(View view) {
 
+        switch (view.getId()){
+            case R.id.select_chinese:
+                switchLanguage("zh");
+                break;
+            case R.id.select_english:
+                switchLanguage("en");
+                break;
+        }
+
+        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+        //开始新的activity同时移除之前所有的activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 
     /**
      * 单击特效
@@ -158,8 +176,10 @@ public class SettingActivity extends BaseActivity {
                 case R.id.tv_set_guide:
                     touchColor(tvSetGuide, motionEvent);
                     break;
-                case tv_set_we:
-                    touchColor(tvSetWe, motionEvent);
+
+                case R.id.tv_set_we:
+                    touchColor(tvSetWe,motionEvent);
+
                     break;
 
                 case R.id.tv_set_edition:

@@ -1,14 +1,19 @@
 package info.btsland.app.ui.activity;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+
+import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
+import info.btsland.app.Adapter.ImagePageAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
@@ -42,9 +47,11 @@ public class MarketDetailedActivity extends AppCompatActivity {
         fragments.add(detailedBuyAndSellFragment);
         fragments.add(detailedHaveInHandFragment);
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles);
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.psts_detailed_title);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
-        viewPager.addOnPageChangeListener(new OnPage());
+        tabStrip.setViewPager(viewPager);
+        tabStrip.setOnPageChangeListener(new OnPage());
     }
     /**
      * 装载顶部导航

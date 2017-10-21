@@ -38,5 +38,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.github.liuguangqiang.SuperRecyclerView:super-recyclerview:0.1.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
+    compile 'com.jpardogo.materialtabstrip:library:1.1.0'
     testCompile 'junit:junit:4.12'
 }

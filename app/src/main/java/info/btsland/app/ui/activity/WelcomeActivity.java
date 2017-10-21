@@ -26,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
         WelcomeThread w = new WelcomeThread();
         new Thread(w).start();
     }
+
     class WelcomeThread implements Runnable {
         @Override
         public void run() {
@@ -34,17 +35,14 @@ public class WelcomeActivity extends AppCompatActivity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Log.i("getColor", "getColor: "+getResources().getColor(R.color.color_Grey));
-            Log.i("getColor", "getString: "+getResources().getString(R.string.font_color_gray));
+            Log.i("getColor", "getColor: " + getResources().getColor(R.color.color_Grey));
+            Log.i("getColor", "getString: " + getResources().getString(R.string.font_color_gray));
             Intent intent = new Intent();
             intent.setClass(WelcomeActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
         }
     }
-
-
-
 
 
     public static void scaleImage(final AppCompatActivity activity, final View view, int drawableResId) {

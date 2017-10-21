@@ -33,6 +33,7 @@ public class MainActivity extends BaseActivity {
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
     private TextView tvHeadLeft;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,78 +49,79 @@ public class MainActivity extends BaseActivity {
     }
 
 
-
     /**
      * 初始化
      */
-    protected void init(){
+    protected void init() {
         //初始化
-        tvNavHome=(TextView)findViewById(R.id.tv_nav_home);
-        tvNavMarket=(TextView)findViewById(R.id.tv_nav_market);
-        tvNavPurse=(TextView)findViewById(R.id.tv_nav_purse);
+        tvNavHome = (TextView) findViewById(R.id.tv_nav_home);
+        tvNavMarket = (TextView) findViewById(R.id.tv_nav_market);
+        tvNavPurse = (TextView) findViewById(R.id.tv_nav_purse);
         //绑定监听器
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
 
-        touchColor(tvNavMarket,tvNavHome,tvNavPurse);//选中行情控件
+        touchColor(tvNavMarket, tvNavHome, tvNavPurse);//选中行情控件
         showFragment(tvNavMarket);//显示行情页面
     }
 
     /**
      * 装载顶部导航
      */
-    private void fillInHead(){
+    private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (headFragment==null){
-            headFragment=new HeadFragment();
+        if (headFragment == null) {
+            headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.USER_SET);
-            transaction.add(R.id.fra_main_head,headFragment);
+            transaction.add(R.id.fra_main_head, headFragment);
         }
         transaction.commit();
     }
+
     /**
      * 装载主体内容
      */
-    private void fillInBody(){
+    private void fillInBody() {
         //初始化fra_main_body
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (marketFragment==null){
-            marketFragment=new MarketFragment();
-            transaction.add(R.id.fra_main_body,marketFragment);
-        };
+        if (marketFragment == null) {
+            marketFragment = new MarketFragment();
+            transaction.add(R.id.fra_main_body, marketFragment);
+        }
+        ;
         transaction.commit();
     }
-
 
 
     /**
      * 根据底部导航栏选定的控件进行切换fra
+     *
      * @param textView 选定的控件
      */
-    private void showFragment(TextView textView){
+    private void showFragment(TextView textView) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        switch (textView.getId()){
+        switch (textView.getId()) {
             case R.id.tv_nav_home:
-                if (homeFragment==null){
-                    homeFragment=new HomeFragment();
-                    transaction.add(R.id.fra_main_body,homeFragment);
+                if (homeFragment == null) {
+                    homeFragment = new HomeFragment();
+                    transaction.add(R.id.fra_main_body, homeFragment);
                 }
                 hideFragment(transaction);
                 transaction.show(homeFragment);
                 break;
             case R.id.tv_nav_market:
-                if (marketFragment==null){
-                    marketFragment=new MarketFragment();
-                    transaction.add(R.id.fra_main_body,marketFragment);
+                if (marketFragment == null) {
+                    marketFragment = new MarketFragment();
+                    transaction.add(R.id.fra_main_body, marketFragment);
                 }
                 hideFragment(transaction);
                 transaction.show(marketFragment);
                 break;
             case R.id.tv_nav_purse:
-                if (purseFragment==null){
-                    purseFragment=new PurseFragment();
-                    transaction.add(R.id.fra_main_body,purseFragment);
+                if (purseFragment == null) {
+                    purseFragment = new PurseFragment();
+                    transaction.add(R.id.fra_main_body, purseFragment);
                 }
                 hideFragment(transaction);
                 transaction.show(purseFragment);
@@ -127,38 +129,41 @@ public class MainActivity extends BaseActivity {
         }
         transaction.commit();
     }
+
     /**
      * 隐藏所有fragment
+     *
      * @param transaction
      */
-    private void hideFragment(FragmentTransaction transaction){
-        if(marketFragment != null){
+    private void hideFragment(FragmentTransaction transaction) {
+        if (marketFragment != null) {
             transaction.hide(marketFragment);
         }
-        if(homeFragment != null){
+        if (homeFragment != null) {
             transaction.hide(homeFragment);
         }
-        if(purseFragment != null){
+        if (purseFragment != null) {
             transaction.hide(purseFragment);
         }
     }
+
     /**
      * 底部导航栏操作效果
      */
-    class NavOnClickListener implements View.OnClickListener{
+    class NavOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tv_nav_home:
-                    touchColor(tvNavHome,tvNavMarket,tvNavPurse);//控件特效
+                    touchColor(tvNavHome, tvNavMarket, tvNavPurse);//控件特效
                     showFragment(tvNavHome);
                     break;
                 case R.id.tv_nav_market:
-                    touchColor(tvNavMarket,tvNavHome,tvNavPurse);//控件特效
+                    touchColor(tvNavMarket, tvNavHome, tvNavPurse);//控件特效
                     showFragment(tvNavMarket);
                     break;
                 case R.id.tv_nav_purse:
-                    touchColor(tvNavPurse,tvNavHome,tvNavMarket);//控件特效
+                    touchColor(tvNavPurse, tvNavHome, tvNavMarket);//控件特效
                     showFragment(tvNavPurse);
                     break;
             }
@@ -166,38 +171,43 @@ public class MainActivity extends BaseActivity {
 
 
     }
+
     /**
      * 导航栏交互特效
+     *
      * @param facingTextView 当前的控件
      * @param textView1
      * @param textView2
      */
-    protected void touchColor(TextView facingTextView,TextView textView1,TextView textView2){
+    protected void touchColor(TextView facingTextView, TextView textView1, TextView textView2) {
         facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
         textView1.setBackground(getDrawable(R.drawable.tv_border));
         textView2.setBackground(getDrawable(R.drawable.tv_border));
-        facingTextView.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_yellow_red,null));
-        textView1.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
-        textView2.setTextColor(ResourcesCompat.getColor(getResources(),R.color.color_black,null));
+        facingTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow_red, null));
+        textView1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
+        textView2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
     }
 
 
     /**
      * 头像单击事件功能实现
      */
-    class ivNavUserOnClick implements View.OnClickListener{
+    class ivNavUserOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent=new Intent(MainActivity.this,UserActivity.class);
+            Intent intent = new Intent(MainActivity.this, UserActivity.class);
             MainActivity.this.startActivity(intent);
         }
     }
+
     /**
      * 标识是否关闭程序
      */
-    private boolean isExit=false;
+    private boolean isExit = false;
+
     /**
      * 检测物理按键
+     *
      * @param keyCode
      * @param event
      * @return
@@ -211,7 +221,8 @@ public class MainActivity extends BaseActivity {
             return super.onKeyDown(keyCode, event);
         }
     }
-    private void exit(){
+
+    private void exit() {
         if (isExit) {
             Intent intent = new Intent(Intent.ACTION_MAIN);
             intent.addCategory(Intent.CATEGORY_HOME);
@@ -224,6 +235,7 @@ public class MainActivity extends BaseActivity {
         }
 
     }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

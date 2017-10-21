@@ -20,6 +20,7 @@ import info.btsland.app.ui.fragment.NewsContentFragment;
 public class NewsContentActivity extends AppCompatActivity {
     private HeadFragment headFragment;
     private TextView textView;
+
     //actionStart()方法，将启动NewsActivity所需要的参数导入进来
     public static void actionStart(Context context,News news) {
         Intent intent = new Intent(context, NewsContentActivity.class);

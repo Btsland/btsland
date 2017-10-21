@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/language_dialog">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="@string/selectlanguage"
+        android:textSize="25dp"
+        android:gravity="center"/>
+
+    <RadioGroup
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/select_chinese"
+            android:text="@string/stringzh"
+            android:textSize="25dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:checked="false"/>
+
+        <RadioButton
+            android:id="@+id/select_english"
+            android:text="@string/stringen"
+            android:textSize="25dp"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:button="@null"
+            android:drawableRight="@android:drawable/btn_radio"
+            android:checked="false"/>
+
+    </RadioGroup>
+
+</LinearLayout>

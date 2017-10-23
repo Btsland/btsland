@@ -74,7 +74,8 @@
         android:textColor="@color/color_white"
         app:layout_constraintTop_toBottomOf="@+id/v_user_back"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:id="@+id/tv_user_whiteList"

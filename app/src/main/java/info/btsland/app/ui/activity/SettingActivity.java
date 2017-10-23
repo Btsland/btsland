@@ -1,7 +1,6 @@
 package info.btsland.app.ui.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,7 +24,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private TextView tvSetGuide;
     private TextView tvSetWe;
     private TextView tvSetEdition;
-
+    private RadioButton chinese;
+    private RadioButton english;
 
 
 
@@ -58,6 +58,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         //绑定点击事件
         TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
+        tvSetTheme.setOnClickListener(OnClickListener);
         tvSetGuide.setOnClickListener(OnClickListener);
         tvSetWe.setOnClickListener(OnClickListener);
         tvSetEdition.setOnClickListener(OnClickListener);
@@ -92,7 +93,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         }
     }
 
-
     /**
      * 装载顶部导航
      */
@@ -107,20 +107,21 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     }
 
     /**
-     * 跳出Dialog窗口
+     * 跳出语言Dialog窗口
      */
     private void showListDialog() {
         //创建Dialog
         AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
         //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.fragment_language, (LinearLayout) findViewById(R.id.language_dialog));
+        View layout = inflater.inflate(R.layout.dialog_language, (LinearLayout) findViewById(R.id.language_dialog));
 
         //获得参数
-        RadioButton chinese = layout.findViewById(R.id.select_chinese);
-        RadioButton english = layout.findViewById(R.id.select_english);
+        chinese = layout.findViewById(R.id.select_chinese);
+        english = layout.findViewById(R.id.select_english);
         chinese.setOnClickListener(SettingActivity.this);
         english.setOnClickListener(SettingActivity.this);
+
 
         dialog.setView(layout);
         dialog.show();
@@ -128,7 +129,6 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     //框内控件
     @Override
     public void onClick(View view) {
-
         switch (view.getId()){
             case R.id.select_chinese:
                 switchLanguage("zh");

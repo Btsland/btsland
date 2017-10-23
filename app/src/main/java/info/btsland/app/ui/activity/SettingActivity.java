@@ -1,7 +1,6 @@
 package info.btsland.app.ui.activity;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -16,6 +15,8 @@ import android.widget.TextView;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
+import static info.btsland.app.R.id.tv_set_transaction;
+
 
 public class SettingActivity extends BaseActivity implements View.OnClickListener{
     private HeadFragment headFragment;
@@ -25,6 +26,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private TextView tvSetGuide;
     private TextView tvSetWe;
     private TextView tvSetEdition;
+    private TextView tvSetTransaction;
 
 
 
@@ -45,6 +47,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
         tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
         tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
+        tvSetTransaction= (TextView) findViewById(tv_set_transaction);
         tvSetWe= (TextView) findViewById(R.id.tv_set_we);
         tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
@@ -54,6 +57,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         tvSetLanguage.setOnTouchListener(OnTouchListener);
         tvSetTheme.setOnTouchListener(OnTouchListener);
         tvSetGuide.setOnTouchListener(OnTouchListener);
+        tvSetTransaction.setOnTouchListener(OnTouchListener);
         tvSetWe.setOnTouchListener(OnTouchListener);
         tvSetEdition.setOnTouchListener(OnTouchListener);
 
@@ -61,6 +65,7 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         TextViewOnClickListener OnClickListener = new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
         tvSetGuide.setOnClickListener(OnClickListener);
+        tvSetTransaction.setOnClickListener(OnClickListener);
         tvSetWe.setOnClickListener(OnClickListener);
         tvSetEdition.setOnClickListener(OnClickListener);
     }
@@ -80,6 +85,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                 case R.id.tv_set_guide:
                     Intent iii = new Intent(SettingActivity.this, UsersGuidanceActivity.class);
                     startActivity(iii);
+                    break;
+                case tv_set_transaction:
+                    Intent iiii = new Intent(SettingActivity.this, TransactionActivity.class);
+                    startActivity(iiii);
                     break;
                 case R.id.tv_set_we:
                     Log.i("dddddd", "onClick: ");

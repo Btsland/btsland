@@ -25,6 +25,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     private TextView tvSetGuide;
     private TextView tvSetWe;
     private TextView tvSetEdition;
+    private RadioButton chinese;
+    private RadioButton english;
 
 
 
@@ -114,11 +116,11 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
         //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.fragment_language, (LinearLayout) findViewById(R.id.language_dialog));
+        View layout = inflater.inflate(R.layout.dialog_language, (LinearLayout) findViewById(R.id.language_dialog));
 
         //获得参数
-        RadioButton chinese = layout.findViewById(R.id.select_chinese);
-        RadioButton english = layout.findViewById(R.id.select_english);
+        chinese = layout.findViewById(R.id.select_chinese);
+        english = layout.findViewById(R.id.select_english);
         chinese.setOnClickListener(SettingActivity.this);
         english.setOnClickListener(SettingActivity.this);
 

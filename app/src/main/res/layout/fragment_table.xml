@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal" >
+
+
+    <View
+        android:layout_width="0.5px"
+        android:layout_height="fill_parent"
+        android:background="#B8B8B8"
+        android:visibility="visible" />
+
+
+    <TextView
+        android:id="@+id/tv_asset_table"
+        android:layout_width="80dip"
+        android:layout_height="50dip"
+        android:textColor="#CD3700"
+        android:text="1BTS"
+        android:textSize="15sp" />
+
+
+    <View
+        android:layout_width="0.5px"
+        android:layout_height="fill_parent"
+        android:background="#B8B8B8"
+        android:visibility="visible" />
+
+
+    <TextView
+        android:id="@+id/tv_scaledValue_table"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:text="1BTC"
+        android:textSize="15sp" />
+
+
+    <View
+        android:layout_width="0.5px"
+        android:layout_height="fill_parent"
+        android:background="#B8B8B8"
+        android:text="1btsCNY"
+        android:visibility="visible" />
+
+
+    <TextView
+        android:id="@+id/tv_supplyShare_table"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:text="1USD"
+        android:textSize="15sp" />
+
+
+    <View
+        android:layout_width="0.5px"
+        android:layout_height="fill_parent"
+        android:background="#B8B8B8"
+        android:visibility="visible" />
+
+
+
+    <TextView
+        android:id="@+id/tv_transferAccounts_table"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:text="1ETH"
+        android:textSize="15sp" />
+
+
+
+    <View
+        android:layout_width="0.5px"
+        android:layout_height="fill_parent"
+        android:background="#B8B8B8"
+        android:visibility="visible" />
+
+
+
+    <TextView
+        android:id="@+id/tv_MarketOperation_table"
+        android:layout_width="80dip"
+        android:layout_height="wrap_content"
+        android:textColor="#000000"
+        android:text="1btsUSD"
+        android:textSize="15sp" />
+
+
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

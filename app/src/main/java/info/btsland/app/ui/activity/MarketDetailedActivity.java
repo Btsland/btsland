@@ -7,6 +7,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,9 +47,11 @@ public class MarketDetailedActivity extends AppCompatActivity {
         fragments.add(detailedBuyAndSellFragment);
         fragments.add(detailedHaveInHandFragment);
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles);
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.psts_detailed_title);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
-        viewPager.addOnPageChangeListener(new OnPage());
+        tabStrip.setViewPager(viewPager);
+        tabStrip.setOnPageChangeListener(new OnPage());
     }
     /**
      * 装载顶部导航

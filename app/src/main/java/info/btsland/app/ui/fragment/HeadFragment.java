@@ -23,9 +23,9 @@ import info.btsland.app.ui.activity.UserActivity;
  */
 public class HeadFragment extends Fragment {
 
-    private int type=HeadType.BACK_SET;
+    private int type = HeadType.BACK_SET;
 
-    private String titleName="btsland";
+    private String titleName = "btsland";
 
     public String getTitleName() {
         return titleName;
@@ -68,23 +68,23 @@ public class HeadFragment extends Fragment {
     /**
      * 初始化
      */
-    private void init(){
+    private void init() {
         Log.i("HeadFragment", "init: ");
-        leftTextView=getActivity().findViewById(R.id.tv_head_left);
-        rightTextView=getActivity().findViewById(R.id.tv_head_right);
-        titleTextView=getActivity().findViewById(R.id.tv_head_title);
+        leftTextView = getActivity().findViewById(R.id.tv_head_left);
+        rightTextView = getActivity().findViewById(R.id.tv_head_right);
+        titleTextView = getActivity().findViewById(R.id.tv_head_title);
     }
 
     /**
      * 填充内容
      */
-    private void fillIn(int type){
-        Log.i("HeadFragment", "fillIn: type="+type);
-        BackOnClickListener back=new BackOnClickListener();
-        ToUserOnClickListener toUser=new ToUserOnClickListener();
-        ToSettingOnClickListener toSetting=new ToSettingOnClickListener();
+    private void fillIn(int type) {
+        Log.i("HeadFragment", "fillIn: type=" + type);
+        BackOnClickListener back = new BackOnClickListener();
+        ToUserOnClickListener toUser = new ToUserOnClickListener();
+        ToSettingOnClickListener toSetting = new ToSettingOnClickListener();
         titleTextView.setText(titleName);
-        switch (type){
+        switch (type) {
             case HeadType.BACK_NULL:
                 leftTextView.setOnClickListener(back);
                 rightTextView.setVisibility(View.GONE);
@@ -104,22 +104,25 @@ public class HeadFragment extends Fragment {
                 break;
         }
     }
-    class BackOnClickListener implements View.OnClickListener{
+
+    class BackOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             getActivity().finish();
         }
     }
-    class ToUserOnClickListener implements View.OnClickListener{
+
+    class ToUserOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), UserActivity.class);
             getActivity().startActivity(intent);
-            News news=new News();
-            Market market=new Market();
+            News news = new News();
+            Market market = new Market();
         }
     }
-    class ToSettingOnClickListener implements View.OnClickListener{
+
+    class ToSettingOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(getActivity(), SettingActivity.class);
@@ -158,10 +161,10 @@ public class HeadFragment extends Fragment {
         super.onDetach();
     }
 
-    public abstract static class  HeadType{
-        public static final int BACK_SET=1;
-        public static final int USER_SET=2;
-        public static final int BACK_NULL=3;
-        public static final int NULL_NULL=4;
+    public abstract static class HeadType {
+        public static final int BACK_SET = 1;
+        public static final int USER_SET = 2;
+        public static final int BACK_NULL = 3;
+        public static final int NULL_NULL = 4;
     }
 }

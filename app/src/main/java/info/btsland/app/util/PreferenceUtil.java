@@ -11,45 +11,45 @@ public class PreferenceUtil {
     private static SharedPreferences mSharedPreferences = null;
     private static SharedPreferences.Editor mEditor = null;
 
-    public static void init(Context context){
+    public static void init(Context context) {
         if (null == mSharedPreferences) {
-            mSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context) ;
+            mSharedPreferences = android.preference.PreferenceManager.getDefaultSharedPreferences(context);
         }
     }
 
-    public static void removeKey(String key){
+    public static void removeKey(String key) {
         mEditor = mSharedPreferences.edit();
         mEditor.remove(key);
         mEditor.commit();
     }
 
-    public static void removeAll(){
+    public static void removeAll() {
         mEditor = mSharedPreferences.edit();
         mEditor.clear();
         mEditor.commit();
     }
 
-    public static void commitString(String key, String value){
+    public static void commitString(String key, String value) {
         mEditor = mSharedPreferences.edit();
         mEditor.putString(key, value);
         mEditor.commit();
     }
 
-    public static String getString(String key, String faillValue){
+    public static String getString(String key, String faillValue) {
         return mSharedPreferences.getString(key, faillValue);
     }
 
-    public static void commitInt(String key, int value){
+    public static void commitInt(String key, int value) {
         mEditor = mSharedPreferences.edit();
         mEditor.putInt(key, value);
         mEditor.commit();
     }
 
-    public static int getInt(String key, int failValue){
+    public static int getInt(String key, int failValue) {
         return mSharedPreferences.getInt(key, failValue);
     }
 
-    public static void commitLong(String key, long value){
+    public static void commitLong(String key, long value) {
         mEditor = mSharedPreferences.edit();
         mEditor.putLong(key, value);
         mEditor.commit();
@@ -59,13 +59,13 @@ public class PreferenceUtil {
         return mSharedPreferences.getLong(key, failValue);
     }
 
-    public static void commitBoolean(String key, boolean value){
+    public static void commitBoolean(String key, boolean value) {
         mEditor = mSharedPreferences.edit();
         mEditor.putBoolean(key, value);
         mEditor.commit();
     }
 
-    public static Boolean getBoolean(String key, boolean failValue){
+    public static Boolean getBoolean(String key, boolean failValue) {
         return mSharedPreferences.getBoolean(key, failValue);
     }
 

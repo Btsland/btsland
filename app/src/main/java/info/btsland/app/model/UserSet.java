@@ -1,4 +1,4 @@
-package info.btsland.app.ui.activity;
+package info.btsland.app.model;
 
 /**
  * author：lw1000
@@ -7,7 +7,7 @@ package info.btsland.app.ui.activity;
  */
 
 
-public class UsersetActivity {
+public class UserSet {
 
 
     /**
@@ -31,7 +31,7 @@ public class UsersetActivity {
 
 
 
-    public UsersetActivity(String uAsset, String scaledValue, String supplyShare) {
+    public UserSet(String uAsset, String scaledValue, String supplyShare) {
         this.uAsset = uAsset;
         this.scaledValue = scaledValue;
         this.supplyShare = supplyShare;

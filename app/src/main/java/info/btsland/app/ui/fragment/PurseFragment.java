@@ -43,7 +43,6 @@ public class PurseFragment extends Fragment {
     }
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,47 +61,50 @@ public class PurseFragment extends Fragment {
         init();
     }
 
-    private void init(){
+    private void init() {
         //全部资产
-        tvPurseAllAsset=getActivity().findViewById(R.id.tv_purse_allAsset);
-        tvPurseRW=getActivity().findViewById(R.id.tv_purse_rw);
-        tvPurseDeal=getActivity().findViewById(R.id.tv_purse_deal);
-        tvPurseAllRemain=getActivity().findViewById(R.id.tv_purse_allRemain);
-        tvPurseBackup=getActivity().findViewById(R.id.tv_purse_backup);
-        TextViewOnTouchListener onTouchlistener=new TextViewOnTouchListener();
+        tvPurseAllAsset = getActivity().findViewById(R.id.tv_purse_allAsset);
+        tvPurseRW = getActivity().findViewById(R.id.tv_purse_rw);
+        tvPurseDeal = getActivity().findViewById(R.id.tv_purse_deal);
+        tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
+        tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
+        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
         tvPurseAllAsset.setOnTouchListener(onTouchlistener);
         tvPurseRW.setOnTouchListener(onTouchlistener);
         tvPurseDeal.setOnTouchListener(onTouchlistener);
         tvPurseAllRemain.setOnTouchListener(onTouchlistener);
         tvPurseBackup.setOnTouchListener(onTouchlistener);
-        TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
+        TextViewOnCLickListener onCLickListener = new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
         tvPurseRW.setOnClickListener(onCLickListener);
         tvPurseDeal.setOnClickListener(onCLickListener);
         tvPurseAllRemain.setOnClickListener(onCLickListener);
         tvPurseBackup.setOnClickListener(onCLickListener);
     }
+
     /**
      * 单击特效
-     * @param textView 被单击的tv
+     *
+     * @param textView    被单击的tv
      * @param motionEvent 当前状态
      */
-    protected void touchColor(TextView textView,MotionEvent motionEvent){
+    protected void touchColor(TextView textView, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch, null));
         }
         if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
+            textView.setBackground(getResources().getDrawable(R.drawable.tv_row, null));
         }
     }
-    class TextViewOnCLickListener implements View.OnClickListener{
+
+    class TextViewOnCLickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             Toast.makeText(getActivity(), "全部", Toast.LENGTH_SHORT).show();
             switch (view.getId()) {
 
                 case R.id.tv_purse_allAsset:
-                    Intent intent=new Intent(getActivity(),AssetActivity.class);
+                    Intent intent = new Intent(getActivity(), AssetActivity.class);
                     getActivity().startActivity(intent);
                     break;
                 case R.id.tv_purse_rw:
@@ -116,24 +118,25 @@ public class PurseFragment extends Fragment {
             }
         }
     }
-    class TextViewOnTouchListener implements View.OnTouchListener{
+
+    class TextViewOnTouchListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
             switch (view.getId()) {
                 case R.id.tv_purse_allAsset:
-                    touchColor(tvPurseAllAsset,motionEvent);
+                    touchColor(tvPurseAllAsset, motionEvent);
                     break;
                 case R.id.tv_purse_rw:
-                    touchColor(tvPurseRW,motionEvent);
+                    touchColor(tvPurseRW, motionEvent);
                     break;
                 case R.id.tv_purse_deal:
-                    touchColor(tvPurseDeal,motionEvent);
+                    touchColor(tvPurseDeal, motionEvent);
                     break;
                 case R.id.tv_purse_allRemain:
-                    touchColor(tvPurseAllRemain,motionEvent);
+                    touchColor(tvPurseAllRemain, motionEvent);
                     break;
                 case R.id.tv_purse_backup:
-                    touchColor(tvPurseBackup,motionEvent);
+                    touchColor(tvPurseBackup, motionEvent);
                     break;
             }
             return false;

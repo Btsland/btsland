@@ -2,15 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="75dp"
+    android:layout_height="50dp"
     android:background="@color/color_dullRed1">
-    <TextView
-        android:id="@+id/tv_top"
-        android:layout_width="0dp"
-        android:layout_height="25dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
     <!--顶部导航栏-->
     <TextView
         android:id="@+id/tv_head_title"
@@ -22,7 +15,7 @@
         android:textSize="18sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_top"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
         android:id="@+id/tv_head_left"

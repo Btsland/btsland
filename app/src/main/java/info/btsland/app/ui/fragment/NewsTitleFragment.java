@@ -4,9 +4,9 @@ package info.btsland.app.ui.fragment;
  * Created by zyf on 2017/10/8.
  * 与fragment_newstitle.xml相对应
  * 根据碎片的生命周期,onAttach()方法会首先执行,因此在这里做了一些数据初始化的操作,比如调用 getNews()方法获取几
- 条新闻数据,以及完成 NewsAdapter 的创建。然后在 onCreateView()方法中加载了news_title_frag 布局,
- 并给新闻列表的 ListView 注册了点击事件。
- 然后在 ListView 的点击事件里我们就可以判断,如果当前是单页模式,就启动一个新的活动去显示新闻内容
+ * 条新闻数据,以及完成 NewsAdapter 的创建。然后在 onCreateView()方法中加载了news_title_frag 布局,
+ * 并给新闻列表的 ListView 注册了点击事件。
+ * 然后在 ListView 的点击事件里我们就可以判断,如果当前是单页模式,就启动一个新的活动去显示新闻内容
  */
 
 import android.app.Activity;
@@ -60,9 +60,9 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
     //ListView子项目的点击事件
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         News news = newsList.get(position);
-            //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-        Intent intent=new Intent(getActivity(),NewsContentActivity.class);
-        intent.putExtra("news",news);
+        //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
+        Intent intent = new Intent(getActivity(), NewsContentActivity.class);
+        intent.putExtra("news", news);
         getActivity().startActivity(intent);
     }
 
@@ -70,6 +70,69 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
     private List<News> getNews() {
         //初始化新闻标题及内容
         List<News> newsList = new ArrayList<News>();
+
+        News new16 = new News();
+        new16.setTitle("哈萨克斯坦拟发行以法币为支撑的国家加密货币");
+        new16.setDate("2017-10-21");
+        new16.setTitleContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。");
+        new16.setContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。\n" +
+                "\n" +
+                "Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。\n" +
+                "\n" +
+                "National Cryptocurrency\n" +
+                "\n" +
+                "AIFC负责人Kairat Kelimbetov表示，该机构相信“区块链和加密货币正在迈入当今主流经济环境”。Kelimbetov强调，AIFC致力于领先全球分布式账本技术（DLT）的研发和普及进程。他说：\n" +
+                "\n" +
+                "阿斯塔纳（哈萨克斯坦首都）的顶尖金融监管部门已经开始采取行为，为哈萨克斯坦的金融科技生态系统打下基础。我们认为AIFC能够成为区块链运作的国际中心，发展数字资产市场是我们将来的首要任务。\n" +
+                " \n" +
+                "\n" +
+                "区块链和加密货币博览会\n" +
+                " \n" +
+                "\n" +
+                "Kelimbetov近期谈到即将到来的博览会，AIFC希望提高国际上对哈萨克斯坦金融科技以及DLT行业的认识。据当地媒体报道，这位AIFC负责人指出：\n" +
+                "\n" +
+                "我们希望博览会举办地能够成为加密山谷或加密港口，全世界都对此很感兴趣。某些国家的央行支持这一发展方向，而另一些央行已经在密切关注（加密货币）了。\n" +
+                "Kelimbetov强调，AIFC希望在促进加密货币创新和发展以及确保金融稳定性之间寻找平衡。\n" +
+                "\n" +
+                "美国和新加坡希望平等对待加密经济活动以及普通金融活动。在瑞士尤其如此，日本也已经支持某些加密货币成为支付方式。从这一方向来看，AIFC希望深入了解当前的发展流程，但与此同时我们也会对金融稳定性以及特定金融机构的监管负责。\n" +
+                " \n" +
+                "\n" +
+                "发展金融科技\n" +
+                " \n" +
+                "\n" +
+                "Kelimbetov说，该国领导已经授权AIFC作为新兴金融技术发展的专业中心。为了实现这一目标，AIFC不久将“加入由国际高新技术中心组成的联盟，其中就包括一些正在研究国家和地区加密货币以及区块链技术方案的大型国际银行”。\n" +
+                "\n" +
+                "本月早些时候，AIFC与微软签署谅解备忘录，旨在建立该国的区块链创新中心，促进DLT初创公司的创新发展。今年7月，AIFC宣布，其与德勤和Waves将为加密货币、区块链以及金融科技企业制定宽松的监管框架。");
+        newsList.add(new16);
+
+        News new15 = new News();
+        new15.setTitle("微软CEO对话SWIFT：构建‘有意义的’区块链应用");
+        new15.setDate("2017-10-21");
+        new15.setTitleContent("微软（Microsoft）CEO萨蒂亚•纳德拉（Satya Nadella）以“挑战”一词作为评价Sibos 2017（国际银行营运研讨会）的结束语。");
+        new15.setContent("微软（Microsoft）CEO萨蒂亚•纳德拉（Satya Nadella）以“挑战”一词作为评价Sibos 2017（国际银行营运研讨会）的结束语。\n" +
+                "\n" +
+                "blockchain\n" +
+                "\n" +
+                "在这场由银行间结算系统SWIFT主办的年度金融会议的第三天，Nadella就金融科技初创公司间的合作发表了评论，而区块链则并不是他演讲的重点。\n" +
+                "\n" +
+                "然而，这场会议并没有这样草草收尾。\n" +
+                "\n" +
+                "在与Nadella同台时，Swift CEO戈特弗里德•来布朗特（Gottfried Leibbrandt）向他提问：区块链真的有人们说的那么好吗？Nadella作出了明确回应。\n" +
+                "\n" +
+                "他告诉在场的观众：\n" +
+                "\n" +
+                "目前这方面已经取得了切实的进展。不过，我认为这项技术的应用是否有意义取决于你自己。\n" +
+                "Nadella给Swift带来的这番言语上的挑战听起来十分有趣，这个连接了世界上1.1万家银行的平台已经成功进行区块链试验，有意思的是，有人说这项技术将淘汰Swift的业务。\n" +
+                "\n" +
+                "另外，Nadella还在Sibos中提到了微软的区块链大计以及该公司对发展Azure云平台的区块链支持。\n" +
+                "\n" +
+                "他还分享了自己曾在微软担任程序员的时光，他称区块链实现了他一直以来的强烈愿望。\n" +
+                "\n" +
+                "他说：\n" +
+                "\n" +
+                "自从我进入这一行之后，我们一直都在研究可信的分布式数据库，旨在达成多个组织间的合作。\n" +
+                "显然，我认为区块链及其底层分布式账本是一种非常创新的部署，这种技术将产生重大影响。");
+        newsList.add(new15);
 
         News new12 = new News();
         new12.setTitle("俄罗斯最大的银行Sberbank加入企业以太坊联盟");

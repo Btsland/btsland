@@ -35,4 +35,7 @@ public class DetailedFragmentAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         return titles[position];
     }
+    public int getPageIconResId(int position){
+        return 1;
+    }
 }

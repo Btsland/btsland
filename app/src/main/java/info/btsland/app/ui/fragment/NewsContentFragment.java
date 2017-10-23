@@ -26,14 +26,15 @@ public class NewsContentFragment extends Fragment {
     /**
      * 创建refresh()方法，
      * 这个方法用于将新闻的标题和内容显示在界面上
+     *
      * @param news
      */
     public void refresh(News news) {
-        View visibilityLayout =getActivity().findViewById(R.id.visibility_layout);
+        View visibilityLayout = getActivity().findViewById(R.id.visibility_layout);
         visibilityLayout.setVisibility(View.VISIBLE);
         //接收新闻信息并刷新新闻内容
-        TextView newsTitleText = (TextView)getActivity().findViewById(R.id.news_title);//得到新闻标题控件的实例
-        TextView newsContentText = (TextView)getActivity().findViewById(R.id.news_content);//得到新闻内容控件的实例
+        TextView newsTitleText = (TextView) getActivity().findViewById(R.id.news_title);//得到新闻标题控件的实例
+        TextView newsContentText = (TextView) getActivity().findViewById(R.id.news_content);//得到新闻内容控件的实例
         newsTitleText.setText(news.getTitle());//刷新新闻的标题
         newsContentText.setText(news.getContent());//刷新新闻的内容
     }

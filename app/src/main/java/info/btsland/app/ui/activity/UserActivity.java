@@ -1,5 +1,6 @@
 package info.btsland.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -99,6 +100,10 @@ public class UserActivity extends AppCompatActivity {
                     break;
                 case R.id.tv_user_set:
                     touchColor(tvUserSeting, motionEvent);
+                    //Intent i = new Intent(MainActivity.this , page1.class);
+                    Intent i=new Intent(UserActivity.this,UserSetActity.class);
+                    ////启动
+                    startActivity(i);
                     break;
             }
             return false;

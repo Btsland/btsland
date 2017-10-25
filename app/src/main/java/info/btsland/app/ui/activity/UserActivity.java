@@ -94,16 +94,19 @@ public class UserActivity extends AppCompatActivity {
                     break;
                 case R.id.tv_user_recent:
                     touchColor(tvUserRecent, motionEvent);
+                    Intent iRecent=new Intent(UserActivity.this,RecentActivity.class);
+                    startActivity(iRecent);
                     break;
                 case R.id.tv_user_entrust:
                     touchColor(tvUserEntrust, motionEvent);
+
                     break;
                 case R.id.tv_user_set:
                     touchColor(tvUserSeting, motionEvent);
                     //Intent i = new Intent(MainActivity.this , page1.class);
-                    Intent i=new Intent(UserActivity.this,UserSetActity.class);
-                    ////启动
-                    startActivity(i);
+                    Intent iUsertSet=new Intent(UserActivity.this,UserSetActity.class);
+                    //启动
+                    startActivity(iUsertSet);
                     break;
             }
             return false;

@@ -42,12 +42,12 @@ public class UserSetActity extends AppCompatActivity {
     @Override
     protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lv=(ListView) findViewById(R.id.lv);
+        lv=(ListView) findViewById(R.id.lv_userset);
 
         setContentView(R.layout.activity_userset);
 
 
-       //fillInHead();
+       fillInHead();
 
         uptdaListView();
 
@@ -58,18 +58,18 @@ public class UserSetActity extends AppCompatActivity {
     /**
      * 装载顶部导航
      */
-  /*  private void fillInHead() {
+    private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName("用户资产设置");
-            transaction.add(R.id.fra_news_head, headFragment);
+            transaction.add(R.id.fra_userset_head, headFragment);
         }
         transaction.commit();
     }
-*/
+
 
     public void uptdaListView(){
 

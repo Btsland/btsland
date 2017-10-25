@@ -3,7 +3,6 @@ package info.btsland.app.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -20,6 +19,8 @@ public class DetailedFragmentAdapter extends FragmentPagerAdapter {
         this.fragmentList=fragmentList;
         this.titles=titles;
     }
+
+
 
     @Override
     public Fragment getItem(int position) {

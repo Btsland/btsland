@@ -96,16 +96,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".ui.activity.TransactionActivity">
-
-        </activity>
-
-        <activity android:name=".ui.activity.UserSetActity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
+        <activity android:name=".ui.activity.TransactionActivity"></activity>
+        <activity
+            android:name=".ui.activity.UserSetActity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

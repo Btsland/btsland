@@ -33,7 +33,7 @@ public class TransactionActivity extends AppCompatActivity {
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName("关于我们");
+            headFragment.setTitleName("交易向导");
             transaction.add(R.id.fra_transaction_head, headFragment);
         }
         transaction.commit();

@@ -74,7 +74,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new16 = new News();
         new16.setTitle("哈萨克斯坦拟发行以法币为支撑的国家加密货币");
         new16.setDate("2017-10-21");
-        new16.setTitleContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。");
+        new16.setTitleContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。AIFC负责人Kairat Kelimbetov表示，该机构相信“区块链和加密货币正在迈入当今主流经济环境”。Kelimbetov强调，AIFC致力于领先全球分布式账本技术（DLT）的研发和普及进程。他说：");
         new16.setContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。\n" +
                 "\n" +
                 "Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。\n" +
@@ -108,7 +108,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new15 = new News();
         new15.setTitle("微软CEO对话SWIFT：构建‘有意义的’区块链应用");
         new15.setDate("2017-10-21");
-        new15.setTitleContent("微软（Microsoft）CEO萨蒂亚•纳德拉（Satya Nadella）以“挑战”一词作为评价Sibos 2017（国际银行营运研讨会）的结束语。");
+        new15.setTitleContent("微软（Microsoft）CEO萨蒂亚•纳德拉（Satya Nadella）以“挑战”一词作为评价Sibos 2017（国际银行营运研讨会）的结束语。在这场由银行间结算系统SWIFT主办的年度金融会议的第三天，Nadella就金融科技初创公司间的合作发表了评论，而区块链则并不是他演讲的重点。然而，这场会议并没有这样草草收尾。在与Nadella同台时，Swift CEO戈特弗里德•来布朗特（Gottfried Leibbrandt）向他提问：区块链真的有人们说的那么好吗？Nadella作出了明确回应。");
         new15.setContent("微软（Microsoft）CEO萨蒂亚•纳德拉（Satya Nadella）以“挑战”一词作为评价Sibos 2017（国际银行营运研讨会）的结束语。\n" +
                 "\n" +
                 "blockchain\n" +
@@ -137,7 +137,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new12 = new News();
         new12.setTitle("俄罗斯最大的银行Sberbank加入企业以太坊联盟");
         new12.setDate("2017-10-20");
-        new12.setTitleContent("企业以太坊联盟（EnterpriseEthereumAlliance）刚刚迎来了它的第一家俄罗斯银行。");
+        new12.setTitleContent("企业以太坊联盟（EnterpriseEthereumAlliance）刚刚迎来了它的第一家俄罗斯银行。联盟登记注册了一百多家企业，以建立与以太坊区块链兼容的企业分布式账本技术，其后，该国最大的银行Sberbank（俄罗斯联邦储蓄银行）也加入了其日渐壮大的名单之中。 在CoinDesk的采访中，Sberbank透露说，加入联盟是利用国际市场的新方式。");
         new12.setContent("    企业以太坊联盟（EnterpriseEthereumAlliance）刚刚迎来了它的第一家俄罗斯银行。\n" +
                 "\n" +
                 "    联盟登记注册了一百多家企业，以建立与以太坊区块链兼容的企业分布式账本技术，其后，该国最大的银行Sberbank（俄罗斯联邦储蓄银行）也加入了其日渐壮大的名单之中。\n" +
@@ -172,7 +172,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new13 = new News();
         new13.setTitle("以太坊企业联盟新增48名新成员");
         new13.setDate("2017-10-20");
-        new13.setTitleContent("48家公司加入了以太坊企业联盟，其中包括HPE。");
+        new13.setTitleContent("48家公司加入了以太坊企业联盟，其中包括HPE。新成员的名单多种多样，从区块链创业公司生态系统、IT、金融和学术领域都有。新成员包括新南威尔士大学。本周，新南威尔士大学公布了一项新的消费者忠诚度研究计划，该计划将提供“加密货币”作为购买的奖励。总共有200家公司参与了这项计划。考虑到最近围绕该技术的举措，HPE可能会将重心转移到EEA上，这或许并不令人意外。正如之前报道的那样，HPE与分布式记账初创公司R3合作，为其客户端开发新的解决方案，到8月份已经开始与部分客户进行测试。");
         new13.setContent("48家公司加入了以太坊企业联盟，其中包括HPE。\n" +
                 "\n" +
                 "    新成员的名单多种多样，从区块链创业公司生态系统、IT、金融和学术领域都有。新成员包括新南威尔士大学。本周，新南威尔士大学公布了一项新的消费者忠诚度研究计划，该计划将提供“加密货币”作为购买的奖励。总共有200家公司参与了这项计划。\n" +
@@ -191,7 +191,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new1 = new News();
         new1.setTitle("全球最积极投资区块链公司的两大机构：高盛和谷歌");
         new1.setDate("2017-10-20");
-        new1.setTitleContent("据数据公司 CB Insights于近日发布的一份报告，谷歌和高盛是当前全球投资区块链公司最活跃的两家机构投资者。");
+        new1.setTitleContent("据数据公司 CB Insights于近日发布的一份报告，谷歌和高盛是当前全球投资区块链公司最活跃的两家机构投资者。区块链是加密货币（例如比特币）的底层技术。这种技术可以用于多个行业的开发，从金融到保险，区块链技术可以带来更便宜且更快速的过程。根据这份报告，全球投资区块链技术公司的机构投资者，在今年达到创纪录的91家，仅次于风投公司的95家。");
         new1.setContent("据数据公司 CB Insights于近日发布的一份报告，谷歌和高盛是当前全球投资区块链公司最活跃的两家机构投资者。\n" +
                 "\n" +
                 "区块链是加密货币（例如比特币）的底层技术。这种技术可以用于多个行业的开发，从金融到保险，区块链技术可以带来更便宜且更快速的过程。\n" +
@@ -244,7 +244,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new10 = new News();
         new10.setTitle("瑞士监管部门发行金融执照，首家比特币合规企业出炉");
         new10.setDate("2017-10-20");
-        new10.setTitleContent("支付网关Payment21的所属公司成为了第一家获得瑞士金融监管者批准且完全合规的比特币公司。");
+        new10.setTitleContent("支付网关Payment21的所属公司成为了第一家获得瑞士金融监管者批准且完全合规的比特币公司。本周二，Moving Media宣布其获得了直属金融中介（DSFI）执照。这代表了其在瑞士金融市场监管局（FINMA）的监管下，成为了在AML（反洗钱）和KYC（了解你的客户）方面完全合规的企业。Moving Media表示，他们在经过“一年多的努力和投入”之后才获得了这个执照。该公司总经理Bernhard Kaufmann说：");
         new10.setContent("本周二，Moving Media宣布其获得了直属金融中介（DSFI）执照。\n" +
                 "\n" +
                 "这代表了其在瑞士金融市场监管局（FINMA）的监管下，成为了在AML（反洗钱）和KYC（了解你的客户）方面完全合规的企业。\n" +
@@ -263,7 +263,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new9 = new News();
         new9.setTitle("区块链开发成本如此昂贵，值得吗？华尔街女皇等大咖表示肯定");
         new9.setDate("2017-10-20");
-        new9.setTitleContent("区块链作为一种通用型技术，其可应用于各个领域，然而，当我们在实际使用区块链来建设一些东西时，我们会发现这个过程的艰难性。");
+        new9.setTitleContent("区块链作为一种通用型技术，其可应用于各个领域，然而，当我们在实际使用区块链来建设一些东西时，我们会发现这个过程的艰难性。但如果你听取了前摩根大通高管、现数字资产公司（DAH）首席执行官Blythe Masters的建议，那你就会觉得，这一切都是值得的。在今日多伦多举办的Swift 年度Sibos会议上，Masters在一个小组讨论活动上告诉观众：我不认为区块链解决方案在本质上会引入风险，在某些情况下，它们甚至会减轻风险。然而，要整合区块链这项技术的诸多好处，包括更快的结算时间及更好的数据透明度，需要消耗大量的资源。数字资产控股公司（DAH），其至今已获得了1.07亿美元融资，为了扩展该创业公司的区块链解决方案，其正努力将其区块链解决方案融入澳大利亚证券交易所。");
         new9.setContent("区块链作为一种通用型技术，其可应用于各个领域，然而，当我们在实际使用区块链来建设一些东西时，我们会发现这个过程的艰难性。\n" +
                 "\n" +
                 "但如果你听取了前摩根大通高管、现数字资产公司（DAH）首席执行官Blythe Masters的建议，那你就会觉得，这一切都是值得的。在今日多伦多举办的Swift 年度Sibos会议上，Masters在一个小组讨论活动上告诉观众：\n" +
@@ -316,7 +316,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new8 = new News();
         new8.setTitle("比特币分叉路上的机遇与变革");
         new8.setDate("2017-10-19");
-        new8.setTitleContent("比特币Segwit2X硬分叉在即，相信作为投资者的你肯定心有所惑：什么是硬分叉？Segwit2X又是个啥？分叉后比特币价格会怎么变动？下面老五将分别讲解比特币分叉的原理、经过和未来预期的价格走势，希望能为各位投资者提供参考。");
+        new8.setTitleContent("比特币Segwit2X硬分叉在即，相信作为投资者的你肯定心有所惑：什么是硬分叉？Segwit2X又是个啥？分叉后比特币价格会怎么变动？下面老五将分别讲解比特币分叉的原理、经过和未来预期的价格走势，希望能为各位投资者提供参考。众所周知，比特币（BitCoin）最初由中本聪在2009年提出，它是一种P2P形式的虚拟货币，依据特定算法通过大量的计算产生。比特币系统使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。");
         new8.setContent("比特币Segwit2X硬分叉在即，相信作为投资者的你肯定心有所惑：什么是硬分叉？Segwit2X又是个啥？分叉后比特币价格会怎么变动？下面老五将分别讲解比特币分叉的原理、经过和未来预期的价格走势，希望能为各位投资者提供参考。\n" +
                 "\n" +
                 "众所周知，比特币（BitCoin）最初由中本聪在2009年提出，它是一种P2P形式的虚拟货币，依据特定算法通过大量的计算产生。比特币系统使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。\n" +
@@ -458,7 +458,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new7 = new News();
         new7.setTitle("全球火热的区块链技术真的能颠覆互联网吗？");
         new7.setDate("2017-10-18");
-        new7.setTitleContent("这两年，我们听到了越来越多的关于比特币和区块链的声音，有的人扬言利用区块链技术可以超越BAT，有的人说用区块链技术可以颠覆整个互联网，这是真的吗？");
+        new7.setTitleContent("这两年，我们听到了越来越多的关于比特币和区块链的声音，有的人扬言利用区块链技术可以超越BAT，有的人说用区块链技术可以颠覆整个互联网，这是真的吗？如何看待区块链这门新技术，如何看待区块链的发展呢？是区块链技术被吹嘘的太离谱，还是真的可能引领社会的技术变革？希望用这样一篇文章给大家提供一个全方位的分析。");
         new7.setContent("这两年，我们听到了越来越多的关于比特币和区块链的声音，有的人扬言利用区块链技术可以超越BAT，有的人说用区块链技术可以颠覆整个互联网，这是真的吗？\n" +
                 "\n" +
                 "如何看待区块链这门新技术，如何看待区块链的发展呢？是区块链技术被吹嘘的太离谱，还是真的可能引领社会的技术变革？希望用这样一篇文章给大家提供一个全方位的分析。\n" +
@@ -564,7 +564,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new6 = new News();
         new6.setTitle("Swift向区块链颠覆者迈出关键一步，区块链国际往来账应用测试成功");
         new6.setDate("2017-10-18");
-        new6.setTitleContent("曾经一度被认为可能是被区块链颠覆的最大中间商，Swift今天选择向自己成为颠覆者迈出了重要一步。");
+        new6.setTitleContent("曾经一度被认为可能是被区块链颠覆的最大中间商，Swift今天选择向自己成为颠覆者迈出了重要一步。就在该组织的最大年度盛会Sibos[2]的前夕，Swift与6家国际银行一起宣布他们的旗舰区块链概念验证（PoC）试验取得从技术到商业的全面成功，这些银行中包括巴黎银行、纽约梅隆银行和富国银行。这个概念验证最初于今年1月份公布，用于测试如果将存储在用于国际交易的往来账户中资金转移到一个区块链上，那么是否能够将这些资金用于进一步投资。");
         new6.setContent("曾经一度被认为可能是被区块链颠覆的最大中间商，Swift[1]今天选择向自己成为颠覆者迈出了重要一步。\n" +
                 "\n" +
                 "160925_bpp_005-e1507882847493\n" +
@@ -626,7 +626,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new5 = new News();
         new5.setTitle("以太坊成功执行拜占庭硬分叉，暂未出现任何意外分叉");
         new5.setDate("2017-10-17");
-        new5.setTitleContent("以太坊已经正式升级。");
+        new5.setTitleContent("以太坊已经正式升级。在UTC时间05:22（北京时间13:22），全球市值排名第二的加密货币——以太坊——执行了第5次硬分叉。这次硬分叉将带来一系列的以太坊改进提案（EIPs）。ETH美元价格在助跑这次硬分叉中发生了剧烈动荡，根据CoinMarketCap数据显示，ETH价格上涨了超过2%，硬分叉激活后达到了348美元。这个大规模升级首次于2015年的以太坊路线图——“大都会（Metropolis）中被提出，但此前遇到了一些重大的推迟，导致其被分裂为两个阶段——拜占庭和君士坦丁堡（后者还没有公布正式的发布日期）。");
         new5.setContent("以太坊已经正式升级。\n" +
                 "\n" +
                 "在UTC时间05:22（北京时间13:22），全球市值排名第二的加密货币——以太坊——执行了第5次硬分叉。这次硬分叉将带来一系列的以太坊改进提案（EIPs）。\n" +
@@ -651,7 +651,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new3 = new News();
         new3.setTitle("百度加入超级帐本，BATJ全面进场，互联网巨头如何抢滩区块链？");
         new3.setDate("2017-10-17");
-        new3.setTitleContent("10月17日，超级帐本（Hyperledger）官网发布公告称，互联网巨头百度加入超级帐本项目，并成为首要会员（premier member），这也是继万达之后，超级帐本首要会员队列中的第二位中国成员。");
+        new3.setTitleContent("10月17日，超级帐本（Hyperledger）官网发布公告称，互联网巨头百度加入超级帐本项目，并成为首要会员（premier member），这也是继万达之后，超级帐本首要会员队列中的第二位中国成员。超级账本的首要会员阵容豪华，包括DAH、日立、IBM、英特尔、R3、美国存管信托和结算公司、芝加哥期货交易所、德国证券交易所、埃森哲、富士通、摩根大通、NEC、SAP等等，囊括了科技行业巨头、华尔街金融大鳄、金融行业性组织以及区块链初创公司。自2016年初以来，Hyperledger已经发展到超过160个成员，包括金融、医疗、物联网和航空等多个行业。对于此次加入超级帐本，百度副总裁张旭阳说:");
         new3.setContent("10月17日，超级帐本（Hyperledger）官网发布公告称，互联网巨头百度加入超级帐本项目，并成为首要会员（premier member），这也是继万达之后，超级帐本首要会员队列中的第二位中国成员。\n" +
                 "\n" +
                 "超级账本的首要会员阵容豪华，包括DAH、日立、IBM、英特尔、R3、美国存管信托和结算公司、芝加哥期货交易所、德国证券交易所、埃森哲、富士通、摩根大通、NEC、SAP等等，囊括了科技行业巨头、华尔街金融大鳄、金融行业性组织以及区块链初创公司。\n" +
@@ -729,7 +729,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News new2 = new News();
         new2.setTitle("《深圳市扶持金融业发展若干措施》发布");
         new2.setDate("2017-10-16");
-        new2.setTitleContent("10月9日，深圳市人民政府向各区人民政府，市政府直属各单位印发《深圳市扶持金融业发展若干措施》（以下简称“《若干措施》”）。");
+        new2.setTitleContent("10月9日，深圳市人民政府向各区人民政府，市政府直属各单位印发《深圳市扶持金融业发展若干措施》（以下简称“《若干措施》”）。深圳市政府表示，此举是为进一步完善金融支持政策体系，吸引集聚优质金融资源，推动全市金融业可持续均衡发展，加快建设国际化金融创新中心。《若干措施》共分五大项，33条。内容包括：坚持服务导向，优化金融政策环境；发展金融总部经济，鼓励金融总部企业做大做强；支持金融企业分支机构落户布局，鼓励精细化发展；规范发展新兴金融业态，丰富金融市场层级；培育引进创新型金融机构，完善配套金融支持体系。");
         new2.setContent("10月9日，深圳市人民政府向各区人民政府，市政府直属各单位印发《深圳市扶持金融业发展若干措施》（以下简称“《若干措施》”）。深圳市政府表示，此举是为进一步完善金融支持政策体系，吸引集聚优质金融资源，推动全市金融业可持续均衡发展，加快建设国际化金融创新中心。\n" +
                 "\n" +
                 "《若干措施》共分五大项，33条。内容包括：坚持服务导向，优化金融政策环境；发展金融总部经济，鼓励金融总部企业做大做强；支持金融企业分支机构落户布局，鼓励精细化发展；规范发展新兴金融业态，丰富金融市场层级；培育引进创新型金融机构，完善配套金融支持体系。\n" +
@@ -740,7 +740,7 @@ public class NewsTitleFragment extends Fragment implements OnItemClickListener {
         News news11 = new News();
         news11.setTitle("韩国比特币交易量激增，政府拟对比特币使用征税");
         news11.setDate("2017-10-16");
-        news11.setTitleContent("考虑到国内比特币交易量飙升，甚至超过了Kosdaq（韩国创业板市场，隶属于韩国交易所），韩国正准备对比特币使用进行征税。");
+        news11.setTitleContent("考虑到国内比特币交易量飙升，甚至超过了Kosdaq（韩国创业板市场，隶属于韩国交易所），韩国正准备对比特币使用进行征税。上周末，韩国国税局（NTS）局长HanSeung-hee表示，正在讨论如何才能更好的对加密货币进行征税，包括资本利得税、增值税和礼品税等领域。韩国拟对比特币使用进行征税");
         news11.setContent("考虑到国内比特币交易量飙升，甚至超过了Kosdaq（韩国创业板市场，隶属于韩国交易所），韩国正准备对比特币使用进行征税。上周末，韩国国税局（NTS）局长HanSeung-hee表示，正在讨论如何才能更好的对加密货币进行征税，包括资本利得税、增值税和礼品税等领域。\n" +
                 "\n" +
                 "    韩国拟对比特币使用进行征税\n" +

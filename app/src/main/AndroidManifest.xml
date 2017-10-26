@@ -38,7 +38,8 @@
         </activity>
         <activity
             android:name=".ui.activity.WelcomeActivity"
-            android:theme="@style/welcomeTheme.TranslucentStatus">
+            android:theme="@style/welcomeTheme.TranslucentStatus"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -97,7 +98,8 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.TransactionActivity">
+        <activity android:name=".ui.activity.TransactionActivity"
+            android:screenOrientation="portrait">
 
         </activity>
 

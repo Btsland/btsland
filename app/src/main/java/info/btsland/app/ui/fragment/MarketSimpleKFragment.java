@@ -67,13 +67,13 @@ public class MarketSimpleKFragment extends Fragment {
         return simpleKFragment;
     }
 
-    private void init() {
+    private void init(View view) {
         Log.i("init", "init: ");
-        deal = getActivity().findViewById(R.id.tv_market_simple_deal);
-        high = getActivity().findViewById(R.id.tv_market_simple_high);
-        low = getActivity().findViewById(R.id.tv_market_simple_low);
-        count = getActivity().findViewById(R.id.tv_market_simple_count);
-        simpleK = getActivity().findViewById(R.id.lc_market_simple_K);
+        deal = view.findViewById(R.id.tv_market_simple_deal);
+        high = view.findViewById(R.id.tv_market_simple_high);
+        low = view.findViewById(R.id.tv_market_simple_low);
+        count = view.findViewById(R.id.tv_market_simple_count);
+        simpleK = view.findViewById(R.id.lc_market_simple_K);
         Log.i("init", "init: leftCoin+\":\"+rightCoin" + leftCoin + ":" + rightCoin);
         deal.setText(leftCoin + ":" + rightCoin);
         startReceiveMarkets(null);
@@ -307,14 +307,13 @@ public class MarketSimpleKFragment extends Fragment {
                 rightCoin = market.getRightCoin();
             }
         }
-
+        init(view);
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        init();
     }
 
     @Override

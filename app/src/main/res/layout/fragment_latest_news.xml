@@ -16,7 +16,7 @@
     <!--android:text="最新资讯"/>-->
 
     <ListView
-        android:id="@+id/news_title_list_view"
+        android:id="@+id/news_latest_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:divider="#FFFFFF"

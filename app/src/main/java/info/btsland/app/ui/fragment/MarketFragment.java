@@ -29,16 +29,7 @@ public class MarketFragment extends Fragment {
     private TextView tvMarketLeftCoin_3;
     private TextView tvMarketLeftCoin_4;
     private TextView tvMarketLeftCoin_5;
-    private List marketsBTC;
-    private List marketsCNY;
-    private List marketsUSD;
-    private List marketsBTS;
-    private List marketsETH;
-    private String[] shops;
-
     private ListView lvMarketInfo;
-
-
     private Map<String, List<Market>> market;
 
     public MarketFragment() {
@@ -67,6 +58,20 @@ public class MarketFragment extends Fragment {
         setMarket(tvMarketLeftCoin_1);//设置数据
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+//        private MarketSimpleKFragment simpleKFragment;
+//        private TextView tvMarketLeftCoin_1;
+//        private TextView tvMarketLeftCoin_2;
+//        private TextView tvMarketLeftCoin_3;
+//        private TextView tvMarketLeftCoin_4;
+//        private TextView tvMarketLeftCoin_5;
+//        private ListView lvMarketInfo;
+//        private Map<String, List<Market>> market;
+
+    }
+
     private void init() {
         tvMarketLeftCoin_1 = getActivity().findViewById(R.id.tv_market_left_coin1);
         tvMarketLeftCoin_2 = getActivity().findViewById(R.id.tv_market_left_coin2);
@@ -80,7 +85,6 @@ public class MarketFragment extends Fragment {
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
-        shops = getResources().getStringArray(R.array.shops);//得到需要显示的市场
 
     }
 
@@ -89,7 +93,7 @@ public class MarketFragment extends Fragment {
      */
     private void fillInSimpleK(Market market) {
         Log.i("fillInSimpleK", "fillInSimpleK: ");
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (simpleKFragment == null) {
             simpleKFragment = MarketSimpleKFragment.newInstance(market);
             transaction.add(R.id.fra_market_simple, simpleKFragment);

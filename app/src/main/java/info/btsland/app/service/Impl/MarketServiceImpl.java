@@ -1,5 +1,6 @@
 package info.btsland.app.service.Impl;
 
+import android.os.Parcel;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -23,7 +24,7 @@ import info.btsland.app.service.MarketService;
  */
 
 public class MarketServiceImpl implements MarketService {
-
+    private String sr;
     @Override
     public Map<String,List<Market>> getallinformation() {
 
@@ -202,6 +203,8 @@ public class MarketServiceImpl implements MarketService {
     public List<Market> queryMarkets(String rightCoin) {
         return null;
     }
+
+
 
 
     @Override

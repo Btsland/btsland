@@ -108,6 +108,12 @@
 
         </activity>
 
+
+        <activity android:name=".ui.activity.RecentActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
     </application>
 
 </manifest>

@@ -30,9 +30,10 @@ public class RecentActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_recent);
+        init();
+
         fillInHead();
 
-        init();
 
     }
 

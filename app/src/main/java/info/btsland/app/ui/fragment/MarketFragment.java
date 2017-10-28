@@ -193,18 +193,23 @@ public class MarketFragment extends Fragment {
         switch (leftCoin.getId()) {
             case R.id.tv_market_left_coin1:
                 list = market.get("bitCNY");
+                Log.e("market", "bitCNYreadMarket: "+ list.size());
                 break;
             case R.id.tv_market_left_coin2:
                 list = market.get("BTS");
+                Log.e("market", "BTSreadMarket: "+ list.size());
                 break;
             case R.id.tv_market_left_coin3:
                 list = market.get("bitUSD");
+                Log.e("market", "bitUSDreadMarket: "+ list.size());
                 break;
             case R.id.tv_market_left_coin4:
                 list = market.get("BTC");
+                Log.e("market", "BTCreadMarket: "+ list.size());
                 break;
             case R.id.tv_market_left_coin5:
                 list = market.get("ETH");
+                Log.e("market", "ETHreadMarket: "+ list.size());
                 break;
         }
         return list;

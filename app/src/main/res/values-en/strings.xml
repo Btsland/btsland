@@ -1,8 +1,8 @@
 <resources>
 
-    <string name="homepage">Home</string>
+    <string name="homepage">News</string>
 
-    <string name="themarket">Market</string>
+    <string name="themarket">Exchange</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
 

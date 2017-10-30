@@ -2,7 +2,7 @@ package info.btsland.app;
 
 import org.junit.Test;
 
-import info.btsland.app.api.websocket_api;
+import static org.junit.Assert.*;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -12,8 +12,6 @@ import info.btsland.app.api.websocket_api;
 public class ExampleUnitTest {
     @Test
     public void addition_isCorrect() throws Exception {
-        websocket_api wsapi = new websocket_api("wss://bitshares.openledger.info/ws");
-        wsapi.connect();
-        wsapi.get_ticker();
+        assertEquals(4, 2 + 2);
     }
 }

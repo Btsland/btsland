@@ -93,7 +93,7 @@ public class UserActivity extends AppCompatActivity {
                     touchColor(tvUserPower, motionEvent);
                     break;
                 case R.id.tv_user_recent:
-                    touchColor(tvUserRecent, motionEvent);
+
                     Intent iRecent=new Intent(UserActivity.this,RecentActivity.class);
                     startActivity(iRecent);
                     break;

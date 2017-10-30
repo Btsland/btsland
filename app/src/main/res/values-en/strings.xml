@@ -10,13 +10,14 @@
     <string name="asset">Asset</string>
     <string name="accessrecord">AccessRecord</string>
     <string name="tradingrecord">TradingRecord</string>
-    <string name="entryorders">EntryOrders</string>
+    <string name="wholeguadan">EntryOrders</string>
     <string name="walletbackup">WalletBackup</string>
 
     <string name="set">Set</string>
     <string name="language">LanguAge</string>
     <string name="theme">Theme</string>
     <string name="guide">UseGuide</string>
+    <string name="trading_guide">TradingGuide</string>
     <string name="we">AboutUs</string>
     <string name="edition">Edition</string>
 

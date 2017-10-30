@@ -12,7 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import info.btsland.app.R;
-import info.btsland.app.ui.activity.AssetActivity;
+import info.btsland.app.ui.activity.PurseAccessRecordActivity;
+import info.btsland.app.ui.activity.PurseAssetActivity;
+import info.btsland.app.ui.activity.PurseTradingRecordActivity;
+import info.btsland.app.ui.activity.PurseWalletBackupActivity;
+import info.btsland.app.ui.activity.PurseWholeGuadanActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -68,12 +72,14 @@ public class PurseFragment extends Fragment {
         tvPurseDeal = getActivity().findViewById(R.id.tv_purse_deal);
         tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
         tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
+
         TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
         tvPurseAllAsset.setOnTouchListener(onTouchlistener);
         tvPurseRW.setOnTouchListener(onTouchlistener);
         tvPurseDeal.setOnTouchListener(onTouchlistener);
         tvPurseAllRemain.setOnTouchListener(onTouchlistener);
         tvPurseBackup.setOnTouchListener(onTouchlistener);
+
         TextViewOnCLickListener onCLickListener = new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
         tvPurseRW.setOnClickListener(onCLickListener);
@@ -104,16 +110,24 @@ public class PurseFragment extends Fragment {
             switch (view.getId()) {
 
                 case R.id.tv_purse_allAsset:
-                    Intent intent = new Intent(getActivity(), AssetActivity.class);
+                    Intent intent = new Intent(getActivity(), PurseAssetActivity.class);
                     getActivity().startActivity(intent);
                     break;
                 case R.id.tv_purse_rw:
+                    Intent rw = new Intent(getActivity(), PurseAccessRecordActivity.class);
+                    getActivity().startActivity(rw);
                     break;
                 case R.id.tv_purse_deal:
+                    Intent deal = new Intent(getActivity(), PurseTradingRecordActivity.class);
+                    getActivity().startActivity(deal);
                     break;
                 case R.id.tv_purse_allRemain:
+                    Intent allremain = new Intent(getActivity(), PurseWholeGuadanActivity.class);
+                    getActivity().startActivity(allremain);
                     break;
                 case R.id.tv_purse_backup:
+                    Intent backup = new Intent(getActivity(), PurseWalletBackupActivity.class);
+                    getActivity().startActivity(backup);
                     break;
             }
         }

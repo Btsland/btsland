@@ -2,9 +2,9 @@ package info.btsland.app.ui.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,10 +16,10 @@ import android.widget.TextView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.util.PreferenceUtil;
 
 
-public class SettingActivity extends BaseActivity implements View.OnClickListener{
-    private String TAG="SettingActivity";
+public class SettingActivity extends BaseActivity{
     private HeadFragment headFragment;
 
     private TextView tvSetLanguage;
@@ -36,65 +36,10 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate: ");
         setContentView(info.btsland.app.R.layout.activity_setting);
         fillInHead();
         init();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.e(TAG, "onStart: " );
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.e(TAG, "onStop: " );
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.e(TAG, "onDestroy: " );
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.e(TAG, "onResume: " );
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Log.e(TAG, "onRestart: ");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.e(TAG, "onPause: ");
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        Log.e(TAG, "onRestoreInstanceState: " );
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState) {
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
-        Log.e(TAG, "onRestoreInstanceState2: " );
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        Log.e(TAG, "onSaveInstanceState: ");
-    }
+}
 
     /**
      * 初始化
@@ -117,9 +62,20 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
         //绑定点击事件
         TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
         tvSetLanguage.setOnClickListener(OnClickListener);
+        tvSetTheme.setOnClickListener(OnClickListener);
         tvSetGuide.setOnClickListener(OnClickListener);
         tvSetWe.setOnClickListener(OnClickListener);
         tvSetEdition.setOnClickListener(OnClickListener);
+
+        //判断checkedItem的值
+        String lo = PreferenceUtil.getString("language", "zh");
+        Log.i("init", "init: "+lo);
+        if (lo.equals("zh")){
+            index=0;
+        }else if (lo.equals("en")){
+            index=1;
+        }
+        Log.i("init", "init: "+index);
     }
 
     /*
@@ -133,6 +89,8 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
                     showListDialog();
                     break;
                 case R.id.tv_set_theme:
+                    Intent theme = new Intent(SettingActivity.this,SetThemeActivity.class);
+                    startActivity(theme);
                     break;
                 case R.id.tv_set_guide:
                     Intent iii = new Intent(SettingActivity.this , UsersGuidanceActivity.class);
@@ -168,40 +126,42 @@ public class SettingActivity extends BaseActivity implements View.OnClickListene
     /**
      * 跳出Dialog窗口
      */
+
+    int index = 0 ;//设置默认选项，作为checkedItem参数传入。
+
     private void showListDialog() {
-        //创建Dialog
-        AlertDialog.Builder dialog = new AlertDialog.Builder(SettingActivity.this);
-        //通过LayoutInflater来加载一个xml的布局文件作为一个View对象
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.dialog_language, (LinearLayout) findViewById(R.id.language_dialog));
 
-        //获得参数
-        chinese = layout.findViewById(R.id.select_chinese);
-        english = layout.findViewById(R.id.select_english);
-        chinese.setOnClickListener(SettingActivity.this);
-        english.setOnClickListener(SettingActivity.this);
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
+        listDialog.setTitle(getString(R.string.selectlanguage));
 
-        dialog.setView(layout);
-        dialog.show();
+        listDialog.setIcon(android.R.drawable.ic_dialog_info);
+
+        final String[] items={"中文","英文"};
+        items[0]=getString(R.string.stringzh);
+        items[1]=getString(R.string.stringen);
+
+
+        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if(items[which]==getString(R.string.stringzh)){
+                    switchLanguage("zh");
+                }else if(items[which]==getString(R.string.stringen)){
+                    switchLanguage("en");
+                }
+                dialog.dismiss();
+                finish();
+
+                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+                //开始新的activity同时移除之前所有的activity
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(intent);
+            }
+        });
+        listDialog.show();
     }
-    //框内控件
-    @Override
-    public void onClick(View view) {
 
-        switch (view.getId()){
-            case R.id.select_chinese:
-                switchLanguage("zh");
-                break;
-            case R.id.select_english:
-                switchLanguage("en");
-                break;
-        }
-
-        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
-        //开始新的activity同时移除之前所有的activity
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-    }
 
     /**
      * 单击特效

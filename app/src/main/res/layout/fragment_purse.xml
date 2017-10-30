@@ -99,7 +99,7 @@
         android:id="@+id/tv_purse_allRemain"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:text="@string/entryorders"
+        android:text="@string/wholeguadan"
         android:paddingLeft="8dp"
         android:gravity="center_vertical"
         android:layout_margin="5dp"

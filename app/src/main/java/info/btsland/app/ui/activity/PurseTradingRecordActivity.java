@@ -1,25 +1,27 @@
 package info.btsland.app.ui.activity;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-public class AssetActivity extends AppCompatActivity {
+/**
+ * Created by Administrator on 2017/10/30 0030.
+ */
+
+public class PurseTradingRecordActivity extends AppCompatActivity {
     private HeadFragment headFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_asset);
-        Log.i("AssetActivity", "onCreate: ");
+        setContentView(R.layout.activity_purse_trading);
         fillInHead();
         init();
     }
-
     /**
      * 初始化
      */
@@ -35,8 +37,9 @@ public class AssetActivity extends AppCompatActivity {
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            transaction.add(R.id.fra_asset_head, headFragment);
+            transaction.add(R.id.fra_trading_head, headFragment);
         }
         transaction.commit();
     }
+
 }

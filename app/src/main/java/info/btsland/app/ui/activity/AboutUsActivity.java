@@ -14,7 +14,7 @@ public class AboutUsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about_us);
+        setContentView(R.layout.activity_setting_we);
         fillInHead();
         init();
     }
@@ -33,7 +33,7 @@ public class AboutUsActivity extends AppCompatActivity {
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName("关于我们");
+            headFragment.setTitleName(getString(R.string.we));
             transaction.add(R.id.fra_about_head, headFragment);
         }
         transaction.commit();

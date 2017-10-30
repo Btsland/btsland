@@ -3,18 +3,19 @@ package info.btsland.app.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-public class VersionInformationActivity extends AppCompatActivity {
-
+public class PurseAssetActivity extends AppCompatActivity {
     private HeadFragment headFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_setting_edition);
+        setContentView(R.layout.activity_asset);
+        Log.i("PurseAssetActivity", "onCreate: ");
         fillInHead();
         init();
     }
@@ -23,6 +24,7 @@ public class VersionInformationActivity extends AppCompatActivity {
      * 初始化
      */
     private void init() {
+
     }
 
     /**
@@ -33,8 +35,7 @@ public class VersionInformationActivity extends AppCompatActivity {
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName(getString(R.string.edition));
-            transaction.add(R.id.fra_version_head, headFragment);
+            transaction.add(R.id.fra_asset_head, headFragment);
         }
         transaction.commit();
     }

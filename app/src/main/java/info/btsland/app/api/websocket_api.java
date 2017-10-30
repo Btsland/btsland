@@ -1,16 +1,35 @@
 package info.btsland.app.api;
 
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import info.btsland.app.BtslandApplication;
+import info.btsland.app.R;
+import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.model.MarketTicker;
+import info.btsland.app.model.MarketTrade;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
+
+import static info.btsland.app.api.ErrorCode.*;
 
 public class websocket_api extends WebSocketListener {
     private int _nDatabaseId = -1;
@@ -26,11 +45,12 @@ public class websocket_api extends WebSocketListener {
     private static int WEBSOCKET_CONNECT_SUCCESS = 0;
     private static int WEBSOCKET_ALL_READY = 0;
     private static int WEBSOCKET_CONNECT_FAIL = 1;
+    private HashMap<Integer, IReplyObjectProcess> mHashMapIdToProcess = new HashMap<>();
 
     private AtomicInteger mnCallId = new AtomicInteger(1);
 
-    public websocket_api(String strServer) {
-        this.strServer = strServer;
+    public websocket_api() {
+        connect();
     }
 
 
@@ -83,12 +103,26 @@ public class websocket_api extends WebSocketListener {
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
     }
 
-    private boolean login(String strUserName, String strPassword) {
-        String ok = "{\"id\":1,\"method\":\"call\",\"params\":[1,\"login\",[\"\",\"\"]]}";
+    private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
+        Call callObject = new Call();
 
-        mWebsocket.send(ok);
+        callObject.id = mnCallId.getAndIncrement();;
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(1);
+        callObject.params.add("login");
 
-        return true;
+        List<Object> listLoginParams = new ArrayList<>();
+        listLoginParams.add(strUserName);
+        listLoginParams.add(strPassword);
+        callObject.params.add(listLoginParams);
+
+        ReplyObjectProcess<Reply<Boolean>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<Boolean>>(){}.getType());
+        Reply<Boolean> replyLogin = sendForReplyImpl(callObject, replyObject);
+
+
+        return replyLogin.result;
     }
 
     public synchronized int connect() {
@@ -96,8 +130,10 @@ public class websocket_api extends WebSocketListener {
             return 0;
         }
 
-        if (StringUtils.isEmpty(strServer)) {
-            return -9;
+        FullNodeServerSelect fullNodeServerSelect = new FullNodeServerSelect();
+        String strServer = fullNodeServerSelect.getServer();
+        if (TextUtils.isEmpty(strServer)) {
+            return ERROR_CONNECT_SERVER_FAILD;
         }
 
         Request request = new Request.Builder().url(strServer).build();
@@ -112,20 +148,33 @@ public class websocket_api extends WebSocketListener {
                 }
 
                 if (mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
-                    return -9;
+                    return ERROR_CONNECT_SERVER_FAILD;
                 }
             }
         }
 
         int nRet = 0;
-
-
-        boolean bLogin = login("", "");
-        if (bLogin == true) {
-
-        } else {
-            nRet = -9;
+        try {
+            boolean bLogin = login("", "");
+            if (bLogin == true) {
+                _nDatabaseId = get_websocket_bitshares_api_id("database");
+                _nHistoryId = get_websocket_bitshares_api_id("history");
+                _nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
+            } else {
+                nRet = ERROR_CONNECT_SERVER_FAILD;
+            }
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+            nRet = ERROR_CONNECT_SERVER_FAILD;
         }
+
+//        try {
+//            asset_object base = lookup_asset_symbols("BTS");
+//            asset_object quote = lookup_asset_symbols("CNY");
+//            subscribe_to_market(base.id, quote.id);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         if (nRet != 0) {
             mWebsocket.close(1000, "");
@@ -137,7 +186,200 @@ public class websocket_api extends WebSocketListener {
 
         return nRet;
     }
+    private int get_websocket_bitshares_api_id(String strApiName) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(1);
+        callObject.params.add(strApiName);
 
+        List<Object> listDatabaseParams = new ArrayList<>();
+        callObject.params.add(listDatabaseParams);
+
+        ReplyObjectProcess<Reply<Integer>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<Integer>>(){}.getType());
+        Reply<Integer> replyApiId = sendForReplyImpl(callObject, replyObject);
+
+        return replyApiId.result;
+    }
+    public asset_object lookup_asset_symbols(String strAssetSymbol) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("lookup_asset_symbols");
+
+        List<Object> listAssetsParam = new ArrayList<>();
+
+        List<Object> listAssetSysmbols = new ArrayList<>();
+        listAssetSysmbols.add(strAssetSymbol);
+
+        listAssetsParam.add(listAssetSysmbols);
+        callObject.params.add(listAssetsParam);
+
+        ReplyObjectProcess<Reply<List<asset_object>>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset_object>>>(){}.getType());
+        Reply<List<asset_object>> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result.get(0);
+    }
+    public List<MarketTicker>  get_ticker_base(String base) throws NetworkStatusException {
+        if(base==null||base=="") {
+            return null;
+        }
+        String[] quotes = BtslandApplication.getInstance().getResources().getStringArray(R.array.quotes);
+        List<MarketTicker> MarketTickers=new ArrayList<MarketTicker>();
+        for(int i=0;i<quotes.length;i++){
+            MarketTicker marketTicker= get_ticker(base,quotes[i]);
+            MarketTickers.add(marketTicker);
+        }
+        if(MarketTickers==null){
+            return null;
+        }
+        return MarketTickers;
+
+    }
+    public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
+                                                   object_id<asset_object> assetObjectId2,
+                                                   int nBucket,
+                                                   Date dateStart,
+                                                   Date dateEnd) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nHistoryId);
+        callObject.params.add("get_market_history");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(assetObjectId1);
+        listParams.add(assetObjectId2);
+        listParams.add(nBucket);
+        listParams.add(dateStart);
+        listParams.add(dateEnd);
+        callObject.params.add(listParams);
+        ReplyObjectProcess<Reply<List<bucket_object>>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<bucket_object>>>(){}.getType());
+        Reply<List<bucket_object>> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+
+    }
+    public List<limit_order_object> get_limit_orders(object_id<asset_object> base,
+                                                     object_id<asset_object> quote,
+                                                     int limit) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_limit_orders");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(base);
+        listParams.add(quote);
+        listParams.add(limit);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<limit_order_object>>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<limit_order_object>>>(){}.getType());
+        Reply<List<limit_order_object>> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+    }
+    public List<MarketTrade> get_trade_history(String base, String quote, Date start, Date end, int limit)
+            throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_trade_history");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(base);
+        listParams.add(quote);
+        listParams.add(start);
+        listParams.add(end);
+        listParams.add(limit);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<MarketTrade>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<MarketTrade>>>(){}.getType());
+        Reply<List<MarketTrade>> reply = sendForReply(callObject, replyObject);
+
+        return reply.result;
+    }
+    public MarketTicker get_ticker(String base, String quote) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_ticker");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(base);
+        listParams.add(quote);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<MarketTicker>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<MarketTicker>>(){}.getType());
+        Reply<MarketTicker> reply = sendForReply(callObject, replyObject);
+
+        return reply.result;
+    }
+    private <T> Reply<T> sendForReply(Call callObject,
+                                      ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
+        if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
+            int nRet = connect();
+            if (nRet == -1) {
+                throw new NetworkStatusException("It doesn't connect to the server.");
+            }
+        }
+
+        return sendForReplyImpl(callObject, replyObjectProcess);
+    }
+
+    private <T> Reply<T> sendForReplyImpl(Call callObject,
+                                          ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
+        Gson gson = new Gson();
+        String strMessage = gson.toJson(callObject);
+        Log.e("wecsocket", "sendForReplyImpl: strMessage:"+strMessage );
+        synchronized (mHashMapIdToProcess) {
+            mHashMapIdToProcess.put(callObject.id, replyObjectProcess);
+        }
+
+        synchronized (replyObjectProcess) {
+            boolean bRet = mWebsocket.send(strMessage);
+            if (bRet == false) {
+                throw new NetworkStatusException("Failed to send message to server.");
+            }
+            try {
+                Log.e("websocket1", "sendForReplyImpl: replyObject:"+replyObjectProcess.getReplyObject());
+                replyObjectProcess.wait();
+                Reply<T> replyObject = replyObjectProcess.getReplyObject();
+                Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
+                String strError = replyObjectProcess.getError();
+                if (TextUtils.isEmpty(strError) == false) {
+                    throw new NetworkStatusException(strError);
+                } else if (replyObjectProcess.getException() != null) {
+                    throw new NetworkStatusException(replyObjectProcess.getException());
+                } else if (replyObject == null) {
+                    throw new NetworkStatusException("Reply object is null.\n" + replyObjectProcess.getResponse());
+                }else if (replyObject.error != null) {
+                    throw new NetworkStatusException(gson.toJson(replyObject.error));
+                }
+
+                return replyObject;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+    }
     public void get_ticker() {
         String db = "{\"id\":2,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
         mWebsocket.send(db);
@@ -150,5 +392,95 @@ public class websocket_api extends WebSocketListener {
 
         String query = "{\"id\":5,\"method\":\"call\",\"params\":[2,\"get_ticker\",[\"CNY\",\"BTS\"]]}";
         mWebsocket.send(query);
+    }
+    private interface IReplyObjectProcess<T> {
+        void processTextToObject(String strText);
+        T getReplyObject();
+        String getError();
+        void notifyFailure(Throwable t);
+        Throwable getException();
+        String getResponse();
+    }
+    private class ReplyObjectProcess<T> implements IReplyObjectProcess<T> {
+        private String strError;
+        private T mT;
+        private Type mType;
+        private Throwable exception;
+        private String strResponse;
+        public ReplyObjectProcess(Type type) {
+            mType = type;
+        }
+
+        public void processTextToObject(String strText) {
+            try {
+                Gson gson = new Gson();
+                mT = gson.fromJson(strText, mType);
+            } catch (JsonSyntaxException e) {
+                e.printStackTrace();
+                strError = e.getMessage();
+                strResponse = strText;
+            } catch (Exception e) {
+                e.printStackTrace();
+                strError = e.getMessage();
+                strResponse = strText;
+            }
+            synchronized (this) {
+                notify();
+            }
+        }
+
+        @Override
+        public T getReplyObject() {
+            return mT;
+        }
+
+        @Override
+        public String getError() {
+            return strError;
+        }
+
+        @Override
+        public void notifyFailure(Throwable t) {
+            exception = t;
+            synchronized (this) {
+                notify();
+            }
+        }
+
+        @Override
+        public Throwable getException() {
+            return exception;
+        }
+
+        @Override
+        public String getResponse() {
+            return strResponse;
+        }
+    }
+    class Call {
+        int id;
+        String method;
+        List<Object> params;
+    }
+    class WebsocketError {
+        int code;
+        String message;
+        Object data;
+    }
+    class Reply<T> {
+        String id;
+        String jsonrpc;
+        T result;
+        WebsocketError error;
+
+        @Override
+        public String toString() {
+            return "Reply{" +
+                    "id='" + id + '\'' +
+                    ", jsonrpc='" + jsonrpc + '\'' +
+                    ", result=" + result +
+                    ", error=" + error +
+                    '}';
+        }
     }
 }

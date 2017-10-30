@@ -6,7 +6,7 @@
     <string name="font_color_lightGrey">#8D8D8D</string>
     <string name="font_color_green">#458B00</string>
     <string name="font_color_red">#ff0000</string>
-    <string-array name="shops">
+    <string-array name="quotes">
         <item>BTC</item>
         <item>ETH</item>
         <item>BTS</item>

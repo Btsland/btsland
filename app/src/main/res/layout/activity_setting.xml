@@ -18,16 +18,18 @@ tools:context="info.btsland.app.ui.activity.UserActivity">
         app:layout_constraintRight_toRightOf="parent">
     </FrameLayout>
 
-    <View
+    <ImageView
         android:id="@+id/v_set_back"
         android:layout_width="0dp"
         android:layout_height="200dp"
         android:background="@drawable/welcome2"
+        android:scaleType="fitXY"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fra_set_head"
         app:layout_constraintHorizontal_bias="1.0"
         android:layout_marginTop="-1dp" />
+
 
     <TextView
         android:id="@+id/tv_set_language"
@@ -72,7 +74,7 @@ tools:context="info.btsland.app.ui.activity.UserActivity">
         android:id="@+id/tv_set_transaction"
         android:layout_width="0dp"
         android:layout_height="40dp"
-        android:text="交易向导"
+        android:text="@string/trading_guide"
         android:gravity="center"
         android:layout_margin="5dp"
         android:background="@drawable/tv_row"

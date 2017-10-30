@@ -34,7 +34,7 @@ public class UsersGuidanceActivity extends AppCompatActivity {
         if (headFragment == null) {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName("使用指南");
+            headFragment.setTitleName(getString(R.string.guide));
             transaction.add(R.id.fra_users_head, headFragment);
         }
         transaction.commit();

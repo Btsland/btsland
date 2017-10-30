@@ -11,6 +11,7 @@ public class News implements Serializable {
     private String content;
     private String date;    //新闻日期
     private String titleContent;    //标题内容
+    private String author;          //新闻作者
 
     public String getTitleContent() {
         return titleContent;
@@ -44,19 +45,30 @@ public class News implements Serializable {
         this.content = content;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
     public News() {
     }
 
-    public News(String title, String content) {
+    public News(String title, String content, String date, String author) {
         this.title = title;
         this.content = content;
+        this.date = date;
+        this.author = author;
     }
 
-    public News(String title, String content, String date, String titleContent) {
+    public News(String title, String content, String date, String titleContent, String author ) {
         this.title = title;
         this.content = content;
         this.date = date;
         this.titleContent = titleContent;
+        this.author = author;
     }
 
     @Override
@@ -64,6 +76,8 @@ public class News implements Serializable {
         return "News{" +
                 "title='" + title + '\'' +
                 ", content='" + content + '\'' +
+                ", date='" + date + '\'' +
+                ", author='" + author + '\'' +
                 '}';
     }
 }

@@ -33,22 +33,99 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textColor="#000000"
+            android:textColor="#212121"
+            android:lineSpacingExtra="2dp"
+            android:lineSpacingMultiplier="1.2"
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:padding="10dp"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/news_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="#000000"
+            android:textSize="12sp"/>
+
+        <TextView
+            android:id="@+id/news_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:textColor="#000000"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/news_content"
             android:layout_width="match_parent"
+            android:lineSpacingExtra="4dp"
+            android:lineSpacingMultiplier="1.5"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:textColor="#000000"
+            android:textColor="#212121"
             android:padding="15dp"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/news_like"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/tv_button"
+            android:textColor="#FFFFFF"
+            android:onClick="likeButton"
+            android:text="赞"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="50sp" />
+
     </LinearLayout>
+
     </ScrollView>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <EditText
+        android:id="@+id/news_edi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/tv_edit"
+        android:layout_gravity="bottom"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        android:hint="写评论"
+        android:imeOptions="actionSend"
+        android:textColor="#000000"
+        android:textColorHint="#BDBDBD" />
+
+    <!--android:cursorVisible="false" 隐藏光标-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_weight="1"
+        android:textSize="30dp"
+        android:layout_toRightOf="@+id/news_edi"/>
+</LinearLayout>
+
     <ImageView
         android:layout_width="1dp"
         android:layout_height="match_parent"

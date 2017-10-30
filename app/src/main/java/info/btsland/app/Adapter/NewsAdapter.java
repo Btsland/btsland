@@ -41,18 +41,24 @@ public class NewsAdapter extends ArrayAdapter<News> {
             //convertView参数：这个参数用于将之前加载好的布局进行缓存，提高ListView的运行效率
             view = convertView;
         }
-        //实例化时间
-        TextView newsDateText = (TextView) view.findViewById(R.id.news_date);
+
         //实例化新闻标题
         TextView newsTitleText = (TextView) view.findViewById(R.id.news_title);
         //实例化新闻内容
         TextView newsTitleContentText = (TextView) view.findViewById(R.id.news_titlecontent);
+        //实例化时间
+        TextView newsDateText = (TextView) view.findViewById(R.id.news_date);
+        //实例化新闻作者
+        TextView newsAuthorText = (TextView) view.findViewById(R.id.news_author);
+
         //让新闻的标题在列表中进行显示
         newsTitleText.setText(news.getTitle());
-        //让日期在列表中进行显示
-        newsDateText.setText(news.getDate());
         //让新闻的内容在列表中进行显示
         newsTitleContentText.setText(news.getTitleContent());
+        //让日期在列表中进行显示
+        newsDateText.setText(news.getDate());
+        //让新闻的作者在列表中进行显示
+        newsAuthorText.setText(news.getAuthor());
 
         return view;
     }

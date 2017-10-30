@@ -10,6 +10,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import info.btsland.app.R;
@@ -33,9 +38,68 @@ public class NewsContentActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newscontent);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         fillInHead();//装载顶部导航栏
         init();//初始化
         showNews();//展示新闻
+    }
+    /**
+     * 获取当前点击位置是否为et
+     * @param view 焦点所在View
+     * @param event 触摸事件
+     * @return
+     */
+    public  boolean isClickEt(View view, MotionEvent event) {
+        if (view != null && (view instanceof EditText)) {
+            int[] leftTop = { 0, 0 };
+            //获取输入框当前的location位置
+            view.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            //此处根据输入框左上位置和宽高获得右下位置
+            int bottom = top + view.getHeight();
+            int right = left + view.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 點擊EditText以外的區域后鍵盤隱藏
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+
+            //获取当前获得当前焦点所在View
+            View view = getCurrentFocus();
+            if (isClickEt(view, event)) {
+
+                //如果不是edittext，则隐藏键盘
+
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (inputMethodManager != null) {
+                    //隐藏键盘
+                    inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            }
+            return super.dispatchTouchEvent(event);
+        }
+        /**
+         * 看源码可知superDispatchTouchEvent  是个抽象方法，用于自定义的Window
+         * 此处目的是为了继续将事件由dispatchTouchEvent(MotionEvent event)传递到onTouchEvent(MotionEvent event)
+         * 必不可少，否则所有组件都不能触发 onTouchEvent(MotionEvent event)
+         */
+        if (getWindow().superDispatchTouchEvent(event)) {
+            return true;
+        }
+        return onTouchEvent(event);
     }
 
     /**

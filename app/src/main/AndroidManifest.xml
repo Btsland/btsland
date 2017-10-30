@@ -37,6 +37,15 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".ui.activity.SetThemeActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.THEME" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".ui.activity.WelcomeActivity"
             android:theme="@style/welcomeTheme.TranslucentStatus"
             android:screenOrientation="portrait">
@@ -47,10 +56,46 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.activity.AssetActivity"
+            android:name=".ui.activity.PurseAssetActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.ASSET" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.PurseAccessRecordActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.ACCESS" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.PurseTradingRecordActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.TRADING" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.PurseWholeGuadanActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.GUADAN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.PurseWalletBackupActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.BACKUP" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>

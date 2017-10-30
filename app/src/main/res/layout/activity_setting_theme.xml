@@ -8,7 +8,7 @@
 
     <!--顶部导航栏-->
     <FrameLayout
-        android:id="@+id/fra_users_head"
+        android:id="@+id/fra_theme_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,12 +20,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"/>
-
-    <TextView
-        android:id="@+id/tv_about_official_website"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="20dp"
-        android:text="" />
 
 </LinearLayout>

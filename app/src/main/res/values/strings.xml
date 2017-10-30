@@ -35,13 +35,14 @@
     <string name="asset">全部资产</string>
     <string name="accessrecord">充提记录</string>
     <string name="tradingrecord">交易记录</string>
-    <string name="entryorders">全部挂单</string>
+    <string name="wholeguadan">全部挂单</string>
     <string name="walletbackup">钱包备份</string>
 
     <string name="set">设置</string>
     <string name="language">语言</string>
     <string name="theme">主题</string>
     <string name="guide">使用指南</string>
+    <string name="trading_guide">交易向导</string>
     <string name="we">关于我们</string>
     <string name="edition">版本信息</string>
 

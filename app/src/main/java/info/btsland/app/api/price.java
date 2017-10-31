@@ -1,5 +1,7 @@
 package info.btsland.app.api;
 
+import static info.btsland.app.R.string.asset;
+
 public class price {
     public asset base;
     public asset quote;

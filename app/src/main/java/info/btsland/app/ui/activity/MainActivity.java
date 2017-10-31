@@ -26,6 +26,7 @@ import info.btsland.app.util.PreferenceUtil;
  * 完成时间：
  */
 public class MainActivity extends BaseActivity {
+    private String TAG="MainActivity";
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;

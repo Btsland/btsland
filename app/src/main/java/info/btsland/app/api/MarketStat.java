@@ -35,6 +35,7 @@ public class MarketStat {
     public static final int STAT_MARKET_OPEN_ORDER = 0x08;
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
+    private websocket_api mWebsocketApi=new websocket_api();
 
     private HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
     private static boolean isDeserializerRegistered = false;
@@ -47,6 +48,11 @@ public class MarketStat {
 //            global_config_object.getInstance().getGsonBuilder().registerTypeAdapter(
 //                    full_account_object.class, new full_account_object.deserializer());
 //        }
+    }
+    public int initialize() {
+        int nRet = mWebsocketApi.connect();
+
+        return nRet;
     }
     public void subscribe(String base,int stats,
                           OnMarketStatUpdateListener l) {
@@ -143,11 +149,6 @@ public class MarketStat {
         private OnMarketStatUpdateListener listener;
         private asset_object baseAsset;
         private asset_object quoteAsset;
-        private websocket_api mWebsocketApi=new websocket_api();
-       // private BitsharesWalletWraper wraper = BitsharesWalletWraper.getInstance();
-        private Handler handler = new Handler();
-        private Handler statHandler;
-        private HandlerThread statThread;
         private AtomicBoolean isCancelled = new AtomicBoolean(false);
 
         private Subscription(String base, String quote, long bucketSecs, int stats,
@@ -158,34 +159,24 @@ public class MarketStat {
             this.stats = stats;
             this.intervalMillis = intervalMillis;
             this.listener = l;
-            this.statThread = new HandlerThread(makeMarketName(base, quote));
-            this.statThread.start();
-            this.statHandler = new Handler(this.statThread.getLooper());
-            this.statHandler.post(this);
         }
         private Subscription(String base, int stats, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.base = base;
             this.stats = stats;
             this.listener = l;
-            this.statThread = new HandlerThread(makeMarketName(base, quote));
-            this.statThread.start();
-            this.statHandler = new Handler(this.statThread.getLooper());
-            this.statHandler.post(this);
         }
 
         private void cancel() {
             isCancelled.set(true);
-            statHandler.getLooper().quit();
         }
 
         private void updateImmediately() {
-            statHandler.post(this);
         }
 
         @Override
         public void run() {
-            mWebsocketApi.connect();
+            //mWebsocketApi.connect();
             Log.e("websocket", "run: "+Thread.currentThread().getName());
             //Log.e(TAG, "run: " );
             if(base==null||base==""){
@@ -233,15 +224,9 @@ public class MarketStat {
                 if (isCancelled.get()) {
                     return;
                 }
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        listener.onMarketStatUpdate(marketStat);
-                    }
-                });
-                statHandler.postDelayed(this, intervalMillis);
+                listener.onMarketStatUpdate(marketStat);
             } else if (!isCancelled.get()) {
-                statHandler.postDelayed(this, 500);
+
             }
         }
 

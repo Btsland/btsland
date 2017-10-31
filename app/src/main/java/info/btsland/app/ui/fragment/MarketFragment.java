@@ -26,6 +26,7 @@ import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
+    private String TAG="MarketFragment";
     private MarketService marketService;
     private MarketSimpleKFragment simpleKFragment;
     private TextView tvMarketLeftCoin_1;
@@ -111,7 +112,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
-        marketStat.subscribe("CNY",MarketStat.STAT_TICKERS_BASE,this);
+        websocket_api websocketApi=new websocket_api();
+        websocketApi.connect();
+//        marketStat.subscribe("CNY",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("BTS",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("BTC",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("USD",MarketStat.STAT_TICKERS_BASE,this);
@@ -157,7 +160,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      * 装载简易K图
      */
     private void fillInSimpleK(Market market) {
-        Log.i("fillInSimpleK", "fillInSimpleK: ");
+        Log.i(TAG, "fillInSimpleK: ");
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (simpleKFragment == null) {
             simpleKFragment = MarketSimpleKFragment.newInstance(market);

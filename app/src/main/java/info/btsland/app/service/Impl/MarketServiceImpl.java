@@ -24,6 +24,7 @@ import info.btsland.app.service.MarketService;
  */
 
 public class MarketServiceImpl implements MarketService {
+    private String TAG="MarketServiceImpl";
     private String sr;
     @Override
     public Map<String,List<Market>> getallinformation() {
@@ -184,7 +185,7 @@ public class MarketServiceImpl implements MarketService {
             markets.add(market);
         }
 
-        Log.i("queryMarkets", "queryMarkets: markets.size():"+markets.size());
+        Log.i(TAG, "queryMarkets: markets.size():"+markets.size());
         return markets;
     }
 

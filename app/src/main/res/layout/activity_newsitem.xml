@@ -5,6 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+
+
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -13,7 +15,12 @@
     <!-- android:singleLine设置为True表示让这个TextView只能单行显示 -->
     <!-- android:ellipsize 设定当文本内容超出控件宽度时，文本的缩略方式，这里指定成end表示在尾部进行缩略 -->
 
-
+    <ImageView
+        android:id="@+id/news_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_toLeftOf="@+id/news_title"
+        />
 
     <TextView
         android:id="@+id/news_title"

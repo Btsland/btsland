@@ -55,6 +55,15 @@
     <string name="activity">近期活动</string>
     <string name="entrust">委单</string>
 
+
+    <string name="wusername">账户名</string>
+    <string name="whitetext">添加到白名单</string>
+    <string name="whiteadd">添加</string>
+
+    <string name="entrusttv">您好，您暂无委单</string>
+
+
+
     <string name="accountset">账户设置</string>
 
     <string name="selectlanguage">请选择系统语言 </string>

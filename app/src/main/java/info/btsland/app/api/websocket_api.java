@@ -50,7 +50,7 @@ public class websocket_api extends WebSocketListener {
     private AtomicInteger mnCallId = new AtomicInteger(1);
 
     public websocket_api() {
-        connect();
+
     }
 
 
@@ -71,6 +71,25 @@ public class websocket_api extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         System.out.println(text);
+        try {
+            Gson gson = new Gson();
+            ReplyBase replyObjectBase = gson.fromJson(text, ReplyBase.class);
+
+            IReplyObjectProcess iReplyObjectProcess = null;
+            synchronized (mHashMapIdToProcess) {
+                if (mHashMapIdToProcess.containsKey(replyObjectBase.id)) {
+                    iReplyObjectProcess = mHashMapIdToProcess.get(replyObjectBase.id);
+                }
+            }
+
+            if (iReplyObjectProcess != null) {
+                iReplyObjectProcess.processTextToObject(text);
+            } else {
+
+            }
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
     }
 
     /** Invoked when a binary (type {@code 0x2}) message has been received. */
@@ -104,39 +123,43 @@ public class websocket_api extends WebSocketListener {
     }
 
     private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
-        Call callObject = new Call();
+//        Call callObject = new Call();
+//
+//        callObject.id = mnCallId.getAndIncrement();;
+//        callObject.method = "call";
+//        callObject.params = new ArrayList<>();
+//        callObject.params.add(1);
+//        callObject.params.add("login");
+//
+//        List<Object> listLoginParams = new ArrayList<>();
+//        listLoginParams.add(strUserName);
+//        listLoginParams.add(strPassword);
+//        callObject.params.add(listLoginParams);
+//
+//        ReplyObjectProcess<Reply<Boolean>> replyObject =
+//                new ReplyObjectProcess<>(new TypeToken<Reply<Boolean>>(){}.getType());
+//        Reply<Boolean> replyLogin = sendForReplyImpl(callObject, replyObject);
+//
+//
+//        return replyLogin.result;
+        String ok = "{\"id\":1,\"method\":\"call\",\"params\":[1,\"login\",[\"\",\"\"]]}";
+        mWebsocket.send(ok);
 
-        callObject.id = mnCallId.getAndIncrement();;
-        callObject.method = "call";
-        callObject.params = new ArrayList<>();
-        callObject.params.add(1);
-        callObject.params.add("login");
-
-        List<Object> listLoginParams = new ArrayList<>();
-        listLoginParams.add(strUserName);
-        listLoginParams.add(strPassword);
-        callObject.params.add(listLoginParams);
-
-        ReplyObjectProcess<Reply<Boolean>> replyObject =
-                new ReplyObjectProcess<>(new TypeToken<Reply<Boolean>>(){}.getType());
-        Reply<Boolean> replyLogin = sendForReplyImpl(callObject, replyObject);
-
-
-        return replyLogin.result;
+        return true;
     }
 
     public synchronized int connect() {
+        Log.e("websocket", "connect: "+Thread.currentThread().getName());
         if (mnConnectStatus == WEBSOCKET_ALL_READY) {
             return 0;
         }
 
-        FullNodeServerSelect fullNodeServerSelect = new FullNodeServerSelect();
-        String strServer = fullNodeServerSelect.getServer();
-        if (TextUtils.isEmpty(strServer)) {
-            return ERROR_CONNECT_SERVER_FAILD;
-        }
-
-        Request request = new Request.Builder().url(strServer).build();
+//        FullNodeServerSelect fullNodeServerSelect = new FullNodeServerSelect();
+//        String strServer = fullNodeServerSelect.getServer();
+//        if (TextUtils.isEmpty(strServer)) {
+//            return ERROR_CONNECT_SERVER_FAILD;
+//        }
+        Request request = new Request.Builder().url("wss://bitshares.openledger.info/ws").build();
         mOkHttpClient = new OkHttpClient();
         mWebsocket = mOkHttpClient.newWebSocket(request, this);
         synchronized (mWebsocket) {
@@ -225,20 +248,20 @@ public class websocket_api extends WebSocketListener {
 
         return replyObject.result.get(0);
     }
-    public List<MarketTicker>  get_ticker_base(String base) throws NetworkStatusException {
+    public List<MarketTicker>  get_ticker_base(String base,String[] quotes) throws NetworkStatusException {
         if(base==null||base=="") {
             return null;
         }
-        String[] quotes = BtslandApplication.getInstance().getResources().getStringArray(R.array.quotes);
-        List<MarketTicker> MarketTickers=new ArrayList<MarketTicker>();
+        List<MarketTicker> marketTickers=new ArrayList<MarketTicker>();
         for(int i=0;i<quotes.length;i++){
             MarketTicker marketTicker= get_ticker(base,quotes[i]);
-            MarketTickers.add(marketTicker);
+            //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
+            marketTickers.add(marketTicker);
         }
-        if(MarketTickers==null){
+        if(marketTickers==null){
             return null;
         }
-        return MarketTickers;
+        return marketTickers;
 
     }
     public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
@@ -347,7 +370,7 @@ public class websocket_api extends WebSocketListener {
                                           ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         Gson gson = new Gson();
         String strMessage = gson.toJson(callObject);
-        Log.e("wecsocket", "sendForReplyImpl: strMessage:"+strMessage );
+        //Log.e("wecsocket", "sendForReplyImpl: strMessage:"+strMessage );
         synchronized (mHashMapIdToProcess) {
             mHashMapIdToProcess.put(callObject.id, replyObjectProcess);
         }
@@ -358,10 +381,9 @@ public class websocket_api extends WebSocketListener {
                 throw new NetworkStatusException("Failed to send message to server.");
             }
             try {
-                Log.e("websocket1", "sendForReplyImpl: replyObject:"+replyObjectProcess.getReplyObject());
                 replyObjectProcess.wait();
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
-                Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
+                //Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
                 String strError = replyObjectProcess.getError();
                 if (TextUtils.isEmpty(strError) == false) {
                     throw new NetworkStatusException(strError);
@@ -467,6 +489,11 @@ public class websocket_api extends WebSocketListener {
         String message;
         Object data;
     }
+    class ReplyBase {
+        int id;
+        String jsonrpc;
+    }
+
     class Reply<T> {
         String id;
         String jsonrpc;

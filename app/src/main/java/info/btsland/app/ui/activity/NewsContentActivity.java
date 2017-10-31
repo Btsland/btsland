@@ -43,6 +43,7 @@ public class NewsContentActivity extends AppCompatActivity {
         init();//初始化
         showNews();//展示新闻
     }
+
     /**
      * 获取当前点击位置是否为et
      * @param view 焦点所在View
@@ -71,7 +72,7 @@ public class NewsContentActivity extends AppCompatActivity {
     }
 
     /**
-     * 點擊EditText以外的區域后鍵盤隱藏
+     * 点击EditText以外的区域后键盘隐藏
      */
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {

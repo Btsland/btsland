@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import info.btsland.app.R;
+import info.btsland.app.model.UserSet;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 
@@ -79,6 +80,7 @@ public class UserActivity extends AppCompatActivity {
         }
     }
 
+
     class TextViewListener implements View.OnTouchListener {
         @Override
         public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -87,10 +89,13 @@ public class UserActivity extends AppCompatActivity {
                     touchColor(tvUserInfo, motionEvent);
                     break;
                 case R.id.tv_user_whiteList:
-                    touchColor(tvUserWhiteList, motionEvent);
+                   // touchColor(tvUserWhiteList, motionEvent);
+                    Intent iWhiteList=new Intent(UserActivity.this,WhiteListActivity.class);
+                    startActivity(iWhiteList);
                     break;
                 case R.id.tv_user_power:
                     touchColor(tvUserPower, motionEvent);
+
                     break;
                 case R.id.tv_user_recent:
 
@@ -98,15 +103,16 @@ public class UserActivity extends AppCompatActivity {
                     startActivity(iRecent);
                     break;
                 case R.id.tv_user_entrust:
-                    touchColor(tvUserEntrust, motionEvent);
-
+                    //touchColor(tvUserEntrust, motionEvent);
+                    Intent iEntrust=new Intent(UserActivity.this,EntrustActivity.class);
+                    startActivity(iEntrust);
                     break;
                 case R.id.tv_user_set:
-                    touchColor(tvUserSeting, motionEvent);
-                    //Intent i = new Intent(MainActivity.this , page1.class);
-//                    Intent iUsertSet=new Intent(UserActivity.this,UserSetActity.class);
-//                    //启动
-//                    startActivity(iUsertSet);
+                   // touchColor(tvUserSeting, motionEvent);
+                    Intent i = new Intent(UserActivity.this , UserSet.class);
+                    Intent iUsertSet=new Intent(UserActivity.this,UserSetActity.class);
+                    //启动
+                    startActivity(iUsertSet);
                     break;
             }
             return false;

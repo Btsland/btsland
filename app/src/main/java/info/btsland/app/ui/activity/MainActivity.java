@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,6 +107,7 @@ public class MainActivity extends BaseActivity {
                 if (homeFragment == null) {
                     homeFragment = new HomeFragment();
                     transaction.add(R.id.fra_main_body, homeFragment);
+
                 }
                 hideFragment(transaction);
                 transaction.show(homeFragment);

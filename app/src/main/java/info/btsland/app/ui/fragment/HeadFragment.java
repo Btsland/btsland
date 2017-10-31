@@ -98,7 +98,7 @@ public class HeadFragment extends Fragment {
                 rightTextView.setVisibility(View.GONE);
                 break;
             case HeadType.USER_SET:
-                leftTextView.setBackground(getActivity().getDrawable(R.mipmap.ic_btsland));
+                leftTextView.setBackground(getActivity().getDrawable(R.drawable.image_user));
                 leftTextView.setOnClickListener(toUser);
                 rightTextView.setOnClickListener(toSetting);
                 break;

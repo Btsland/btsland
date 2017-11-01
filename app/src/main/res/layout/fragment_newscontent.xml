@@ -41,7 +41,7 @@
             android:layout_marginRight="8dp"
             android:layout_marginLeft="8dp"
             android:padding="10dp"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/news_author"
@@ -49,23 +49,25 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
             android:textColor="#000000"
-            android:textSize="12sp"/>
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/news_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:layout_marginRight="16dp"
             android:layout_marginLeft="16dp"
-            android:textColor="#000000"
+            android:textColor="#757575"
             android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/news_content"
             android:layout_width="match_parent"
-            android:lineSpacingExtra="4dp"
-            android:lineSpacingMultiplier="1.5"
+            android:lineSpacingExtra="3dp"
+            android:lineSpacingMultiplier="1.2"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:textColor="#212121"

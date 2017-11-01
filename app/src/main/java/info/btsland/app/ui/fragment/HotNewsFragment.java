@@ -64,6 +64,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new7 = new News();
         new7.setTitle("到2027年，每家公司都将使用区块链技术，原因在这里");
         new7.setDate("2017-10-26");
+        new7.setAuthor("作者：Mohit Mamoria");
         new7.setTitleContent("大约10年以前，比特币之父中本聪发表了一份长达8页的调查报告，解释了比特币如何实现货币的去中心化。这一报告悄无声息地扰乱了银行等信用机构的运行。但那时并没有多少人理解这八页报告蕴含的潜力。但我所要讲的并不是货币的去中心化，而是去中心化本身。在这八页报告中，中本聪不仅揭示了人们如何重新获得对自己资金的控制权，而且还为陌生人之间的合作提供了新的方案。");
         new7.setContent("大约10年以前，比特币之父中本聪发表了一份长达8页的调查报告，解释了比特币如何实现货币的去中心化。这一报告悄无声息地扰乱了银行等信用机构的运行。但那时并没有多少人理解这八页报告蕴含的潜力。\n" +
                 "\n" +
@@ -155,6 +156,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new3 = new News();
         new3.setTitle("为促进区块链应用安全，Ledger联手巨头英特尔");
         new3.setDate("2017-10-25");
+        new3.setAuthor("作者：Banking Tech");
         new3.setTitleContent("Ledger ，一家专注于加密货币及区块链应用安全解决方案的法国创业公司，其已与英特尔公司达成合作，旨在为数字钱包用户提供更安全的解决方案，据悉，Ledger将其区块链开放式账本操作系统（Bolos）与英特尔的软件防护扩展（Intel SGX）相整合，这种联合解决方案，最初将应用于加密货币软件钱包Electrum以及 MyEtherWallet。");
         new3.setContent("Ledger ，一家专注于加密货币及区块链应用安全解决方案的法国创业公司，其已与英特尔公司达成合作，旨在为数字钱包用户提供更安全的解决方案，\n" +
                 "\n" +
@@ -176,6 +178,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new8 = new News();
         new8.setTitle("去中心化交易所将崛起？原子互换技术究竟是什么？");
         new8.setDate("2017-10-25");
+        new8.setAuthor("作者：MATTHEW HRONES");
         new8.setTitleContent("开发社区中很多人都正在为一些加密货币研究一种新的功能——原子互换（Atomic Swaps）。这些互换能够完全移除对第三方机构监管的需要并把不同加密货币之间的交易交到用户的手中。去中心化交易？最近几周，加密货币开发社区出现了大量关于一种革命性想法的讨论——跨链原子互换（Atomic Swap）。原子互换是一种正在开发中的新技术，允许在不同类型的数字资产之间实现无需信任的点对点交易。这些交易可以在瞬间完成，所以任何一方都没有机会不遵守协议。并且当出现一方中途退出的情况下，资金会在一个规定的时间后退还给各方。");
         new8.setContent("开发社区中很多人都正在为一些加密货币研究一种新的功能——原子互换（Atomic Swaps）。这些互换能够完全移除对第三方机构监管的需要并把不同加密货币之间的交易交到用户的手中。\n" +
                 "\n" +
@@ -218,6 +221,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new6 = new News();
         new6.setTitle("Segwit2X算不算正牌比特币？这些交易所有话说");
         new6.setDate("2017-10-24");
+        new6.setAuthor("作者：油焖大虾");
         new6.setTitleContent("币圈里流传着这么一句话，在加密货币的世界里没有一天是乏味的。每一年你都觉得各种辩（si）论（bi）大战实在是太精彩了（比如说BitGo工程师的家被警察围堵），没想到好戏永远在明年……今年是比特币最“多产”的一年，从8月份的Bitcoin Cash（BCC/BCH）到近几日的Bitcoin Gold（BTG）都是我们比特母亲的孩子。这不，大概再过一个月的时间，又有一次硬分叉要开始了。");
         new6.setContent("币圈里流传着这么一句话，在加密货币的世界里没有一天是乏味的。每一年你都觉得各种辩（si）论（bi）大战实在是太精彩了（比如说BitGo工程师的家被警察围堵），没想到好戏永远在明年……\n" +
                 "\n" +
@@ -326,6 +330,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new5 = new News();
         new5.setTitle("法定数字货币属性探讨");
         new5.setDate("2017-10-24");
+        new5.setAuthor("作者：陈云峰");
         new5.setTitleContent("“2017国际电联第一次法定数字货币焦点组工作会议”10月12日、13日在北京举行，该会议对法定数字货币的需求、法定数字货币生态系统中各方面临的政策和监管方面的挑战、国际数字普惠金融状况及模式及数字货币的安全性、兼容性、标准化等问题进行探讨。中国人民银行数字货币研究所所长姚前从四个维度对法定数字货币的本质内涵进行了界定和剖析：“首先，法定数字货币在价值上是信用货币，其次技术上看是加密货币，再次实现上是算法货币，最后应用场景上则是智能货币。”并提到了比特币的价值主要来自市场炒作，无价值锚定，不宜作为货币的论断。");
         new5.setContent("“2017国际电联第一次法定数字货币焦点组工作会议”10月12日、13日在北京举行，该会议对法定数字货币的需求、法定数字货币生态系统中各方面临的政策和监管方面的挑战、国际数字普惠金融状况及模式及数字货币的安全性、兼容性、标准化等问题进行探讨。中国人民银行数字货币研究所所长姚前从四个维度对法定数字货币的本质内涵进行了界定和剖析：“首先，法定数字货币在价值上是信用货币，其次技术上看是加密货币，再次实现上是算法货币，最后应用场景上则是智能货币。”并提到了比特币的价值主要来自市场炒作，无价值锚定，不宜作为货币的论断。\n" +
                 "\n" +
@@ -357,6 +362,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new2 = new News();
         new2.setTitle("比特币分叉路上的机遇与变革");
         new2.setDate("2017-10-23");
+        new2.setAuthor("作者：58coin");
         new2.setTitleContent("比特币Segwit2X硬分叉在即，相信作为投资者的你肯定心有所惑：什么是硬分叉？Segwit2X又是个啥？分叉后比特币价格会怎么变动？下面老五将分别讲解比特币分叉的原理、经过和未来预期的价格走势，希望能为各位投资者提供参考。众所周知，比特币（BitCoin）最初由中本聪在2009年提出，它是一种P2P形式的虚拟货币，依据特定算法通过大量的计算产生。比特币系统使用整个P2P网络中众多节点构成的分布式数据库来确认并记录所有的交易行为，并使用密码学的设计来确保货币流通各个环节安全性。");
         new2.setContent("比特币Segwit2X硬分叉在即，相信作为投资者的你肯定心有所惑：什么是硬分叉？Segwit2X又是个啥？分叉后比特币价格会怎么变动？下面老五将分别讲解比特币分叉的原理、经过和未来预期的价格走势，希望能为各位投资者提供参考。\n" +
                 "\n" +
@@ -492,6 +498,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         News new1 = new News();
         new1.setTitle("顶级学府MIT使用比特币区块链发行学位证书");
         new1.setDate("2017-10-23");
+        new1.setAuthor("作者：Samuel Haig");
         new1.setTitleContent("世界顶尖大学麻省理工（MIT）已宣布了一项试点计划，其将利用比特币区块链为111位毕业生签发毕业证书。该项目是由麻省理工学院注册处办公室及马萨诸塞州软件公司Learning Machine合作实施的。MIT将使用Blockcerts钱包，通过比特币区块链签发毕业证书");
         new1.setContent("世界顶尖大学麻省理工（MIT）已宣布了一项试点计划，其将利用比特币区块链为111位毕业生签发毕业证书。该项目是由麻省理工学院注册处办公室及马萨诸塞州软件公司Learning Machine合作实施的。\n" +
                 "\n" +

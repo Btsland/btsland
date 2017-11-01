@@ -69,21 +69,25 @@ public class MarketRowAdapter extends BaseAdapter {
         TextView tvBestAskNum = convertView.findViewById(R.id.tv_bestAskNum);
         TextView tvBestBidNum = convertView.findViewById(R.id.tv_bestBidNum);
         tvCoin.setText(market.quote);
-        String fluctuation= String.valueOf(market.percent_change)+"%";
-        Log.e("getView", "fluctuation: "+ fluctuation);
+        DecimalFormat dfFluctuation = new DecimalFormat();
+        dfFluctuation.applyPattern("0.00");
+        String fluctuation= String.valueOf(dfFluctuation.format(market.percent_change))+"%";
+        Log.i("getView", "fluctuation: "+ fluctuation);
         tvFluctuation.setText(fluctuation);
-        DecimalFormat df = new DecimalFormat();
-        df.applyPattern("0.00000000");
-        tvNewPrice.setText(df.format(market.latest));
-        tvBestAskNum.setText(df.format(market.lowest_ask));
-        tvBestBidNum.setText(df.format(market.highest_bid));
-        if (market.percent_change >= 0) {
-            ;
+        DecimalFormat dfPrice = new DecimalFormat();
+        dfPrice.applyPattern("0.000000");
+        tvNewPrice.setText(dfPrice.format(market.latest));
+        tvBestAskNum.setText(dfPrice.format(market.lowest_ask));
+        tvBestBidNum.setText(dfPrice.format(market.highest_bid));
+        if (market.percent_change > 0) {
             tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));
             tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_green));
-        } else {
+        } else if(market.percent_change <0) {
             tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_font_red));
             tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_font_red));
+        }else {
+            tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_font_blue));
+            tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_font_blue));
         }
 
         convertView.setOnClickListener(new View.OnClickListener() {

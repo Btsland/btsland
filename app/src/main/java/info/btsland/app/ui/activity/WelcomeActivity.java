@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 
 import info.btsland.app.R;
+import info.btsland.app.api.MarketStat;
+import info.btsland.app.ui.fragment.MarketFragment;
 
 public class WelcomeActivity extends AppCompatActivity {
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +26,7 @@ public class WelcomeActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
         //scaleImage(this,findViewById(android.R.id.content), R.drawable.welcome);
+
         WelcomeThread w = new WelcomeThread();
         new Thread(w).start();
     }
@@ -30,16 +34,14 @@ public class WelcomeActivity extends AppCompatActivity {
     class WelcomeThread implements Runnable {
         @Override
         public void run() {
+
             try {
-                Thread.sleep(3000);
+                Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             Log.i("getColor", "getColor: " + getResources().getColor(R.color.color_Grey));
             Log.i("getColor", "getString: " + getResources().getString(R.string.font_color_gray));
-            Intent intent = new Intent();
-            intent.setClass(WelcomeActivity.this, MainActivity.class);
-            startActivity(intent);
             finish();
         }
     }

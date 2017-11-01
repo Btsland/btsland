@@ -2,6 +2,8 @@ package info.btsland.app.ui.fragment;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
@@ -24,6 +26,7 @@ import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.activity.WelcomeActivity;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private String TAG="MarketFragment";
@@ -46,52 +49,97 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private MarketRowAdapter usdRowAdapter ;
     private MarketRowAdapter ethRowAdapter ;
     private MarketStat marketStat;
+    public static int NOTIFY_CNY=1;
+    public static int NOTIFY_BTS=2;
+    public static int NOTIFY_USD=3;
+    public static int NOTIFY_BTC=4;
+    public static int NOTIFY_ETH=5;
     public MarketFragment() {
         this.marketStat=new MarketStat();
+        String[] base={"CNY","BTS","USD","BTC"};
+        String[] quotes={"BTC", "ETH","BTS","LTC","OMG","STEEM","VEN","HPB","OCT","YOYOW","DOGE","HASH"};
+        String[] quotes1={"BTS", "USD","OPEN.BTC","OPEN.ETH","YOYOW","OCT","OPEN.LTC","OPEN.STEEM","OPEN.DASH","HPB","OPEN.OMG","IMIAO"};
+        marketStat.subscribe(base,quotes1,MarketStat.STAT_TICKERS_BASE,this);
     }
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        if(stat.MarketTickers==null){
+        for(int i=0;i<stat.MarketTickers.size();i++){
+            Log.i(TAG, "onMarketStatUpdate: marketStat.MarketTickers："+stat.MarketTickers.get(i));
+        }
+        if(stat.MarketTickers==null&&stat.MarketTickers.size()==0){
             return;
         }
-        if(stat.MarketTickers.get(0).base=="CNY"){
-            if(cnyMarket!=null){
-                cnyMarket.clear();
-            }
-            cnyMarket=stat.MarketTickers;
-            cnyRowAdapter.markets=cnyMarket;
-            cnyRowAdapter.notifyDataSetChanged();
-            return;
+        Message message=Message.obtain();
+        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTickers.get(0).base.equals("CNY")));
+        switch (stat.MarketTickers.get(0).base){
+            case "CNY":
+                if(cnyMarket!=null){
+                    cnyMarket.clear();
+                }
+                Log.i(TAG, "onMarketStatUpdate: ThreadName:"+Thread.currentThread().getName());
+                cnyMarket=stat.MarketTickers;
+                cnyRowAdapter.markets=cnyMarket;
+                message.what=NOTIFY_CNY;
+                mHandler.sendMessage(message);
+                break;
+            case "BTS":
+                if(btsMarket!=null){
+                    btsMarket.clear();
+                }
+                btsMarket=stat.MarketTickers;
+                btsRowAdapter.markets=btsMarket;
+                message.what=NOTIFY_BTS;
+                mHandler.sendMessage(message);
+                break;
+            case "USD":
+                if(usdMarket!=null){
+                    usdMarket.clear();
+                }
+                usdMarket=stat.MarketTickers;
+                usdRowAdapter.markets=usdMarket;
+                message.what=NOTIFY_USD;
+                mHandler.sendMessage(message);
+                break;
+            case "BTC":
+                if(btcMarket!=null){
+                    btcMarket.clear();
+                }
+                btcMarket=stat.MarketTickers;
+                btcRowAdapter.markets=btcMarket;
+                message.what=NOTIFY_BTC;
+                mHandler.sendMessage(message);
+                break;
+            case "ETH":
+                if(ethMarket!=null){
+                    ethMarket.clear();
+                }
+                ethMarket=stat.MarketTickers;
+                ethRowAdapter.markets=ethMarket;
+                message.what=NOTIFY_ETH;
+                mHandler.sendMessage(message);
+                break;
         }
-        if(stat.MarketTickers.get(0).base=="BTS"){
-            if(btsMarket!=null){
-                btsMarket.clear();
-            }
-            btsMarket=stat.MarketTickers;
-            btsRowAdapter.notifyDataSetChanged();
-        }
-        if(stat.MarketTickers.get(0).base=="USD"){
-            if(usdMarket!=null){
-                usdMarket.clear();
-            }
-            usdMarket=stat.MarketTickers;
-            usdRowAdapter.notifyDataSetChanged();
-        }
-        if(stat.MarketTickers.get(0).base=="BTC"){
-            if(btcMarket!=null){
-                btcMarket.clear();
-            }
-            btcMarket=stat.MarketTickers;
-            btcRowAdapter.notifyDataSetChanged();
-        }
-        if(stat.MarketTickers.get(0).base=="ETH"){
-            if(ethMarket!=null){
-                ethMarket.clear();
-            }
-            ethMarket=stat.MarketTickers;
-            ethRowAdapter.notifyDataSetChanged();
-        }
+
     }
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+
+            Log.i(TAG, "handleMessage: msg.what:"+msg.what);
+            if(msg.what==NOTIFY_CNY){
+                Log.i(TAG, "handleMessage: ");
+                cnyRowAdapter.notifyDataSetChanged();
+            }else if(msg.what==NOTIFY_BTS){
+                btsRowAdapter.notifyDataSetChanged();
+            }else if(msg.what==NOTIFY_USD){
+                usdRowAdapter.notifyDataSetChanged();
+            }else if(msg.what==NOTIFY_BTC){
+                btcRowAdapter.notifyDataSetChanged();
+            }else if(msg.what==NOTIFY_ETH){
+                ethRowAdapter.notifyDataSetChanged();
+            }
+        }
+    };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,9 +160,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
-        websocket_api websocketApi=new websocket_api();
-        websocketApi.connect();
-//        marketStat.subscribe("CNY",MarketStat.STAT_TICKERS_BASE,this);
+//        websocket_api websocketApi=new websocket_api();
+//        websocketApi.connect();
 //        marketStat.subscribe("BTS",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("BTC",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("USD",MarketStat.STAT_TICKERS_BASE,this);

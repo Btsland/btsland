@@ -3,6 +3,7 @@ package info.btsland.app.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -37,10 +38,10 @@ public class MarketStat {
     public static final int STAT_TICKERS_BASE = 0x10;
     private websocket_api mWebsocketApi=new websocket_api();
 
-    private HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
+    public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
     private static boolean isDeserializerRegistered = false;
     
-    private String[] quotes={"BTC", "ETH","BTS","LTC","OMG","STEEM","VEN","HPB","OCT","YOYOW","DOGE","HASH"};
+    private String[] quotes;
     
     public MarketStat() {
 //        if (!isDeserializerRegistered) {
@@ -48,18 +49,25 @@ public class MarketStat {
 //            global_config_object.getInstance().getGsonBuilder().registerTypeAdapter(
 //                    full_account_object.class, new full_account_object.deserializer());
 //        }
+       int i= initialize();
+        Log.i(TAG, "MarketStat: i:"+i);
+
     }
     public int initialize() {
         int nRet = mWebsocketApi.connect();
-
         return nRet;
     }
-    public void subscribe(String base,int stats,
+    public void subscribe(String[] base,String[] quotes,int stats,
                           OnMarketStatUpdateListener l) {
+        this.quotes=quotes;
         //Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
-        unsubscribe(base, "");
-        Subscription subscription =new Subscription(base, stats, l);
-        subscriptionHashMap.put(makeMarketName(base, ""), subscription);
+        for(int i=0;i<base.length;i++){
+            unsubscribe(base[i], "");
+            Subscription subscription =new Subscription(base[i], stats, l);
+            subscriptionHashMap.put(makeMarketName(base[i], ""), subscription);
+        }
+
+
     }
     public void subscribe(String base, String quote, int stats, long intervalMillis,
                           OnMarketStatUpdateListener l) {
@@ -149,6 +157,8 @@ public class MarketStat {
         private OnMarketStatUpdateListener listener;
         private asset_object baseAsset;
         private asset_object quoteAsset;
+        private HandlerThread statThread;
+        private Handler statHandler;
         private AtomicBoolean isCancelled = new AtomicBoolean(false);
 
         private Subscription(String base, String quote, long bucketSecs, int stats,
@@ -159,12 +169,21 @@ public class MarketStat {
             this.stats = stats;
             this.intervalMillis = intervalMillis;
             this.listener = l;
+            this.statThread = new HandlerThread(makeMarketName(base, quote));
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
         }
         private Subscription(String base, int stats, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.base = base;
             this.stats = stats;
             this.listener = l;
+            this.statThread = new HandlerThread(makeMarketName(base, ""));
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+
         }
 
         private void cancel() {
@@ -175,7 +194,7 @@ public class MarketStat {
         }
 
         @Override
-        public void run() {
+        public  void run() {
             //mWebsocketApi.connect();
             Log.e("websocket", "run: "+Thread.currentThread().getName());
             //Log.e(TAG, "run: " );
@@ -224,6 +243,8 @@ public class MarketStat {
                 if (isCancelled.get()) {
                     return;
                 }
+
+
                 listener.onMarketStatUpdate(marketStat);
             } else if (!isCancelled.get()) {
 

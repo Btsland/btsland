@@ -60,7 +60,6 @@ public class MarketSimpleKFragment extends Fragment {
     }
 
     public static MarketSimpleKFragment newInstance(Market market) {
-        Log.i("newInstance", "newInstance: ");
         MarketSimpleKFragment simpleKFragment = new MarketSimpleKFragment();
         Bundle args = new Bundle();
         args.putSerializable("market", market);
@@ -69,13 +68,11 @@ public class MarketSimpleKFragment extends Fragment {
     }
 
     private void init(View view) {
-        Log.i("init", "init: ");
         deal = view.findViewById(R.id.tv_market_simple_deal);
         high = view.findViewById(R.id.tv_market_simple_high);
         low = view.findViewById(R.id.tv_market_simple_low);
         count = view.findViewById(R.id.tv_market_simple_count);
         simpleK = view.findViewById(R.id.lc_market_simple_K);
-        Log.i("init", "init: leftCoin+\":\"+rightCoin" + leftCoin + ":" + rightCoin);
         deal.setText(leftCoin + ":" + rightCoin);
         startReceiveMarkets(null);
 //        simpleK.setDescription("BTC:CNY");
@@ -143,21 +140,17 @@ public class MarketSimpleKFragment extends Fragment {
             if (start < to) {
                 this.length = to - start + 1;
             }
-            Log.i("length", "MyXAxisValueFormatter+length: " + length);
             step = length / values.size();
-            Log.i("step", "MyXAxisValueFormatter+step: " + step);
             tags = new HashMap<String, String>();
             for (int i = 0; i < values.size(); i++) {
                 String value = values.get(i);
                 int index = (int) (i * step);
-                Log.i("index", "MyXAxisValueFormatter+index: " + index);
                 tags.put(String.valueOf(index), value);
             }
         }
 
         @Override
         public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            Log.i("index", "getXValue+index: " + index);
             String XValue = "";
             if (index == 30) {
                 XValue = "中间";
@@ -205,11 +198,8 @@ public class MarketSimpleKFragment extends Fragment {
 
         @Override
         public void run() {
-            Log.i("run", "run: ");
-            Log.i("run", "run: Left:" + left + "+right:" + right);
             MarketService marketService = new MarketServiceImpl();
             List<Market> markets = marketService.queryMarkets(left, right, "");
-            Log.i("run", "run: markets.size():" + markets.size());
             Message message = Message.obtain();
             message.what = 1;
             message.obj = markets;

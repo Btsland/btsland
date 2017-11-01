@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
@@ -35,6 +36,8 @@ public class MainActivity extends BaseActivity {
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
     private TextView tvHeadLeft;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,13 +91,22 @@ public class MainActivity extends BaseActivity {
         //初始化fra_main_body
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (marketFragment == null) {
-            marketFragment = new MarketFragment();
+            marketFragment =new MarketFragment();
             transaction.add(R.id.fra_main_body, marketFragment);
         }
-        ;
         transaction.commit();
     }
 
+    @Override
+    protected void onStart() {
+        if(BtslandApplication.isWel==false){
+            Intent intent=new Intent(this,WelcomeActivity.class);
+            startActivity(intent);
+            BtslandApplication.isWel=true;
+        }
+
+        super.onStart();
+    }
 
     /**
      * 根据底部导航栏选定的控件进行切换fra

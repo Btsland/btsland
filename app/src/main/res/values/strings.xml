@@ -55,6 +55,12 @@
     <string name="activity">近期活动</string>
     <string name="entrust">委单</string>
 
+    <string name="motto">座右铭：</string>
+    <string name="phone">手机号：</string>
+    <string name="statement">个人说明：</string>
+
+
+
 
     <string name="wusername">账户名</string>
     <string name="whitetext">添加到白名单</string>

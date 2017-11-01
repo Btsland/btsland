@@ -87,6 +87,8 @@ public class UserActivity extends AppCompatActivity {
             switch (view.getId()) {
                 case R.id.tv_user_info:
                     touchColor(tvUserInfo, motionEvent);
+                    Intent iUserInfo =new Intent(UserActivity.this,UserInfoActivity.class);
+                    startActivity(iUserInfo);
                     break;
                 case R.id.tv_user_whiteList:
                    // touchColor(tvUserWhiteList, motionEvent);
@@ -108,11 +110,11 @@ public class UserActivity extends AppCompatActivity {
                     startActivity(iEntrust);
                     break;
                 case R.id.tv_user_set:
-                   // touchColor(tvUserSeting, motionEvent);
-                    Intent i = new Intent(UserActivity.this , UserSet.class);
-                    Intent iUsertSet=new Intent(UserActivity.this,UserSetActity.class);
+                   // touchColor(tvUserSetting, motionEvent);
+
+                    Intent iUserSet=new Intent(UserActivity.this,UserSetActity.class);
                     //启动
-                    startActivity(iUsertSet);
+                    startActivity(iUserSet);
                     break;
             }
             return false;

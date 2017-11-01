@@ -171,6 +171,11 @@
 
         </activity>
 
+        <activity android:name=".ui.activity.UserInfoActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+
 
     </application>
 

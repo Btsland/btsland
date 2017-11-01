@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import info.btsland.app.R;
-import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
@@ -21,6 +20,7 @@ import info.btsland.app.ui.fragment.MarketSimpleKFragment;
  */
 
 public class MarketRowAdapter extends BaseAdapter {
+
     private MarketSimpleKFragment simpleKFragment;
     public List<MarketTicker> markets;
     private LayoutInflater inflater;

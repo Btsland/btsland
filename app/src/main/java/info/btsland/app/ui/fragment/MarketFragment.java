@@ -12,17 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import info.btsland.app.Adapter.MarketRowAdapter;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
-import info.btsland.app.api.websocket_api;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
@@ -112,8 +108,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
-        websocket_api websocketApi=new websocket_api();
-        websocketApi.connect();
+//        websocket_api websocketApi=new websocket_api();
+//        websocketApi.connect();
 //        marketStat.subscribe("CNY",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("BTS",MarketStat.STAT_TICKERS_BASE,this);
 //        marketStat.subscribe("BTC",MarketStat.STAT_TICKERS_BASE,this);

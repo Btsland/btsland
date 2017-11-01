@@ -2,6 +2,7 @@ package info.btsland.app.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -47,6 +48,8 @@ public class HeadFragment extends Fragment {
     private TextView rightTextView;
     private TextView titleTextView;
 
+    private Drawable drawable;
+
 
     public HeadFragment() {
         super();
@@ -73,6 +76,9 @@ public class HeadFragment extends Fragment {
         leftTextView = getActivity().findViewById(R.id.tv_head_left);
         rightTextView = getActivity().findViewById(R.id.tv_head_right);
         titleTextView = getActivity().findViewById(R.id.tv_head_title);
+        drawable = getResources().getDrawable(R.drawable.image_user,null);
+        //设置图片大小
+        drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
     }
 
     /**
@@ -98,7 +104,8 @@ public class HeadFragment extends Fragment {
                 rightTextView.setVisibility(View.GONE);
                 break;
             case HeadType.USER_SET:
-                leftTextView.setBackground(getActivity().getDrawable(R.drawable.image_user));
+//                leftTextView.setBackground(getActivity().getDrawable(R.drawable.image_user));
+                leftTextView.setCompoundDrawables(null,null,drawable,null);
                 leftTextView.setOnClickListener(toUser);
                 rightTextView.setOnClickListener(toSetting);
                 break;

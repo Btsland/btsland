@@ -31,6 +31,7 @@ import java.util.Map;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
+import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
@@ -172,10 +173,10 @@ public class MarketSimpleKFragment extends Fragment {
         }
     }
 
-    public void startReceiveMarkets(Market market) {
+    public void startReceiveMarkets(MarketTicker market) {
         if (market != null) {
-            Log.i("startReceiveMarkets", "startReceiveMarkets: market1:" + market.getLeftCoin() + ":" + market.getRightCoin());
-            if (market.getRightCoin() == rightCoin && market.getLeftCoin() == leftCoin) {
+            //Log.i("startReceiveMarkets", "startReceiveMarkets: market1:" + market.getLeftCoin() + ":" + market.getRightCoin());
+            if (market.base == rightCoin && market.quote == leftCoin) {
                 Log.i("startReceiveMarkets", "startReceiveMarkets: 111111111111");
                 Intent intent = new Intent(getActivity(), MarketDetailedActivity.class);
                 intent.putExtra("market", market);
@@ -191,11 +192,11 @@ public class MarketSimpleKFragment extends Fragment {
         private String left;
         private String right;
 
-        public ReceiveMarkets(Market market) {
+        public ReceiveMarkets(MarketTicker market) {
             Log.i("ReceiveMarkets", "ReceiveMarkets: ");
             if (market != null) {
-                left = market.getLeftCoin();
-                right = market.getRightCoin();
+                left = market.quote;
+                right = market.base;
             } else {
                 left = leftCoin;
                 right = rightCoin;

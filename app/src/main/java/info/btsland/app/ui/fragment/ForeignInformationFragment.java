@@ -63,6 +63,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new8 = new News();
         new8.setTitle("韩国央行行长：比特币是商品而非货币，央行需加强对虚拟货币的研究");
         new8.setDate("2017-10-26");
+        new8.setAuthor("作者：Wolfie Zhao");
         new8.setTitleContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。据汉城联合通讯社报道，Lee行长否定了接受加密货币作为法定货币的可能性。这项声明是在韩国禁止ICO后，由官方发布的针对加密货币技术的最新评估。“对虚拟货币进行监管是合适的，因为它们属于商品，而不是法定货币，” Lee在韩国国民议会举办的一次政府审计会议上表示。");
         new8.setContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。\n" +
                 "\n" +
@@ -83,6 +84,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new1 = new News();
         new1.setTitle("穆迪：区块链和加密货币的颠覆潜力不可避免");
         new1.setDate("2017-10-26");
+        new1.setAuthor("作者：Tanzeel Akhtar");
         new1.setTitleContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。穆迪分析师斯蒂芬•索恩（Stephen Sohn）及其团队在本月中发表了一篇名为《消费者数字支付——美国》的报告，他们在报告中安慰支付领域参与者，区块链技术是一个“遥远的威胁”。");
         new1.setContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。\n" +
                 "\n" +
@@ -109,6 +111,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new3 = new News();
         new3.setTitle("以投资者利益为先，马耳他政府出台加密货币投资基金管理规则");
         new3.setDate("2017-10-25");
+        new3.setAuthor("作者：Stan Higgins");
         new3.setTitleContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。马耳他金融服务管理局（MFSA）本周一公布了一份指南，用于指导专业投资机构招募投资者、管理风险以及进行自我管理。这份指南在下月的咨询阶段过后将面临进一步的修改，这也是马耳他政府为这项技术部署的最新的国家政策改进。MSFA在声明中表示，这份指南将适用于各种投资基金类型。");
         new3.setContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。\n" +
                 "\n" +
@@ -127,16 +130,12 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new2 = new News();
         new2.setTitle("银行有阻区块链创业公司发展？英国金融行为监管局（FCA）如是说");
         new2.setDate("2017-10-25");
+        new2.setAuthor("作者：Samuel Haig");
         new2.setTitleContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。 FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”报告讨论了FCA建立“沙箱监管”一年来所取得的成就及经验教训，并指责了金融机构有意拒绝为区块链技术公司提供银行服务。");
         new2.setContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”\n" +
                 " \n" +
-                "\n" +
-                "en\n" +
-                "\n" +
                 "报告讨论了FCA建立“沙箱监管”一年来所取得的成就及经验教训，并指责了金融机构有意拒绝为区块链技术公司提供银行服务。\n" +
                 "\n" +
                 "FCA指出，“我们亲眼目睹了前两批沙箱计划中的不少公司遭到了银行的拒绝，对于那些分布式账本支付公司而言，尤其困难。”\n" +
@@ -147,20 +146,14 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "FCA表示，在一系列因素之中，银行部门拒绝向DLT公司提供服务的决定，是由“战略商业决策”驱动的。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "FCA强调消极的银行服务，将会给初生的区块链行业带来负面影响\n" +
                 " \n" +
-                "\n" +
                 "FCA指出，目前的银行业务和“创新”存在着竞争。\n" +
                 "\n" +
                 "FCA声称，“哪怕在沙箱中进行测试，如果某些公司无法拥有安全的银行账户，那么他们有可能无法满足我们的条件，就无法进入市场。”报告称：“一些企业由于被银行剥夺了获取金融服务的机会，无法按原计划进行测试。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "洗钱风险和区块链技术\n" +
                 " \n" +
-                "\n" +
                 "FCA称，金融机构多次以区块链技术存在洗钱风险为由，拒绝向DLT公司提供基本服务。\n" +
                 "\n" +
                 "FCA拒绝了这一观点，其还补充说：\n" +
@@ -171,21 +164,18 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new9 = new News();
         new9.setTitle("区块链即服务（BaaS）：IBM，微软与亚马逊形成三足鼎立之势");
         new9.setDate("2017-10-25");
+        new9.setAuthor("作者：Divya Joshi");
         new9.setTitleContent("什么是区块链即服务？根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。区块链是一种加密货币的所有交易的一个账本或名单，是比特币和其他加密货币的底层技术。对于区块链技术本身，它拥有无数应用，从银行服务到物联网（IoT）。");
         new9.setContent("什么是区块链即服务？\n" +
                 " \n" +
-                "\n" +
                 "根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。\n" +
                 "\n" +
                 "区块链是一种加密货币的所有交易的一个账本或名单，是比特币和其他加密货币的底层技术。对于区块链技术本身，它拥有无数应用，从银行服务到物联网（IoT）。\n" +
                 "\n" +
                 "在未来几年，Business Insider的研究服务BI Intelligence预计各个公司都会开始充实并具体化他们的区块链IoT解决方案。不过，一些企业已经推出了他们的区块链即服务。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "IBM区块链技术\n" +
                 " \n" +
-                "\n" +
                 "IBM Blockchain通过利用一种高度安全的，共享的和复制的账本准许企业公司将其交易工作流程数字化。IBM Blockchain是一种公共云服务，客户可用于构建安全的区块链网络。\n" +
                 "\n" +
                 "IBM Blockchain已经加入了由Linux基金会领导的超级账本项目（Hyperledger）来改进这种区块链的早期形式。\n" +
@@ -194,11 +184,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "IBM声称他们的区块链产品是以一种高度可审计的方式建立的，可跟踪网络中发生的所有活动，让管理人员可以在出现错误时进行审计跟踪。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "微软Azure区块链技术\n" +
                 " \n" +
-                "\n" +
                 "微软Azure的区块链即服务声称，通过试验新的业务流程为组织机构提供了一种速度快，成本低，风险低和快速失败平台，由一个拥有行业内最大的合规投资组合的云平台提供支持。\n" +
                 "\n" +
                 "作为一种开放，灵活且可扩展的平台，微软Azure声称支持了越来越多的分布式账本技术，解决了在安全性，性能和运营流程方面的特殊业务和技术需求。\n" +
@@ -207,11 +194,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "最近，微软成为了加密货币与合约倡议（IC3）的成员。通过这个成员关系，微软预计推动企业级区块链准备就绪，并与IC3团队在密码学，博弈论、分布式系统、编程语言和系统的安全性方面进行合作。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "亚马逊AWS区块链技术\n" +
                 " \n" +
-                "\n" +
                 "亚马逊几乎无处不在。这个科技巨头将自己的爪子深深地伸向了全球几乎所有的经济领域，从房地产到食品再到药品，如今还有区块链技术。\n" +
                 "\n" +
                 "回到2016年，亚马逊云计算业务——亚马逊网络服务（AWS）与投资公司数字货币集团（DCG）达成合作为企业提供一种区块链即服务试验环境。\n" +
@@ -220,11 +204,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "根据AWS全球金融服务业务开发主管Scott Mullins所说，AWS正在与金融机构和区块链供应商合作刺激创新和推动无摩擦试验。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "R3 Corda区块链技术\n" +
                 " \n" +
-                "\n" +
                 "R3意识到分布式账本技术的力量在于其网络效应，R3因此就与这个行业合作建立了最大行业合作组织（100多家金融机构成员）——然后推出了Corda平台。\n" +
                 "\n" +
                 "R3 Corda是一个为金融行业打造的专业分布式账本平台，为企业提供了API和代码用于创建类区块链的应用，并且旨在现有全球金融市场创建更多高效性。\n" +
@@ -239,11 +220,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "2017年5月份，押注分布式账本技术的大型金融机构宣布为R3区块链联盟提供1.07亿美元资金，用于全球技术发展以及将Corda企业版带给全球机构。\n" +
                 "\n" +
-                " \n" +
-                "\n" +
                 "区块链即服务市场趋势\n" +
                 " \n" +
-                "\n" +
                 "截止2017年2月份，“区块链”这个术语的搜索量已经在Gartner.com排名第二，在过去12个月增长了400%。在2015年到2016年，Gartner客户咨询数量增长了超过600%，证明了行业对这个快速发展的市场的兴趣正在日益增长。\n" +
                 "\n" +
                 "区块链市场到2012年的年复合增长率（CAGR）预计将达到61.5%，透明度和不可更改性都将成为区块链市场指数增长的推动因素。\n" +
@@ -256,6 +234,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new6 = new News();
         new6.setTitle("英国金融管理局：分布式账本技术创业公司遭受银行打压，无法获得银行服务");
         new6.setDate("2017-10-24");
+        new6.setAuthor("作者：Nikhilesh De");
         new6.setTitleContent("据英国金融行为监管局（FCA）上周发布的报告显示，英国分布式账本技术创业公司在获得银行服务时正遇到麻烦。FCA这个金融监管机构运行着一个监管沙箱，允许新类型的企业“在一种活跃的市场环境下测试创新型产品、服务和业务模式”。据报道，FCA发现其金融技术测试框架下的创业公司被阻止在银行开户。");
         new6.setContent("据英国金融行为监管局（FCA）上周发布的报告显示，英国分布式账本技术创业公司在获得银行服务时正遇到麻烦。\n" +
                 "\n" +
@@ -281,6 +260,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new5 = new News();
         new5.setTitle("瑞士信贷银行银行家：只有天空才是区块链的极限，比特币只是区块链的第一种杀手APP");
         new5.setDate("2017-10-23");
+        new5.setAuthor("作者：Rebecca Campbell");
         new5.setTitleContent("尽管很多银行都拒绝比特币这种概念，不过很多银行都正在将他们的注意力转移到区块链的使用。根据欧洲银行瑞士信贷银行（Credit Suisse）的一位投资银行家所说，“只有天空才是区块链技术的极限”。瑞士信贷银行软件投资银行服务全球主管James Disney所说，就现在而言，私人股权交易的结算需要20到30天时间才能完成，然而使用区块链技术则可以缩短到数分钟完成。");
         new5.setContent("尽管很多银行都拒绝比特币这种概念，不过很多银行都正在将他们的注意力转移到区块链的使用。\n" +
                 "\n" +
@@ -312,6 +292,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new10 = new News();
         new10.setTitle("哈萨克斯坦拟发行以法币为支撑的国家加密货币");
         new10.setDate("2017-10-22");
+        new10.setAuthor("作者：Samuel Haig");
         new10.setTitleContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。");
         new10.setContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。\n" +
                 "\n" +
@@ -321,10 +302,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "阿斯塔纳（哈萨克斯坦首都）的顶尖金融监管部门已经开始采取行为，为哈萨克斯坦的金融科技生态系统打下基础。我们认为AIFC能够成为区块链运作的国际中心，发展数字资产市场是我们将来的首要任务。\n" +
                 " \n" +
-                "\n" +
                 "区块链和加密货币博览会\n" +
                 " \n" +
-                "\n" +
                 "Kelimbetov近期谈到即将到来的博览会，AIFC希望提高国际上对哈萨克斯坦金融科技以及DLT行业的认识。据当地媒体报道，这位AIFC负责人指出：\n" +
                 "\n" +
                 "我们希望博览会举办地能够成为加密山谷或加密港口，全世界都对此很感兴趣。某些国家的央行支持这一发展方向，而另一些央行已经在密切关注（加密货币）了。\n" +
@@ -332,10 +311,8 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "\n" +
                 "美国和新加坡希望平等对待加密经济活动以及普通金融活动。在瑞士尤其如此，日本也已经支持某些加密货币成为支付方式。从这一方向来看，AIFC希望深入了解当前的发展流程，但与此同时我们也会对金融稳定性以及特定金融机构的监管负责。\n" +
                 " \n" +
-                "\n" +
                 "发展金融科技\n" +
                 " \n" +
-                "\n" +
                 "Kelimbetov说，该国领导已经授权AIFC作为新兴金融技术发展的专业中心。为了实现这一目标，AIFC不久将“加入由国际高新技术中心组成的联盟，其中就包括一些正在研究国家和地区加密货币以及区块链技术方案的大型国际银行”。\n" +
                 "\n" +
                 "本月早些时候，AIFC与微软签署谅解备忘录，旨在建立该国的区块链创新中心，促进DLT初创公司的创新发展。今年7月，AIFC宣布，其与德勤和Waves将为加密货币、区块链以及金融科技企业制定宽松的监管框架。");

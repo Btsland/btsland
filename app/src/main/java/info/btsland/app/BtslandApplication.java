@@ -9,16 +9,9 @@ import java.security.Security;
  */
 
 public class BtslandApplication  extends MultiDexApplication {
-    private static BtslandApplication theApp;
-    /*
-    * 是否需要把涨跌的颜色互换
-     */
-    public static BtslandApplication getInstance() {
-        return theApp;
-    }
+
 
     public BtslandApplication() {
-        theApp = this;
     }
 
     @Override

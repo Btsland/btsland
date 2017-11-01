@@ -24,6 +24,7 @@ import info.btsland.app.service.MarketService;
  */
 
 public class MarketServiceImpl implements MarketService {
+    private String TAG="MarketServiceImpl";
     private String sr;
     @Override
     public Map<String,List<Market>> getallinformation() {
@@ -145,7 +146,6 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public List<Market> queryMarkets(String LeftCoin, String rightCoin, String date) {
-        Log.i("queryMarkets", "queryMarkets: LeftCoin:"+LeftCoin+"rightCoin:"+rightCoin);
         List<Market> markets=new ArrayList<Market>();
         Date date1=new Date();
         int max=60;
@@ -166,7 +166,6 @@ public class MarketServiceImpl implements MarketService {
             Market market=null;
             beforeTime.add(Calendar.MINUTE, +5);
             Date beforeD = beforeTime.getTime();
-            Log.i("queryMarkets", "queryMarkets: beforeD:"+beforeD);
             if(i>d){
                 newPrice=price-price2;
                 market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
@@ -183,11 +182,10 @@ public class MarketServiceImpl implements MarketService {
                 newPrice=price-price2;
                 market=new Market(beforeD,LeftCoin,rightCoin,newPrice,284.39281f,301.44213f,308.734f,50.58f);
             }
-            Log.i("queryMarkets", "queryMarkets: market:"+market.toString());
             markets.add(market);
         }
 
-        Log.i("queryMarkets", "queryMarkets: markets.size():"+markets.size());
+        Log.i(TAG, "queryMarkets: markets.size():"+markets.size());
         return markets;
     }
 

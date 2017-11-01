@@ -12,16 +12,21 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import info.btsland.app.Adapter.MarketRowAdapter;
 import info.btsland.app.R;
+import info.btsland.app.api.MarketStat;
+import info.btsland.app.api.websocket_api;
 import info.btsland.app.model.Market;
+import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
 
-public class MarketFragment extends Fragment {
+public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
+    private String TAG="MarketFragment";
     private MarketService marketService;
     private MarketSimpleKFragment simpleKFragment;
     private TextView tvMarketLeftCoin_1;
@@ -30,12 +35,63 @@ public class MarketFragment extends Fragment {
     private TextView tvMarketLeftCoin_4;
     private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
-    private Map<String, List<Market>> market;
-
+    private List<MarketTicker> cnyMarket;
+    private List<MarketTicker> btsMarket;
+    private List<MarketTicker> usdMarket;
+    private List<MarketTicker> btcMarket;
+    private List<MarketTicker> ethMarket;
+    private MarketRowAdapter cnyRowAdapter ;
+    private MarketRowAdapter btsRowAdapter ;
+    private MarketRowAdapter btcRowAdapter ;
+    private MarketRowAdapter usdRowAdapter ;
+    private MarketRowAdapter ethRowAdapter ;
+    private MarketStat marketStat;
     public MarketFragment() {
-        // Required empty public constructor
+        this.marketStat=new MarketStat();
     }
-
+    @Override
+    public void onMarketStatUpdate(MarketStat.Stat stat) {
+        if(stat.MarketTickers==null){
+            return;
+        }
+        if(stat.MarketTickers.get(0).base=="CNY"){
+            if(cnyMarket!=null){
+                cnyMarket.clear();
+            }
+            cnyMarket=stat.MarketTickers;
+            cnyRowAdapter.markets=cnyMarket;
+            cnyRowAdapter.notifyDataSetChanged();
+            return;
+        }
+        if(stat.MarketTickers.get(0).base=="BTS"){
+            if(btsMarket!=null){
+                btsMarket.clear();
+            }
+            btsMarket=stat.MarketTickers;
+            btsRowAdapter.notifyDataSetChanged();
+        }
+        if(stat.MarketTickers.get(0).base=="USD"){
+            if(usdMarket!=null){
+                usdMarket.clear();
+            }
+            usdMarket=stat.MarketTickers;
+            usdRowAdapter.notifyDataSetChanged();
+        }
+        if(stat.MarketTickers.get(0).base=="BTC"){
+            if(btcMarket!=null){
+                btcMarket.clear();
+            }
+            btcMarket=stat.MarketTickers;
+            btcRowAdapter.notifyDataSetChanged();
+        }
+        if(stat.MarketTickers.get(0).base=="ETH"){
+            if(ethMarket!=null){
+                ethMarket.clear();
+            }
+            ethMarket=stat.MarketTickers;
+            ethRowAdapter.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +104,7 @@ public class MarketFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         return view;
     }
-
+    //startGetTickerThread
     @Override
     public void onStart() {
         super.onStart();
@@ -56,6 +112,13 @@ public class MarketFragment extends Fragment {
         init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
+        websocket_api websocketApi=new websocket_api();
+        websocketApi.connect();
+//        marketStat.subscribe("CNY",MarketStat.STAT_TICKERS_BASE,this);
+//        marketStat.subscribe("BTS",MarketStat.STAT_TICKERS_BASE,this);
+//        marketStat.subscribe("BTC",MarketStat.STAT_TICKERS_BASE,this);
+//        marketStat.subscribe("USD",MarketStat.STAT_TICKERS_BASE,this);
+//        marketStat.subscribe("ETH",MarketStat.STAT_TICKERS_BASE,this);
     }
 
     @Override
@@ -85,6 +148,11 @@ public class MarketFragment extends Fragment {
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
+        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), cnyMarket);
+        btsRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), btsMarket);
+        btcRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), btcMarket);
+        usdRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), usdMarket);
+        ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ethMarket);
 
     }
 
@@ -92,7 +160,7 @@ public class MarketFragment extends Fragment {
      * 装载简易K图
      */
     private void fillInSimpleK(Market market) {
-        Log.i("fillInSimpleK", "fillInSimpleK: ");
+        Log.i(TAG, "fillInSimpleK: ");
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (simpleKFragment == null) {
             simpleKFragment = MarketSimpleKFragment.newInstance(market);
@@ -100,6 +168,8 @@ public class MarketFragment extends Fragment {
         }
         transaction.commit();
     }
+
+
 
     class LeftCoinOnClickListener implements View.OnClickListener {
         @Override
@@ -175,45 +245,26 @@ public class MarketFragment extends Fragment {
         TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_white, null));
     }
 
-    private void setMarket(View leftCoin) {
-        Log.i("setMarket", String.valueOf("lvMarketInfo: " + lvMarketInfo == null));
-//            if(lvMarketInfo!=null){
-//                lvMarketInfo.removeAllViews();
-//            }
-
-        List<Market> markets = readMarket(leftCoin);
-        MarketRowAdapter rowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), markets);
-        lvMarketInfo.setAdapter(rowAdapter);
-    }
-
-    private List<Market> readMarket(View leftCoin) {
-        marketService = new MarketServiceImpl();
-        market = marketService.getallinformation();
-        List list = null;
-        switch (leftCoin.getId()) {
+    private void setMarket(View baseView) {
+        switch (baseView.getId()) {
             case R.id.tv_market_left_coin1:
-                list = market.get("bitCNY");
-                Log.e("market", "bitCNYreadMarket: "+ list.size());
+                lvMarketInfo.setAdapter(cnyRowAdapter);
                 break;
             case R.id.tv_market_left_coin2:
-                list = market.get("BTS");
-                Log.e("market", "BTSreadMarket: "+ list.size());
+                lvMarketInfo.setAdapter(btsRowAdapter);
                 break;
             case R.id.tv_market_left_coin3:
-                list = market.get("bitUSD");
-                Log.e("market", "bitUSDreadMarket: "+ list.size());
+                lvMarketInfo.setAdapter(usdRowAdapter);
                 break;
             case R.id.tv_market_left_coin4:
-                list = market.get("BTC");
-                Log.e("market", "BTCreadMarket: "+ list.size());
+                lvMarketInfo.setAdapter(btcRowAdapter);
                 break;
             case R.id.tv_market_left_coin5:
-                list = market.get("ETH");
-                Log.e("market", "ETHreadMarket: "+ list.size());
+                lvMarketInfo.setAdapter(ethRowAdapter);
                 break;
         }
-        return list;
     }
+
 //        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
 //            for (int i = 0; i < markets.size(); i++) {
 //                market=markets.get(i);

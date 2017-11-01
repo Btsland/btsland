@@ -15,6 +15,7 @@ public class account_object {
     public String name;
     public authority owner;
     public authority active;
+    //public types.account_options options;
     public String statistics;
     public List<String> whitelisting_accounts;
     public List<String> whitelisted_accounts;

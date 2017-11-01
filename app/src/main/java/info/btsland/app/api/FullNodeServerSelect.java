@@ -33,13 +33,13 @@ public class FullNodeServerSelect {
     );
 
     public String getServer() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BtslandApplication.getInstance());
-        String strServer = sharedPreferences.getString("full_node_api_server", "autoselect");
-        if (strServer.equals("autoselect")) {
+//        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(BtslandApplication.getInstance());
+//        String strServer = sharedPreferences.getString("full_node_api_server", "autoselect");
+        //if (strServer.equals("autoselect")) {
             return getAutoSelectServer();
-        } else {
-            return strServer;
-        }
+        //} else {
+          //  return strServer;
+        //}
     }
 
     private String getAutoSelectServer() {
@@ -52,14 +52,14 @@ public class FullNodeServerSelect {
             Request request = new Request.Builder().url(strServer).build();
             OkHttpClient okHttpClient = new OkHttpClient();
             WebSocket webSocket = okHttpClient.newWebSocket(request, new WebSocketListener() {
+
                 @Override
                 public void onFailure(WebSocket webSocket, Throwable t, Response response) {
                     super.onFailure(webSocket, t, response);
                     synchronized (objectSync) {
                         listSelectedServer.add(""); // 失败，则填空
-
                         if (listSelectedServer.size() == nTotalCount) {
-                            objectSync.notify();;
+                            objectSync.notify();
                         }
                     }
                 }
@@ -67,9 +67,12 @@ public class FullNodeServerSelect {
                 @Override
                 public void onOpen(WebSocket webSocket, Response response) {
                     super.onOpen(webSocket, response);
-                    synchronized (objectSync) {
-                        listSelectedServer.add(strServer);
-                        objectSync.notify();
+                    boolean res = webSocket.send("{\"id\":1,\"method\":\"call\",\"params\":[1,\"login\",[\"\",\"\"]]}");
+                    if (res) {
+                        synchronized (objectSync) {
+                            listSelectedServer.add(strServer);
+                            objectSync.notify();
+                        }
                     }
                 }
             });

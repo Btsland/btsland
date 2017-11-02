@@ -25,7 +25,10 @@
         android:background="@color/color_frenchGrey"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fra_user_head" />
+        app:layout_constraintTop_toBottomOf="@+id/fra_user_head"
+        />
+
+
     <ImageView
         android:id="@+id/iv_user_pho"
         android:layout_width="100dp"
@@ -35,7 +38,10 @@
         android:layout_marginLeft="13dp"
         app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
         app:layout_constraintTop_toTopOf="@+id/v_user_back"
-        android:layout_marginStart="13dp" />
+        android:layout_marginStart="13dp"
+        />
+
+
     <TextView
         android:id="@+id/tv_user_name"
         android:layout_width="0dp"
@@ -50,7 +56,13 @@
         app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
         app:layout_constraintBottom_toTopOf="@+id/tv_user_anotherName"
         app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintRight_toRightOf="@+id/v_user_back"/>
+        app:layout_constraintRight_toRightOf="@+id/v_user_back"
+
+        />
+
+
+
+
     <TextView
         android:id="@+id/tv_user_anotherName"
         android:layout_width="120dp"
@@ -61,7 +73,11 @@
         android:layout_marginLeft="13dp"
         android:textColor="@color/color_white"
         app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintBottom_toBottomOf="@+id/v_user_back"/>
+        app:layout_constraintBottom_toBottomOf="@+id/v_user_back"
+        />
+
+
+
     <TextView
         android:id="@+id/tv_user_info"
         android:layout_width="0dp"
@@ -78,7 +94,11 @@
         app:layout_constraintTop_toBottomOf="@+id/v_user_back"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="5dp" />
+        android:layout_marginTop="5dp"
+        />
+
+
+
 
     <TextView
         android:id="@+id/tv_user_whiteList"
@@ -95,9 +115,13 @@
         android:textColor="@color/color_white"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_info"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        />
 
-    <TextView
+
+
+
+<!--    <TextView
         android:id="@+id/tv_user_power"
         android:layout_width="0dp"
         android:layout_height="40dp"
@@ -112,7 +136,9 @@
         android:textColor="@color/color_white"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_whiteList"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent" />-->
+
+
 
     <TextView
         android:id="@+id/tv_user_recent"
@@ -127,9 +153,12 @@
         android:drawableLeft="@drawable/image_user_activation"
         android:drawablePadding="10dp"
         android:textColor="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@+id/tv_user_power"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_whiteList"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
 
     <TextView
         android:id="@+id/tv_user_entrust"
@@ -146,7 +175,11 @@
         android:textColor="@color/color_white"
         app:layout_constraintTop_toBottomOf="@+id/tv_user_recent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        />
+
+
+
     <TextView
         android:id="@+id/tv_user_set"
         android:layout_width="wrap_content"
@@ -158,9 +191,14 @@
         android:background="@drawable/tv_row"
         android:textColor="@color/color_white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+
+
 
 </android.support.constraint.ConstraintLayout>
+
 
 
 

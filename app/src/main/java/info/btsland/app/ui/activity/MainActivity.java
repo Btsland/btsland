@@ -1,6 +1,5 @@
 package info.btsland.app.ui.activity;
 
-import android.graphics.drawable.Drawable;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
@@ -37,8 +35,6 @@ public class MainActivity extends BaseActivity {
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
     private TextView tvHeadLeft;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +65,6 @@ public class MainActivity extends BaseActivity {
         tvNavPurse.setOnClickListener(new NavOnClickListener());
 
         touchColor(tvNavMarket, tvNavHome, tvNavPurse);//选中行情控件
-        touchImage(tvNavMarket);
         showFragment(tvNavMarket);//显示行情页面
     }
 
@@ -93,22 +88,13 @@ public class MainActivity extends BaseActivity {
         //初始化fra_main_body
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (marketFragment == null) {
-            marketFragment =new MarketFragment();
+            marketFragment = new MarketFragment();
             transaction.add(R.id.fra_main_body, marketFragment);
         }
+        ;
         transaction.commit();
     }
 
-    @Override
-    protected void onStart() {
-        if(BtslandApplication.isWel==false){
-            Intent intent=new Intent(this,WelcomeActivity.class);
-            startActivity(intent);
-            BtslandApplication.isWel=true;
-        }
-
-        super.onStart();
-    }
 
     /**
      * 根据底部导航栏选定的控件进行切换fra
@@ -173,62 +159,20 @@ public class MainActivity extends BaseActivity {
             switch (view.getId()) {
                 case R.id.tv_nav_home:
                     touchColor(tvNavHome, tvNavMarket, tvNavPurse);//控件特效
-                    touchImage(tvNavHome);
                     showFragment(tvNavHome);
                     break;
                 case R.id.tv_nav_market:
                     touchColor(tvNavMarket, tvNavHome, tvNavPurse);//控件特效
-                    touchImage(tvNavMarket);
                     showFragment(tvNavMarket);
                     break;
                 case R.id.tv_nav_purse:
                     touchColor(tvNavPurse, tvNavHome, tvNavMarket);//控件特效
-                    touchImage(tvNavPurse);
                     showFragment(tvNavPurse);
                     break;
             }
         }
 
 
-    }
-
-    /**
-     * 设置图片点击特效
-     * @param textView
-     */
-    private void touchImage(TextView textView) {
-        Drawable homeTouch = getResources().getDrawable(R.drawable.image_nav_home_touch,null);
-        Drawable marketTouch = getResources().getDrawable(R.drawable.image_nav_market_touch,null);
-        Drawable purseTouch = getResources().getDrawable(R.drawable.image_nav_purse_touch,null);
-        Drawable home = getResources().getDrawable(R.drawable.image_nav_home,null);
-        Drawable market = getResources().getDrawable(R.drawable.image_nav_market,null);
-        Drawable purse = getResources().getDrawable(R.drawable.image_nav_purse,null);
-
-        //显示图片
-        homeTouch.setBounds(0,0,homeTouch.getMinimumWidth(),homeTouch.getMinimumHeight());
-        marketTouch.setBounds(0,0,marketTouch.getMinimumWidth(),marketTouch.getMinimumHeight());
-        purseTouch.setBounds(0,0,purseTouch.getMinimumWidth(),purseTouch.getMinimumHeight());
-        home.setBounds(0,0,home.getMinimumWidth(),home.getMinimumHeight());
-        market.setBounds(0,0,market.getMinimumWidth(),market.getMinimumHeight());
-        purse.setBounds(0,0,purse.getMinimumWidth(),purse.getMinimumHeight());
-
-        switch (textView.getId()) {
-            case R.id.tv_nav_home:
-                tvNavHome.setCompoundDrawables(null,homeTouch,null,null);
-                tvNavMarket.setCompoundDrawables(null,market,null,null);
-                tvNavPurse.setCompoundDrawables(null,purse,null,null);
-                break;
-            case R.id.tv_nav_market:
-                tvNavHome.setCompoundDrawables(null,home,null,null);
-                tvNavMarket.setCompoundDrawables(null,marketTouch,null,null);
-                tvNavPurse.setCompoundDrawables(null,purse,null,null);
-                break;
-            case R.id.tv_nav_purse:
-                tvNavHome.setCompoundDrawables(null,home,null,null);
-                tvNavMarket.setCompoundDrawables(null,market,null,null);
-                tvNavPurse.setCompoundDrawables(null,purseTouch,null,null);
-                break;
-        }
     }
 
     /**
@@ -242,7 +186,7 @@ public class MainActivity extends BaseActivity {
         facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
         textView1.setBackground(getDrawable(R.drawable.tv_border));
         textView2.setBackground(getDrawable(R.drawable.tv_border));
-        facingTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_dullRed1, null));
+        facingTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow_red, null));
         textView1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
         textView2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
     }

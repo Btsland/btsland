@@ -70,11 +70,9 @@ public class MarketRowAdapter extends BaseAdapter {
         String fluctuation= String.valueOf(dfFluc.format(market.percent_change))+"%";
         Log.e("getView", "fluctuation: "+ fluctuation);
         tvFluctuation.setText(fluctuation);
-        DecimalFormat df = new DecimalFormat();
-        df.applyPattern("0.0000000");
-        tvNewPrice.setText(df.format(market.latest));
-        tvBestAskNum.setText(df.format(market.lowest_ask));
-        tvBestBidNum.setText(df.format(market.lowest_ask));
+        tvNewPrice.setText(market.latest.substring(0,8));
+        tvBestAskNum.setText(market.lowest_ask.substring(0,8));
+        tvBestBidNum.setText(market.lowest_ask.substring(0,8));
         if (market.percent_change > 0) {
             ;
             tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));

@@ -28,17 +28,19 @@ import info.btsland.app.model.OrderBook;
 
 public class MarketStat {
     private static final String TAG = "MarketStat";
-    private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
+    public static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
     
     public static final int STAT_MARKET_HISTORY = 0x01;
     public static final int STAT_MARKET_TICKER = 0x02;
     public static final int STAT_MARKET_ORDER_BOOK = 0x04;
     public static final int STAT_MARKET_OPEN_ORDER = 0x08;
+    public static final int STAT_COUNECT=0x12;
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
-    private websocket_api mWebsocketApi=new websocket_api();
+    private Websocket_api mWebsocketApi=new Websocket_api();
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
+    public HashMap<String, Connect> connectHashMap = new HashMap<>();
     private static boolean isDeserializerRegistered = false;
     
     private String[] quotes;
@@ -49,13 +51,8 @@ public class MarketStat {
 //            global_config_object.getInstance().getGsonBuilder().registerTypeAdapter(
 //                    full_account_object.class, new full_account_object.deserializer());
 //        }
-       int i= initialize();
-        Log.i(TAG, "MarketStat: i:"+i);
 
-    }
-    public int initialize() {
-        int nRet = mWebsocketApi.connect();
-        return nRet;
+
     }
     public void subscribe(String[] base,String[] quotes,int stats,
                           OnMarketStatUpdateListener l) {
@@ -67,6 +64,12 @@ public class MarketStat {
             subscriptionHashMap.put(makeMarketName(base[i], ""), subscription);
         }
 
+
+    }
+    public void connect(int stats,
+                          OnMarketStatUpdateListener l) {
+        Connect connect = new Connect(stats, l);
+        connectHashMap.put("connect", connect);
 
     }
     public void subscribe(String base, String quote, int stats, long intervalMillis,
@@ -121,6 +124,18 @@ public class MarketStat {
         public double close;
         public double volume;
         public Date date;
+
+        @Override
+        public String toString() {
+            return "HistoryPrice{" +
+                    "high=" + high +
+                    ", low=" + low +
+                    ", open=" + open +
+                    ", close=" + close +
+                    ", volume=" + volume +
+                    ", date=" + date +
+                    '}';
+        }
     }
 
     public static class Stat {
@@ -131,6 +146,7 @@ public class MarketStat {
         public List<OpenOrder> openOrders;
         public List<MarketTicker> MarketTickers;
         public MarketTicker MarketTicker;
+        public int nRet;
 
         @Override
         public String toString() {
@@ -147,6 +163,37 @@ public class MarketStat {
 
     public interface OnMarketStatUpdateListener {
         void onMarketStatUpdate(Stat stat);
+    }
+
+    private class Connect implements Runnable {
+        private int stats;
+        private OnMarketStatUpdateListener listener;
+        private HandlerThread statThread;
+        private Handler statHandler;
+        private Connect(int stats, OnMarketStatUpdateListener l) {
+            this.stats = stats;
+            this.listener = l;
+            this.statThread = new HandlerThread("connect");
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+
+        }
+        public void unConnect(String name) {
+            Connect connect = connectHashMap.get(name);
+            if (connect != null) {
+                subscriptionHashMap.remove(connect);
+            }
+        }
+        @Override
+        public void run() {
+            //登录
+            final Stat stat = new Stat();
+            if ((stats & STAT_COUNECT) != 0) {
+                stat.nRet= mWebsocketApi.connect();
+                listener.onMarketStatUpdate(stat);
+            }
+        }
     }
 
     private class Subscription implements Runnable {
@@ -184,7 +231,6 @@ public class MarketStat {
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
-
         }
 
         private void cancel() {
@@ -207,12 +253,12 @@ public class MarketStat {
             }
            // if (getAssets()) {
             if (true) {
-                final Stat marketStat = new Stat();
+                final Stat stat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
                         for(int i=0;i<quotes.length;i++){
-                            marketStat.MarketTicker = mWebsocketApi.get_ticker_base(base,quotes[i]);
-                            listener.onMarketStatUpdate(marketStat);
+                            stat.MarketTicker = mWebsocketApi.get_ticker_base(base,quotes[i]);
+                            listener.onMarketStatUpdate(stat);
                         }
                         return;
                     } catch (NetworkStatusException e) {
@@ -220,11 +266,11 @@ public class MarketStat {
                     }
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
-                    marketStat.prices = getMarketHistory();//1
+                    stat.prices = getMarketHistory(base,quote,(int)bucketSecs);//1
                 }
                 if ((stats & STAT_MARKET_TICKER) != 0) {
                     try {
-                        marketStat.ticker = mWebsocketApi.get_ticker(base, quote);//2
+                        stat.ticker = mWebsocketApi.get_ticker(base, quote);//2
                         //Log.e(TAG, "run: "+"base"+base+"quote"+ quote);
                         Date start = new Date(System.currentTimeMillis());
                         Date end = new Date(
@@ -236,21 +282,21 @@ public class MarketStat {
                             trades = mWebsocketApi.get_trade_history(base, quote, start, end, 1);
                         }
                         if (trades != null && trades.size() > 0) {
-                            marketStat.latestTradeDate = trades.get(0).date;
+                            stat.latestTradeDate = trades.get(0).date;
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
                 if ((stats & STAT_MARKET_ORDER_BOOK) != 0) {
-                    marketStat.orderBook = getOrderBook();
+                    stat.orderBook = getOrderBook();
                 }
                 if (isCancelled.get()) {
                     return;
                 }
 
 
-                listener.onMarketStatUpdate(marketStat);
+                listener.onMarketStatUpdate(stat);
             } else if (!isCancelled.get()) {
 
             }
@@ -270,7 +316,7 @@ public class MarketStat {
             return false;
         }
 
-        private HistoryPrice[] getMarketHistory() {
+        private HistoryPrice[] getMarketHistory(String base,String quote,int bucketSecs) {
             // 服务器每次最多返回200个bucket对象
             final int maxBucketCount = 200;
             Date startDate1 = new Date(
@@ -278,8 +324,8 @@ public class MarketStat {
             Date startDate2 = new Date(
                     System.currentTimeMillis() - bucketSecs * maxBucketCount * 2000);
             Date endDate = new Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS);
-            List<bucket_object> buckets1 = getMarketHistory(startDate2, startDate1);
-            List<bucket_object> buckets2 = getMarketHistory(startDate1, endDate);
+            List<bucket_object> buckets1 = getMarketHistory(base,quote,bucketSecs,startDate2, startDate1);
+            List<bucket_object> buckets2 = getMarketHistory(base,quote,bucketSecs,startDate1, endDate);
             int numBuckets = (buckets1 != null ? buckets1.size() : 0) +
                     (buckets2 != null ? buckets2.size() : 0);
             HistoryPrice[] prices = new HistoryPrice[numBuckets];
@@ -299,14 +345,20 @@ public class MarketStat {
             return prices;
         }
 
-        private List<bucket_object> getMarketHistory(Date start, Date end) {
+        private List<bucket_object> getMarketHistory(String base,String quote,int bucketSecs, Date start, Date end) {
             try {
+//                asset_object base_object = mWebsocketApi.lookup_asset_symbols(base);
+//                asset_object quote_object = mWebsocketApi.lookup_asset_symbols(quote);
                 return mWebsocketApi.get_market_history(
-                        baseAsset.id, quoteAsset.id, (int) bucketSecs, start, end);
+                        base, quote,bucketSecs, start, end);
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+                return null;
             } catch (Exception e) {
                 return null;
             }
         }
+
 
         private HistoryPrice priceFromBucket(bucket_object bucket) {
             HistoryPrice price = new HistoryPrice();

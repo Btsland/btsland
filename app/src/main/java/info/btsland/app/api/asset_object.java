@@ -15,17 +15,18 @@ public class asset_object {
     //static const uint8_t space_id = protocol_ids;
     //static const uint8_t type_id  = asset_object_type;
     /// Ticker symbol for this asset, i.e. "USD"
-    public object_id<asset_object> id;
+    public String id;
     public String symbol;
     /// Maximum number of digits after the decimal point (must be <= 12)
     public int precision = 0;
     /// ID of the account which issued this asset.
-    object_id<account_object> issuer;
+    String issuer;
 
     public asset_options options;
 
     /// Current supply, fee pool, and collected fees are stored in a separate object as they change frequently.
-    object_id<asset_dynamic_data_object>  dynamic_asset_data_id;
+    String  dynamic_asset_data_id;
+    public String bitasset_data_id;
 
     public boolean is_base_asset_object() {
         asset base = options.core_exchange_rate.base;
@@ -71,35 +72,35 @@ public class asset_object {
         return lQuoteAmount;
     }
 
-    public asset amount_from_string(String strAmount) {
-        //strAmount.matches();
-        // // TODO: 07/09/2017 需要正则表达处理
-
-
-        long lCount = 0;
-        long lDecimal = 0;
-        Long scaled_precision = get_scaled_precision();
-
-        int nIndex = strAmount.indexOf('.');
-        if (nIndex == -1) {
-            lCount = Long.valueOf(strAmount);
-        } else {
-            lCount = Long.valueOf(strAmount.substring(0, nIndex));
-
-            int nDecMaxLen = scaled_precision.toString().substring(1).length();
-
-            String strDecimal = strAmount.substring(nIndex + 1);
-            for (int i = strDecimal.length(); i < nDecMaxLen; ++i) {
-                strDecimal += "0";
-            }
-
-            lDecimal = Long.valueOf(strDecimal);
-        }
-
-        asset assetObject = new asset(lCount * scaled_precision + lDecimal, id);
-
-        return assetObject;
-    }
+//    public asset amount_from_string(String strAmount) {
+//        //strAmount.matches();
+//        // // TODO: 07/09/2017 需要正则表达处理
+//
+//
+//        long lCount = 0;
+//        long lDecimal = 0;
+//        Long scaled_precision = get_scaled_precision();
+//
+//        int nIndex = strAmount.indexOf('.');
+//        if (nIndex == -1) {
+//            lCount = Long.valueOf(strAmount);
+//        } else {
+//            lCount = Long.valueOf(strAmount.substring(0, nIndex));
+//
+//            int nDecMaxLen = scaled_precision.toString().substring(1).length();
+//
+//            String strDecimal = strAmount.substring(nIndex + 1);
+//            for (int i = strDecimal.length(); i < nDecMaxLen; ++i) {
+//                strDecimal += "0";
+//            }
+//
+//            lDecimal = Long.valueOf(strDecimal);
+//        }
+//
+//        asset assetObject = new asset(lCount * scaled_precision + lDecimal, id);
+//
+//        return assetObject;
+//    }
 
     public long get_scaled_precision() {
         long scaled_precision = 1;

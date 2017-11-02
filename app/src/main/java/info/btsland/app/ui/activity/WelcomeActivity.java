@@ -6,18 +6,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.Toast;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
-import info.btsland.app.ui.fragment.MarketFragment;
+import info.btsland.app.api.Websocket_api;
+import info.btsland.app.util.InternetUtil;
 
-public class WelcomeActivity extends AppCompatActivity {
-
+public class WelcomeActivity extends AppCompatActivity implements MarketStat.OnMarketStatUpdateListener {
+    private Thread thread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,25 +30,62 @@ public class WelcomeActivity extends AppCompatActivity {
 //        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN , WindowManager.LayoutParams. FLAG_FULLSCREEN);
         setContentView(R.layout.activity_welcome);
         //scaleImage(this,findViewById(android.R.id.content), R.drawable.welcome);
-
-        WelcomeThread w = new WelcomeThread();
-        new Thread(w).start();
     }
+    class waitThread extends Thread{
+        private WelcomeActivity activity;
+        public waitThread( WelcomeActivity activity) {
+            this.activity=activity;
+        }
 
-    class WelcomeThread implements Runnable {
         @Override
         public void run() {
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            MarketStat marketStat = BtslandApplication.getMarketStat();
+            if (BtslandApplication.nRet == Websocket_api.WEBSOCKET_CONNECT_INVALID) {
+                marketStat.connect(MarketStat.STAT_COUNECT, activity);
             }
-            BtslandApplication.isWel=true;
-            Intent intent=new Intent(WelcomeActivity.this,MainActivity.class);
-            startActivity(intent);
-            finish();
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if(InternetUtil.isConnected(this)){
+            thread = new waitThread(this);
+            thread.start();
+        }else {
+            Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
+//            try {
+//                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+            onMarketStatUpdate(null);
+        }
+
+    }
+
+    @Override
+    public void onMarketStatUpdate(MarketStat.Stat stat) {
+        if(stat!=null){
+            BtslandApplication.nRet=stat.nRet;
+        }else {
+            BtslandApplication.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
+        }
+        Message message=Message.obtain();
+        message.obj="finish";
+        mHandler.sendMessage(message);
+    }
+
+    private Handler mHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.obj.equals("finish")){
+                Intent intent=new Intent(WelcomeActivity.this,MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        }
+    };
 
 
     public static void scaleImage(final AppCompatActivity activity, final View view, int drawableResId) {

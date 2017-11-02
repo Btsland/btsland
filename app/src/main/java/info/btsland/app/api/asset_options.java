@@ -1,6 +1,7 @@
 package info.btsland.app.api;
 
 import java.util.List;
+import java.util.Set;
 
 import static info.btsland.app.api.config.GRAPHENE_MAX_SHARE_SUPPLY;
 import static info.btsland.app.api.types.UIA_ASSET_ISSUER_PERMISSION_MASK;
@@ -47,6 +48,7 @@ public class asset_options {
      * size of description.
      */
     String description;
+    Set<types.void_t> extensions;
     //extensions_type extensions;
 
     /// Perform internal consistency checks.

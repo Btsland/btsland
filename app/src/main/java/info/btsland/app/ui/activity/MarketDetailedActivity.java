@@ -16,6 +16,7 @@ import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.Adapter.ImagePageAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
+import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
 import info.btsland.app.ui.fragment.DetailedHaveInHandFragment;
 import info.btsland.app.ui.fragment.DetailedKFragment;
@@ -23,13 +24,13 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 public class MarketDetailedActivity extends AppCompatActivity {
     private HeadFragment headFragment;
-    private Market market;
+    private MarketTicker market;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
-        market= (Market) getIntent().getSerializableExtra("market");
+        market= (MarketTicker) getIntent().getSerializableExtra("market");
         fillInHead();
         init();
     }

@@ -233,7 +233,7 @@ public class types {
 //        public private_key getPrivateKey() {
 //            return new private_key(key_data);
 //        }
-    }
+//    }
 
 //    public static class vote_id_type {
 //        int content;
@@ -298,9 +298,9 @@ public class types {
 //        }
 //    }
 
-//    class void_t {
-//
-//    }
+    public static class void_t {
+
+    }
 //    public static class TestClass {
 //        public String id;
 //    }
@@ -308,4 +308,4 @@ public class types {
 //    public static class TestClass2 {
 //        public object_id<account_object> id;
 //    }
-//}
+}

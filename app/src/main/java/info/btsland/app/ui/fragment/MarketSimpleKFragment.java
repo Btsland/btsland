@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.util.TimeUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +29,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
@@ -37,8 +41,10 @@ import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 
 
-public class MarketSimpleKFragment extends Fragment {
-
+public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
+    private String TAG="MarketSimpleKFragment";
+    private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
+    private MarketStat marketStat;
     private TextView deal;
     private TextView high;
     private TextView low;
@@ -46,16 +52,17 @@ public class MarketSimpleKFragment extends Fragment {
     private LineChart simpleK;
 
     private String leftCoin = "BTS";
-    private String rightCoin = "btsCNY";
+    private String rightCoin = "CNY";
 
-
+    private MarketStat.HistoryPrice[] prices;
     private String highStr;
     private String lowStr;
     private String countStr;
 
-    private Market freshMarket;
+    private MarketTicker freshMarket;
 
     public MarketSimpleKFragment() {
+        this.marketStat=BtslandApplication.getMarketStat();
         // Required empty public constructor
     }
 
@@ -75,46 +82,16 @@ public class MarketSimpleKFragment extends Fragment {
         simpleK = view.findViewById(R.id.lc_market_simple_K);
         deal.setText(leftCoin + ":" + rightCoin);
         startReceiveMarkets(null);
-//        simpleK.setDescription("BTC:CNY");
-//        simpleK.setDescriptionTextSize(DensityUtil.dip2px(getActivity(),20f));
-//        simpleK.setDrawGridBackground(false);
-//        XAxis xAxis=simpleK.getXAxis();
-//        xAxis.setDrawAxisLine(true);
-//        xAxis.setSpaceBetweenLabels(-4);
-//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-//        List<String> values=new ArrayList<String>();
-//        values.add("11：00");
-//        values.add("13：00");
-//        values.add("15：00");
-//        values.add("17：00");
-//        xAxis.setValueFormatter(new MyXAxisValueFormatter(0f,59f,values));
-//        ArrayList<Entry> valsComp1 = new ArrayList<Entry>();
-//        for(int i=0;i<14;i++){
-//            int max=100;
-//            int min=0;
-//            Random random = new Random();
-//            int s= random.nextInt(max)%(max-min+1) + min;
-//            Entry c1e = new Entry(s, i*5);
-//            valsComp1.add(c1e);
-//        }
-//
-//        LineDataSet setComp1 = new LineDataSet(valsComp1, "最新成交价");
-//        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-//        setComp1.setColor(Color.RED);
-//        setComp1.setCircleSize(0f);//设置焦点圆心的大小
-//        setComp1.setLineWidth(1f);
-//        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-//        dataSets.add(setComp1);
-//
-//        ArrayList<String> xVals = new ArrayList<String>();
-//        for (int i=0;i<72;i++){
-//            xVals.add(i+"");
-//        }
-//        LineData data = new LineData(xVals,dataSets);
-//        data.setDrawValues(false);
-//        simpleK.setData(data);
-//        //simpleK.setVisibleXRangeMaximum(30f);
-//        simpleK.invalidate(); // refresh
+    }
+
+    @Override
+    public void onMarketStatUpdate(MarketStat.Stat stat) {
+        if(stat.prices!=null){
+            prices=stat.prices;
+            for(int i=0;i<prices.length;i++){
+                Log.e(TAG, "onMarketStatUpdate: prices:"+prices[i].toString() );
+            }
+        }
 
     }
 
@@ -176,15 +153,21 @@ public class MarketSimpleKFragment extends Fragment {
                 getActivity().startActivity(intent);
                 return;
             }
+            marketStat.subscribe(
+                    market.base,
+                    market.quote,
+                    MarketStat.DEFAULT_BUCKET_SECS,
+                    MarketStat.STAT_MARKET_HISTORY,
+                    DEFAULT_BUCKET_SECS,this);
+//            ReceiveMarkets receiveMarkets = new ReceiveMarkets(market);
+//            receiveMarkets.start();
         }
-        ReceiveMarkets receiveMarkets = new ReceiveMarkets(market);
-        receiveMarkets.start();
+
     }
 
     public class ReceiveMarkets extends Thread {
         private String left;
         private String right;
-
         public ReceiveMarkets(MarketTicker market) {
             Log.i("ReceiveMarkets", "ReceiveMarkets: ");
             if (market != null) {

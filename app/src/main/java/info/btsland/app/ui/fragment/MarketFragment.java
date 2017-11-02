@@ -15,19 +15,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import info.btsland.app.Adapter.MarketRowAdapter;
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
-import info.btsland.app.api.websocket_api;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
-import info.btsland.app.ui.activity.WelcomeActivity;
+import info.btsland.app.util.InternetUtil;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private String TAG="MarketFragment";
@@ -55,15 +52,17 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     public static int NOTIFY_USD=3;
     public static int NOTIFY_BTC=4;
     public static int NOTIFY_ETH=5;
-    private String[] base;
-    private String[] quotes;
+    private String[] bases;
     private String[] quotes1;
+    private String[] quotes2;
     public MarketFragment() {
-        this.marketStat=new MarketStat();
-        base= new String[]{"CNY", "BTS", "USD", "BTC"};
-        quotes= new String[]{"BTC", "ETH", "BTS", "LTC", "OMG", "STEEM", "VEN", "HPB", "OCT", "YOYOW", "DOGE", "HASH"};
-        quotes1= new String[]{"BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
-        marketStat.subscribe(base,quotes1,MarketStat.STAT_TICKERS_BASE,this);
+        this.marketStat= BtslandApplication.getMarketStat();
+        bases=BtslandApplication.bases;
+        quotes1=BtslandApplication.quotes1;
+        quotes2=BtslandApplication.quotes2;
+        if(InternetUtil.isConnected(BtslandApplication.getInstance())){
+            marketStat.subscribe(bases,quotes2,MarketStat.STAT_TICKERS_BASE,this);
+        }
     }
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {

@@ -11,7 +11,7 @@ public class price {
         quote = assetQuote;
     }
 
-    public static price unit_price(object_id<asset_object> assetObjectobjectId) {
+    public static price unit_price(String assetObjectobjectId) {
         return new price(new asset(1, assetObjectobjectId), new asset(1, assetObjectobjectId));
     }
 }

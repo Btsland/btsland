@@ -6,9 +6,9 @@ import java.io.Serializable;
 public class MarketTicker implements Serializable {
     public String base;
     public String quote;
-    public double latest;
-    public double lowest_ask;
-    public double highest_bid;
+    public String latest;
+    public String lowest_ask;
+    public String highest_bid;
     public double percent_change;
     public double base_volume;
     public double quote_volume;

@@ -33,27 +33,25 @@ import okio.ByteString;
 
 import static info.btsland.app.api.ErrorCode.*;
 
-public class websocket_api extends WebSocketListener {
+public class Websocket_api extends WebSocketListener {
+    public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
     private String TAG="websocket_api";
-    private int _nDatabaseId = -1;
-    private int _nHistoryId = -1;
-    private int _nBroadcastId = -1;
 
     private String strServer="wss://bitshares.openledger.info/ws";
     private OkHttpClient mOkHttpClient;
     private WebSocket mWebsocket;
 
     private int mnConnectStatus = WEBSOCKET_CONNECT_INVALID;
-    private static int WEBSOCKET_CONNECT_INVALID = -1;
-    private static int WEBSOCKET_CONNECT_SUCCESS = 0;
-    private static int WEBSOCKET_ALL_READY = 0;
+    public static int WEBSOCKET_CONNECT_INVALID = -1;
+    public static int WEBSOCKET_CONNECT_SUCCESS = 0;
+    public static int WEBSOCKET_ALL_READY = 0;
     private static int WEBSOCKET_CONNECT_FAIL = 1;
     private HashMap<Integer, IReplyObjectProcess> mHashMapIdToProcess = new HashMap<>();
 
     private AtomicInteger mnCallId = new AtomicInteger(1);
 
 
-    public websocket_api() {
+    public Websocket_api() {
     }
 
 
@@ -193,7 +191,7 @@ public class websocket_api extends WebSocketListener {
         synchronized (mWebsocket) {
             if (mnConnectStatus == WEBSOCKET_CONNECT_INVALID) {
                 try {
-                    mWebsocket.wait(10000);
+                    mWebsocket.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -211,12 +209,12 @@ public class websocket_api extends WebSocketListener {
         try {
             bLogin = login("","");
             if (bLogin == true) {
-                _nDatabaseId = get_websocket_bitshares_api_id("database");
-                _nHistoryId = get_websocket_bitshares_api_id("history");
-                _nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
-                Log.i(TAG, "connect: _nDatabaseId:"+_nDatabaseId);
-                Log.i(TAG, "connect: _nHistoryId:"+_nHistoryId);
-                Log.i(TAG, "connect: _nBroadcastId:"+_nBroadcastId);
+                BtslandApplication._nDatabaseId = get_websocket_bitshares_api_id("database");
+                BtslandApplication._nHistoryId = get_websocket_bitshares_api_id("history");
+                BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
+                Log.i(TAG, "connect: _nDatabaseId:"+BtslandApplication._nDatabaseId);
+                Log.i(TAG, "connect: _nHistoryId:"+BtslandApplication._nHistoryId);
+                Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
             } else {
                 nRet = -9;
             }
@@ -230,7 +228,7 @@ public class websocket_api extends WebSocketListener {
             mWebsocket = null;
             mnConnectStatus = WEBSOCKET_CONNECT_INVALID;
         } else {
-            mnConnectStatus = WEBSOCKET_ALL_READY;
+            mnConnectStatus = WEBSOCKET_CONNECT_SUCCESS;
         }
 
         return nRet;
@@ -259,7 +257,7 @@ public class websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nDatabaseId);
+        callObject.params.add(BtslandApplication._nDatabaseId);
         callObject.params.add("lookup_asset_symbols");
 
         List<Object> listAssetsParam = new ArrayList<>();
@@ -289,8 +287,8 @@ public class websocket_api extends WebSocketListener {
         return marketTicker;
 
     }
-    public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
-                                                   object_id<asset_object> assetObjectId2,
+    public List<bucket_object>  get_market_history(String assetObjectId1,
+                                                   String assetObjectId2,
                                                    int nBucket,
                                                    Date dateStart,
                                                    Date dateEnd) throws NetworkStatusException {
@@ -299,7 +297,7 @@ public class websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nHistoryId);
+        callObject.params.add(BtslandApplication._nHistoryId);
         callObject.params.add("get_market_history");
 
         List<Object> listParams = new ArrayList<>();
@@ -316,15 +314,15 @@ public class websocket_api extends WebSocketListener {
         return replyObject.result;
 
     }
-    public List<limit_order_object> get_limit_orders(object_id<asset_object> base,
-                                                     object_id<asset_object> quote,
+    public List<limit_order_object> get_limit_orders(String base,
+                                                     String quote,
                                                      int limit) throws NetworkStatusException {
         Log.i(TAG, "get_limit_orders: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nDatabaseId);
+        callObject.params.add(BtslandApplication._nDatabaseId);
         callObject.params.add("get_limit_orders");
 
         List<Object> listParams = new ArrayList<>();
@@ -346,7 +344,7 @@ public class websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nDatabaseId);
+        callObject.params.add(BtslandApplication._nDatabaseId);
         callObject.params.add("get_trade_history");
 
         List<Object> listParams = new ArrayList<>();
@@ -372,7 +370,7 @@ public class websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nDatabaseId);
+        callObject.params.add(BtslandApplication._nDatabaseId);
         callObject.params.add("get_ticker");
 
         List<Object> listParams = new ArrayList<>();
@@ -392,10 +390,10 @@ public class websocket_api extends WebSocketListener {
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
-            int nRet = connect();
-            if (nRet == -1) {
-                throw new NetworkStatusException("It doesn't connect to the server.");
-            }
+
+
+
+
         }
 
         return sendForReplyImpl(callObject, replyObjectProcess);

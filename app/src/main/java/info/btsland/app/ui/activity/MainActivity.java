@@ -99,17 +99,6 @@ public class MainActivity extends BaseActivity {
         transaction.commit();
     }
 
-    @Override
-    protected void onStart() {
-        if(BtslandApplication.isWel==false){
-            Intent intent=new Intent(this,WelcomeActivity.class);
-            startActivity(intent);
-            BtslandApplication.isWel=true;
-        }
-
-        super.onStart();
-    }
-
     /**
      * 根据底部导航栏选定的控件进行切换fra
      *

@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.ui.fragment.MarketFragment;
@@ -34,14 +35,14 @@ public class WelcomeActivity extends AppCompatActivity {
     class WelcomeThread implements Runnable {
         @Override
         public void run() {
-
             try {
-                Thread.sleep(5000);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Log.i("getColor", "getColor: " + getResources().getColor(R.color.color_Grey));
-            Log.i("getColor", "getString: " + getResources().getString(R.string.font_color_gray));
+            BtslandApplication.isWel=true;
+            Intent intent=new Intent(WelcomeActivity.this,MainActivity.class);
+            startActivity(intent);
             finish();
         }
     }

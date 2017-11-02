@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,11 +39,11 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private TextView tvMarketLeftCoin_4;
     private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
-    private List<MarketTicker> cnyMarket;
-    private List<MarketTicker> btsMarket;
-    private List<MarketTicker> usdMarket;
-    private List<MarketTicker> btcMarket;
-    private List<MarketTicker> ethMarket;
+    private List<MarketTicker> cnyMarket=new ArrayList<>();
+    private List<MarketTicker> btsMarket=new ArrayList<>();
+    private List<MarketTicker> usdMarket=new ArrayList<>();
+    private List<MarketTicker> btcMarket=new ArrayList<>();
+    private List<MarketTicker> ethMarket=new ArrayList<>();
     private MarketRowAdapter cnyRowAdapter ;
     private MarketRowAdapter btsRowAdapter ;
     private MarketRowAdapter btcRowAdapter ;
@@ -54,67 +55,66 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     public static int NOTIFY_USD=3;
     public static int NOTIFY_BTC=4;
     public static int NOTIFY_ETH=5;
+    private String[] base;
+    private String[] quotes;
+    private String[] quotes1;
     public MarketFragment() {
         this.marketStat=new MarketStat();
-        String[] base={"CNY","BTS","USD","BTC"};
-        String[] quotes={"BTC", "ETH","BTS","LTC","OMG","STEEM","VEN","HPB","OCT","YOYOW","DOGE","HASH"};
-        String[] quotes1={"BTS", "USD","OPEN.BTC","OPEN.ETH","YOYOW","OCT","OPEN.LTC","OPEN.STEEM","OPEN.DASH","HPB","OPEN.OMG","IMIAO"};
+        base= new String[]{"CNY", "BTS", "USD", "BTC"};
+        quotes= new String[]{"BTC", "ETH", "BTS", "LTC", "OMG", "STEEM", "VEN", "HPB", "OCT", "YOYOW", "DOGE", "HASH"};
+        quotes1= new String[]{"BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
         marketStat.subscribe(base,quotes1,MarketStat.STAT_TICKERS_BASE,this);
     }
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        for(int i=0;i<stat.MarketTickers.size();i++){
-            Log.i(TAG, "onMarketStatUpdate: marketStat.MarketTickers："+stat.MarketTickers.get(i));
-        }
-        if(stat.MarketTickers==null&&stat.MarketTickers.size()==0){
+
+        if(stat.MarketTicker==null){
             return;
         }
+        Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
+
         Message message=Message.obtain();
-        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTickers.get(0).base.equals("CNY")));
-        switch (stat.MarketTickers.get(0).base){
+
+        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTicker.base.equals("CNY")));
+        switch (stat.MarketTicker.base){
             case "CNY":
-                if(cnyMarket!=null){
+                if(cnyMarket!=null&&cnyMarket.size()>=quotes1.length){
                     cnyMarket.clear();
                 }
                 Log.i(TAG, "onMarketStatUpdate: ThreadName:"+Thread.currentThread().getName());
-                cnyMarket=stat.MarketTickers;
-                cnyRowAdapter.markets=cnyMarket;
+                cnyMarket.add(stat.MarketTicker);
                 message.what=NOTIFY_CNY;
                 mHandler.sendMessage(message);
                 break;
             case "BTS":
-                if(btsMarket!=null){
+                if(btsMarket!=null&&btsMarket.size()>=quotes1.length){
                     btsMarket.clear();
                 }
-                btsMarket=stat.MarketTickers;
-                btsRowAdapter.markets=btsMarket;
+                btsMarket.add(stat.MarketTicker);
                 message.what=NOTIFY_BTS;
                 mHandler.sendMessage(message);
                 break;
             case "USD":
-                if(usdMarket!=null){
+                if(usdMarket!=null&&usdMarket.size()>=quotes1.length){
                     usdMarket.clear();
                 }
-                usdMarket=stat.MarketTickers;
-                usdRowAdapter.markets=usdMarket;
+                usdMarket.add(stat.MarketTicker);
                 message.what=NOTIFY_USD;
                 mHandler.sendMessage(message);
                 break;
             case "BTC":
-                if(btcMarket!=null){
+                if(btcMarket!=null&&btcMarket.size()>=quotes1.length){
                     btcMarket.clear();
                 }
-                btcMarket=stat.MarketTickers;
-                btcRowAdapter.markets=btcMarket;
+                btcMarket.add(stat.MarketTicker);
                 message.what=NOTIFY_BTC;
                 mHandler.sendMessage(message);
                 break;
             case "ETH":
-                if(ethMarket!=null){
+                if(ethMarket!=null&&ethMarket.size()>=quotes1.length){
                     ethMarket.clear();
                 }
-                ethMarket=stat.MarketTickers;
-                ethRowAdapter.markets=ethMarket;
+                ethMarket.add(stat.MarketTicker);
                 message.what=NOTIFY_ETH;
                 mHandler.sendMessage(message);
                 break;

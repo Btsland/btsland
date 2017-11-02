@@ -276,24 +276,17 @@ public class websocket_api extends WebSocketListener {
 
         return replyObject.result.get(0);
     }
-    public List<MarketTicker>  get_ticker_base(String base,String[] quotes) throws NetworkStatusException {
+    public MarketTicker  get_ticker_base(String base,String quote) throws NetworkStatusException {
         Log.i(TAG, "get_ticker_base: ");
         if(base==null||base=="") {
             return null;
         }
-        List<MarketTicker> marketTickers=new ArrayList<MarketTicker>();
-        for(int i=0;i<quotes.length;i++){
-            MarketTicker marketTicker= get_ticker(base,quotes[i]);
-            //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
-            if(marketTicker!=null){
-                marketTickers.add(marketTicker);
-            }
+        MarketTicker marketTicker=null;
 
-        }
-        if(marketTickers==null){
-            return null;
-        }
-        return marketTickers;
+        marketTicker= get_ticker(base,quote);
+        //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
+
+        return marketTicker;
 
     }
     public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
@@ -370,7 +363,7 @@ public class websocket_api extends WebSocketListener {
 
         return reply.result;
     }
-    public MarketTicker get_ticker(String base, String quote) throws NetworkStatusException {
+    public synchronized MarketTicker get_ticker(String base, String quote) throws NetworkStatusException {
         if(base.equals(quote)){
             return null;
         }

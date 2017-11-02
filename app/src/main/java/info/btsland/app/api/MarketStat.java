@@ -130,6 +130,7 @@ public class MarketStat {
         public OrderBook orderBook;
         public List<OpenOrder> openOrders;
         public List<MarketTicker> MarketTickers;
+        public MarketTicker MarketTicker;
 
         @Override
         public String toString() {
@@ -209,7 +210,11 @@ public class MarketStat {
                 final Stat marketStat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
-                        marketStat.MarketTickers = mWebsocketApi.get_ticker_base(base,quotes);
+                        for(int i=0;i<quotes.length;i++){
+                            marketStat.MarketTicker = mWebsocketApi.get_ticker_base(base,quotes[i]);
+                            listener.onMarketStatUpdate(marketStat);
+                        }
+                        return;
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }

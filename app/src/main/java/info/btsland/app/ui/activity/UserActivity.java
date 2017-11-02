@@ -39,14 +39,14 @@ public class UserActivity extends AppCompatActivity {
         //初始化
         tvUserInfo = (TextView) findViewById(R.id.tv_user_info);
         tvUserWhiteList = (TextView) findViewById(R.id.tv_user_whiteList);
-        tvUserPower = (TextView) findViewById(R.id.tv_user_power);
+//        tvUserPower = (TextView) findViewById(R.id.tv_user_power);
         tvUserRecent = (TextView) findViewById(R.id.tv_user_recent);
         tvUserEntrust = (TextView) findViewById(R.id.tv_user_entrust);
         tvUserSeting = (TextView) findViewById(R.id.tv_user_set);
         //绑定监听器
         tvUserInfo.setOnTouchListener(new TextViewListener());
         tvUserWhiteList.setOnTouchListener(new TextViewListener());
-        tvUserPower.setOnTouchListener(new TextViewListener());
+        //tvUserPower.setOnTouchListener(new TextViewListener());
         tvUserRecent.setOnTouchListener(new TextViewListener());
         tvUserEntrust.setOnTouchListener(new TextViewListener());
         tvUserSeting.setOnTouchListener(new TextViewListener());
@@ -95,10 +95,10 @@ public class UserActivity extends AppCompatActivity {
                     Intent iWhiteList=new Intent(UserActivity.this,WhiteListActivity.class);
                     startActivity(iWhiteList);
                     break;
-                case R.id.tv_user_power:
-                    touchColor(tvUserPower, motionEvent);
-
-                    break;
+//                case R.id.tv_user_power:
+//                    touchColor(tvUserPower, motionEvent);
+//
+//                    break;
                 case R.id.tv_user_recent:
 
                     Intent iRecent=new Intent(UserActivity.this,RecentActivity.class);

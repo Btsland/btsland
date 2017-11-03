@@ -4,6 +4,7 @@ package info.btsland.app.ui.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,9 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.CombinedChart;
+import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.CandleData;
+import com.github.mikephil.charting.data.CandleDataSet;
+import com.github.mikephil.charting.data.CandleEntry;
+import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -26,6 +32,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,156 +56,156 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     private TextView high;
     private TextView low;
     private TextView count;
-    private LineChart simpleK;
 
-    private String leftCoin = "BTS";
-    private String rightCoin = "CNY";
+    private final String REFURBISH="refurbish";
+
+    private String quote ="BTS";
+    private String base ="CNY";
 
     private MarketStat.HistoryPrice[] prices;
     private String highStr;
     private String lowStr;
     private String countStr;
+    private SimpleDateFormat df = new SimpleDateFormat("HH:mm");
+    private CandleDataSet candleDataSet;
+    private CandleData candleData;//烛形图对象
+    private CombinedData data;//图表总数据
 
-    private MarketTicker freshMarket;
+    private CombinedChart simpleK;//图表
+
+    private float max;
+    private float min;
 
     public MarketSimpleKFragment() {
         this.marketStat=BtslandApplication.getMarketStat();
         // Required empty public constructor
     }
 
-    public static MarketSimpleKFragment newInstance(Market market) {
-        MarketSimpleKFragment simpleKFragment = new MarketSimpleKFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("market", market);
-        simpleKFragment.setArguments(args);
-        return simpleKFragment;
-    }
+//    public static MarketSimpleKFragment newInstance(Market market) {
+//        MarketSimpleKFragment simpleKFragment = new MarketSimpleKFragment();
+//        Bundle args = new Bundle();
+//        args.putSerializable("market", market);
+//        simpleKFragment.setArguments(args);
+//        return simpleKFragment;
+//    }
 
     private void init(View view) {
-        deal = view.findViewById(R.id.tv_market_simple_deal);
-        high = view.findViewById(R.id.tv_market_simple_high);
-        low = view.findViewById(R.id.tv_market_simple_low);
-        count = view.findViewById(R.id.tv_market_simple_count);
-        simpleK = view.findViewById(R.id.lc_market_simple_K);
-        deal.setText(leftCoin + ":" + rightCoin);
-        startReceiveMarkets(null);
+//        deal = view.findViewById(R.id.tv_market_simple_deal);
+//        high = view.findViewById(R.id.tv_market_simple_high);
+//        low = view.findViewById(R.id.tv_market_simple_low);
+//        count = view.findViewById(R.id.tv_market_simple_count);
+        simpleK=view.findViewById(R.id.cbc_market_simple_K);
+        simpleK.setNoDataText("数据正在读取中。。。");
+//        deal.setText(quote + ":" + base);
     }
 
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        if(stat.prices!=null){
-            prices=stat.prices;
-            for(int i=0;i<prices.length;i++){
-                Log.e(TAG, "onMarketStatUpdate: prices:"+prices[i].toString() );
+        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat:"+stat==null));
+        if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
+            Log.i(TAG, "onMarketStatUpdate: stat.prices.length:"+stat.prices.size());
+            if(BtslandApplication.prices!=null){
+                BtslandApplication.prices.clear();
+                BtslandApplication.candleEntries.clear();
             }
+            BtslandApplication.prices=stat.prices;
+            Log.i(TAG, "onMarketStatUpdate: BtslandApplication.prices.length:"+BtslandApplication.prices.size());
+            max=(float)stat.prices.get(0).high;
+            min=(float)stat.prices.get(0).low;
+            //处理数据
+            for(int i=0;i<stat.prices.size();i++){
+                CandleEntry entry=new CandleEntry(i,
+                        (float) stat.prices.get(i).high, (float) stat.prices.get(i).low,
+                        (float) stat.prices.get(i).open, (float) stat.prices.get(i).close,
+                        stat.prices.get(i).date);
+
+                if((float)stat.prices.get(i).high>max){
+                    max=(float)stat.prices.get(i).high;
+                }
+                if((float)stat.prices.get(i).low<min){
+                    min=(float)stat.prices.get(i).low;
+                }
+                BtslandApplication.candleEntries.add(entry);
+            }
+            Log.i(TAG, "onMarketStatUpdate: max:"+max);
+            Log.i(TAG, "onMarketStatUpdate: min:"+min);
+
+            Message message=Message.obtain();
+            message.obj=REFURBISH;
+            handler.sendMessage(message);
         }
 
     }
 
-    class MyXAxisValueFormatter implements XAxisValueFormatter {
-        List<String> mValues;
-        float start;
-        float to;
-        float length;
-        float step;
-        Map<String, String> tags;
+    public static MarketSimpleKFragment newInstance(MarketTicker market) {
 
-        /**
-         * X轴标签
-         *
-         * @param start  起始
-         * @param to     结束
-         * @param values 需要设置的标签
-         */
-        public MyXAxisValueFormatter(float start, float to, List<String> values) {
-            this.mValues = values;
-            this.start = start;
-            this.to = to;
-            if (start < to) {
-                this.length = to - start + 1;
-            }
-            step = length / values.size();
-            tags = new HashMap<String, String>();
-            for (int i = 0; i < values.size(); i++) {
-                String value = values.get(i);
-                int index = (int) (i * step);
-                tags.put(String.valueOf(index), value);
-            }
+        MarketSimpleKFragment simpleKFragment=new MarketSimpleKFragment();
+        if(market!=null){
+            Bundle bundle=new Bundle();
+            bundle.putSerializable("MarketTicker",market);
+            simpleKFragment.setArguments(bundle);
         }
+        return simpleKFragment;
+    }
 
+    class MyXAxisValueFormatter implements XAxisValueFormatter {
         @Override
         public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            String XValue = "";
-            if (index == 30) {
-                XValue = "中间";
-            }
-            if (tags.get("" + index) != null) {
-                XValue = tags.get("" + index);
-            }
-//            for (int i=0;i<tags.size();i++ ) {
-//                Map<String,String> tag= tags.get(i);
-//                XValue = tag.get(String.valueOf(index));
-//            }
-            return XValue;
+            return df.format(BtslandApplication.prices.get(index).date);
         }
     }
 
     public void startReceiveMarkets(MarketTicker market) {
         if (market != null) {
-            //Log.i("startReceiveMarkets", "startReceiveMarkets: market1:" + market.getLeftCoin() + ":" + market.getRightCoin());
-            if (market.base == rightCoin && market.quote == leftCoin) {
-                Log.i("startReceiveMarkets", "startReceiveMarkets: 111111111111");
+            if (market.base.equals(base) && market.quote.equals(quote)) {
                 Intent intent = new Intent(getActivity(), MarketDetailedActivity.class);
-                intent.putExtra("market", market);
+                intent.putExtra("MarketTicker", market);
                 getActivity().startActivity(intent);
                 return;
+            }else {
+                this.base=market.base;
+                this.quote=market.quote;
+                deal.setText(quote+":"+base);
             }
-            marketStat.subscribe(
-                    market.base,
-                    market.quote,
-                    MarketStat.DEFAULT_BUCKET_SECS,
-                    MarketStat.STAT_MARKET_HISTORY,
-                    DEFAULT_BUCKET_SECS,this);
-//            ReceiveMarkets receiveMarkets = new ReceiveMarkets(market);
-//            receiveMarkets.start();
         }
+        marketStat.subscribe(
+                base,
+                quote,
+                MarketStat.DEFAULT_BUCKET_SECS,
+                MarketStat.STAT_MARKET_HISTORY,
+                DEFAULT_BUCKET_SECS,this);
 
     }
 
-    public class ReceiveMarkets extends Thread {
-        private String left;
-        private String right;
-        public ReceiveMarkets(MarketTicker market) {
-            Log.i("ReceiveMarkets", "ReceiveMarkets: ");
-            if (market != null) {
-                left = market.quote;
-                right = market.base;
-            } else {
-                left = leftCoin;
-                right = rightCoin;
-            }
-        }
-
-        @Override
-        public void run() {
-            MarketService marketService = new MarketServiceImpl();
-            List<Market> markets = marketService.queryMarkets(left, right, "");
-            Message message = Message.obtain();
-            message.what = 1;
-            message.obj = markets;
-            handler.sendMessage(message);
-        }
-    }
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-
-            List<Market> markets = (List<Market>) msg.obj;
-            draw(markets);
-            leftCoin = markets.get(0).getLeftCoin();
-            rightCoin = markets.get(0).getRightCoin();
-            deal.setText(markets.get(0).getLeftCoin() + ":" + markets.get(0).getRightCoin());
+            if(msg.obj.equals(REFURBISH)){
+                Log.i(TAG, "handleMessage: max:"+max);
+                Log.i(TAG, "handleMessage: min:"+min);
+                Log.i(TAG, "handleMessage: candleEntries:"+BtslandApplication.candleEntries.size());
+                candleDataSet=new CandleDataSet(BtslandApplication.candleEntries,"Data Set");//烛形图图形
+                simpleKInit(candleDataSet);
+                List<String> xVals=new ArrayList<>();
+                for(int i=0;i<BtslandApplication.candleEntries.size();i++){
+                    xVals.add(i,df.format(BtslandApplication.candleEntries.get(i).getData()));
+                }
+                Log.i(TAG, "handleMessage: xVals:"+xVals.size());
+                candleData=new CandleData(xVals,candleDataSet);
+                Log.i(TAG, "handleMessage: candleDataSet.getEntryCount():"+candleDataSet.getEntryCount());
+                Log.i(TAG, "handleMessage: candleData.getDataSets().size():"+candleData.getDataSets().size());
+                Log.i(TAG, "handleMessage: candleData.getXValCount():"+candleData.getXValCount());
+                data=new CombinedData(xVals);
+                data.setData(candleData);
+                simpleK.setData(data);
+                simpleK.setDescription(quote+"/"+base);
+                simpleK.setDescriptionTextSize(14);
+                simpleK.notifyDataSetChanged();
+                simpleK.invalidate();
+                Log.i(TAG, "getAxisLeft: max:"+simpleK.getAxisLeft().getAxisMinValue());
+                Log.i(TAG, "getAxisLeft: min:"+simpleK.getAxisLeft().getAxisMinValue());
+            }
         }
     };
 
@@ -218,49 +225,44 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             Entry entry = new Entry(market.getNewPrice(), i);
             Entrys.add(entry);
         }
+
         return Entrys;
     }
 
-    private void draw(final List<Market> markets) {
-        ArrayList<Entry> entries = toEntry(markets);
-        LineDataSet setComp1 = new LineDataSet(entries, "最新成交价");
-        setComp1.setAxisDependency(YAxis.AxisDependency.LEFT);
-        setComp1.setColor(Color.RED);
-        setComp1.setCircleSize(0f);//设置焦点圆心的大小
-        setComp1.setLineWidth(1f);
-        ArrayList<LineDataSet> dataSets = new ArrayList<LineDataSet>();
-        dataSets.add(setComp1);
-        ArrayList<String> xVals = new ArrayList<String>();
-        if (entries == null) {
-            return;
-        }
-        SimpleDateFormat df = new SimpleDateFormat("HH:mm");//设置日期格式
-        for (int i = 0; i < entries.size(); i++) {
-            xVals.add(df.format(markets.get(i).getDate()));
-        }
-        LineData data = new LineData(xVals, dataSets);
-        data.setDrawValues(false);
-        XAxis xAxis = simpleK.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        //simpleK.setTouchEnabled(false);
-//        simpleK.setDragEnabled(false);
-//        simpleK.setScaleEnabled(false);
-//        simpleK.setScaleXEnabled(false);
-//        simpleK.setScaleYEnabled(false);
-        simpleK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), MarketDetailedActivity.class);
-                intent.putExtra("market", markets.get(0));
-                getActivity().startActivity(intent);
-            }
-        });
-        simpleK.setData(data);
-        simpleK.setDescription(markets.get(0).getLeftCoin() + ":" + markets.get(0).getRightCoin());
-        simpleK.setDescriptionTextSize(14);
-        simpleK.setVisibleXRangeMaximum(entries.size());
-        simpleK.invalidate(); // refresh
+    private void simpleKInit(CandleDataSet candleDataSet) {
+        candleDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
+        candleDataSet.setShadowColor(Color.DKGRAY);//影线颜色
+        candleDataSet.setShadowColorSameAsCandle(true);//影线颜色与实体一致
+        candleDataSet.setShadowWidth(0.7f);//影线
+        candleDataSet.setDecreasingColor(Color.RED);
+        candleDataSet.setDecreasingPaintStyle(Paint.Style.FILL);//红涨，实体
+        candleDataSet.setIncreasingColor(Color.GREEN);
+        candleDataSet.setIncreasingPaintStyle(Paint.Style.FILL);//绿跌，空心
+        //candleDataSet.setNeutralColor(Color.RED);//当天价格不涨不跌（一字线）颜色
+        candleDataSet.setColor(Color.RED);
+        candleDataSet.setHighlightLineWidth(1f);//选中蜡烛时的线宽
+        candleDataSet.setDrawValues(false);//在图表中的元素上面是否显示数值
+        candleDataSet.setLabel("label");//图表名称
+        XAxis xAxis=simpleK.getXAxis();
+        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴标签显示位置
+        xAxis.setDrawGridLines(false);//绘制格网线
+        YAxis leftAxis = simpleK.getAxisLeft();//取得左侧y轴
+        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);//y轴标签绘制的位置
+        leftAxis.setDrawGridLines(true);//绘制y轴格网线
+        leftAxis.setDrawLabels(true);//显示坐标轴上的值, ...其他样式
+        leftAxis.setStartAtZero(false);
+        leftAxis.setAxisMaxValue((float) (max*1.05));
+        leftAxis.setAxisMinValue((float) (min*0.95));
+
+
+        YAxis rightAxis = simpleK.getAxisRight();//取得左侧y轴
+        rightAxis.setDrawGridLines(false);//不绘制y轴格网线
+        rightAxis.setDrawLabels(false);//不显示坐标轴上的值, ...其他样式
+
+
+        Log.i(TAG, "simpleKInit: max:"+max);
+        Log.i(TAG, "simpleKInit: min:"+min);
     }
 
     @Override
@@ -274,14 +276,17 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         Log.i("", "onCreateView: ");
         View view = null;
         view = inflater.inflate(R.layout.fragment_market_simple_k, container, false);
+        MarketTicker market=null;
         if (getArguments() != null) {
-            if (getArguments().getSerializable("market") != null) {
-                Market market = (Market) getArguments().getSerializable("market");
-                leftCoin = market.getLeftCoin();
-                rightCoin = market.getRightCoin();
+            market= (MarketTicker) getArguments().getSerializable("MarketTicker");
+            if (market!= null) {
+                base = market.base;
+                quote = market.quote;
             }
+
         }
         init(view);
+        startReceiveMarkets(market);
         return view;
     }
 

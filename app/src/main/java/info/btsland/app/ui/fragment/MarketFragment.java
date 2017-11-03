@@ -205,7 +205,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     /**
      * 装载简易K图
      */
-    private void fillInSimpleK(Market market) {
+    private void fillInSimpleK(MarketTicker market) {
         Log.i(TAG, "fillInSimpleK: ");
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (simpleKFragment == null) {

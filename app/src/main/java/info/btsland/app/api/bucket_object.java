@@ -8,10 +8,10 @@ public class bucket_object {
     // static const uint8_t type_id  = 1; // market_history_plugin type, referenced from account_history_plugin.hpp
 
     public class bucket_key {
-        public object_id<asset_object>      base;
-        public object_id<asset_object>      quote;
-        public long                         seconds = 0;
-        public Date open;
+        public String      base;
+        public String      quote;
+        public long  seconds = 0;
+        public String open;
     }
 
     public price high() {

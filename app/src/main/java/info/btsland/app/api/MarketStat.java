@@ -8,6 +8,8 @@ import android.text.format.DateUtils;
 import android.util.Log;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -139,7 +141,7 @@ public class MarketStat {
     }
 
     public static class Stat {
-        public HistoryPrice[] prices;
+        public List<HistoryPrice> prices;
         public MarketTicker ticker;
         public Date latestTradeDate;
         public OrderBook orderBook;
@@ -151,12 +153,14 @@ public class MarketStat {
         @Override
         public String toString() {
             return "Stat{" +
-                    "prices=" + Arrays.toString(prices) +
+                    "prices=" + prices +
                     ", ticker=" + ticker +
                     ", latestTradeDate=" + latestTradeDate +
                     ", orderBook=" + orderBook +
                     ", openOrders=" + openOrders +
                     ", MarketTickers=" + MarketTickers +
+                    ", MarketTicker=" + MarketTicker +
+                    ", nRet=" + nRet +
                     '}';
         }
     }
@@ -316,30 +320,26 @@ public class MarketStat {
             return false;
         }
 
-        private HistoryPrice[] getMarketHistory(String base,String quote,int bucketSecs) {
+        private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs) {
             // 服务器每次最多返回200个bucket对象
-            final int maxBucketCount = 200;
+            final int maxBucketCount = 70;
             Date startDate1 = new Date(
                     System.currentTimeMillis() - bucketSecs * maxBucketCount * 1000);
             Date startDate2 = new Date(
                     System.currentTimeMillis() - bucketSecs * maxBucketCount * 2000);
-            Date endDate = new Date(System.currentTimeMillis() + DateUtils.DAY_IN_MILLIS);
+            Date endDate = new Date(System.currentTimeMillis());
             List<bucket_object> buckets1 = getMarketHistory(base,quote,bucketSecs,startDate2, startDate1);
             List<bucket_object> buckets2 = getMarketHistory(base,quote,bucketSecs,startDate1, endDate);
-            int numBuckets = (buckets1 != null ? buckets1.size() : 0) +
-                    (buckets2 != null ? buckets2.size() : 0);
-            HistoryPrice[] prices = new HistoryPrice[numBuckets];
-            int priceIndex = 0;
+
+            List<HistoryPrice> prices=new ArrayList<>();
             if (buckets1 != null) {
                 for (int i = 0; i < buckets1.size(); i++) {
-                    bucket_object bucket = buckets1.get(i);
-                    prices[priceIndex++] = priceFromBucket(bucket);
+                    prices.add(priceFromBucket(buckets1.get(i)));
                 }
             }
             if (buckets2 != null) {
                 for (int i = 0; i < buckets2.size(); i++) {
-                    bucket_object bucket = buckets2.get(i);
-                    prices[priceIndex++] = priceFromBucket(bucket);
+                    prices.add(priceFromBucket(buckets2.get(i)));
                 }
             }
             return prices;
@@ -347,10 +347,12 @@ public class MarketStat {
 
         private List<bucket_object> getMarketHistory(String base,String quote,int bucketSecs, Date start, Date end) {
             try {
-//                asset_object base_object = mWebsocketApi.lookup_asset_symbols(base);
-//                asset_object quote_object = mWebsocketApi.lookup_asset_symbols(quote);
+                baseAsset = mWebsocketApi.lookup_asset_symbols(base);
+                Log.e(TAG, "getMarketHistory: base_object.id:"+baseAsset.id );
+                quoteAsset = mWebsocketApi.lookup_asset_symbols(quote);
+                Log.e(TAG, "getMarketHistory: quote_object.id:"+quoteAsset.id );
                 return mWebsocketApi.get_market_history(
-                        base, quote,bucketSecs, start, end);
+                        baseAsset.id, quoteAsset.id,bucketSecs, start, end);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
                 return null;
@@ -362,7 +364,12 @@ public class MarketStat {
 
         private HistoryPrice priceFromBucket(bucket_object bucket) {
             HistoryPrice price = new HistoryPrice();
-            price.date = bucket.key.open;
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+            try {
+                price.date = df.parse(bucket.key.open);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
             if (bucket.key.quote.equals(quoteAsset.id)) {
                 price.high = utils.get_asset_price(bucket.high_base, baseAsset,
                         bucket.high_quote, quoteAsset);

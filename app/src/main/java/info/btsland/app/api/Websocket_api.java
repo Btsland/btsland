@@ -2,6 +2,7 @@ package info.btsland.app.api;
 
 
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -13,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -304,8 +306,9 @@ public class Websocket_api extends WebSocketListener {
         listParams.add(assetObjectId1);
         listParams.add(assetObjectId2);
         listParams.add(nBucket);
-        listParams.add(dateStart);
-        listParams.add(dateEnd);
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        listParams.add(df.format(dateStart));
+        listParams.add(df.format(dateEnd));
         callObject.params.add(listParams);
         ReplyObjectProcess<Reply<List<bucket_object>>> replyObjectProcess =
                 new ReplyObjectProcess<>(new TypeToken<Reply<List<bucket_object>>>(){}.getType());

@@ -69,7 +69,7 @@
                 android:layout_width="40dp"
                 android:layout_height="50dp"
                 android:layout_gravity="left|center_vertical"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="0dp"
                 android:gravity="center"
                 android:text="+62"
                 android:textColor="@android:color/black"
@@ -152,7 +152,8 @@
             android:layout_marginTop="30dp"
             android:background="@drawable/tv_button"
             android:gravity="center"
-            android:text="登录"
+            android:textSize="@dimen/activity_vertical_margin"
+            android:text="登  录"
             android:textColor="@android:color/white" />
 
 
@@ -163,7 +164,7 @@
             android:layout_alignRight="@id/login"
             android:layout_below="@id/login"
             android:background="#00000000"
-            android:text="忘记密码?"
+            android:text="忘记密码?点这里^-^"
             android:textColor="@drawable/text_color_selector"
             android:textSize="16sp" />
 
@@ -176,7 +177,7 @@
             android:layout_below="@id/login"
             android:background="#00000000"
             android:gravity="left|center_vertical"
-            android:text="注册"
+            android:text="没有帐号？注册一个吧！^-^"
             android:textColor="@drawable/text_color_selector"
             android:textSize="16sp"
             android:visibility="visible" />

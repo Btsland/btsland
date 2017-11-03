@@ -177,7 +177,7 @@
             android:layout_below="@id/login"
             android:background="#00000000"
             android:gravity="left|center_vertical"
-            android:text="没有帐号？注册一个吧！^-^"
+            android:text="没有帐号？注册一个吧^-^"
             android:textColor="@drawable/text_color_selector"
             android:textSize="16sp"
             android:visibility="visible" />

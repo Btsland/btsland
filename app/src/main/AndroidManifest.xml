@@ -176,6 +176,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.LoginActivity"
+            android:theme="@style/welcomeTheme.TranslucentStatus"
             android:screenOrientation="portrait"/>
 
 

@@ -165,7 +165,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             }else {
                 this.base=market.base;
                 this.quote=market.quote;
-                deal.setText(quote+":"+base);
+               // deal.setText(quote+":"+base);
             }
         }
         marketStat.subscribe(

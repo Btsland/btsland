@@ -3,42 +3,44 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="200dp">
-    <TextView
-        android:id="@+id/tv_market_simple_deal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="交易对：BTS/CNY"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_high"/>
-    <TextView
-        android:id="@+id/tv_market_simple_high"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="最高：5555"
-        app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_deal"
-        app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_low"/>
-    <TextView
-        android:id="@+id/tv_market_simple_low"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="最低：4444"
-        app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_high"
-        app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_count"/>
-    <TextView
-        android:id="@+id/tv_market_simple_count"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="量：22323"
-        app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_low"
-        app:layout_constraintRight_toRightOf="parent"/>
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lc_market_simple_K"
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_simple_deal"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="BTS/CNY"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_high"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_simple_high"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="最高：5555"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_deal"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_low"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_simple_low"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="最低：4444"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_high"-->
+        <!--app:layout_constraintRight_toLeftOf="@+id/tv_market_simple_count"/>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_simple_count"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="量：22323"-->
+        <!--app:layout_constraintLeft_toRightOf="@+id/tv_market_simple_low"-->
+        <!--app:layout_constraintRight_toRightOf="parent"/>-->
+    <com.github.mikephil.charting.charts.CombinedChart
+        android:id="@+id/cbc_market_simple_K"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@+id/tv_market_simple_deal"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <!--app:layout_constraintTop_toBottomOf="@+id/tv_market_simple_deal"-->
 
 </android.support.constraint.ConstraintLayout>

@@ -30,7 +30,7 @@ public class MarketDetailedActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
-        market= (MarketTicker) getIntent().getSerializableExtra("market");
+        market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
         fillInHead();
         init();
     }

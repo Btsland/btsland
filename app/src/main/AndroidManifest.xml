@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="info.btsland.app">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_black"
@@ -52,8 +59,8 @@
         </activity>
         <activity
             android:name=".ui.activity.WelcomeActivity"
-            android:theme="@style/welcomeTheme.TranslucentStatus"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/welcomeTheme.TranslucentStatus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -148,38 +155,31 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ui.activity.TransactionActivity"
-            android:screenOrientation="portrait">
 
-        </activity>
-
-        <activity android:name=".ui.activity.UserSetActity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-
-        <activity android:name=".ui.activity.RecentActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".ui.activity.WhiteListActivity"
-            android:screenOrientation="portrait">
-
-
-        </activity>
-
-        <activity android:name=".ui.activity.EntrustActivity"
-            android:screenOrientation="portrait">
+        <activity
+            android:name=".ui.activity.TransactionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.UserSetActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.RecentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.WhiteListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.EntrustActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.UserInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"/>
 
 
-        </activity>
 
-        <activity android:name=".ui.activity.UserInfoActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
 
 
     </application>

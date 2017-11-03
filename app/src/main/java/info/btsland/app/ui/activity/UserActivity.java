@@ -10,7 +10,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import info.btsland.app.R;
-import info.btsland.app.model.UserSet;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 
@@ -21,6 +20,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView tvUserRecent;
     private TextView tvUserEntrust;
     private TextView tvUserSeting;
+    private TextView tvUserLogin;
     private HeadFragment headFragment;
 
     @Override
@@ -43,6 +43,7 @@ public class UserActivity extends AppCompatActivity {
         tvUserRecent = (TextView) findViewById(R.id.tv_user_recent);
         tvUserEntrust = (TextView) findViewById(R.id.tv_user_entrust);
         tvUserSeting = (TextView) findViewById(R.id.tv_user_set);
+           tvUserLogin=(TextView) findViewById(R.id.tv_user_login);
         //绑定监听器
         tvUserInfo.setOnTouchListener(new TextViewListener());
         tvUserWhiteList.setOnTouchListener(new TextViewListener());
@@ -50,6 +51,7 @@ public class UserActivity extends AppCompatActivity {
         tvUserRecent.setOnTouchListener(new TextViewListener());
         tvUserEntrust.setOnTouchListener(new TextViewListener());
         tvUserSeting.setOnTouchListener(new TextViewListener());
+        tvUserLogin.setOnTouchListener(new TextViewListener());
     }
 
     /**
@@ -112,10 +114,18 @@ public class UserActivity extends AppCompatActivity {
                 case R.id.tv_user_set:
                    // touchColor(tvUserSetting, motionEvent);
 
-                    Intent iUserSet=new Intent(UserActivity.this,UserSetActity.class);
+                    Intent iUserSet=new Intent(UserActivity.this,UserSetActivity.class);
                     //启动
                     startActivity(iUserSet);
                     break;
+
+                case R.id.tv_user_login:
+                      Intent iUserLogin=new Intent(UserActivity.this,LoginActivity.class);
+                    startActivity(iUserLogin);
+
+                break;
+
+
             }
             return false;
         }

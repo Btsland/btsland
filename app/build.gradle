@@ -40,8 +40,9 @@ dependencies {
     compile 'com.github.liuguangqiang.SuperRecyclerView:super-recyclerview:0.1.2'
     compile 'com.github.PhilJay:MPAndroidChart:v2.1.6'
     compile 'com.jpardogo.materialtabstrip:library:1.1.0'
-    testCompile 'junit:junit:4.12'
     compile 'org.apache.commons:commons-lang3:3.6'
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.android.support:design:26.+'
+    testCompile 'junit:junit:4.12'
 }

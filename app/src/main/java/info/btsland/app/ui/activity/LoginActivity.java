@@ -51,12 +51,17 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
+
+
+
 /**
  * author：lw1000
  * function：登录
  * 2017/11/3.
  */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+
+
 
     private EditText username, password;
     private Button bt_username_clear;
@@ -67,6 +72,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button register;
     private boolean isOpen = false;
 
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +83,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         initView();
 
     }
+
+
+
 
     private void initView() {
 
@@ -158,6 +169,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+
+
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -223,7 +237,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+
+
+
+
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

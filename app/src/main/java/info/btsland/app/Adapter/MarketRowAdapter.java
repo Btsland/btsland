@@ -12,7 +12,6 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 import info.btsland.app.R;
-import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
@@ -74,7 +73,7 @@ public class MarketRowAdapter extends BaseAdapter {
         tvBestAskNum.setText(market.lowest_ask.substring(0,8));
         tvBestBidNum.setText(market.lowest_ask.substring(0,8));
         if (market.percent_change > 0) {
-            ;
+
             tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));
             tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_green));
         } else if(market.percent_change < 0) {

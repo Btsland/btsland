@@ -1,32 +1,12 @@
 package info.btsland.app.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.ListView;
-
-
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.widget.ListView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
-
-
-
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-
-
-import android.widget.TextView;
-
-
-import info.btsland.app.model.News;
-
-import info.btsland.app.ui.fragment.NewsContentFragment;
 
 /**
  * author：lw1000
@@ -34,7 +14,7 @@ import info.btsland.app.ui.fragment.NewsContentFragment;
  * 2017/10/21.
  */
 
-public class UserSetActity extends AppCompatActivity {
+public class UserSetActivity extends AppCompatActivity {
     private HeadFragment headFragment;
     private ListView lv;
 

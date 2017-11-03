@@ -60,8 +60,6 @@
     <string name="statement">个人说明：</string>
 
 
-
-
     <string name="wusername">账户名</string>
     <string name="whitetext">添加到白名单</string>
     <string name="whiteadd">添加</string>
@@ -69,10 +67,28 @@
     <string name="entrusttv">您好，您暂无委单</string>
 
 
-
     <string name="accountset">账户设置</string>
+
+
+
+
 
     <string name="selectlanguage">请选择系统语言 </string>
     <string name="stringzh">中文</string>
     <string name="stringen">English</string>
+
+    <string name="title_activity_login">Sign in</string>
+    <string name="login">登录</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">用户名</string>
+    <string name="prompt_password">密码</string>
+    <string name="action_sign_in">登录</string>
+    <string name="action_sign_in_short">登录</string>
+    <string name="error_invalid_email">邮箱格式不对</string>
+    <string name="error_invalid_password">密码太短了</string>
+    <string name="error_incorrect_password">此密码不正确</string>
+    <string name="error_field_required">此字段必填</string>
+    <string name="permission_rationale">"提供电子邮件完成所需的联系人权限。"
+    </string>
 </resources>

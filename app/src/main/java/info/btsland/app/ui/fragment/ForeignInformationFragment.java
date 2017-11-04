@@ -63,8 +63,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new8 = new News();
         new8.setTitle("韩国央行行长：比特币是商品而非货币，央行需加强对虚拟货币的研究");
         new8.setDate("2017-10-26");
-        new8.setAuthor("作者：Wolfie Zhao");
-        new8.setTitleContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。据汉城联合通讯社报道，Lee行长否定了接受加密货币作为法定货币的可能性。这项声明是在韩国禁止ICO后，由官方发布的针对加密货币技术的最新评估。“对虚拟货币进行监管是合适的，因为它们属于商品，而不是法定货币，” Lee在韩国国民议会举办的一次政府审计会议上表示。");
+        new8.setAuthor("Wolfie Zhao");
         new8.setContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。\n" +
                 "\n" +
                 "据汉城联合通讯社报道，Lee行长否定了接受加密货币作为法定货币的可能性。这项声明是在韩国禁止ICO后，由官方发布的针对加密货币技术的最新评估。\n" +
@@ -82,10 +81,9 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         newsList.add(new8);
 
         News new1 = new News();
-        new1.setTitle("穆迪：区块链和加密货币的颠覆潜力不可避免");
+        new1.setTitle("区块链和加密货币的颠覆潜力不可避免");
         new1.setDate("2017-10-26");
         new1.setAuthor("作者：Tanzeel Akhtar");
-        new1.setTitleContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。穆迪分析师斯蒂芬•索恩（Stephen Sohn）及其团队在本月中发表了一篇名为《消费者数字支付——美国》的报告，他们在报告中安慰支付领域参与者，区块链技术是一个“遥远的威胁”。");
         new1.setContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。\n" +
                 "\n" +
                 "穆迪分析师斯蒂芬•索恩（Stephen Sohn）及其团队在本月中发表了一篇名为《消费者数字支付——美国》的报告，他们在报告中安慰支付领域参与者，区块链技术是一个“遥远的威胁”。\n" +
@@ -111,8 +109,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new3 = new News();
         new3.setTitle("以投资者利益为先，马耳他政府出台加密货币投资基金管理规则");
         new3.setDate("2017-10-25");
-        new3.setAuthor("作者：Stan Higgins");
-        new3.setTitleContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。马耳他金融服务管理局（MFSA）本周一公布了一份指南，用于指导专业投资机构招募投资者、管理风险以及进行自我管理。这份指南在下月的咨询阶段过后将面临进一步的修改，这也是马耳他政府为这项技术部署的最新的国家政策改进。MSFA在声明中表示，这份指南将适用于各种投资基金类型。");
+        new3.setAuthor("Stan Higgins");
         new3.setContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。\n" +
                 "\n" +
                 "马耳他金融服务管理局（MFSA）本周一公布了一份指南，用于指导专业投资机构招募投资者、管理风险以及进行自我管理。这份指南在下月的咨询阶段过后将面临进一步的修改，这也是马耳他政府为这项技术部署的最新的国家政策改进。\n" +
@@ -130,8 +127,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new2 = new News();
         new2.setTitle("银行有阻区块链创业公司发展？英国金融行为监管局（FCA）如是说");
         new2.setDate("2017-10-25");
-        new2.setAuthor("作者：Samuel Haig");
-        new2.setTitleContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。 FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”报告讨论了FCA建立“沙箱监管”一年来所取得的成就及经验教训，并指责了金融机构有意拒绝为区块链技术公司提供银行服务。");
+        new2.setAuthor("Samuel Haig");
         new2.setContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。\n" +
                 "\n" +
                 "FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”\n" +
@@ -164,8 +160,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new9 = new News();
         new9.setTitle("区块链即服务（BaaS）：IBM，微软与亚马逊形成三足鼎立之势");
         new9.setDate("2017-10-25");
-        new9.setAuthor("作者：Divya Joshi");
-        new9.setTitleContent("什么是区块链即服务？根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。区块链是一种加密货币的所有交易的一个账本或名单，是比特币和其他加密货币的底层技术。对于区块链技术本身，它拥有无数应用，从银行服务到物联网（IoT）。");
+        new9.setAuthor("Divya Joshi");
         new9.setContent("什么是区块链即服务？\n" +
                 " \n" +
                 "根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。\n" +
@@ -234,8 +229,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new6 = new News();
         new6.setTitle("英国金融管理局：分布式账本技术创业公司遭受银行打压，无法获得银行服务");
         new6.setDate("2017-10-24");
-        new6.setAuthor("作者：Nikhilesh De");
-        new6.setTitleContent("据英国金融行为监管局（FCA）上周发布的报告显示，英国分布式账本技术创业公司在获得银行服务时正遇到麻烦。FCA这个金融监管机构运行着一个监管沙箱，允许新类型的企业“在一种活跃的市场环境下测试创新型产品、服务和业务模式”。据报道，FCA发现其金融技术测试框架下的创业公司被阻止在银行开户。");
+        new6.setAuthor("Nikhilesh De");
         new6.setContent("据英国金融行为监管局（FCA）上周发布的报告显示，英国分布式账本技术创业公司在获得银行服务时正遇到麻烦。\n" +
                 "\n" +
                 "FCA这个金融监管机构运行着一个监管沙箱，允许新类型的企业“在一种活跃的市场环境下测试创新型产品、服务和业务模式”。据报道，FCA发现其金融技术测试框架下的创业公司被阻止在银行开户。\n" +
@@ -260,8 +254,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new5 = new News();
         new5.setTitle("瑞士信贷银行银行家：只有天空才是区块链的极限，比特币只是区块链的第一种杀手APP");
         new5.setDate("2017-10-23");
-        new5.setAuthor("作者：Rebecca Campbell");
-        new5.setTitleContent("尽管很多银行都拒绝比特币这种概念，不过很多银行都正在将他们的注意力转移到区块链的使用。根据欧洲银行瑞士信贷银行（Credit Suisse）的一位投资银行家所说，“只有天空才是区块链技术的极限”。瑞士信贷银行软件投资银行服务全球主管James Disney所说，就现在而言，私人股权交易的结算需要20到30天时间才能完成，然而使用区块链技术则可以缩短到数分钟完成。");
+        new5.setAuthor("Rebecca Campbell");
         new5.setContent("尽管很多银行都拒绝比特币这种概念，不过很多银行都正在将他们的注意力转移到区块链的使用。\n" +
                 "\n" +
                 "根据欧洲银行瑞士信贷银行（Credit Suisse）的一位投资银行家所说，“只有天空才是区块链技术的极限”。\n" +
@@ -292,8 +285,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         News new10 = new News();
         new10.setTitle("哈萨克斯坦拟发行以法币为支撑的国家加密货币");
         new10.setDate("2017-10-22");
-        new10.setAuthor("作者：Samuel Haig");
-        new10.setTitleContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。");
+        new10.setAuthor("Samuel Haig");
         new10.setContent("哈萨克斯坦阿斯塔纳国际金融中心（AIFC）宣布和Exante合作研发国家加密货币。哈萨克斯坦政府计划推出国家发行的加密货币，并有法币作支撑。\n" +
                 "\n" +
                 "Exante的“Stasis”平台将成为哈萨克斯坦国家加密货币的基础。这家位于马耳他的投资公司成立于2011年。\n" +

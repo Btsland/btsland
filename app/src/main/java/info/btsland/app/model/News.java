@@ -12,6 +12,15 @@ public class News implements Serializable {
     private String date;    //新闻日期
     private String titleContent;    //标题内容
     private String author;          //新闻作者
+//    private String image;
+
+//    public String getImage() {
+//        return image;
+//    }
+//
+//    public void setImage(String image) {
+//        this.image = image;
+//    }
 
     public String getTitleContent() {
         return titleContent;
@@ -61,14 +70,16 @@ public class News implements Serializable {
         this.content = content;
         this.date = date;
         this.author = author;
+//        this.image = image;
     }
 
-    public News(String title, String content, String date, String titleContent, String author ) {
+    public News(String title, String content, String date, String titleContent, String author) {
         this.title = title;
         this.content = content;
         this.date = date;
         this.titleContent = titleContent;
         this.author = author;
+//        this.image = image;
     }
 
     @Override
@@ -78,11 +89,7 @@ public class News implements Serializable {
                 ", content='" + content + '\'' +
                 ", date='" + date + '\'' +
                 ", author='" + author + '\'' +
+//                ", image='" + image + '\'' +
                 '}';
     }
 }
-
-
-
-
-

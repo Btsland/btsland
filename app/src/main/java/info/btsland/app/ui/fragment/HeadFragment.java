@@ -14,8 +14,8 @@ import android.widget.TextView;
 import info.btsland.app.R;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.News;
+import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.SettingActivity;
-import info.btsland.app.ui.activity.UserActivity;
 
 /**
  * 通用顶部导航栏碎片类
@@ -122,7 +122,7 @@ public class HeadFragment extends Fragment {
     class ToUserOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), UserActivity.class);
+            Intent intent = new Intent(getActivity(), LoginActivity.class);
             getActivity().startActivity(intent);
             News news = new News();
             Market market = new Market();

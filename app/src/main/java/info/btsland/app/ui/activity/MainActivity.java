@@ -1,20 +1,17 @@
 package info.btsland.app.ui.activity;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
@@ -243,7 +240,7 @@ public class MainActivity extends BaseActivity {
     class ivNavUserOnClick implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, UserActivity.class);
+            Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             MainActivity.this.startActivity(intent);
         }
     }

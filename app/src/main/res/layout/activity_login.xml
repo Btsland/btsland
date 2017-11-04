@@ -1,5 +1,8 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/welcome_login1"
@@ -154,7 +157,9 @@
             android:gravity="center"
             android:textSize="@dimen/activity_vertical_margin"
             android:text="登  录"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+
+            />
 
 
         <Button
@@ -165,7 +170,7 @@
             android:layout_below="@id/login"
             android:background="#00000000"
             android:text="忘记密码?点这里^-^"
-            android:textColor="@drawable/text_color_selector"
+            android:textColor="@color/color_white"
             android:textSize="16sp" />
 
 
@@ -177,15 +182,29 @@
             android:layout_below="@id/login"
             android:background="#00000000"
             android:gravity="left|center_vertical"
-            android:text="没有帐号？注册一个吧^-^"
-            android:textColor="@drawable/text_color_selector"
+            android:text="没有帐号？注册一个吧"
+            android:textColor="@color/color_white"
             android:textSize="16sp"
             android:visibility="visible" />
 
 
 
+
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/tourist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:gravity="center_vertical"
+        android:text="不想登录，先看看"
+        android:textColor="@color/color_white"
+        android:textSize="16sp"
+        android:visibility="visible"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        />
 
 
 

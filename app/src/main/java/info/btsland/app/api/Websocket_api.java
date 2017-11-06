@@ -43,11 +43,16 @@ public class Websocket_api extends WebSocketListener {
     private OkHttpClient mOkHttpClient;
     private WebSocket mWebsocket;
 
-    private int mnConnectStatus = WEBSOCKET_CONNECT_INVALID;
+
+    public int mnConnectStatus = WEBSOCKET_CONNECT_INVALID;
     public static int WEBSOCKET_CONNECT_INVALID = -1;
     public static int WEBSOCKET_CONNECT_SUCCESS = 0;
+    public static int WEBSOCKET_CONNECT_CLOSING = -2;
+    public static int WEBSOCKET_CONNECT_CLOSED = -3;
+    public static int WEBSOCKET_CONNECT_FAILURE = -9;
     public static int WEBSOCKET_ALL_READY = 0;
-    private static int WEBSOCKET_CONNECT_FAIL = 1;
+
+    public static String CONNECT="connect";
     private HashMap<Integer, IReplyObjectProcess> mHashMapIdToProcess = new HashMap<>();
 
     private AtomicInteger mnCallId = new AtomicInteger(1);
@@ -89,8 +94,6 @@ public class Websocket_api extends WebSocketListener {
 
             if (iReplyObjectProcess != null) {
                 iReplyObjectProcess.processTextToObject(text);
-            } else {
-
             }
         } catch (JsonSyntaxException e) {
             e.printStackTrace();
@@ -110,6 +113,8 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
+        mnConnectStatus = WEBSOCKET_CONNECT_CLOSING;
+        Log.i(TAG, "onClosing: ");
     }
 
     /**
@@ -118,6 +123,8 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onClosed(WebSocket webSocket, int code, String reason) {
+        mnConnectStatus = WEBSOCKET_CONNECT_CLOSED;
+        Log.i(TAG, "onClosed: ");
     }
 
     /**
@@ -127,13 +134,17 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+        mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
+        Log.i(TAG, "onFailure: ");
+        BtslandApplication.sendBroadcast(BtslandApplication.getInstance(),CONNECT);
+
     }
 
     private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
         Log.i(TAG, "login: ");
         Call callObject = new Call();
 
-        callObject.id = mnCallId.getAndIncrement();;
+        callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
         callObject.params.add(1);
@@ -153,8 +164,7 @@ public class Websocket_api extends WebSocketListener {
     }
 
     public synchronized int connect() {
-        Log.i(TAG, "connect: ");
-        Log.e("websocket", "connect: "+Thread.currentThread().getName());
+        Log.e(TAG, "connect: "+Thread.currentThread().getName());
 //        Request request = new Request.Builder().url("wss://bitshares.openledger.info/ws").build();
 //        mOkHttpClient = new OkHttpClient();
 //        mWebsocket = mOkHttpClient.newWebSocket(request, this);
@@ -364,7 +374,7 @@ public class Websocket_api extends WebSocketListener {
 
         return reply.result;
     }
-    public synchronized MarketTicker get_ticker(String base, String quote) throws NetworkStatusException {
+    public MarketTicker get_ticker(String base, String quote) throws NetworkStatusException {
         if(base.equals(quote)){
             return null;
         }
@@ -393,9 +403,6 @@ public class Websocket_api extends WebSocketListener {
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
-
-
-
 
         }
 

@@ -3,6 +3,7 @@ package info.btsland.app.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -30,8 +31,9 @@ import info.btsland.app.model.OrderBook;
 
 public class MarketStat {
     private static final String TAG = "MarketStat";
-    public static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
-    
+    public static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
+
+    public static final long DEFAULT_UPDATE_SECS = TimeUnit.MINUTES.toSeconds(1);//信息刷新的间隔
     public static final int STAT_MARKET_HISTORY = 0x01;
     public static final int STAT_MARKET_TICKER = 0x02;
     public static final int STAT_MARKET_ORDER_BOOK = 0x04;
@@ -39,10 +41,10 @@ public class MarketStat {
     public static final int STAT_COUNECT=0x12;
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
-    private Websocket_api mWebsocketApi=new Websocket_api();
+    public Websocket_api mWebsocketApi=new Websocket_api();
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
-    public HashMap<String, Connect> connectHashMap = new HashMap<>();
+    public  HashMap<String, Connect> connectHashMap = new HashMap<>();
     private static boolean isDeserializerRegistered = false;
     
     private String[] quotes;
@@ -56,14 +58,22 @@ public class MarketStat {
 
 
     }
-    public void subscribe(String[] base,String[] quotes,int stats,
+
+    /**
+     *
+     * @param base
+     * @param quotes
+     * @param stats
+     * @param l
+     */
+    public void subscribe(String[] base,String[] quotes,int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
         this.quotes=quotes;
         //Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
         for(int i=0;i<base.length;i++){
-            unsubscribe(base[i], "");
-            Subscription subscription =new Subscription(base[i], stats, l);
-            subscriptionHashMap.put(makeMarketName(base[i], ""), subscription);
+            unsubscribe(base[i], "",stats);
+            Subscription subscription =new Subscription(base[i], stats, intervalMillis,l);
+            subscriptionHashMap.put(makeMarketName(base[i], "",stats), subscription);
         }
 
 
@@ -74,21 +84,33 @@ public class MarketStat {
         connectHashMap.put("connect", connect);
 
     }
-    public void subscribe(String base, String quote, int stats, long intervalMillis,
+    public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
-        subscribe(base, quote, DEFAULT_BUCKET_SECS, stats, intervalMillis, l);
+        subscribe(base, quote, DEFAULT_BUCKET_SECS, stats,intervalMillis, l);
     }
 
-    public void subscribe(String base, String quote, long bucketSize, int stats,
-                          long intervalMillis, OnMarketStatUpdateListener l) {
-        unsubscribe(base, quote);
+    private void subscribe(String base, String quote, long bucketSize, int stats,long intervalMillis,
+                          OnMarketStatUpdateListener l) {
+        unsubscribe(base, quote,stats);
         Subscription subscription =
-                new Subscription(base, quote, bucketSize, stats, intervalMillis, l);
-        subscriptionHashMap.put(makeMarketName(base, quote), subscription);
+                new Subscription(base, quote, bucketSize, stats,intervalMillis, l);
+        subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
+    }
+    public void subscribe(String base, String quote, int stats,
+                          OnMarketStatUpdateListener l) {
+        subscribe(base, quote, DEFAULT_BUCKET_SECS, stats, l);
     }
 
-    public void unsubscribe(String base, String quote) {
-        String market = makeMarketName(base, quote);
+    private void subscribe(String base, String quote, long bucketSize, int stats,
+                          OnMarketStatUpdateListener l) {
+        unsubscribe(base, quote,stats);
+        Subscription subscription =
+                new Subscription(base, quote, bucketSize, stats, l);
+        subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
+    }
+
+    public void unsubscribe(String base, String quote,int stats) {
+        String market = makeMarketName(base, quote,stats);
         Subscription subscription = subscriptionHashMap.get(market);
         if (subscription != null) {
             subscriptionHashMap.remove(market);
@@ -96,25 +118,30 @@ public class MarketStat {
         }
     }
 
-    public void updateImmediately(String base, String quote) {
-        String market = makeMarketName(base, quote);
+    public void updateImmediately(String base, String quote,int stats) {
+        String market = makeMarketName(base, quote,stats);
         Subscription subscription = subscriptionHashMap.get(market);
         if (subscription != null) {
             subscription.updateImmediately();
         }
     }
-
-    private static String makeMarketName(String base, String quote) {
+    public void updateConnect(String name) {
+        Connect connect = connectHashMap.get(name);
+        if (connect != null) {
+            connect.updateConnect();
+        }
+    }
+    private static String makeMarketName(String base, String quote,int stats) {
         if((base==null||base=="")&&(quote==null||quote=="")){
             return "";
         }
         if((base!=null||base!="")&&(quote==null||quote=="")){
-            return String.format("%s_%s", base.toLowerCase(),"");
+            return String.format("%s_%s_%s", base.toLowerCase(),"",stats);
         }
         if((base==null||base=="")&&(quote!=null||quote!="")){
-            return String.format("%s_%s", "",quote.toLowerCase());
+            return String.format("%s_%s_%s", "",quote.toLowerCase(),stats);
         }else {
-            return String.format("%s_%s", base.toLowerCase(), quote.toLowerCase());
+            return String.format("%s_%s_%s", base.toLowerCase(), quote.toLowerCase(),stats);
         }
     }
 
@@ -169,11 +196,12 @@ public class MarketStat {
         void onMarketStatUpdate(Stat stat);
     }
 
-    private class Connect implements Runnable {
+    public class Connect implements Runnable {
         private int stats;
         private OnMarketStatUpdateListener listener;
         private HandlerThread statThread;
         private Handler statHandler;
+        private Handler handler=new Handler();
         private Connect(int stats, OnMarketStatUpdateListener l) {
             this.stats = stats;
             this.listener = l;
@@ -186,11 +214,13 @@ public class MarketStat {
         public void unConnect(String name) {
             Connect connect = connectHashMap.get(name);
             if (connect != null) {
-                subscriptionHashMap.remove(connect);
+                connectHashMap.remove(connect);
             }
         }
+
         @Override
         public void run() {
+            Log.i(TAG, "run: "+Thread.currentThread().getName());
             //登录
             final Stat stat = new Stat();
             if ((stats & STAT_COUNECT) != 0) {
@@ -198,40 +228,55 @@ public class MarketStat {
                 listener.onMarketStatUpdate(stat);
             }
         }
+
+        public void updateConnect() {
+            statHandler.post(this);
+        }
     }
 
-    private class Subscription implements Runnable {
+    public class Subscription implements Runnable {
         private String base;
         private String quote;
         private long bucketSecs = DEFAULT_BUCKET_SECS;
         private int stats;
-        private long intervalMillis;
+        private long intervalMillis=DEFAULT_UPDATE_SECS;
         private OnMarketStatUpdateListener listener;
         private asset_object baseAsset;
         private asset_object quoteAsset;
         private HandlerThread statThread;
         private Handler statHandler;
+        private Handler handler=new Handler();
         private AtomicBoolean isCancelled = new AtomicBoolean(false);
-
-        private Subscription(String base, String quote, long bucketSecs, int stats,
-                             long intervalMillis, OnMarketStatUpdateListener l) {
+        private Subscription(String base, String quote, long bucketSecs, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             this.base = base;
             this.quote = quote;
             this.bucketSecs = bucketSecs;
             this.stats = stats;
-            this.intervalMillis = intervalMillis;
+            this.intervalMillis=intervalMillis;
             this.listener = l;
-            this.statThread = new HandlerThread(makeMarketName(base, quote));
+            this.statThread = new HandlerThread(makeMarketName(base, quote,stats));
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
-        private Subscription(String base, int stats, OnMarketStatUpdateListener l) {
+        private Subscription(String base, String quote, long bucketSecs, int stats, OnMarketStatUpdateListener l) {
+            this.base = base;
+            this.quote = quote;
+            this.bucketSecs = bucketSecs;
+            this.stats = stats;
+            this.listener = l;
+            this.statThread = new HandlerThread(makeMarketName(base, quote,stats));
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+        }
+        private Subscription(String base, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.base = base;
             this.stats = stats;
+            this.intervalMillis=intervalMillis;
             this.listener = l;
-            this.statThread = new HandlerThread(makeMarketName(base, ""));
+            this.statThread = new HandlerThread(makeMarketName(base, "",stats));
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
@@ -241,7 +286,8 @@ public class MarketStat {
             isCancelled.set(true);
         }
 
-        private void updateImmediately() {
+        public void updateImmediately() {
+            statHandler.post(this);
         }
 
         @Override
@@ -298,8 +344,6 @@ public class MarketStat {
                 if (isCancelled.get()) {
                     return;
                 }
-
-
                 listener.onMarketStatUpdate(stat);
             } else if (!isCancelled.get()) {
 
@@ -321,25 +365,15 @@ public class MarketStat {
         }
 
         private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs) {
-            // 服务器每次最多返回200个bucket对象
-            final int maxBucketCount = 70;
-            Date startDate1 = new Date(
-                    System.currentTimeMillis() - bucketSecs * maxBucketCount * 1000);
-            Date startDate2 = new Date(
-                    System.currentTimeMillis() - bucketSecs * maxBucketCount * 2000);
+            Date startDate = new Date(
+                    System.currentTimeMillis() -TimeUnit.DAYS.toMillis(1));
             Date endDate = new Date(System.currentTimeMillis());
-            List<bucket_object> buckets1 = getMarketHistory(base,quote,bucketSecs,startDate2, startDate1);
-            List<bucket_object> buckets2 = getMarketHistory(base,quote,bucketSecs,startDate1, endDate);
+            List<bucket_object> buckets= getMarketHistory(base,quote,bucketSecs,startDate, endDate);
 
             List<HistoryPrice> prices=new ArrayList<>();
-            if (buckets1 != null) {
-                for (int i = 0; i < buckets1.size(); i++) {
-                    prices.add(priceFromBucket(buckets1.get(i)));
-                }
-            }
-            if (buckets2 != null) {
-                for (int i = 0; i < buckets2.size(); i++) {
-                    prices.add(priceFromBucket(buckets2.get(i)));
+            if (buckets != null) {
+                for (int i = 0; i < buckets.size(); i++) {
+                    prices.add(priceFromBucket(buckets.get(i)));
                 }
             }
             return prices;

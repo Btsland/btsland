@@ -45,7 +45,7 @@ public class UserSetActivity extends AppCompatActivity {
             headFragment = new HeadFragment();
             headFragment.setType(HeadFragment.HeadType.BACK_NULL);
             headFragment.setTitleName("用户资产设置");
-            transaction.add(R.id.fra_userset_head, headFragment);
+            transaction.add(R.id.fra_user_set_head, headFragment);
         }
         transaction.commit();
     }

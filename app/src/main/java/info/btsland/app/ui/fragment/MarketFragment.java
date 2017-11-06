@@ -61,7 +61,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         quotes1=BtslandApplication.quotes1;
         quotes2=BtslandApplication.quotes2;
         if(InternetUtil.isConnected(BtslandApplication.getInstance())){
-            marketStat.subscribe(bases,quotes2,MarketStat.STAT_TICKERS_BASE,this);
+            marketStat.subscribe(bases,quotes2,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_SECS,this);
         }
     }
     @Override

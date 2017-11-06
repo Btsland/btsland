@@ -157,24 +157,16 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
     public void startReceiveMarkets(MarketTicker market) {
         if (market != null) {
-            if (market.base.equals(base) && market.quote.equals(quote)) {
-                Intent intent = new Intent(getActivity(), MarketDetailedActivity.class);
-                intent.putExtra("MarketTicker", market);
-                getActivity().startActivity(intent);
-                return;
-            }else {
-                this.base=market.base;
-                this.quote=market.quote;
-               // deal.setText(quote+":"+base);
-            }
+            this.base=market.base;
+            this.quote=market.quote;
+            // deal.setText(quote+":"+base);
         }
         marketStat.subscribe(
                 base,
                 quote,
-                MarketStat.DEFAULT_BUCKET_SECS,
                 MarketStat.STAT_MARKET_HISTORY,
-                DEFAULT_BUCKET_SECS,this);
-
+                MarketStat.DEFAULT_UPDATE_SECS,
+                this);
     }
 
 
@@ -252,8 +244,8 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         leftAxis.setDrawGridLines(true);//绘制y轴格网线
         leftAxis.setDrawLabels(true);//显示坐标轴上的值, ...其他样式
         leftAxis.setStartAtZero(false);
-        leftAxis.setAxisMaxValue((float) (max*1.05));
-        leftAxis.setAxisMinValue((float) (min*0.95));
+        leftAxis.setAxisMaxValue(max);
+        leftAxis.setAxisMinValue(min);
 
 
         YAxis rightAxis = simpleK.getAxisRight();//取得左侧y轴
@@ -279,10 +271,17 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         MarketTicker market=null;
         if (getArguments() != null) {
             market= (MarketTicker) getArguments().getSerializable("MarketTicker");
-            if (market!= null) {
-                base = market.base;
-                quote = market.quote;
+            if (market != null) {
+                this.base=market.base;
+                this.quote=market.quote;
+                // deal.setText(quote+":"+base);
             }
+            marketStat.subscribe(
+                    base,
+                    quote,
+                    MarketStat.STAT_MARKET_HISTORY,
+                    MarketStat.DEFAULT_UPDATE_SECS,
+                    this);
 
         }
         init(view);

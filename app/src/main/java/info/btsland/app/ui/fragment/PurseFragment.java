@@ -73,12 +73,12 @@ public class PurseFragment extends Fragment {
         tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
         tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
 
-        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
-        tvPurseAllAsset.setOnTouchListener(onTouchlistener);
-        tvPurseRW.setOnTouchListener(onTouchlistener);
-        tvPurseDeal.setOnTouchListener(onTouchlistener);
-        tvPurseAllRemain.setOnTouchListener(onTouchlistener);
-        tvPurseBackup.setOnTouchListener(onTouchlistener);
+//        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
+//        tvPurseAllAsset.setOnTouchListener(onTouchlistener);
+//        tvPurseRW.setOnTouchListener(onTouchlistener);
+//        tvPurseDeal.setOnTouchListener(onTouchlistener);
+//        tvPurseAllRemain.setOnTouchListener(onTouchlistener);
+//        tvPurseBackup.setOnTouchListener(onTouchlistener);
 
         TextViewOnCLickListener onCLickListener = new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);

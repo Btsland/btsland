@@ -1,18 +1,24 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DecimalFormat;
 import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
 /**
@@ -20,6 +26,9 @@ import info.btsland.app.ui.fragment.MarketSimpleKFragment;
  */
 
 public class MarketRowAdapter extends BaseAdapter {
+
+    long mLastTime=0;
+    long mCurTime=0;
     private MarketSimpleKFragment simpleKFragment;
     private List<MarketTicker> markets;
     private LayoutInflater inflater;
@@ -55,7 +64,7 @@ public class MarketRowAdapter extends BaseAdapter {
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
         final MarketTicker market = markets.get(i);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.fragment_market_row, null);
+            convertView = inflater.inflate(R.layout.market_row, null);
 
         }
         TextView tvCoin = convertView.findViewById(R.id.tv_coin);
@@ -86,11 +95,49 @@ public class MarketRowAdapter extends BaseAdapter {
 
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                Log.i("onClick", "onClick: market1:" + market.quote + ":" + market.base);
-                simpleKFragment.startReceiveMarkets(market);
+            public void onClick(View v) {
+                Message message=Message.obtain();
+                Log.i("sadasdadada", "onClick: i:"+i);
+                mLastTime=mCurTime;
+                mCurTime= System.currentTimeMillis();
+                if(mCurTime-mLastTime<300){//双击事件
+                    mCurTime =0;
+                    mLastTime = 0;
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("result",2);
+                    bundle.putSerializable("MarketTicker",markets.get(i));
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }else{//单击事件
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("result",1);
+                    bundle.putSerializable("MarketTicker",markets.get(i));
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }
+
             }
         });
         return convertView;
+
     }
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle=msg.getData();
+            MarketTicker market = (MarketTicker) bundle.getSerializable("MarketTicker");
+            switch (bundle.getInt("result")) {
+                case 1:
+                    Toast.makeText(context,"双击可以进入详细页面哦！",Toast.LENGTH_LONG).show();
+                    break;
+                case 2:
+                    Toast.makeText(context,"双击事件！",Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, MarketDetailedActivity.class);
+                    intent.putExtra("MarketTicker", market);
+                    context.startActivity(intent);
+                    break;
+            }
+        }
+    };
 }

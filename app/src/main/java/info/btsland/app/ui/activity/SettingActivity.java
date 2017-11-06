@@ -51,13 +51,13 @@ public class SettingActivity extends BaseActivity{
         tvSetWe= (TextView) findViewById(R.id.tv_set_we);
         tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
 
-        //绑定特效事件
-        TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
-        tvSetLanguage.setOnTouchListener(OnTouchListener);
-        tvSetTheme.setOnTouchListener(OnTouchListener);
-        tvSetGuide.setOnTouchListener(OnTouchListener);
-        tvSetWe.setOnTouchListener(OnTouchListener);
-        tvSetEdition.setOnTouchListener(OnTouchListener);
+//        //绑定特效事件
+//        TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
+//        tvSetLanguage.setOnTouchListener(OnTouchListener);
+//        tvSetTheme.setOnTouchListener(OnTouchListener);
+//        tvSetGuide.setOnTouchListener(OnTouchListener);
+//        tvSetWe.setOnTouchListener(OnTouchListener);
+//        tvSetEdition.setOnTouchListener(OnTouchListener);
 
         //绑定点击事件
         TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
@@ -163,41 +163,41 @@ public class SettingActivity extends BaseActivity{
     }
 
 
-    /**
-     * 单击特效
-     * @param textView 被单击的tv
-     * @param motionEvent 当前状态
-     */
-    protected void touchColor(TextView textView,MotionEvent motionEvent){
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
-        }
-        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
-        }
-    }
-    class TextViewOnTouchListener implements View.OnTouchListener{
-        @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
-            switch (view.getId()) {
-                case R.id.tv_set_language:
-                    touchColor(tvSetLanguage,motionEvent);
-                    break;
-                case R.id.tv_set_theme:
-                    touchColor(tvSetTheme,motionEvent);
-                    break;
-                case R.id.tv_set_guide:
-                    touchColor(tvSetGuide,motionEvent);
-                    break;
-                case R.id.tv_set_we:
-                    touchColor(tvSetWe,motionEvent);
-                    break;
-
-                case R.id.tv_set_edition:
-                    touchColor(tvSetEdition,motionEvent);
-                    break;
-            }
-            return false;
-        }
-    }
+//    /**
+//     * 单击特效
+//     * @param textView 被单击的tv
+//     * @param motionEvent 当前状态
+//     */
+//    protected void touchColor(TextView textView,MotionEvent motionEvent){
+//        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+//            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
+//        }
+//        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+//            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
+//        }
+//    }
+//    class TextViewOnTouchListener implements View.OnTouchListener{
+//        @Override
+//        public boolean onTouch(View view, MotionEvent motionEvent) {
+//            switch (view.getId()) {
+//                case R.id.tv_set_language:
+//                    touchColor(tvSetLanguage,motionEvent);
+//                    break;
+//                case R.id.tv_set_theme:
+//                    touchColor(tvSetTheme,motionEvent);
+//                    break;
+//                case R.id.tv_set_guide:
+//                    touchColor(tvSetGuide,motionEvent);
+//                    break;
+//                case R.id.tv_set_we:
+//                    touchColor(tvSetWe,motionEvent);
+//                    break;
+//
+//                case R.id.tv_set_edition:
+//                    touchColor(tvSetEdition,motionEvent);
+//                    break;
+//            }
+//            return false;
+//        }
+//    }
 }

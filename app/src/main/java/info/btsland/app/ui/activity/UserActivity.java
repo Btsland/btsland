@@ -45,13 +45,13 @@ public class UserActivity extends AppCompatActivity {
         tvUserSeting = (TextView) findViewById(R.id.tv_user_set);
            tvUserLogin=(TextView) findViewById(R.id.tv_user_login);
         //绑定监听器
-        tvUserInfo.setOnTouchListener(new TextViewListener());
-        tvUserWhiteList.setOnTouchListener(new TextViewListener());
-        //tvUserPower.setOnTouchListener(new TextViewListener());
-        tvUserRecent.setOnTouchListener(new TextViewListener());
-        tvUserEntrust.setOnTouchListener(new TextViewListener());
-        tvUserSeting.setOnTouchListener(new TextViewListener());
-        tvUserLogin.setOnTouchListener(new TextViewListener());
+        tvUserInfo.setOnClickListener(new TextViewListener());
+        tvUserWhiteList.setOnClickListener(new TextViewListener());
+        //tvUserPower.setOnClickListener(new TextViewListener());
+        tvUserRecent.setOnClickListener(new TextViewListener());
+        tvUserEntrust.setOnClickListener(new TextViewListener());
+        tvUserSeting.setOnClickListener(new TextViewListener());
+        tvUserLogin.setOnClickListener(new TextViewListener());
     }
 
     /**
@@ -83,17 +83,18 @@ public class UserActivity extends AppCompatActivity {
     }
 
 
-    class TextViewListener implements View.OnTouchListener {
+    class TextViewListener implements View.OnClickListener {
+
         @Override
-        public boolean onTouch(View view, MotionEvent motionEvent) {
+        public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tv_user_info:
-                    touchColor(tvUserInfo, motionEvent);
+                    //touchColor(tvUserInfo, motionEvent);
                     Intent iUserInfo =new Intent(UserActivity.this,UserInfoActivity.class);
                     startActivity(iUserInfo);
                     break;
                 case R.id.tv_user_whiteList:
-                   // touchColor(tvUserWhiteList, motionEvent);
+                    // touchColor(tvUserWhiteList, motionEvent);
                     Intent iWhiteList=new Intent(UserActivity.this,WhiteListActivity.class);
                     startActivity(iWhiteList);
                     break;
@@ -112,7 +113,7 @@ public class UserActivity extends AppCompatActivity {
                     startActivity(iEntrust);
                     break;
                 case R.id.tv_user_set:
-                   // touchColor(tvUserSetting, motionEvent);
+                    // touchColor(tvUserSetting, motionEvent);
 
                     Intent iUserSet=new Intent(UserActivity.this,UserSetActivity.class);
                     //启动
@@ -120,14 +121,13 @@ public class UserActivity extends AppCompatActivity {
                     break;
 
                 case R.id.tv_user_login:
-                      Intent iUserLogin=new Intent(UserActivity.this,LoginActivity.class);
+                    Intent iUserLogin=new Intent(UserActivity.this,LoginActivity.class);
                     startActivity(iUserLogin);
 
-                break;
+                    break;
 
 
             }
-            return false;
         }
     }
 }

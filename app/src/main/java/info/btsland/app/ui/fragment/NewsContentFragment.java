@@ -54,10 +54,13 @@ public class NewsContentFragment extends Fragment {
         TextView newsContentText = (TextView) getActivity().findViewById(R.id.news_content);    //得到新闻内容控件的实例
         TextView newsDateText = (TextView) getActivity().findViewById(R.id.news_date);          //得到新闻时间控件的示例
         TextView newsAuthorText = (TextView) getActivity().findViewById(R.id.news_author);      //得到新闻作者控件的示例
+//        TextView newsImageText = (TextView) getActivity().findViewById(R.id.news_images);       //得到新闻图片控件的示例
+
         newsTitleText.setText(news.getTitle());         //刷新新闻的标题
         newsContentText.setText(news.getContent());     //刷新新闻的内容
         newsDateText.setText(news.getDate());           //刷新新闻的时间
         newsAuthorText.setText(news.getAuthor());       //刷新新闻的作者
+//        newsImageText.setText(news.getImage());         //刷新新闻的图片
 
     }
 }

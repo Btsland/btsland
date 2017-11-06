@@ -50,6 +50,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
         TextView newsDateText = (TextView) view.findViewById(R.id.news_date);
         //实例化新闻作者
         TextView newsAuthorText = (TextView) view.findViewById(R.id.news_author);
+        //实例化新闻图片
+//        TextView newsImageText = (TextView) view.findViewById(R.id.news_images);
 
         //让新闻的标题在列表中进行显示
         newsTitleText.setText(news.getTitle());
@@ -59,6 +61,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
         newsDateText.setText(news.getDate());
         //让新闻的作者在列表中进行显示
         newsAuthorText.setText(news.getAuthor());
+        //让新闻的图片在列表中进行显示
+//        newsImageText.setText(news.getImage());
 
         return view;
     }

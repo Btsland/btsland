@@ -6,6 +6,7 @@ import android.annotation.TargetApi;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.app.WallpaperManager;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button bt_pwd_eye;
     private Button login;
     private Button register;
+    private Button tourist;
     private boolean isOpen = false;
 
 
@@ -101,6 +103,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if ("".equals(user)) {
                     // 用户名为空,设置按钮不可见
                     bt_username_clear.setVisibility(View.INVISIBLE);
+                    login.setVisibility(View.INVISIBLE);
                 } else {
                     // 用户名不为空，设置按钮可见
                     bt_username_clear.setVisibility(View.VISIBLE);
@@ -128,10 +131,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // 获得文本框中的用户
                 String pwd = password.getText().toString().trim();
                 if ("".equals(pwd)) {
-                    // 用户名为空,设置按钮不可见
+                    // 密码为空,设置按钮不可见
                     bt_pwd_clear.setVisibility(View.INVISIBLE);
+                    login.setVisibility(View.INVISIBLE);
                 } else {
-                    // 用户名不为空，设置按钮可见
+                    // 密码不为空，设置按钮可见
                     bt_pwd_clear.setVisibility(View.VISIBLE);
                 }
             }
@@ -165,6 +169,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         forgive_pwd = (Button) findViewById(R.id.forgive_pwd);
         forgive_pwd.setOnClickListener(this);
+
+        tourist=(Button) findViewById(R.id.tourist);
+        tourist.setOnClickListener(this);
 
     }
 
@@ -207,7 +214,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // 忘记密码按钮
                 Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
                 break;
-
+            case R.id.tourist:
+               LoginActivity.this.finish();
+                break;
             default:
                 break;
         }

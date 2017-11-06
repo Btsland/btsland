@@ -24,7 +24,6 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
     private List<News> newsList;
     private NewsAdapter adapter;
     private boolean isTwoPane;
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -64,8 +63,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new16 = new News();
         new16.setTitle("波士顿联邦储备银行高级副总裁：分布式账本技术能够“从根本上改变”改变金融服务领域");
         new16.setDate("2017-10-31");
-        new16.setAuthor("作者：Sujha Sundararajan");
-        new16.setTitleContent("美国波士顿联邦储备银行高级副总裁Jim Cunha表示分布式账本技术（DLT）能够“从根本上改变”很多金融服务领域。在波士顿联邦储备银行的官网上发布的一篇文章中，Cunha表露出使用DLT的创新可以为支付等领域带来优势，他表示：“DLT有可能从根本上改变金融服务的许多领域，而支付只是其中之一。证券（出售以及交易后流程），衍生品，贸易金融和供应链等领域都有可能被改变。”");
+        new16.setAuthor("Sujha htmlFor02");
         new16.setContent("美国波士顿联邦储备银行高级副总裁Jim Cunha表示分布式账本技术（DLT）能够“从根本上改变”很多金融服务领域。\n" +
                 "\n" +
                 "在波士顿联邦储备银行的官网上发布的一篇文章中，Cunha表露出使用DLT的创新可以为支付等领域带来优势，他表示：\n" +
@@ -95,8 +93,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new15 = new News();
         new15.setTitle("不止于多链钱包，Kcash希望将数字资产应用到真实场景");
         new15.setDate("2017-10-31");
-        new15.setAuthor("作者：萌大大");
-        new15.setTitleContent("据coinmarketcap统计，全球数字资产总市值已经超过一千六百亿美元，种类达一千多种，随着数字资产整体市值不断增加，如何安全，便捷地储存和管理成了每个数字资产持有者面临的首要问题。今年10月，数字货币交易平台全面退出中国。同时，也给大批用户带来困扰：手上的数字资产放哪才安心？");
+        new15.setAuthor("萌大大");
         new15.setContent("据coinmarketcap统计，全球数字资产总市值已经超过一千六百亿美元，种类达一千多种，随着数字资产整体市值不断增加，如何安全，便捷地储存和管理成了每个数字资产持有者面临的首要问题。\n" +
                 "\n" +
                 "今年10月，数字货币交易平台全面退出中国。同时，也给大批用户带来困扰：手上的数字资产放哪才安心？\n" +
@@ -139,8 +136,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new13 = new News();
         new13.setTitle("互联网的进化，区块链的必然");
         new13.setDate("2017-10-31");
-        new13.setAuthor("作者：区块人生");
-        new13.setTitleContent("在《比特币前传》一文中提到，比特币的市值在众多数字货币中可谓一骑绝尘，什么因素促成了其价格节节攀升，我会在后续文章中尽量试着回答。现在让我们把目光转到比特币背后的技术——区块链，没有区块链这个技术基石，比特币就是空中楼阁。真正的创新并非数字货币本身，因为本质上它就是一串数字，真正的变革来自铸造货币的“信任机器”。这一创新所承载的延伸意义，已经远远超出了数字货币的范畴。区块链可以让人们在没有中央权威机构的情况下，为彼此互相协作建立起信任。简单的说，它是一台创造信任的机器。");
+        new13.setAuthor("区块人生");
         new13.setContent("在《比特币前传》一文中提到，比特币的市值在众多数字货币中可谓一骑绝尘，什么因素促成了其价格节节攀升，我会在后续文章中尽量试着回答。现在让我们把目光转到比特币背后的技术——区块链，没有区块链这个技术基石，比特币就是空中楼阁。真正的创新并非数字货币本身，因为本质上它就是一串数字，真正的变革来自铸造货币的“信任机器”。\n" +
                 "\n" +
                 "这一创新所承载的延伸意义，已经远远超出了数字货币的范畴。区块链可以让人们在没有中央权威机构的情况下，为彼此互相协作建立起信任。简单的说，它是一台创造信任的机器。\n" +
@@ -173,8 +169,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new10 = new News();
         new10.setTitle("欧盟委员会宣布300亿欧元技术创新投资，涵盖区块链技术");
         new10.setDate("2017-10-31");
-        new10.setAuthor("作者：Stan Higgins");
-        new10.setTitleContent("欧盟委员会已经宣布了针对技术创新的300亿欧元新投资，包括涉及到区块链的项目。这些资金将通过Horizon 2020倡议来提供，该倡议迄今为止已经获得了770亿欧元支持。根据10月27日发布的一份声明显示，该倡议的目标是支持在“移民、安全、气候、清洁能源和数字经济”以及“市场创新突破”领域进行的新投资。清洁能源有望成为一个主要的重点领域，预计2018至2020年间将获得33亿欧元支持。");
+        new10.setAuthor("Stan Higgins");
         new10.setContent("欧盟委员会已经宣布了针对技术创新的300亿欧元新投资，包括涉及到区块链的项目。\n" +
                 "\n" +
                 "这些资金将通过Horizon 2020倡议来提供，该倡议迄今为止已经获得了770亿欧元支持。\n" +
@@ -195,8 +190,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new11 = new News();
         new11.setTitle("比特币创下6300美元新高，商界领袖表示不淡定了");
         new11.setDate("2017-10-31");
-        new11.setAuthor("作者：Pete Rizzo");
-        new11.setTitleContent("北京时间10月30日，比特币价格在今日最高升至6306.58美元，再次创下历史新高。一周前，比特币首次突破6000美元大关，在短暂达到6183美元高位后，比特币又回落至5500美元附近。今年以来，比特币的价格增幅已超过了500%，在年初时，其价格才刚刚超过1000美元。");
+        new11.setAuthor("Pete Rizzo");
         new11.setContent("北京时间10月30日，比特币价格在今日最高升至6306.58美元，再次创下历史新高。\n" +
                 "\n" +
                 "一周前，比特币首次突破6000美元大关，在短暂达到6183美元高位后，比特币又回落至5500美元附近。\n" +
@@ -217,8 +211,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new8 = new News();
         new8.setTitle("韩国央行行长：比特币是商品而非货币，央行需加强对虚拟货币的研究");
         new8.setDate("2017-10-26");
-        new8.setAuthor("作者：Wolfie Zhao");
-        new8.setTitleContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。据汉城联合通讯社报道，Lee行长否定了接受加密货币作为法定货币的可能性。这项声明是在韩国禁止ICO后，由官方发布的针对加密货币技术的最新评估。“对虚拟货币进行监管是合适的，因为它们属于商品，而不是法定货币，” Lee在韩国国民议会举办的一次政府审计会议上表示。");
+        new8.setAuthor("Wolfie Zhao");
         new8.setContent("北京时间10月26日消息，韩国央行行长Lee Ju-yeol近日否决了比特币的货币属性，而是将这类加密货币归类为一种商品。\n" +
                 "\n" +
                 "据汉城联合通讯社报道，Lee行长否定了接受加密货币作为法定货币的可能性。这项声明是在韩国禁止ICO后，由官方发布的针对加密货币技术的最新评估。\n" +
@@ -238,8 +231,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new1 = new News();
         new1.setTitle("穆迪：区块链和加密货币的颠覆潜力不可避免");
         new1.setDate("2017-10-26");
-        new1.setAuthor("作者：Tanzeel Akhtar");
-        new1.setTitleContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。穆迪分析师斯蒂芬•索恩（Stephen Sohn）及其团队在本月中发表了一篇名为《消费者数字支付——美国》的报告，他们在报告中安慰支付领域参与者，区块链技术是一个“遥远的威胁”。");
+        new1.setAuthor("Tanzeel Akhtar");
         new1.setContent("亚洲第一信用评级机构穆迪（Moody’s）投资者服务中心安慰美国支付领域，区块链和加密货币能构成的“威胁”距离我们还很“遥远”，但最终各个企业还是会采用这项技术。\n" +
                 "\n" +
                 "穆迪分析师斯蒂芬•索恩（Stephen Sohn）及其团队在本月中发表了一篇名为《消费者数字支付——美国》的报告，他们在报告中安慰支付领域参与者，区块链技术是一个“遥远的威胁”。\n" +
@@ -264,8 +256,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new7 = new News();
         new7.setTitle("到2027年，每家公司都将使用区块链技术，原因在这里");
         new7.setDate("2017-10-26");
-        new7.setAuthor("作者：Mohit Mamoria");
-        new7.setTitleContent("大约10年以前，比特币之父中本聪发表了一份长达8页的调查报告，解释了比特币如何实现货币的去中心化。这一报告悄无声息地扰乱了银行等信用机构的运行。但那时并没有多少人理解这八页报告蕴含的潜力。但我所要讲的并不是货币的去中心化，而是去中心化本身。在这八页报告中，中本聪不仅揭示了人们如何重新获得对自己资金的控制权，而且还为陌生人之间的合作提供了新的方案。");
+        new7.setAuthor("Mohit Mamoria");
         new7.setContent("大约10年以前，比特币之父中本聪发表了一份长达8页的调查报告，解释了比特币如何实现货币的去中心化。这一报告悄无声息地扰乱了银行等信用机构的运行。但那时并没有多少人理解这八页报告蕴含的潜力。\n" +
                 "\n" +
                 "但我所要讲的并不是货币的去中心化，而是去中心化本身。在这八页报告中，中本聪不仅揭示了人们如何重新获得对自己资金的控制权，而且还为陌生人之间的合作提供了新的方案。\n" +
@@ -351,8 +342,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new6 = new News();
         new6.setTitle("香港金管局与新加坡金管局宣布达成区块链合作，双方区块链贸易金融平台将联合");
         new6.setDate("2017-10-25");
-        new6.setAuthor("作者：Elzio Barreto");
-        new6.setTitleContent("香港金融管理局（HKMA）与新加坡金融管理局（MAS）（具有中央银行职能）宣布他们计划将他们正在使用区块链技术开发的贸易金融平台连接在一起，从而减少在万亿美元国际贸易融资中的潜在欺诈和错误。2016年末，香港金融管理局（HKMA）与包括汇丰银行和渣打银行在内的银行测试了使用分布式账本技术（区块链技术）创建一个贸易融资平台。新加坡也正在开发一个类似的平台。");
+        new6.setAuthor("Elzio Barreto");
         new6.setContent("香港金融管理局（HKMA）与新加坡金融管理局（MAS）（具有中央银行职能）宣布他们计划将他们正在使用区块链技术开发的贸易金融平台连接在一起，从而减少在万亿美元国际贸易融资中的潜在欺诈和错误。\n" +
                 "\n" +
                 "2016年末，香港金融管理局（HKMA）与包括汇丰银行和渣打银行在内的银行测试了使用分布式账本技术（区块链技术）创建一个贸易融资平台。新加坡也正在开发一个类似的平台。\n" +
@@ -373,8 +363,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new5 = new News();
         new5.setTitle("贵州省区块链标准工作组会议召开 拟将五个领域区块链应用标准化");
         new5.setDate("2017-10-25");
-        new5.setAuthor("作者：区块链资讯");
-        new5.setTitleContent("10月24日，由贵州省大数据发展管理局、贵阳市人民政府共同发起成立的贵州省区块链标准建设指导协调组和贵州省区块链标准工作组，在贵阳国家高新区召开了“贵州省区块链标准工作组会议”，组织开展区块链标准研制工作。得天独厚 区块链标准化尽享优势");
+        new5.setAuthor("区块链资讯");
         new5.setContent("10月24日，由贵州省大数据发展管理局、贵阳市人民政府共同发起成立的贵州省区块链标准建设指导协调组和贵州省区块链标准工作组，在贵阳国家高新区召开了“贵州省区块链标准工作组会议”，组织开展区块链标准研制工作。\n" +
                 "\n" +
                 "得天独厚 区块链标准化尽享优势\n" +
@@ -405,8 +394,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new3 = new News();
         new3.setTitle("以投资者利益为先，马耳他政府出台加密货币投资基金管理规则");
         new3.setDate("2017-10-25");
-        new3.setAuthor("作者：Stan Higgins");
-        new3.setTitleContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。马耳他金融服务管理局（MFSA）本周一公布了一份指南，用于指导专业投资机构招募投资者、管理风险以及进行自我管理。这份指南在下月的咨询阶段过后将面临进一步的修改，这也是马耳他政府为这项技术部署的最新的国家政策改进。MSFA在声明中表示，这份指南将适用于各种投资基金类型。");
+        new3.setAuthor("Stan Higgins");
         new3.setContent("马耳他政府提出的加密货币投资基金规则目前正在公示阶段。\n" +
                 "\n" +
                 "马耳他金融服务管理局（MFSA）本周一公布了一份指南，用于指导专业投资机构招募投资者、管理风险以及进行自我管理。这份指南在下月的咨询阶段过后将面临进一步的修改，这也是马耳他政府为这项技术部署的最新的国家政策改进。\n" +
@@ -424,8 +412,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new2 = new News();
         new2.setTitle("银行有阻区块链创业公司发展？英国金融行为监管局（FCA）如是说");
         new2.setDate("2017-10-25");
-        new2.setAuthor("作者：Samuel Haig");
-        new2.setTitleContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。 FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”报告讨论了FCA建立“沙箱监管”一年来所取得的成就及经验教训，并指责了金融机构有意拒绝为区块链技术公司提供银行服务。");
+        new2.setAuthor("Samuel Haig");
         new2.setContent("近期，英国金融行为监管局（FCA）发布了一份评估报告，指责金融机构对分布式账本技术创业公司带来了不便。\n" +
                 "\n" +
                 "FCA指出英国银行“批量地拒绝为某些客户提供银行账户服务”\n" +
@@ -458,8 +445,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         News new9 = new News();
         new9.setTitle("区块链即服务（BaaS）：IBM，微软与亚马逊形成三足鼎立之势");
         new9.setDate("2017-10-25");
-        new9.setAuthor("作者：Divya Joshi");
-        new9.setTitleContent("什么是区块链即服务？根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。区块链是一种加密货币的所有交易的一个账本或名单，是比特币和其他加密货币的底层技术。对于区块链技术本身，它拥有无数应用，从银行服务到物联网（IoT）。");
+        new9.setAuthor("Divya Joshi");
         new9.setContent("什么是区块链即服务？\n" +
                 " \n" +
                 "根据《区块链革命》一书的作者Don Tapscott和Alex Tapscott的定义，区块链技术是一种不会腐败的经济交易数字账本，不仅能够编写用于记录金融交易，而且还包括几乎任何有价值的东西。\n" +
@@ -499,7 +485,6 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "根据AWS全球金融服务业务开发主管Scott Mullins所说，AWS正在与金融机构和区块链供应商合作刺激创新和推动无摩擦试验。\n" +
                 "\n" +
                 "R3 Corda区块链技术\n" +
-                " \n" +
                 "R3意识到分布式账本技术的力量在于其网络效应，R3因此就与这个行业合作建立了最大行业合作组织（100多家金融机构成员）——然后推出了Corda平台。\n" +
                 "\n" +
                 "R3 Corda是一个为金融行业打造的专业分布式账本平台，为企业提供了API和代码用于创建类区块链的应用，并且旨在现有全球金融市场创建更多高效性。\n" +

@@ -86,6 +86,7 @@ public class MarketStat {
     }
     public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
+        Log.i(TAG, "subscribe() called with: base = [" + base + "], quote = [" + quote + "], stats = [" + stats + "], intervalMillis = [" + intervalMillis + "], l = [" + l + "]");
         subscribe(base, quote, DEFAULT_BUCKET_SECS, stats,intervalMillis, l);
     }
 
@@ -131,7 +132,7 @@ public class MarketStat {
             connect.updateConnect();
         }
     }
-    private static String makeMarketName(String base, String quote,int stats) {
+    public static String makeMarketName(String base, String quote,int stats) {
         if((base==null||base=="")&&(quote==null||quote=="")){
             return "";
         }
@@ -147,6 +148,9 @@ public class MarketStat {
 
 
     public static class HistoryPrice {
+        public String base;
+        public String quote;
+
         public double high;
         public double low;
         public double open;
@@ -371,9 +375,10 @@ public class MarketStat {
             List<bucket_object> buckets= getMarketHistory(base,quote,bucketSecs,startDate, endDate);
 
             List<HistoryPrice> prices=new ArrayList<>();
+
             if (buckets != null) {
                 for (int i = 0; i < buckets.size(); i++) {
-                    prices.add(priceFromBucket(buckets.get(i)));
+                    prices.add(priceFromBucket(base,quote,buckets.get(i)));
                 }
             }
             return prices;
@@ -396,8 +401,10 @@ public class MarketStat {
         }
 
 
-        private HistoryPrice priceFromBucket(bucket_object bucket) {
+        private HistoryPrice priceFromBucket(String base, String quote, bucket_object bucket) {
             HistoryPrice price = new HistoryPrice();
+            price.base=base;
+            price.quote=quote;
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             try {
                 price.date = df.parse(bucket.key.open);
@@ -405,6 +412,7 @@ public class MarketStat {
                 e.printStackTrace();
             }
             if (bucket.key.quote.equals(quoteAsset.id)) {
+
                 price.high = utils.get_asset_price(bucket.high_base, baseAsset,
                         bucket.high_quote, quoteAsset);
                 price.low = utils.get_asset_price(bucket.low_base, baseAsset,

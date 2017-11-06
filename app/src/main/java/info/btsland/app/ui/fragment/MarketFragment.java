@@ -7,6 +7,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import info.btsland.app.Adapter.MarketRowAdapter;
 import info.btsland.app.BtslandApplication;
@@ -24,6 +27,7 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.util.ArrayUtils;
 import info.btsland.app.util.InternetUtil;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
@@ -36,11 +40,11 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private TextView tvMarketLeftCoin_4;
     private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
-    private List<MarketTicker> cnyMarket=new ArrayList<>();
-    private List<MarketTicker> btsMarket=new ArrayList<>();
-    private List<MarketTicker> usdMarket=new ArrayList<>();
-    private List<MarketTicker> btcMarket=new ArrayList<>();
-    private List<MarketTicker> ethMarket=new ArrayList<>();
+    private Map<String,MarketTicker> cnyMarket=new HashMap<>();
+    private Map<String,MarketTicker> btsMarket=new HashMap<>();
+    private Map<String,MarketTicker> usdMarket=new HashMap<>();
+    private Map<String,MarketTicker> btcMarket=new HashMap<>();
+    private Map<String,MarketTicker> ethMarket=new HashMap<>();
     private MarketRowAdapter cnyRowAdapter ;
     private MarketRowAdapter btsRowAdapter ;
     private MarketRowAdapter btcRowAdapter ;
@@ -53,15 +57,13 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     public static int NOTIFY_BTC=4;
     public static int NOTIFY_ETH=5;
     private String[] bases;
-    private String[] quotes1;
-    private String[] quotes2;
+    private String[] quotes;
     public MarketFragment() {
         this.marketStat= BtslandApplication.getMarketStat();
         bases=BtslandApplication.bases;
-        quotes1=BtslandApplication.quotes1;
-        quotes2=BtslandApplication.quotes2;
+        quotes=BtslandApplication.quotes2;
         if(InternetUtil.isConnected(BtslandApplication.getInstance())){
-            marketStat.subscribe(bases,quotes2,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_SECS,this);
+            marketStat.subscribe(bases,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_SECS,this);
         }
     }
     @Override
@@ -77,47 +79,63 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTicker.base.equals("CNY")));
         switch (stat.MarketTicker.base){
             case "CNY":
-                if(cnyMarket!=null&&cnyMarket.size()>=quotes1.length){
+                if(cnyMarket!=null&&cnyMarket.size()>quotes.length){
                     cnyMarket.clear();
                 }
-                Log.i(TAG, "onMarketStatUpdate: ThreadName:"+Thread.currentThread().getName());
-                cnyMarket.add(stat.MarketTicker);
+                replaceMarket(cnyMarket,stat.MarketTicker);
                 message.what=NOTIFY_CNY;
                 mHandler.sendMessage(message);
                 break;
             case "BTS":
-                if(btsMarket!=null&&btsMarket.size()>=quotes1.length){
+                if(btsMarket!=null&&btsMarket.size()>quotes.length){
                     btsMarket.clear();
                 }
-                btsMarket.add(stat.MarketTicker);
+                replaceMarket(btsMarket,stat.MarketTicker);
                 message.what=NOTIFY_BTS;
                 mHandler.sendMessage(message);
                 break;
             case "USD":
-                if(usdMarket!=null&&usdMarket.size()>=quotes1.length){
+                if(usdMarket!=null&&usdMarket.size()>quotes.length){
                     usdMarket.clear();
                 }
-                usdMarket.add(stat.MarketTicker);
+                replaceMarket(usdMarket,stat.MarketTicker);
                 message.what=NOTIFY_USD;
                 mHandler.sendMessage(message);
                 break;
             case "BTC":
-                if(btcMarket!=null&&btcMarket.size()>=quotes1.length){
+                if(btcMarket!=null&&btcMarket.size()>quotes.length){
                     btcMarket.clear();
                 }
-                btcMarket.add(stat.MarketTicker);
+                replaceMarket(btcMarket,stat.MarketTicker);
                 message.what=NOTIFY_BTC;
                 mHandler.sendMessage(message);
                 break;
             case "ETH":
-                if(ethMarket!=null&&ethMarket.size()>=quotes1.length){
+                if(ethMarket!=null&&ethMarket.size()>quotes.length){
                     ethMarket.clear();
                 }
-                ethMarket.add(stat.MarketTicker);
+                replaceMarket(ethMarket,stat.MarketTicker);
                 message.what=NOTIFY_ETH;
                 mHandler.sendMessage(message);
                 break;
         }
+    }
+    public void replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
+        String key=newMarket.quote;
+        if(oldMarkets.get(key)!=null){
+            oldMarkets.get(key).latest=newMarket.latest;
+            oldMarkets.get(key).lowest_ask=newMarket.lowest_ask;
+            oldMarkets.get(key).highest_bid=newMarket.highest_bid;
+            oldMarkets.get(key).percent_change=newMarket.percent_change;
+            oldMarkets.get(key).base_volume=newMarket.base_volume;
+            oldMarkets.get(key).quote_volume=newMarket.quote_volume;
+        }else {
+            oldMarkets.put(key,newMarket);
+            if(oldMarkets.size()>quotes.length){
+                oldMarkets.clear();
+            }
+        }
+
 
     }
     private Handler mHandler=new Handler(){
@@ -194,13 +212,14 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         tvMarketLeftCoin_5.setOnClickListener(onClickListener);
-        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), cnyMarket);
-        btsRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), btsMarket);
-        btcRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), btcMarket);
-        usdRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), usdMarket);
-        ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ethMarket);
+        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"CNY"), cnyMarket);
+        btsRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTS"), btsMarket);
+        btcRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTC"), btcMarket);
+        usdRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"USD"), usdMarket);
+        ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"CNY"), ethMarket);
 
     }
+
 
     /**
      * 装载简易K图

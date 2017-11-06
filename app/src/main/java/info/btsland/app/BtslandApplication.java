@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.CandleEntry;
 
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -39,9 +40,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static MarketStat marketStat;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
-    public static List<CandleEntry> candleEntries=new ArrayList<>();//烛形图数据
-
-    public static List<MarketStat.HistoryPrice> prices;
+    public static Map<String,List<CandleEntry>> candleEntries=new HashMap<>();//烛形图数据
+    public static Map<String,List<MarketStat.HistoryPrice>> prices =new HashMap<>();
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;
@@ -70,16 +70,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         return application;
     }
 
-    private MConnectReceiver mConnectReceiver;
-
     @Override
     public void onCreate() {
         super.onCreate();
         instance=getApplicationContext();
         application=this;
-        mConnectReceiver=new MConnectReceiver();
-        IntentFilter intentFilter = new IntentFilter(MConnectReceiver.EVENT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(mConnectReceiver,intentFilter);
         if(InternetUtil.isConnected(this)){
             ConnectThread thread=new ConnectThread();
             thread.start();
@@ -90,7 +85,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     }
 
-
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
         if(stat!=null){
@@ -100,41 +94,21 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
     }
-    public static void sendBroadcast(Context context, String connect){
-        Intent intent=new Intent(MConnectReceiver.EVENT);
-        intent.putExtra("connect",connect);
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
-
-    }
-    public class ConnectThread extends Thread{
+    public static class ConnectThread extends Thread{
         @Override
         public void run() {
             Looper.prepare();
             MarketStat marketStat = getMarketStat();
-            if (marketStat.mWebsocketApi.mnConnectStatus != Websocket_api.WEBSOCKET_CONNECT_SUCCESS) {
-                if(marketStat.connectHashMap!=null){
-                    MarketStat.Connect connect = marketStat.connectHashMap.get("connect");
-                    if(connect!=null){
-                        connect.updateConnect();
-                    }
-                    else{
-                        marketStat.connect(MarketStat.STAT_COUNECT,getListener());
-                    }
+            if(marketStat.connectHashMap!=null){
+                MarketStat.Connect connect = marketStat.connectHashMap.get("connect");
+                if(connect!=null){
+                    connect.updateConnect();
+                }
+                else{
+                    marketStat.connect(MarketStat.STAT_COUNECT,getListener());
                 }
             }
         }
     }
-    public class MConnectReceiver extends BroadcastReceiver{
-        private static final String EVENT="MConnectReceiver";
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent!=null){
-                String connect=intent.getStringExtra("connect");
-                if(connect.equals(Websocket_api.CONNECT)){
-                    ConnectThread thread=new ConnectThread();
-                    thread.start();
-                }
-            }
-        }
-    }
+
 }

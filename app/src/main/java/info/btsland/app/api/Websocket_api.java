@@ -135,8 +135,8 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
-        Log.i(TAG, "onFailure: ");
-        BtslandApplication.sendBroadcast(BtslandApplication.getInstance(),CONNECT);
+        BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
+        thread.start();
 
     }
 
@@ -403,7 +403,8 @@ public class Websocket_api extends WebSocketListener {
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
-
+            BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
+            thread.start();
         }
 
         return sendForReplyImpl(callObject, replyObjectProcess);
@@ -421,7 +422,7 @@ public class Websocket_api extends WebSocketListener {
 
         synchronized (replyObjectProcess) {
             boolean bRet = mWebsocket.send(strMessage);
-            if (bRet == false) {
+            if (bRet==false) {
                 throw new NetworkStatusException("Failed to send message to server.");
             }
             try {

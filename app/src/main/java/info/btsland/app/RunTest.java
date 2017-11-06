@@ -1,6 +1,9 @@
 package info.btsland.app;
 
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 /*
  * 第一步： connect
  * 第二步： login
@@ -11,9 +14,9 @@ package info.btsland.app;
  */
 public class RunTest {
     public static void main(String[] args) {
-        websocket_api wsapi = new websocket_api("wss://bitshares.openledger.info/ws");
-        wsapi.connect();
-        wsapi.get_ticker();
+//        websocket_api wsapi = new websocket_api("wss://bitshares.openledger.info/ws");
+//        wsapi.connect();
+//        wsapi.get_ticker();
     }
 }
 

@@ -49,20 +49,19 @@ import info.btsland.app.ui.activity.MarketDetailedActivity;
 
 
 public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
-    private String TAG="MarketSimpleKFragment";
+    private static String TAG="MarketSimpleKFragment";
     private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
-    private MarketStat marketStat;
+    private static String key;
     private TextView deal;
     private TextView high;
     private TextView low;
     private TextView count;
+    private static MarketSimpleKFragment listener;
 
     private final String REFURBISH="refurbish";
 
-    private String quote ="BTS";
-    private String base ="CNY";
-
-    private MarketStat.HistoryPrice[] prices;
+    private static String quote ="BTS";
+    private static String base ="CNY";
     private String highStr;
     private String lowStr;
     private String countStr;
@@ -72,15 +71,17 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     private CombinedData data;//图表总数据
 
     private CombinedChart simpleK;//图表
-
+    private MarketTicker market;
     private float max;
     private float min;
 
     public MarketSimpleKFragment() {
-        this.marketStat=BtslandApplication.getMarketStat();
         // Required empty public constructor
     }
 
+    public static MarketSimpleKFragment getListener() {
+        return listener;
+    }
 //    public static MarketSimpleKFragment newInstance(Market market) {
 //        MarketSimpleKFragment simpleKFragment = new MarketSimpleKFragment();
 //        Bundle args = new Bundle();
@@ -100,16 +101,12 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     }
 
     @Override
-    public void onMarketStatUpdate(MarketStat.Stat stat) {
+    public synchronized void onMarketStatUpdate(MarketStat.Stat stat) {
+        Log.i(TAG, "handleMessage: Thread:"+Thread.currentThread().getName());
         Log.i(TAG, String.valueOf("onMarketStatUpdate: stat:"+stat==null));
         if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
-            Log.i(TAG, "onMarketStatUpdate: stat.prices.length:"+stat.prices.size());
-            if(BtslandApplication.prices!=null){
-                BtslandApplication.prices.clear();
-                BtslandApplication.candleEntries.clear();
-            }
-            BtslandApplication.prices=stat.prices;
-            Log.i(TAG, "onMarketStatUpdate: BtslandApplication.prices.length:"+BtslandApplication.prices.size());
+            BtslandApplication.prices.put(key,stat.prices);
+            List<CandleEntry> pric=new ArrayList<>();
             max=(float)stat.prices.get(0).high;
             min=(float)stat.prices.get(0).low;
             //处理数据
@@ -125,13 +122,19 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
                 if((float)stat.prices.get(i).low<min){
                     min=(float)stat.prices.get(i).low;
                 }
-                BtslandApplication.candleEntries.add(entry);
+                pric.add(entry);
             }
+            String key=stat.prices.get(0).quote+"/"+stat.prices.get(0).base;
+            if(BtslandApplication.candleEntries.get(key)!=null){
+                BtslandApplication.candleEntries.get(key).clear();
+            }
+
+            BtslandApplication.candleEntries.put(key,pric);
             Log.i(TAG, "onMarketStatUpdate: max:"+max);
             Log.i(TAG, "onMarketStatUpdate: min:"+min);
 
             Message message=Message.obtain();
-            message.obj=REFURBISH;
+            message.obj=key;
             handler.sendMessage(message);
         }
 
@@ -147,41 +150,65 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         }
         return simpleKFragment;
     }
-
     class MyXAxisValueFormatter implements XAxisValueFormatter {
+        private final String key;
+
+        public MyXAxisValueFormatter(String key) {
+            this.key=key;
+        }
+
         @Override
         public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            return df.format(BtslandApplication.prices.get(index).date);
+            return df.format(BtslandApplication.prices.get(key).get(index).date);
         }
     }
 
-    public void startReceiveMarkets(MarketTicker market) {
+    public static void startReceiveMarkets(MarketTicker market) {
+        Log.i(TAG, "startReceiveMarkets: market:"+market);
+        String base=MarketSimpleKFragment.base;
+        String quote=MarketSimpleKFragment.quote;
         if (market != null) {
-            this.base=market.base;
-            this.quote=market.quote;
-            // deal.setText(quote+":"+base);
+            base=market.base;
+            quote=market.quote;
         }
-        marketStat.subscribe(
-                base,
-                quote,
-                MarketStat.STAT_MARKET_HISTORY,
-                MarketStat.DEFAULT_UPDATE_SECS,
-                this);
+        //判断线程是否存在，存在则重启，不在则重开
+        if(BtslandApplication.getMarketStat().subscriptionHashMap
+                .get(MarketStat.makeMarketName(
+                        base,quote,MarketStat.STAT_MARKET_HISTORY))!=null){
+            BtslandApplication.getMarketStat().subscriptionHashMap
+                    .get(MarketStat.makeMarketName(
+                            base,quote,MarketStat.STAT_MARKET_HISTORY)).updateImmediately();
+        }else {
+            BtslandApplication.getMarketStat().subscribe(
+                    base,
+                    quote,
+                    MarketStat.STAT_MARKET_HISTORY,
+                    MarketStat.DEFAULT_UPDATE_SECS,
+                    getListener());
+        }
     }
 
 
     private Handler handler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
-            if(msg.obj.equals(REFURBISH)){
+            Log.i(TAG, "handleMessage: Thread:"+Thread.currentThread().getName());
+            String newkey= (String) msg.obj;
+
+            if(BtslandApplication.candleEntries.get(key)!=null){
+                if(!MarketSimpleKFragment.key.equals(key)){
+                    return;
+                }
+                List<CandleEntry> candleEntries=BtslandApplication.candleEntries.get(key);
                 Log.i(TAG, "handleMessage: max:"+max);
                 Log.i(TAG, "handleMessage: min:"+min);
                 Log.i(TAG, "handleMessage: candleEntries:"+BtslandApplication.candleEntries.size());
-                candleDataSet=new CandleDataSet(BtslandApplication.candleEntries,"Data Set");//烛形图图形
+                candleDataSet=new CandleDataSet(candleEntries,"");//烛形图图形
                 simpleKInit(candleDataSet);
                 List<String> xVals=new ArrayList<>();
-                for(int i=0;i<BtslandApplication.candleEntries.size();i++){
-                    xVals.add(i,df.format(BtslandApplication.candleEntries.get(i).getData()));
+                for(int i=0;i<BtslandApplication.candleEntries.get(key).size();i++){
+                    xVals.add(i,df.format(candleEntries.get(i).getData()));
                 }
                 Log.i(TAG, "handleMessage: xVals:"+xVals.size());
                 candleData=new CandleData(xVals,candleDataSet);
@@ -191,11 +218,12 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
                 data=new CombinedData(xVals);
                 data.setData(candleData);
                 simpleK.setData(data);
-                simpleK.setDescription(quote+"/"+base);
+                key=newkey;
+                simpleK.setDescription(key);
                 simpleK.setDescriptionTextSize(14);
                 simpleK.notifyDataSetChanged();
                 simpleK.invalidate();
-                Log.i(TAG, "getAxisLeft: max:"+simpleK.getAxisLeft().getAxisMinValue());
+                Log.i(TAG, "getAxisLeft: max:"+simpleK.getAxisLeft().getAxisMaxValue());
                 Log.i(TAG, "getAxisLeft: min:"+simpleK.getAxisLeft().getAxisMinValue());
             }
         }
@@ -234,9 +262,8 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         candleDataSet.setColor(Color.RED);
         candleDataSet.setHighlightLineWidth(1f);//选中蜡烛时的线宽
         candleDataSet.setDrawValues(false);//在图表中的元素上面是否显示数值
-        candleDataSet.setLabel("label");//图表名称
         XAxis xAxis=simpleK.getXAxis();
-        xAxis.setValueFormatter(new MyXAxisValueFormatter());
+        xAxis.setValueFormatter(new MyXAxisValueFormatter(key));
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴标签显示位置
         xAxis.setDrawGridLines(false);//绘制格网线
         YAxis leftAxis = simpleK.getAxisLeft();//取得左侧y轴
@@ -268,30 +295,21 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         Log.i("", "onCreateView: ");
         View view = null;
         view = inflater.inflate(R.layout.fragment_market_simple_k, container, false);
-        MarketTicker market=null;
         if (getArguments() != null) {
             market= (MarketTicker) getArguments().getSerializable("MarketTicker");
-            if (market != null) {
-                this.base=market.base;
-                this.quote=market.quote;
-                // deal.setText(quote+":"+base);
-            }
-            marketStat.subscribe(
-                    base,
-                    quote,
-                    MarketStat.STAT_MARKET_HISTORY,
-                    MarketStat.DEFAULT_UPDATE_SECS,
-                    this);
-
         }
         init(view);
-        startReceiveMarkets(market);
+        listener=this;
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        key=quote+"/"+base;
+        startReceiveMarkets(market);
+
+
     }
 
     @Override

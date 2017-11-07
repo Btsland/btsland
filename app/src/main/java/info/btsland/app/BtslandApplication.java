@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Websocket_api;
+import info.btsland.app.model.DataK;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
@@ -40,8 +41,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static MarketStat marketStat;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
-    public static Map<String,List<CandleEntry>> candleEntries=new HashMap<>();//烛形图数据
-    public static Map<String,List<MarketStat.HistoryPrice>> prices =new HashMap<>();
+    public static Map<String,DataK> dataKMap=new HashMap<>();
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;

@@ -95,19 +95,19 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        Timer timer=new Timer();
-        TimerTask task=new TimerTask() {
-            @Override
-            public void run() {
-                Map<String,MarketStat.Subscription> map = BtslandApplication.getMarketStat().subscriptionHashMap;
-                if(map!=null){
-                    for (MarketStat.Subscription subscription : map.values()) {
-                        subscription.updateImmediately();
-                    }
-                }
-            }
-        };
-        timer.schedule(task, TimeUnit.MINUTES.toMillis(2),TimeUnit.MINUTES.toMillis(2));
+//        Timer timer=new Timer();
+//        TimerTask task=new TimerTask() {
+//            @Override
+//            public void run() {
+//                Map<String,MarketStat.Subscription> map = BtslandApplication.getMarketStat().subscriptionHashMap;
+//                if(map!=null){
+//                    for (MarketStat.Subscription subscription : map.values()) {
+//                        subscription.updateImmediately();
+//                    }
+//                }
+//            }
+//        };
+//        timer.schedule(task, TimeUnit.MINUTES.toMillis(2),TimeUnit.MINUTES.toMillis(2));
     }
 
     /**

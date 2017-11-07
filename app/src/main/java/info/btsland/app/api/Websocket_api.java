@@ -16,6 +16,7 @@ import org.json.JSONObject;
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -39,7 +40,21 @@ public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
     private String TAG="websocket_api";
 
-    private String strServer="wss://bitshares.openledger.info/ws";
+    private String strServer="wss://bitshares.dacplay.org/ws";
+    private List<String> mListNode = Arrays.asList(
+            "wss://bitshares.openledger.info/ws",
+            "wss://eu.openledger.info/ws",
+            "wss://bit.btsabc.org/ws",
+            "wss://bts.transwiser.com/ws",
+            "wss://bitshares.dacplay.org/ws",
+            "wss://bitshares-api.wancloud.io/ws",
+            "wss://openledger.hk/ws",
+            "wss://secure.freedomledger.com/ws",
+            "wss://dexnode.net/ws",
+            "wss://altcap.io/ws",
+            "wss://bitshares.crypto.fans/ws"
+
+    );
     private OkHttpClient mOkHttpClient;
     private WebSocket mWebsocket;
 
@@ -421,9 +436,14 @@ public class Websocket_api extends WebSocketListener {
         }
 
         synchronized (replyObjectProcess) {
-            boolean bRet = mWebsocket.send(strMessage);
-            if (bRet==false) {
-                throw new NetworkStatusException("Failed to send message to server.");
+            while (true){
+                boolean bRet = mWebsocket.send(strMessage);
+                if (bRet==false) {
+                    BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
+                    thread.start();
+                }else {
+                    break;
+                }
             }
             try {
                 replyObjectProcess.wait();

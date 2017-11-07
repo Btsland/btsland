@@ -348,9 +348,26 @@ public class MarketStat {
                 if (isCancelled.get()) {
                     return;
                 }
-                listener.onMarketStatUpdate(stat);
+                //开启处理数据线程
+                Log.e(TAG, "run: "+ stat.prices.size());
+                new dataHandling(listener,stat).start();
+                this.updateImmediately();
             } else if (!isCancelled.get()) {
 
+            }
+        }
+        class dataHandling extends Thread{
+            private final OnMarketStatUpdateListener lostener;
+            private final Stat stat;
+
+            public dataHandling(OnMarketStatUpdateListener listener, Stat stat) {
+                this.lostener=listener;
+                this.stat=stat;
+            }
+
+            @Override
+            public void run() {
+                lostener.onMarketStatUpdate(stat);
             }
         }
 
@@ -370,7 +387,7 @@ public class MarketStat {
 
         private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs) {
             Date startDate = new Date(
-                    System.currentTimeMillis() -TimeUnit.DAYS.toMillis(1));
+                    System.currentTimeMillis() -TimeUnit.HOURS.toMillis(24));
             Date endDate = new Date(System.currentTimeMillis());
             List<bucket_object> buckets= getMarketHistory(base,quote,bucketSecs,startDate, endDate);
 

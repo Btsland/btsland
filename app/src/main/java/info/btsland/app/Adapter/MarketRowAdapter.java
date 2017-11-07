@@ -13,12 +13,15 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.CombinedChart;
+
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
@@ -30,8 +33,7 @@ import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 public class MarketRowAdapter extends BaseAdapter {
 
     private static final String TAG = "MarketRowAdapter";
-    long mLastTime=0;
-    long mCurTime=0;
+
     private MarketSimpleKFragment simpleKFragment;
     private Map<String,MarketTicker> markets;
     private LayoutInflater inflater;
@@ -104,7 +106,8 @@ public class MarketRowAdapter extends BaseAdapter {
     }
     private class rowOnClickListener implements View.OnClickListener{
         private MarketTicker market;
-
+        long mLastTime=0;
+        long mCurTime=0;
         public rowOnClickListener(MarketTicker market) {
             this.market=market;
         }
@@ -144,7 +147,9 @@ public class MarketRowAdapter extends BaseAdapter {
                 case 1:
                     Toast.makeText(context,"双击可以进入详细页面哦！",Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "handleMessage: market:"+market);
-                    MarketSimpleKFragment.startReceiveMarkets(market);
+                    String key=market.quote+"/"+market.base;
+                    simpleKFragment.key = key;
+                    simpleKFragment.drawK(market);
                     break;
                 case 2:
                     Log.i(TAG, "handleMessage: market:"+market);

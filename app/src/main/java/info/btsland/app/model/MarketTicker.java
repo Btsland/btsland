@@ -13,6 +13,11 @@ public class MarketTicker implements Serializable {
     public double base_volume;
     public double quote_volume;
 
+    public MarketTicker(String base, String quote) {
+        this.base=base;
+        this.quote=quote;
+    }
+
     @Override
     public String toString() {
         return "MarketTicker{" +

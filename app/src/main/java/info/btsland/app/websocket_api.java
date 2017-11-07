@@ -61,6 +61,7 @@ public class websocket_api extends WebSocketListener {
     /**
      * Invoked when the remote peer has indicated that no more incoming messages will be
      * transmitted.
+     * 当远程套接字接受Web套接字并开始传输消息时调用
      */
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
@@ -78,6 +79,8 @@ public class websocket_api extends WebSocketListener {
      * Invoked when a web socket has been closed due to an error reading from or writing to the
      * network. Both outgoing and incoming messages may have been lost. No further calls to this
      * listener will be made.
+     *
+     * 当Web套接字因读取或写入网络错误而关闭时调用。传出消息和传入消息都可能丢失。将不再向该侦听器发出进一步的调用。
      */
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
@@ -160,5 +163,26 @@ public class websocket_api extends WebSocketListener {
         String query = "{\"id\":5,\"method\":\"call\",\"params\":[2,\"get_ticker\",[\"CNY\",\"BTS\"]]}";
         mWebsocket.send(query);
 
+
+
+
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

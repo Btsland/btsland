@@ -49,7 +49,7 @@ public class HomeFragment extends Fragment {
         Log.e(TAG, "init: ");
         ViewPager viewPager1= (ViewPager) getActivity().findViewById(R.id.vp_detailed);
         String[] titles={"最新资讯","热点资讯","国内资讯","国外资讯"};
-       List<Fragment> fragments=new ArrayList<Fragment>();
+        List<Fragment> fragments=new ArrayList<Fragment>();
         LatestNewsFragment latestNewsFragment=new LatestNewsFragment();
         HotNewsFragment hotNewsFragment=new HotNewsFragment();
         DomesticInformationFragment domesticInformationFragment=new DomesticInformationFragment();

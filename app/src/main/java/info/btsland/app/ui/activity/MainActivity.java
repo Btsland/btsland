@@ -1,18 +1,16 @@
 package info.btsland.app.ui.activity;
 
-import android.graphics.drawable.Drawable;
-import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import java.util.Map;
 import java.util.Timer;

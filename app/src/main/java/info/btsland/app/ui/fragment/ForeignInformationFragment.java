@@ -50,9 +50,9 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         News news = newsList.get(position);
         //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-        Intent intent = new Intent(getActivity(), NewsContentActivity.class);
-        intent.putExtra("news", news);
-        getActivity().startActivity(intent);
+        Intent intent2 = new Intent(getActivity(), NewsContentActivity.class);
+        intent2.putExtra("news", news);
+        getActivity().startActivity(intent2);
     }
 
 

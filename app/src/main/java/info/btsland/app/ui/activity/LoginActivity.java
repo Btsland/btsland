@@ -1,58 +1,17 @@
 package info.btsland.app.ui.activity;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.annotation.TargetApi;
-import android.app.LoaderManager.LoaderCallbacks;
-import android.app.WallpaperManager;
-import android.content.CursorLoader;
-import android.content.Intent;
-import android.content.Loader;
-import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import info.btsland.app.R;
-import info.btsland.app.ui.fragment.HeadFragment;
-
-import static android.Manifest.permission.READ_CONTACTS;
-
-
 
 
 /**
@@ -71,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button bt_pwd_eye;
     private Button login;
     private Button register;
-    private Button tourist;
+   // private Button tourist;
     private boolean isOpen = false;
 
 
@@ -80,7 +39,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login1);
 
         initView();
 
@@ -170,8 +129,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgive_pwd = (Button) findViewById(R.id.forgive_pwd);
         forgive_pwd.setOnClickListener(this);
 
-        tourist=(Button) findViewById(R.id.tourist);
-        tourist.setOnClickListener(this);
 
     }
 
@@ -212,11 +169,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.forgive_pwd:
                 // 忘记密码按钮
-                Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
+               // Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
+                LoginActivity.this.finish();
                 break;
-            case R.id.tourist:
-               LoginActivity.this.finish();
-                break;
+
             default:
                 break;
         }

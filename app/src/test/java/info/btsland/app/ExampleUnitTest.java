@@ -1,9 +1,5 @@
 package info.btsland.app;
 
-import org.junit.Test;
-
-import info.btsland.app.api.websocket_api;
-
 /**
  * Example local unit test, which will execute on the development machine (host).
  *

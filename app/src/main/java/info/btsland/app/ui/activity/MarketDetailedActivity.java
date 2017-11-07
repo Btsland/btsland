@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -24,20 +25,32 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 public class MarketDetailedActivity extends AppCompatActivity {
     private HeadFragment headFragment;
-    private MarketTicker market;
+    public static MarketTicker market;
+
+    public static String key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
         market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+        key=market.quote+"/"+market.base;
         fillInHead();
         init();
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        TextView textView = headFragment.getView().findViewById(R.id.tv_head_title);
+        textView.setText(key);
+    }
+
     /**
      * 初始化
      */
     private void init(){
+
         ViewPager viewPager= (ViewPager) findViewById(R.id.vp_detailed_page);
         String[] titles={"详情","买/卖","进行中"};
         List<Fragment> fragments=new ArrayList<Fragment>();

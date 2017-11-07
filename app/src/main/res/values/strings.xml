@@ -28,6 +28,8 @@
     <string name="homepage">资讯</string>
 
     <string name="themarket">交易</string>
+    <string name="bid">买入:</string>
+    <string name="ask">卖出:</string>
     <string name="buy">买入</string>
     <string name="sell">卖出</string>
 

@@ -312,8 +312,9 @@ public class MarketStat {
                     try {
                         for(int i=0;i<quotes.length;i++){
                             stat.MarketTicker = mWebsocketApi.get_ticker_base(base,quotes[i]);
-                            listener.onMarketStatUpdate(stat);
+                            new dataHandling(listener,stat).start();
                         }
+                        //this.updateImmediately();
                         return;
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
@@ -351,7 +352,7 @@ public class MarketStat {
                 //开启处理数据线程
                 Log.e(TAG, "run: "+ stat.prices.size());
                 new dataHandling(listener,stat).start();
-                this.updateImmediately();
+                //this.updateImmediately();
             } else if (!isCancelled.get()) {
 
             }

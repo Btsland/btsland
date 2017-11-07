@@ -19,6 +19,42 @@ public class MarketTicker implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        MarketTicker that = (MarketTicker) o;
+
+        if (Double.compare(that.percent_change, percent_change) != 0) return false;
+        if (Double.compare(that.base_volume, base_volume) != 0) return false;
+        if (Double.compare(that.quote_volume, quote_volume) != 0) return false;
+        if (!base.equals(that.base)) return false;
+        if (!quote.equals(that.quote)) return false;
+        if (!latest.equals(that.latest)) return false;
+        if (!lowest_ask.equals(that.lowest_ask)) return false;
+        return highest_bid.equals(that.highest_bid);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result;
+        long temp;
+        result = base.hashCode();
+        result = 31 * result + quote.hashCode();
+        result = 31 * result + latest.hashCode();
+        result = 31 * result + lowest_ask.hashCode();
+        result = 31 * result + highest_bid.hashCode();
+        temp = Double.doubleToLongBits(percent_change);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(base_volume);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        temp = Double.doubleToLongBits(quote_volume);
+        result = 31 * result + (int) (temp ^ (temp >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "MarketTicker{" +
                 "base='" + base + '\'' +

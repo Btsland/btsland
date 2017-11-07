@@ -3,6 +3,7 @@ package info.btsland.app.Adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.Log;
 
 import java.lang.reflect.InvocationHandler;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  */
 
 public class DetailedFragmentAdapter extends FragmentPagerAdapter {
+    private static final String TAG = "DetailedFragmentAdapter";
     private List<Fragment> fragmentList;
     private String[] titles;
 

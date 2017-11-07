@@ -3,6 +3,8 @@
     <string name="homepage">News</string>
 
     <string name="themarket">Exchange</string>
+    <string name="bid">bid:</string>
+    <string name="ask">ask:</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
 

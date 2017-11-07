@@ -87,7 +87,7 @@ public class MarketRowAdapter extends BaseAdapter {
         tvFluctuation.setText(fluctuation);
         tvNewPrice.setText(market.latest.substring(0,8));
         tvBestAskNum.setText(market.lowest_ask.substring(0,8));
-        tvBestBidNum.setText(market.lowest_ask.substring(0,8));
+        tvBestBidNum.setText(market.highest_bid.substring(0,8));
         if (market.percent_change > 0) {
 
             tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));

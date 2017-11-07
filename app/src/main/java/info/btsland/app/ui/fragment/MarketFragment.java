@@ -72,17 +72,24 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         if(stat.MarketTicker==null){
             return;
         }
+        if(stat.MarketTicker.base==null){
+            return;
+        }
         Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
 
         Message message=Message.obtain();
 
+
         Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTicker.base.equals("CNY")));
+
         switch (stat.MarketTicker.base){
             case "CNY":
                 if(cnyMarket!=null&&cnyMarket.size()>quotes.length){
                     cnyMarket.clear();
                 }
-                replaceMarket(cnyMarket,stat.MarketTicker);
+                if(!replaceMarket(cnyMarket,stat.MarketTicker)){
+                    return;
+                }
                 message.what=NOTIFY_CNY;
                 mHandler.sendMessage(message);
                 break;
@@ -90,7 +97,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 if(btsMarket!=null&&btsMarket.size()>quotes.length){
                     btsMarket.clear();
                 }
-                replaceMarket(btsMarket,stat.MarketTicker);
+                if(!replaceMarket(btsMarket,stat.MarketTicker)){
+                    return;
+                }
                 message.what=NOTIFY_BTS;
                 mHandler.sendMessage(message);
                 break;
@@ -98,7 +107,10 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 if(usdMarket!=null&&usdMarket.size()>quotes.length){
                     usdMarket.clear();
                 }
-                replaceMarket(usdMarket,stat.MarketTicker);
+
+                if(!replaceMarket(usdMarket,stat.MarketTicker)){
+                    return;
+                }
                 message.what=NOTIFY_USD;
                 mHandler.sendMessage(message);
                 break;
@@ -106,7 +118,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 if(btcMarket!=null&&btcMarket.size()>quotes.length){
                     btcMarket.clear();
                 }
-                replaceMarket(btcMarket,stat.MarketTicker);
+                if(!replaceMarket(btcMarket,stat.MarketTicker)){
+                    return;
+                }
                 message.what=NOTIFY_BTC;
                 mHandler.sendMessage(message);
                 break;
@@ -114,37 +128,41 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 if(ethMarket!=null&&ethMarket.size()>quotes.length){
                     ethMarket.clear();
                 }
-                replaceMarket(ethMarket,stat.MarketTicker);
+                if(!replaceMarket(ethMarket,stat.MarketTicker)){
+                    return;
+                }
                 message.what=NOTIFY_ETH;
                 mHandler.sendMessage(message);
                 break;
         }
     }
-    public void replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
+    public boolean replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
         String key=newMarket.quote;
         if(oldMarkets.get(key)!=null){
+            if(oldMarkets.get(key).equals(newMarket)){
+                return false;
+            }
             oldMarkets.get(key).latest=newMarket.latest;
             oldMarkets.get(key).lowest_ask=newMarket.lowest_ask;
             oldMarkets.get(key).highest_bid=newMarket.highest_bid;
             oldMarkets.get(key).percent_change=newMarket.percent_change;
             oldMarkets.get(key).base_volume=newMarket.base_volume;
             oldMarkets.get(key).quote_volume=newMarket.quote_volume;
+            return true;
         }else {
             oldMarkets.put(key,newMarket);
             if(oldMarkets.size()>quotes.length){
                 oldMarkets.clear();
             }
+            return true;
         }
-
-
     }
     private Handler mHandler=new Handler(){
         @Override
-        public void handleMessage(Message msg) {
+        public synchronized void handleMessage(Message msg) {
 
             Log.i(TAG, "handleMessage: msg.what:"+msg.what);
             if(msg.what==NOTIFY_CNY){
-                Log.i(TAG, "handleMessage: ");
                 cnyRowAdapter.notifyDataSetChanged();
             }else if(msg.what==NOTIFY_BTS){
                 btsRowAdapter.notifyDataSetChanged();

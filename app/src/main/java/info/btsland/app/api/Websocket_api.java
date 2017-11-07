@@ -179,6 +179,7 @@ public class Websocket_api extends WebSocketListener {
     }
 
     public synchronized int connect() {
+
         Log.e(TAG, "connect: "+Thread.currentThread().getName());
 //        Request request = new Request.Builder().url("wss://bitshares.openledger.info/ws").build();
 //        mOkHttpClient = new OkHttpClient();
@@ -513,10 +514,12 @@ public class Websocket_api extends WebSocketListener {
                 e.printStackTrace();
                 strError = e.getMessage();
                 strResponse = strText;
+                return;
             } catch (Exception e) {
                 e.printStackTrace();
                 strError = e.getMessage();
                 strResponse = strText;
+                return;
             }
             synchronized (this) {
                 notify();

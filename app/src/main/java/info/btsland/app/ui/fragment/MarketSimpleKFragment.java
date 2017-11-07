@@ -87,7 +87,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        Log.i(TAG, "handleMessage: Thread:"+Thread.currentThread().getName());
+        Log.i(TAG, "onMarketStatUpdate: Thread:"+Thread.currentThread().getName());
         Log.i(TAG, String.valueOf("onMarketStatUpdate: stat:"+stat==null));
         if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
             DataK dataK=new DataK();

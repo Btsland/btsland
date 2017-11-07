@@ -1,6 +1,9 @@
 package info.btsland.app;
 
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.util.Arrays;
 
@@ -17,6 +20,60 @@ public class RunTest {
 //        websocket_api wsapi = new websocket_api("wss://bitshares.openledger.info/ws");
 //        wsapi.connect();
 //        wsapi.get_ticker();
+        try {
+            playRunTime("www.baidu.com");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+//    public static void main(String args[])
+//
+//    {
+//
+//        String[] addrs= {"www.baidu.com"};
+//
+//        if (addrs.length < 1) {
+//            System.out.println("syntax Error!");
+//        } else {
+//            for(int i=0;i<addrs.length;i++){
+//                String line = null;
+//                try{
+//
+//                    Process pro = Runtime.getRuntime().exec("ping " + addrs+" -l 1000 -n 4");
+//
+//                    BufferedReader buf = new BufferedReader(new InputStreamReader(pro.getInputStream()));
+//                    while((line = buf.readLine()) != null){
+//                        System.out.println(line);
+//                        int position=0;
+//                        if((position=line.indexOf("Average"))>=0) {
+//                            System.out.println(line);
+////                            line.substring(position+10,line.lastIndexOf("ms"));
+////                            String value=line.substring(position+10,line.lastIndexOf("ms"));
+////                            System.out.println("your speed is:"+(1000/Integer.parseInt(value))+"KB");
+//                        }
+//                    }
+//                }catch(Exception ex) {
+//                    System.out.println(ex.getMessage());
+//                }
+//            }
+//        }
+//    }
+
+    public static void playRunTime(String cmd) throws Exception {
+        Process p = Runtime.getRuntime().exec("ping " + cmd+" -l 1000 -n 4");
+        InputStream is = p.getInputStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            System.out.println(line);
+        }
+        p.waitFor();
+        is.close();
+        reader.close();
+        p.destroy();
     }
 }
 

@@ -5,6 +5,8 @@
     <string name="themarket">交易</string>
     <string name="buy">买入</string>
     <string name="sell">卖出</string>
+    <string name="bid">买入:</string>
+    <string name="ask">卖出:</string>
 
     <string name="wallet">钱包</string>
     <string name="asset">全部资产</string>

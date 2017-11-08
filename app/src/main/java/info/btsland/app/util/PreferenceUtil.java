@@ -69,4 +69,36 @@ public class PreferenceUtil {
         return mSharedPreferences.getBoolean(key, failValue);
     }
 
+
+//    /**
+//     * 设置主题
+//     *
+//     * @param context
+//     * @return true 表示明亮主题 false 表示暗主题
+//     */
+//    public static void setTheme(Context context, boolean is) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+//        mEditor.putBoolean("theme", is).commit();
+//    }
+//
+//    /**
+//     * 得到主题
+//     *
+//     * @param context
+//     * @return
+//     */
+//    public static boolean getTheme(Context context) {
+//        SharedPreferences sharedPreferences = context.getSharedPreferences(null, Context.MODE_PRIVATE);
+//        return sharedPreferences.getBoolean("theme", false);
+//    }
+
+//    public static void commitTheme(Context context,boolean value){
+//        SharedPreferences sf = context.getSharedPreferences("cons",context.MODE_PRIVATE);
+//        mEditor.putBoolean("theme",value);
+//        mEditor.commit();
+//    }
+
+
+
+
 }

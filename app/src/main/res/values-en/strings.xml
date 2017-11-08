@@ -18,6 +18,8 @@
     <string name="set">Set</string>
     <string name="language">LanguAge</string>
     <string name="theme">Theme</string>
+    <string name="daytime">DaylightMode</string>
+    <string name="night">DarkMode </string>
     <string name="guide">UseGuide</string>
     <string name="trading_guide">TradingGuide</string>
     <string name="we">AboutUs</string>

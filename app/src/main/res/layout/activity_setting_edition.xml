@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     android:orientation="vertical">
 
     <!--顶部导航栏-->
@@ -26,16 +27,17 @@
         android:layout_height="40dp"
         android:textSize="20dp"
         android:gravity="center"
-        android:text="版本号：1.0.1" />
+        android:text="版本号：1.0.1"
+        android:textColor="?attr/colorValue"/>
     <TextView
         android:id="@+id/tv_set_language"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:text="检查更新"
+        android:textColor="?attr/colorValue"
         android:gravity="center"
         android:layout_margin="5dp"
-        android:background="@drawable/tv_row"
-        android:textColor="@color/color_white"
+        android:background="?attr/backgroundView"
         android:layout_marginTop="5dp" />
 
 </LinearLayout>

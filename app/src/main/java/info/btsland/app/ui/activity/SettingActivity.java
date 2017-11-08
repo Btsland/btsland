@@ -1,9 +1,12 @@
 package info.btsland.app.ui.activity;
 
+import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,6 +16,8 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
+
+import java.lang.reflect.Method;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
@@ -27,10 +32,6 @@ public class SettingActivity extends BaseActivity{
     private TextView tvSetGuide;
     private TextView tvSetWe;
     private TextView tvSetEdition;
-    private RadioButton chinese;
-    private RadioButton english;
-
-
 
 
     @Override
@@ -76,6 +77,13 @@ public class SettingActivity extends BaseActivity{
             index=1;
         }
         Log.i("init", "init: "+index);
+
+        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
+        if (theme==(R.style.SwitchTheme1)){
+            index2=0;
+        }else if (theme==(R.style.SwitchTheme2)){
+            index2=1;
+        }
     }
 
     /*
@@ -89,8 +97,7 @@ public class SettingActivity extends BaseActivity{
                     showListDialog();
                     break;
                 case R.id.tv_set_theme:
-                    Intent theme = new Intent(SettingActivity.this,SetThemeActivity.class);
-                    startActivity(theme);
+                    showthemeDialog();
                     break;
                 case R.id.tv_set_guide:
                     Intent iii = new Intent(SettingActivity.this , UsersGuidanceActivity.class);
@@ -140,7 +147,6 @@ public class SettingActivity extends BaseActivity{
         items[0]=getString(R.string.stringzh);
         items[1]=getString(R.string.stringen);
 
-
         listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
 
             @Override
@@ -161,6 +167,34 @@ public class SettingActivity extends BaseActivity{
         });
         listDialog.show();
     }
+
+    int index2 = 0 ;//设置默认选项，作为checkedItem参数传入。
+
+    private void showthemeDialog(){
+
+        final String[] theme={"白昼模式","黑夜模式"};
+        theme[0]=getString(R.string.daytime);
+        theme[1]=getString(R.string.night);
+
+        AlertDialog.Builder themeDialog = new AlertDialog.Builder(SettingActivity.this);
+        themeDialog.setTitle("主题选择").setIcon(android.R.drawable.ic_dialog_info)
+                .setSingleChoiceItems(theme,index2, new DialogInterface.OnClickListener() {
+                    @Override
+                            public void onClick(DialogInterface dialog, int i) {
+                                if (theme[i]==getString(R.string.daytime)){
+                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
+                                            .putInt("theme", R.style.SwitchTheme1).commit();
+                                } else if (theme[i]==getString(R.string.night)){
+                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
+                                            .putInt("theme", R.style.SwitchTheme2).commit();
+                                }
+                                dialog.dismiss();
+                                finish();
+                            }
+                    });
+            themeDialog.show();
+        }
+
 
 
 //    /**

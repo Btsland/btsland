@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorValue" format="color" />
+    <attr name="stringValue" format="string" />
+    <attr name="backgroundPicture" format="reference" />
+    <attr name="backgroundColor" format="reference" />
+    <attr name="backgroundView" format="reference"/>
+</resources>
+
+
+<!--<attr name="floatValue" format="float" />-->
+<!--<attr name="integerValue" format="integer" />-->
+<!--<attr name="booleanValue" format="boolean" />-->
+<!--<attr name="dimensionValue" format="dimension" />-->

@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/backgroundColor"
     android:orientation="vertical">
 
     <!--顶部导航栏-->
     <FrameLayout
-        android:id="@+id/fra_theme_head"
+        android:id="@+id/fra_users_head"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -16,9 +17,16 @@
 
     <ImageView
         android:id="@+id/iv_users_back"
-        android:src="@drawable/welcome2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:background="?attr/backgroundPicture"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/tv_about_official_website"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:scaleType="fitXY"/>
+        android:textSize="20dp"
+        android:text="" />
 
 </LinearLayout>

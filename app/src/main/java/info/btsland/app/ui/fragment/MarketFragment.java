@@ -27,6 +27,7 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.activity.BaseActivity;
 import info.btsland.app.util.ArrayUtils;
 import info.btsland.app.util.InternetUtil;
 
@@ -249,12 +250,14 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
 
 
-    class LeftCoinOnClickListener implements View.OnClickListener {
+    class LeftCoinOnClickListener extends BaseActivity implements View.OnClickListener {
+        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         @Override
         public void onClick(View view) {
             touchColor((TextView) view);//交互特效
             setMarket(view);//设置数据
         }
+
     }
 
     /**
@@ -308,7 +311,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      *
      * @param TextView
      */
-    private void setDownBack(TextView TextView) {
+    private void  setDownBack(TextView TextView) {
+
         TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch, null));
         TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow, null));
     }

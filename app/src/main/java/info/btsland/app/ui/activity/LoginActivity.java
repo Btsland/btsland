@@ -19,8 +19,6 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 
-import static android.R.attr.name;
-
 
 /**
  * author：lw1000
@@ -218,6 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
         Log.i(TAG, "onMarketStatUpdate: stat:"+stat.account_objects.toString());
+
     }
 }
 

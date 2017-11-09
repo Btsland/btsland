@@ -149,26 +149,35 @@ public class websocket_api extends WebSocketListener {
 
         String network_broadcast = "{\"id\":9,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
         mWebsocket.send(network_broadcast);
-        String query1 = "{\"id\":1,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
-        mWebsocket.send(query1);
+
+
+        String query6 = "{\"id\":10,\"method\":\"call\",\"params\":[2,\"get_account_by_name\",[\"li-8888\"]]}";
+        mWebsocket.send(query6);
+
+  /*      String query7 = "{\"id\":11,\"method\":\"call\",\"params\":[2,\"verify_account_authority\",[\"li-8888\",\"\"]]}";
+        mWebsocket.send(query7);*/
+
 
 //        String query2 = "{\"id\":52,\"method\":\"call\",\"params\":[3,\"get_market_history\",[\"CNY\",\"BTS\",300,\"Nov 2, 2017 12:54:23 AM\",\"Nov 3, 2017 5:34:23 PM\"]]}";
 //        mWebsocket.send(query2);
 
-        String query3 = "{\"id\":53,\"method\":\"call\",\"params\":[3,\"get_market_history\",[\"1.3.121\",\"1.3.0\",300,\"Nov 1, 2017 08:25:19\",\"Nov 2, 2017 01:05:19\"]]}";
+        /*String query3 = "{\"id\":53,\"method\":\"call\",\"params\":[3,\"get_market_history\",[\"1.3.121\",\"1.3.0\",300,\"Nov 1, 2017 08:25:19\",\"Nov 2, 2017 01:05:19\"]]}";
         mWebsocket.send(query3);
         String query4 = "{\"id\":21,\"method\":\"call\",\"params\":[3,\"get_market_history\",[\"1.3.121\",\"1.3.0\",300,\"2017-11-01T17:13:06\",\"2017-11-03T09:53:06\"]]}";
         mWebsocket.send(query4);
 
         String query = "{\"id\":5,\"method\":\"call\",\"params\":[2,\"get_ticker\",[\"CNY\",\"BTS\"]]}";
         mWebsocket.send(query);
-
+*/
 
 
 
 
     }
+
+
 }
+
 
 
 

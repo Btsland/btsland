@@ -264,7 +264,7 @@ public class types {
 //    }
 
     public static class account_options {
-        public public_key_type memo_key;
+        public String memo_key;
         public String voting_account;
         public Integer num_witness;
         public Integer num_committee;

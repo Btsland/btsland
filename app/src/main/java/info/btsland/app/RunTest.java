@@ -4,8 +4,6 @@ package info.btsland.app;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.util.Arrays;
 
 /*
  * 第一步： connect
@@ -17,14 +15,10 @@ import java.util.Arrays;
  */
 public class RunTest {
     public static void main(String[] args) {
-//        websocket_api wsapi = new websocket_api("wss://bitshares.openledger.info/ws");
-//        wsapi.connect();
-//        wsapi.get_ticker();
-        try {
-            playRunTime("www.baidu.com");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        websocket_api wsapi = new websocket_api("wss://bitshares.dacplay.org/ws");
+        wsapi.connect();
+        wsapi.get_ticker();
+
 
     }
 

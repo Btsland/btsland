@@ -14,25 +14,25 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name=".BtslandApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_black"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_black"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name=".BtslandApplication">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.UserActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.SettingActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.activity.SetThemeActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -45,23 +45,29 @@
         </activity>
         <activity
             android:name=".ui.activity.PurseAssetActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.PurseAccessRecordActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.PurseTradingRecordActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.PurseWholeGuadanActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.PurseWalletBackupActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.MarketDetailedActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+        </activity>
         <activity
             android:name=".ui.activity.NewsContentActivity"
             android:screenOrientation="portrait">
@@ -69,13 +75,16 @@
         </activity>
         <activity
             android:name=".ui.activity.AboutUsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.UsersGuidanceActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.VersionInformationActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+        </activity>
         <activity
             android:name=".ui.activity.TransactionActivity"
             android:screenOrientation="portrait" />
@@ -96,8 +105,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.LoginActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/welcomeTheme.TranslucentStatus" />
+            android:theme="@style/welcomeTheme.TranslucentStatus"
+            android:screenOrientation="portrait"/>
+
+
+
+
     </application>
 
 </manifest>

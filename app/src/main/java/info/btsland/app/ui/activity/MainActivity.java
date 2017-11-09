@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
-    private TextView tvHeadLeft;
 
 
 
@@ -51,6 +50,8 @@ public class MainActivity extends BaseActivity {
         PreferenceUtil.init(this);
         // 依据上次的语言设置，又一次设置语言
         switchLanguage(PreferenceUtil.getString("language", "zh"));
+
+
         setContentView(R.layout.activity_main);
         fillInHead();
         fillInBody();

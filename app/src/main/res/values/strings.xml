@@ -43,6 +43,8 @@
     <string name="set">设置</string>
     <string name="language">语言</string>
     <string name="theme">主题</string>
+    <string name="daytime">白昼模式</string>
+    <string name="night">黑夜模式</string>
     <string name="guide">使用指南</string>
     <string name="trading_guide">交易向导</string>
     <string name="we">关于我们</string>

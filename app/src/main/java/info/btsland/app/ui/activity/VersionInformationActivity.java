@@ -7,7 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-public class VersionInformationActivity extends AppCompatActivity {
+public class VersionInformationActivity extends BaseActivity {
 
     private HeadFragment headFragment;
 

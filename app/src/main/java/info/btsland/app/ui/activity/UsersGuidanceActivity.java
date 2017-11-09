@@ -7,14 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-public class UsersGuidanceActivity extends AppCompatActivity {
+public class UsersGuidanceActivity extends BaseActivity {
 
     private HeadFragment headFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_users_guidance);
+        setContentView(R.layout.activity_setting_guidance);
         fillInHead();
         init();
     }

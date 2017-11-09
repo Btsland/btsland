@@ -2,6 +2,7 @@ package info.btsland.app.api;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.HashSet;
 
 
 public class types {
@@ -235,20 +236,20 @@ public class types {
 //        }
 //    }
 
-//    public static class vote_id_type {
-//        int content;
-//
-//        public vote_id_type(String strSerial) {
-//            int nIndex = strSerial.indexOf(':');
-//            if (nIndex == -1) {
-//                throw new RuntimeException("vote_id_type invalid serial");
-//            }
-//            int nType = Integer.valueOf(strSerial.substring(0, nIndex));
-//            int nInstance = Integer.valueOf(strSerial.substring(nIndex + 1));
-//
-//            content = (nInstance << 8) | nType;
-//        }
-//    }
+    public static class vote_id_type {
+        int content;
+
+        public vote_id_type(String strSerial) {
+            int nIndex = strSerial.indexOf(':');
+            if (nIndex == -1) {
+                throw new RuntimeException("vote_id_type invalid serial");
+            }
+            int nType = Integer.valueOf(strSerial.substring(0, nIndex));
+            int nInstance = Integer.valueOf(strSerial.substring(nIndex + 1));
+
+            content = (nInstance << 8) | nType;
+        }
+    }
 
 //    public static class vote_id_type_deserializer implements JsonDeserializer<vote_id_type> {
 //
@@ -262,16 +263,16 @@ public class types {
 //        }
 //    }
 
-//    public static class account_options {
-//        public public_key_type memo_key;
-//        public String voting_account;
-//        public Integer num_witness;
-//        public Integer num_committee;
-//        public HashSet<vote_id_type> votes;
-//        // 未完成
-//        public HashSet<String> extensions;  // extension type
-//
-//    }
+    public static class account_options {
+        public public_key_type memo_key;
+        public String voting_account;
+        public Integer num_witness;
+        public Integer num_committee;
+        public HashSet<vote_id_type> votes;
+        // 未完成
+        public HashSet<String> extensions;  // extension type
+
+    }
 
 //    public static class public_key_type_deserializer implements JsonDeserializer<public_key_type> {
 //

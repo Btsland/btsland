@@ -6,12 +6,20 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.MarketStat;
+
+import static android.R.attr.name;
 
 
 /**
@@ -19,10 +27,10 @@ import info.btsland.app.R;
  * function：登录
  * 2017/11/3.
  */
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener ,MarketStat.OnMarketStatUpdateListener{
 
 
-
+    private static final String TAG ="LoginActivity" ;
     private EditText username, password;
     private Button bt_username_clear;
     private Button bt_pwd_clear;
@@ -160,12 +168,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
-                // TODO 登录按钮
+                MarketStat marketStat = BtslandApplication.getMarketStat();
+                List<String> strings=new ArrayList<>();
+                strings.add("li-8888");
+                Log.e(TAG, "onClick: login" );
+                marketStat.subscribe(strings,"2313132",MarketStat.STAT_ACCENTS,this);
 
                 break;
             case R.id.register:
                 // 注册按钮
-                Toast.makeText(LoginActivity.this, "注册", 0).show();
+                Toast.makeText(LoginActivity.this, "注册", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.forgive_pwd:
                 // 忘记密码按钮
@@ -203,11 +215,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
-
-
-
-
+    @Override
+    public void onMarketStatUpdate(MarketStat.Stat stat) {
+        Log.i(TAG, "onMarketStatUpdate: stat:"+stat.account_objects.toString());
+    }
 }
 
 

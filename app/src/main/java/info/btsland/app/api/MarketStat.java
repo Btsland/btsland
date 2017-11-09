@@ -41,6 +41,7 @@ public class MarketStat {
     public static final int STAT_COUNECT=0x12;
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
+    public static final int STAT_ACCENTS = 1;
     public Websocket_api mWebsocketApi=new Websocket_api();
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
@@ -97,8 +98,16 @@ public class MarketStat {
                 new Subscription(base, quote, bucketSize, stats,intervalMillis, l);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
+    public void subscribe(List<String> name,String pwd, int stats,
+                           OnMarketStatUpdateListener l) {
+        Log.e(TAG, "subscribe: name:"+name.get(0) );
+        Subscription subscription =
+                new Subscription(name,pwd,stats,l);
+        subscriptionHashMap.put("get_accounts", subscription);
+    }
     public void subscribe(String base, String quote, int stats,
                           OnMarketStatUpdateListener l) {
+
         subscribe(base, quote, DEFAULT_BUCKET_SECS, stats, l);
     }
 
@@ -179,6 +188,7 @@ public class MarketStat {
         public List<OpenOrder> openOrders;
         public List<MarketTicker> MarketTickers;
         public MarketTicker MarketTicker;
+        public account_object account_objects;
         public int nRet;
 
         @Override
@@ -239,6 +249,8 @@ public class MarketStat {
     }
 
     public class Subscription implements Runnable {
+        private String password;
+        private List<String> accentName;
         private String base;
         private String quote;
         private long bucketSecs = DEFAULT_BUCKET_SECS;
@@ -285,6 +297,17 @@ public class MarketStat {
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
+        private Subscription(List<String> name, String pwd,int stats, OnMarketStatUpdateListener l) {
+            //Log.e(TAG, "Subscription: ");
+            this.accentName=name;
+            this.password=pwd;
+            this.stats = stats;
+            this.listener = l;
+            this.statThread = new HandlerThread("get_accounts");
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+        }
 
         private void cancel() {
             isCancelled.set(true);
@@ -297,7 +320,8 @@ public class MarketStat {
         @Override
         public  void run() {
             //mWebsocketApi.connect();
-            Log.e("websocket", "run: "+Thread.currentThread().getName());
+            Log.e(TAG, "run: "+Thread.currentThread().getName());
+            Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
             //Log.e(TAG, "run: " );
             if(base==null||base==""){
                 base="CNY";
@@ -322,6 +346,15 @@ public class MarketStat {
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
                     stat.prices = getMarketHistory(base,quote,(int)bucketSecs);//1
+                }
+                Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
+                if (stats== STAT_ACCENTS) {
+                    Log.e(TAG, "run: STAT_ACCENTS  accentName:"+accentName);
+                    try {
+                        stat.account_objects= mWebsocketApi.get_account_by_name(accentName);//1
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
                 }
                 if ((stats & STAT_MARKET_TICKER) != 0) {
                     try {

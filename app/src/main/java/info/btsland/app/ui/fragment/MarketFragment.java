@@ -76,12 +76,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
             return;
         }
         Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
-
         Message message=Message.obtain();
-
-
-        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat.MarketTickers.get(0).base==\"CNY\":"+stat.MarketTicker.base.equals("CNY")));
-
         switch (stat.MarketTicker.base){
             case "CNY":
                 if(cnyMarket!=null&&cnyMarket.size()>quotes.length){

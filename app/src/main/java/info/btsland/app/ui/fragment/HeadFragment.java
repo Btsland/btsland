@@ -109,6 +109,17 @@ public class HeadFragment extends Fragment {
                 leftTextView.setOnClickListener(toUser);
                 rightTextView.setOnClickListener(toSetting);
                 break;
+            case HeadType.BACK_SELECT_NULL:
+                leftTextView.setOnClickListener(back);
+                titleTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+                rightTextView.setVisibility(View.GONE);
+                break;
+
         }
     }
 
@@ -173,5 +184,6 @@ public class HeadFragment extends Fragment {
         public static final int USER_SET = 2;
         public static final int BACK_NULL = 3;
         public static final int NULL_NULL = 4;
+        public static final int BACK_SELECT_NULL = 5;
     }
 }

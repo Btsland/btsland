@@ -57,7 +57,6 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         intent.putExtra("news", news);
         getActivity().startActivity(intent);    //标记位置
     }
-    Bitmap bitmap = BitmapFactory.decodeResource(this.getContext().getResources(), R.drawable.p3);
 
     private List<News> getNews() {
         //初始化新闻标题及内容

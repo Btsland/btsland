@@ -261,6 +261,21 @@ public class Websocket_api extends WebSocketListener {
 
         return nRet;
     }
+    public account_object get_account_by_name(List<String> listAccountObjectId) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_account_by_name");
+
+        callObject.params.add(listAccountObjectId);
+        ReplyObjectProcess<Reply<account_object>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<account_object>>(){}.getType());
+        Reply<account_object> replyAccountObjectList = sendForReply(callObject, replyObject);
+
+        return replyAccountObjectList.result;
+    }
     private int get_websocket_bitshares_api_id(String strApiName) throws NetworkStatusException {
         Log.i(TAG, "get_websocket_bitshares_api_id: ");
         Call callObject = new Call();

@@ -104,10 +104,11 @@ public class MarketRowAdapter extends BaseAdapter {
         return convertView;
 
     }
+    long mLastTime=0;
+    long mCurTime=0;
     private class rowOnClickListener implements View.OnClickListener{
         private MarketTicker market;
-        long mLastTime=0;
-        long mCurTime=0;
+
         public rowOnClickListener(MarketTicker market) {
             this.market=market;
         }

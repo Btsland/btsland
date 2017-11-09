@@ -79,55 +79,65 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         Message message=Message.obtain();
         switch (stat.MarketTicker.base){
             case "CNY":
-                if(cnyMarket!=null&&cnyMarket.size()>quotes.length){
-                    cnyMarket.clear();
+                synchronized (this) {
+                    if (cnyMarket != null && cnyMarket.size() > quotes.length) {
+                        cnyMarket.clear();
+                    }
+                    if (!replaceMarket(cnyMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_CNY;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(cnyMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_CNY;
-                mHandler.sendMessage(message);
                 break;
             case "BTS":
-                if(btsMarket!=null&&btsMarket.size()>quotes.length){
-                    btsMarket.clear();
+                synchronized (this) {
+                    if (btsMarket != null && btsMarket.size() > quotes.length) {
+                        btsMarket.clear();
+                    }
+                    if (!replaceMarket(btsMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_BTS;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(btsMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_BTS;
-                mHandler.sendMessage(message);
                 break;
             case "USD":
-                if(usdMarket!=null&&usdMarket.size()>quotes.length){
-                    usdMarket.clear();
-                }
+                synchronized (this) {
+                    if (usdMarket != null && usdMarket.size() > quotes.length) {
+                        usdMarket.clear();
+                    }
 
-                if(!replaceMarket(usdMarket,stat.MarketTicker)){
-                    return;
+                    if (!replaceMarket(usdMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_USD;
+                    mHandler.sendMessage(message);
                 }
-                message.what=NOTIFY_USD;
-                mHandler.sendMessage(message);
                 break;
             case "BTC":
-                if(btcMarket!=null&&btcMarket.size()>quotes.length){
-                    btcMarket.clear();
+                synchronized (this) {
+                    if (btcMarket != null && btcMarket.size() > quotes.length) {
+                        btcMarket.clear();
+                    }
+                    if (!replaceMarket(btcMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_BTC;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(btcMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_BTC;
-                mHandler.sendMessage(message);
                 break;
             case "ETH":
-                if(ethMarket!=null&&ethMarket.size()>quotes.length){
-                    ethMarket.clear();
+                synchronized (this) {
+                    if (ethMarket != null && ethMarket.size() > quotes.length) {
+                        ethMarket.clear();
+                    }
+                    if (!replaceMarket(ethMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_ETH;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(ethMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_ETH;
-                mHandler.sendMessage(message);
                 break;
         }
     }

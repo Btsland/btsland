@@ -18,6 +18,9 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
+import info.btsland.app.api.Wallet_api;
+import info.btsland.app.exception.CreateAccountException;
+import info.btsland.app.exception.NetworkStatusException;
 
 
 /**
@@ -176,6 +179,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.register:
                 // 注册按钮
                 Toast.makeText(LoginActivity.this, "注册", Toast.LENGTH_SHORT).show();
+                Wallet_api wallet_api=new Wallet_api();
+                try {
+                    Log.i(TAG, "onClick: 注册");
+                    wallet_api.create_account_with_password("xjh1010","X123456789zz");
+                } catch (NetworkStatusException e) {
+                    e.printStackTrace();
+                } catch (CreateAccountException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.forgive_pwd:
                 // 忘记密码按钮

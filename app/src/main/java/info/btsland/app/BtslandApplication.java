@@ -12,6 +12,8 @@ import android.widget.Toast;
 
 import com.github.mikephil.charting.data.CandleEntry;
 
+import org.spongycastle.jce.provider.BouncyCastleProvider;
+
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -27,6 +29,7 @@ import info.btsland.app.model.DataK;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
+import okhttp3.WebSocket;
 
 /**
  * Created by Administrator on 2017/10/30.
@@ -40,6 +43,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static boolean isWel=false;
 
     public static MarketStat marketStat;
+    public static WebSocket mWebsocket;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,DataK> dataKMap=new HashMap<>();
     public static int _nDatabaseId = -1;
@@ -73,6 +77,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     @Override
     public void onCreate() {
         super.onCreate();
+        //Fabric.with(this, new Crashlytics());
+        Security.insertProviderAt(new BouncyCastleProvider(), 1);
         instance=getApplicationContext();
         application=this;
         if(InternetUtil.isConnected(this)){

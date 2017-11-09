@@ -125,9 +125,9 @@ public class types {
             return Arrays.equals(key_data, publicKeyType.key_data);
         }
 
-//        public public_key_type(public_key publicKey) {
-//            key_data = publicKey.getKeyByte();
-//        }
+        public public_key_type(public_key publicKey) {
+            key_data = publicKey.getKeyByte();
+        }
 
 //        @Override
 //        public String toString() {

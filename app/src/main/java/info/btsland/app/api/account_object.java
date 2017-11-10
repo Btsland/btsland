@@ -1,9 +1,15 @@
 package info.btsland.app.api;
 
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+
+import java.io.Serializable;
+import java.lang.reflect.Type;
 import java.util.List;
 
-public class account_object {
+public class account_object implements Serializable {
     public String id;
     public String membership_expiration_date;
     public String registrar;
@@ -49,5 +55,17 @@ public class account_object {
                 ", active_special_authority=" + active_special_authority +
                 ", top_n_control_flags=" + top_n_control_flags +
                 '}';
+    }
+    public object_id toObject_id(String id){
+        String strContent = id;
+        int nFirstDot = strContent.indexOf('.');
+        int nSecondDot = strContent.indexOf('.', nFirstDot + 1);
+
+        int nSpaceId = Integer.valueOf(strContent.substring(0, nFirstDot));
+        int nTypeId = Integer.valueOf(strContent.substring(nFirstDot + 1, nSecondDot));
+        int nInstance = Integer.valueOf(strContent.substring(nSecondDot + 1));
+        object_id objectId = new object_id(nSpaceId, nTypeId, nInstance);
+
+        return objectId;
     }
 }

@@ -1,6 +1,8 @@
 package info.btsland.app.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +15,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Wallet_api;
+import info.btsland.app.api.account_object;
 import info.btsland.app.exception.CreateAccountException;
 import info.btsland.app.exception.NetworkStatusException;
 
@@ -169,25 +174,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
-                MarketStat marketStat = BtslandApplication.getMarketStat();
-                List<String> strings=new ArrayList<>();
-                strings.add("li-8888");
-                Log.e(TAG, "onClick: login" );
-                marketStat.subscribe(strings,"2313132",MarketStat.STAT_ACCENTS,this);
 
+                AccountThread loginThread=new AccountThread("xjh2233","X123456789xx",AccountThread.LOGIN_BY_PASSWORD);
+                loginThread.start();
                 break;
             case R.id.register:
                 // 注册按钮
                 Toast.makeText(LoginActivity.this, "注册", Toast.LENGTH_SHORT).show();
-                Wallet_api wallet_api=new Wallet_api();
-                try {
-                    Log.i(TAG, "onClick: 注册");
-                    wallet_api.create_account_with_password("xjh1010","X123456789zz");
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-                } catch (CreateAccountException e) {
-                    e.printStackTrace();
-                }
+                AccountThread registerThread=new AccountThread("xjh2233","X123456789xx",AccountThread.REGISTER_BY_PASSWORD);
+                registerThread.start();
                 break;
             case R.id.forgive_pwd:
                 // 忘记密码按钮
@@ -227,9 +222,86 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        Log.i(TAG, "onMarketStatUpdate: stat:"+stat.account_objects.toString());
+        Log.i(TAG, "onMarketStatUpdate: stat:"+stat.account_object.toString());
 
     }
+
+    class AccountThread extends Thread{
+        public static final int LOGIN_BY_PASSWORD=1;
+        public static final int LOGIN_BY_BIN=2;
+        public static final int REGISTER_BY_PASSWORD=3;
+        private int want;
+        private String name;
+        private String pwd;
+
+        public AccountThread(String name, String pwd,int want) {
+            this.name=name;
+            this.pwd=pwd;
+            this.want=want;
+        }
+
+        @Override
+        public void run() {
+            Wallet_api wallet_api=new Wallet_api();
+            switch (want){
+                //账号登录
+                case LOGIN_BY_PASSWORD:
+                    account_object accountObject=null;
+                    int loginRet=0;
+                    try {
+                        accountObject= wallet_api.import_account_password(name,pwd);
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                    Bundle loginbundle=new Bundle();
+                    if(accountObject==null){
+                        loginRet=-1;
+                    }else {
+                        loginbundle.putSerializable("account",accountObject);
+                    }
+                    loginbundle.putInt("login",loginRet);
+                    Message loginmsg=Message.obtain();
+                    loginmsg.setData(loginbundle);
+                    mHander.sendMessage(loginmsg);
+                    break;
+                //钱包登录
+                case LOGIN_BY_BIN:
+
+                    break;
+                //帐号注册
+                case REGISTER_BY_PASSWORD:
+                    int registernRet=0;
+
+                    try {
+                        Log.i(TAG, "onClick: 注册");
+                        registernRet = wallet_api.create_account_with_password("xjh1010","X123456789zz");
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    } catch (CreateAccountException e) {
+                        e.printStackTrace();
+                    }
+                    Bundle registerbundle=new Bundle();
+                    registerbundle.putInt("register",registernRet);
+                    Message registermsg=Message.obtain();
+                    registermsg.setData(registerbundle);
+                    mHander.sendMessage(registermsg);
+                    break;
+            }
+        }
+    }
+    public Handler mHander=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle=msg.getData();
+            if(bundle.getInt("register")==0){
+                Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+            }
+            if(bundle.getInt("login")==0){
+                account_object accountObject = (account_object) bundle.get("account");
+                Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 }
 
 

@@ -1,8 +1,16 @@
 package info.btsland.app.api;
 
+import com.mrd.bitlib.bitcoinj.Base58;
+import com.mrd.bitlib.crypto.digest.RIPEMD160Digest;
+
+import org.spongycastle.crypto.digests.SHA256Digest;
+
 import java.nio.ByteBuffer;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.HashSet;
+
+import static info.btsland.app.api.config.GRAPHENE_ADDRESS_PREFIX;
 
 
 public class types {
@@ -129,112 +137,112 @@ public class types {
             key_data = publicKey.getKeyByte();
         }
 
-//        @Override
-//        public String toString() {
-//            RIPEMD160Digest dig = new RIPEMD160Digest();
-//            dig.update(key_data, 0, key_data.length);
-//            byte[] out = new byte[20];
-//            dig.doFinal(out, 0);
-//
-//            byte[] byteKeyData = new byte[37];
-//            System.arraycopy(key_data, 0, byteKeyData, 0, key_data.length);
-//            System.arraycopy(out, 0, byteKeyData, key_data.length, byteKeyData.length - key_data.length);
-//
-//            String strResult = GRAPHENE_ADDRESS_PREFIX;
-//            strResult += Base58.encode(byteKeyData);
-//
-//            return strResult;
-//        }
+        @Override
+        public String toString() {
+            RIPEMD160Digest dig = new RIPEMD160Digest();
+            dig.update(key_data, 0, key_data.length);
+            byte[] out = new byte[20];
+            dig.doFinal(out, 0);
 
-//        public public_key_type(String strBase58) throws NoSuchAlgorithmException {
-//            String strPrefix = GRAPHENE_ADDRESS_PREFIX;
-//            byte[] byteKeyData = Base58.decode(strBase58.substring(strPrefix.length()));
-//            binary_key binaryKey = new binary_key(byteKeyData);
-//
-//            RIPEMD160Digest digest = new RIPEMD160Digest();
-//            digest.update(binaryKey.data, 0, binaryKey.data.length);
-//            byte[] out = new byte[20];
-//            digest.doFinal(out, 0);
-//
-//            byte[] byteOut = new byte[4];
-//            System.arraycopy(out, 0, byteOut, 0, byteOut.length);
-//            int nByteOut = ByteBuffer.wrap(byteOut).getInt();
-//
-//            if (nByteOut != binaryKey.check) {
-//                throw new RuntimeException("Public key is not valid");
-//            }
-//            key_data = binaryKey.data;
-//        }
-//
-//        public public_key getPublicKey() {
-//            return new public_key(key_data);
-//        }
-//
-//        public boolean compare(public_key_type publicKeyType) {
-//            return Arrays.equals(key_data, publicKeyType.key_data);
-//        }
+            byte[] byteKeyData = new byte[37];
+            System.arraycopy(key_data, 0, byteKeyData, 0, key_data.length);
+            System.arraycopy(out, 0, byteKeyData, key_data.length, byteKeyData.length - key_data.length);
+
+            String strResult = GRAPHENE_ADDRESS_PREFIX;
+            strResult += Base58.encode(byteKeyData);
+
+            return strResult;
+        }
+
+        public public_key_type(String strBase58) throws NoSuchAlgorithmException {
+            String strPrefix = GRAPHENE_ADDRESS_PREFIX;
+            byte[] byteKeyData = Base58.decode(strBase58.substring(strPrefix.length()));
+            binary_key binaryKey = new binary_key(byteKeyData);
+
+            RIPEMD160Digest digest = new RIPEMD160Digest();
+            digest.update(binaryKey.data, 0, binaryKey.data.length);
+            byte[] out = new byte[20];
+            digest.doFinal(out, 0);
+
+            byte[] byteOut = new byte[4];
+            System.arraycopy(out, 0, byteOut, 0, byteOut.length);
+            int nByteOut = ByteBuffer.wrap(byteOut).getInt();
+
+            if (nByteOut != binaryKey.check) {
+                throw new RuntimeException("Public key is not valid");
+            }
+            key_data = binaryKey.data;
+        }
+
+        public public_key getPublicKey() {
+            return new public_key(key_data);
+        }
+
+        public boolean compare(public_key_type publicKeyType) {
+            return Arrays.equals(key_data, publicKeyType.key_data);
+        }
     }
 
-//    public static class private_key_type {
-//        private byte[] key_data = new byte[32];
-//
-//        @Override
-//        public String toString() {
-//            byte[] data = new byte[key_data.length + 1 + 4];
-//            data[0] = (byte)0x80;
-//            System.arraycopy(key_data, 0, data, 1, key_data.length);
-//
-//            SHA256Digest digest = new SHA256Digest();
-//            digest.update(data, 0, key_data.length + 1);
-//            byte[] out = new byte[32];
-//            digest.doFinal(out, 0);
-//
-//            digest.update(out, 0, out.length);
-//            digest.doFinal(out, 0);
-//
-//            System.arraycopy(out, 0, data, key_data.length + 1, 4);
-//            return Base58.encode(data);
-//        }
+    public static class private_key_type {
+        private byte[] key_data = new byte[32];
 
-//        public private_key_type(String strBase58) {
-//            byte wif_bytes[] = Base58.decode(strBase58);
-//            if (wif_bytes.length < 5) {
-//                throw new RuntimeException("Private key is not valid");
-//            }
-//
-//            System.arraycopy(wif_bytes, 1, key_data, 0, key_data.length);
-//
-//            SHA256Digest digest = new SHA256Digest();
-//            digest.update(wif_bytes, 0, wif_bytes.length - 4);
-//            byte[] hashCheck = new byte[32];
-//            digest.doFinal(hashCheck, 0);
-//
-//            byte[] hashCheck2 = new byte[32];
-//            digest.update(hashCheck, 0, hashCheck.length);
-//            digest.doFinal(hashCheck2, 0);
-//
-//            byte check[] = new byte[4];
-//            System.arraycopy(wif_bytes, wif_bytes.length - check.length, check, 0, check.length);
-//
-//            byte[] check1 = new byte[4];
-//            byte[] check2 = new byte[4];
-//            System.arraycopy(hashCheck, 0, check1, 0, check1.length);
-//            System.arraycopy(hashCheck2, 0, check2, 0, check2.length);
-//
-//            if (Arrays.equals(check1, check) == false &&
-//                    Arrays.equals(check2, check) == false) {
-//                throw new RuntimeException("Private key is not valid");
-//            }
-//        }
+        @Override
+        public String toString() {
+            byte[] data = new byte[key_data.length + 1 + 4];
+            data[0] = (byte)0x80;
+            System.arraycopy(key_data, 0, data, 1, key_data.length);
 
-//        public private_key_type(private_key privateKey) {
-//            key_data = privateKey.get_secret();
-//        }
+            SHA256Digest digest = new SHA256Digest();
+            digest.update(data, 0, key_data.length + 1);
+            byte[] out = new byte[32];
+            digest.doFinal(out, 0);
 
-//        public private_key getPrivateKey() {
-//            return new private_key(key_data);
-//        }
-//    }
+            digest.update(out, 0, out.length);
+            digest.doFinal(out, 0);
+
+            System.arraycopy(out, 0, data, key_data.length + 1, 4);
+            return Base58.encode(data);
+        }
+
+        public private_key_type(String strBase58) {
+            byte wif_bytes[] = Base58.decode(strBase58);
+            if (wif_bytes.length < 5) {
+                throw new RuntimeException("Private key is not valid");
+            }
+
+            System.arraycopy(wif_bytes, 1, key_data, 0, key_data.length);
+
+            SHA256Digest digest = new SHA256Digest();
+            digest.update(wif_bytes, 0, wif_bytes.length - 4);
+            byte[] hashCheck = new byte[32];
+            digest.doFinal(hashCheck, 0);
+
+            byte[] hashCheck2 = new byte[32];
+            digest.update(hashCheck, 0, hashCheck.length);
+            digest.doFinal(hashCheck2, 0);
+
+            byte check[] = new byte[4];
+            System.arraycopy(wif_bytes, wif_bytes.length - check.length, check, 0, check.length);
+
+            byte[] check1 = new byte[4];
+            byte[] check2 = new byte[4];
+            System.arraycopy(hashCheck, 0, check1, 0, check1.length);
+            System.arraycopy(hashCheck2, 0, check2, 0, check2.length);
+
+            if (Arrays.equals(check1, check) == false &&
+                    Arrays.equals(check2, check) == false) {
+                throw new RuntimeException("Private key is not valid");
+            }
+        }
+
+        public private_key_type(private_key privateKey) {
+            key_data = privateKey.get_secret();
+        }
+
+        public private_key getPrivateKey() {
+            return new private_key(key_data);
+        }
+    }
 
     public static class vote_id_type {
         int content;

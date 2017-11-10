@@ -184,7 +184,7 @@ public class MarketStat {
         public List<OpenOrder> openOrders;
         public List<MarketTicker> MarketTickers;
         public MarketTicker MarketTicker;
-        public account_object account_objects;
+        public account_object account_object;
         public int nRet;
 
         @Override
@@ -349,7 +349,7 @@ public class MarketStat {
                 if (stats== STAT_ACCENTS) {
                     Log.e(TAG, "run: STAT_ACCENTS  accentName:"+accentName);
                     try {
-                        stat.account_objects= mWebsocketApi.get_account_by_name(accentName);//1
+                        stat.account_object= mWebsocketApi.get_account_by_name(accentName);//1
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }

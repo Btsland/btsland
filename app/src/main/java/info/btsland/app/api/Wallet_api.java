@@ -127,6 +127,22 @@ public class Wallet_api {
         }
         return nRet;
     }
+
+    public account_object get_account(String strAccountName){
+        account_object accountObject=null;
+        List<String> names=new ArrayList<>();
+        names.add(strAccountName);
+
+        try {
+            accountObject = mWebsocketApi.get_account_by_name(names);
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+        }
+        return accountObject;
+    }
+
+
+
     public int create_account_with_password(String strServerUrl,
                                             String strAccountName,
                                             String strPassword) throws NetworkStatusException, CreateAccountException {

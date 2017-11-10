@@ -2,7 +2,6 @@ package info.btsland.app.api;
 
 
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -23,7 +22,6 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import info.btsland.app.BtslandApplication;
-import info.btsland.app.R;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
@@ -33,8 +31,6 @@ import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
-
-import static info.btsland.app.api.ErrorCode.*;
 
 public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
@@ -513,7 +509,7 @@ public class Websocket_api extends WebSocketListener {
                 }else if (replyObject.error != null) {
                     throw new NetworkStatusException(gson.toJson(replyObject.error));
                 }
-
+                //打包好返回的数据
                 return replyObject;
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -556,7 +552,7 @@ public class Websocket_api extends WebSocketListener {
         public ReplyObjectProcess() {
 
         }
-
+//
         public void processTextToObject(String strText) {
             Log.i(TAG, "processTextToObject: strText:"+strText);
             Log.i(TAG, "processTextToObject: mType:"+mType);

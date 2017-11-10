@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -26,6 +27,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
@@ -37,11 +39,12 @@ import info.btsland.app.ui.activity.MarketDetailedActivity;
 public class DetailedKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String MARKET = "market";
     private static final String TAG ="DetailedKFragment" ;
 
-    public static String key;
+    private long range= TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
+
+    private long ago=TimeUnit.DAYS.toSeconds(1);//距离现在时间
 
     private static String quote ="BTS";
     private static String base ="CNY";
@@ -52,32 +55,21 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private CombinedData data;//图表总数据
 
     private CombinedChart simpleK;//图表
+    private TextView tv5M;
+    private TextView tv1H;
+    private TextView tv1D;
 
     private static DetailedKFragment listener;
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private MarketTicker market;
 
 
     public DetailedKFragment() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment DetailedKFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static DetailedKFragment newInstance(String param1, String param2) {
+    public static DetailedKFragment newInstance(MarketTicker market) {
         DetailedKFragment fragment = new DetailedKFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putSerializable(MARKET, market);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,8 +77,6 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        key=quote+"/"+base;
-        Log.i(TAG, "onCreate: key:"+key);
 
     }
 
@@ -95,36 +85,61 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_detailed_k, container, false);
+        this.market=(MarketTicker) getArguments().getSerializable(MARKET);
+        if (market != null) {
+            base=market.base;
+            quote=market.quote;
+        }
         listener=this;
         init(view);
+
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        Log.e(TAG, "onStart: MarketDetailedActivity.market:"+MarketDetailedActivity.market);
-        drawK(MarketDetailedActivity.market);
-    }
+        drawK();
 
+    }
+    class tvOnClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            switch (view.getId()){
+                case R.id.tv_detailed_foot_5M:
+                    range=TimeUnit.MINUTES.toMillis(5);
+                    ago=TimeUnit.DAYS.toMillis(2);
+                    break;
+                case R.id.tv_detailed_foot_1H:
+                    range=TimeUnit.HOURS.toMillis(1);
+                    ago=TimeUnit.DAYS.toMillis(7);
+                    break;
+                case R.id.tv_detailed_foot_1D:
+                    range=TimeUnit.DAYS.toMillis(1);
+                    ago=TimeUnit.DAYS.toMillis(90);
+                    break;
+            }
+            startReceiveMarkets();
+
+        }
+    }
     private void init(View view) {
         simpleK=view.findViewById(R.id.cbc_detailed_K);
         simpleK.setNoDataText("数据正在读取中。。。");
+        tv5M=view.findViewById(R.id.tv_detailed_foot_5M);
+        tv1H=view.findViewById(R.id.tv_detailed_foot_1H);
+        tv1D=view.findViewById(R.id.tv_detailed_foot_1D);
     }
 
     public static DetailedKFragment getListener() {
         return listener;
     }
-    public void drawK(MarketTicker market) {
-        String newKey=market.quote+"/"+market.base;
-        Log.i(TAG, "drawK: newKey:"+newKey);
-        Log.i(TAG, String.valueOf("drawK: "+ BtslandApplication.dataKMap.get(newKey)!=null));
-        if(BtslandApplication.dataKMap.get(newKey)!=null) {
-            if(!MarketDetailedActivity.key.equals(newKey)){
-                Log.i(TAG, "drawK: return");
-                return;
-            }
-            DataK dataK = BtslandApplication.dataKMap.get(newKey);
+    public void drawK() {
+        String key=market.quote+"/"+market.base;
+        Log.i(TAG, "drawK: newKey:"+key);
+        Log.i(TAG, String.valueOf("drawK: "+ BtslandApplication.dataKMap.get(key)!=null));
+        if(BtslandApplication.dataKMap.get(key)!=null) {
+            DataK dataK = BtslandApplication.dataKMap.get(key);
             List<CandleEntry> candleEntries = dataK.candleEntries;
             candleDataSet = new CandleDataSet(candleEntries, "");//烛形图图形
             simpleKInit(candleDataSet, dataK);
@@ -147,7 +162,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
             Log.i(TAG, "getAxisLeft: max:" + simpleK.getAxisLeft().getAxisMaxValue());
             Log.i(TAG, "getAxisLeft: min:" + simpleK.getAxisLeft().getAxisMinValue());
         }else {
-            startReceiveMarkets(market);
+            startReceiveMarkets();
         }
     }
     private void simpleKInit(CandleDataSet candleDataSet,DataK dataK) {
@@ -192,31 +207,19 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
             return df.format(prices.get(index).date);
         }
     }
-    public static void startReceiveMarkets(MarketTicker market) {
-        Log.i(TAG, "startReceiveMarkets: market:"+market);
-        String base=DetailedKFragment.base;
-        String quote=DetailedKFragment.quote;
-        if (market != null) {
-            base=market.base;
-            quote=market.quote;
-        }
-        key=quote+"/"+base;
-        //判断线程是否存在，存在则重启，不在则重开
-        if(BtslandApplication.getMarketStat().subscriptionHashMap
-                .get(MarketStat.makeMarketName(
-                        base,quote,MarketStat.STAT_MARKET_HISTORY))!=null){
-            BtslandApplication.getMarketStat().subscriptionHashMap
-                    .get(MarketStat.makeMarketName(
-                            base,quote,MarketStat.STAT_MARKET_HISTORY)).updateImmediately();
-        }else {
-            BtslandApplication.getMarketStat().subscribe(
-                    base,
-                    quote,
-                    MarketStat.STAT_MARKET_HISTORY,
-                    MarketStat.DEFAULT_UPDATE_SECS,
-                    getListener());
-        }
 
+    /**
+     * 启动查询数据线程
+     */
+    public void startReceiveMarkets() {
+        BtslandApplication.getMarketStat().subscribe(
+                base,
+                quote,
+                range,
+                ago,
+                MarketStat.STAT_MARKET_HISTORY,
+                MarketStat.DEFAULT_UPDATE_SECS,
+                getListener());
     }
 
     @Override
@@ -258,7 +261,6 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
             message.obj=new MarketTicker(stat.prices.get(0).base,stat.prices.get(0).quote);
             Log.e(TAG, "onMarketStatUpdate:sendMessage:newKey"+newKey);
             handler.sendMessage(message);
-
         }
     }
     public Handler handler = new Handler() {
@@ -266,11 +268,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         @Override
         public void handleMessage(Message msg) {
             Log.i(TAG, "handleMessage: Thread:"+Thread.currentThread().getName());
-            MarketTicker market=(MarketTicker) msg.obj;
-            String newKey=market.quote+"/"+market.base;
-
-            drawK(market);
-
+            market=(MarketTicker) msg.obj;
+            drawK();
         }
     };
 }

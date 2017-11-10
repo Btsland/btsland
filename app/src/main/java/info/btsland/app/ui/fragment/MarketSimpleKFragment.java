@@ -162,20 +162,12 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         }
         key=quote+"/"+base;
         //判断线程是否存在，存在则重启，不在则重开
-        if(BtslandApplication.getMarketStat().subscriptionHashMap
-                .get(MarketStat.makeMarketName(
-                        base,quote,MarketStat.STAT_MARKET_HISTORY))!=null){
-            BtslandApplication.getMarketStat().subscriptionHashMap
-                    .get(MarketStat.makeMarketName(
-                            base,quote,MarketStat.STAT_MARKET_HISTORY)).updateImmediately();
-        }else {
             BtslandApplication.getMarketStat().subscribe(
                     base,
                     quote,
                     MarketStat.STAT_MARKET_HISTORY,
                     MarketStat.DEFAULT_UPDATE_SECS,
                     getListener());
-        }
 
     }
 

@@ -155,9 +155,7 @@ public class MarketRowAdapter extends BaseAdapter {
                 case 2:
                     Log.i(TAG, "handleMessage: market:"+market);
                     Toast.makeText(context,"双击事件！",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(context, MarketDetailedActivity.class);
-                    intent.putExtra("MarketTicker", market);
-                    context.startActivity(intent);
+                    MarketDetailedActivity.startAction(context,market);
                     break;
             }
         }

@@ -1,5 +1,7 @@
 package info.btsland.app.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -21,19 +23,21 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 public class MarketDetailedActivity extends AppCompatActivity{
     private HeadFragment headFragment;
-    public static MarketTicker market;
+    public MarketTicker market;
     public TextView textView;
 
     public static String key;
-    public static void startAction(MarketTicker market){
-
+    public static void startAction(Context context, MarketTicker market){
+        Intent intent = new Intent(context, MarketDetailedActivity.class);
+        intent.putExtra("MarketTicker", market);
+        context.startActivity(intent);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
-        market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
-        key=market.quote+"/"+market.base;
+        this.market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+        this.key=market.quote+"/"+market.base;
         fillInHead();
         init();
     }
@@ -53,9 +57,9 @@ public class MarketDetailedActivity extends AppCompatActivity{
         ViewPager viewPager= (ViewPager) findViewById(R.id.vp_detailed_page);
         String[] titles={"详情","买/卖","进行中"};
         List<Fragment> fragments=new ArrayList<Fragment>();
-        DetailedKFragment detailedKFragment=new DetailedKFragment();
-        DetailedBuyAndSellFragment detailedBuyAndSellFragment=new DetailedBuyAndSellFragment();
-        DetailedHaveInHandFragment detailedHaveInHandFragment=new DetailedHaveInHandFragment();
+        DetailedKFragment detailedKFragment=DetailedKFragment.newInstance(market);
+        DetailedBuyAndSellFragment detailedBuyAndSellFragment=DetailedBuyAndSellFragment.newInstance(market);
+        DetailedHaveInHandFragment detailedHaveInHandFragment=DetailedHaveInHandFragment.newInstance(market);
         fragments.add(detailedKFragment);
         fragments.add(detailedBuyAndSellFragment);
         fragments.add(detailedHaveInHandFragment);

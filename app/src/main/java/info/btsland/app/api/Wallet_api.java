@@ -1,5 +1,7 @@
 package info.btsland.app.api;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
@@ -17,11 +19,13 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
+
 /**
  * Created by Administrator on 2017/11/9.
  */
 
 public class Wallet_api {
+    private static final String TAG="Wallet_api";
 
     private Websocket_api mWebsocketApi;
 
@@ -38,6 +42,7 @@ public class Wallet_api {
                 "https://openledger.hk/api/v1/accounts"
         };*/
         String[] strAddress = {"https://openledger.io/api/v1/accounts"};
+        Log.i(TAG, "create_account_with_password: ");
 
         int nRet = -1;
         for (int i = 0; i < strAddress.length; ++i) {
@@ -159,5 +164,4 @@ public class Wallet_api {
             return ErrorCode.ERROR_SERVER_CREATE_ACCOUNT_FAIL;
         }
     }
-
 }

@@ -381,7 +381,6 @@ public class MarketStat {
                     return;
                 }
                 //开启处理数据线程
-                Log.e(TAG, "run: "+ stat.prices.size());
                 new dataHandling(listener,stat).start();
                 //this.updateImmediately();
             } else if (!isCancelled.get()) {

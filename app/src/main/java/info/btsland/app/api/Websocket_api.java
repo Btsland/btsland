@@ -252,6 +252,7 @@ public class Websocket_api extends WebSocketListener {
             mWebsocket = null;
             mnConnectStatus = WEBSOCKET_CONNECT_INVALID;
         } else {
+            BtslandApplication.mWebsocket=mWebsocket;
             mnConnectStatus = WEBSOCKET_CONNECT_SUCCESS;
         }
 
@@ -431,7 +432,12 @@ public class Websocket_api extends WebSocketListener {
         Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
             BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
-            thread.start();
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
         }
 
         return sendForReplyImpl(callObject, replyObjectProcess);
@@ -449,10 +455,22 @@ public class Websocket_api extends WebSocketListener {
 
         synchronized (replyObjectProcess) {
             while (true){
-                boolean bRet = mWebsocket.send(strMessage);
-                if (bRet==false) {
+                boolean bRet=false;
+                if(mWebsocket!=null){
+                    bRet = mWebsocket.send(strMessage);
+                }else if(BtslandApplication.mWebsocket!=null) {
+                    bRet = BtslandApplication.mWebsocket.send(strMessage);
+                }else {
                     BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
-                    thread.start();
+                    try {
+                        thread.join();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if (bRet==false) {
+
                 }else {
                     break;
                 }

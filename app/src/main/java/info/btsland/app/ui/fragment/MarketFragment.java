@@ -27,6 +27,7 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.activity.BaseActivity;
 import info.btsland.app.util.ArrayUtils;
 import info.btsland.app.util.InternetUtil;
 
@@ -79,55 +80,65 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         Message message=Message.obtain();
         switch (stat.MarketTicker.base){
             case "CNY":
-                if(cnyMarket!=null&&cnyMarket.size()>quotes.length){
-                    cnyMarket.clear();
+                synchronized (this) {
+                    if (cnyMarket != null && cnyMarket.size() > quotes.length) {
+                        cnyMarket.clear();
+                    }
+                    if (!replaceMarket(cnyMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_CNY;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(cnyMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_CNY;
-                mHandler.sendMessage(message);
                 break;
             case "BTS":
-                if(btsMarket!=null&&btsMarket.size()>quotes.length){
-                    btsMarket.clear();
+                synchronized (this) {
+                    if (btsMarket != null && btsMarket.size() > quotes.length) {
+                        btsMarket.clear();
+                    }
+                    if (!replaceMarket(btsMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_BTS;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(btsMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_BTS;
-                mHandler.sendMessage(message);
                 break;
             case "USD":
-                if(usdMarket!=null&&usdMarket.size()>quotes.length){
-                    usdMarket.clear();
-                }
+                synchronized (this) {
+                    if (usdMarket != null && usdMarket.size() > quotes.length) {
+                        usdMarket.clear();
+                    }
 
-                if(!replaceMarket(usdMarket,stat.MarketTicker)){
-                    return;
+                    if (!replaceMarket(usdMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_USD;
+                    mHandler.sendMessage(message);
                 }
-                message.what=NOTIFY_USD;
-                mHandler.sendMessage(message);
                 break;
             case "BTC":
-                if(btcMarket!=null&&btcMarket.size()>quotes.length){
-                    btcMarket.clear();
+                synchronized (this) {
+                    if (btcMarket != null && btcMarket.size() > quotes.length) {
+                        btcMarket.clear();
+                    }
+                    if (!replaceMarket(btcMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_BTC;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(btcMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_BTC;
-                mHandler.sendMessage(message);
                 break;
             case "ETH":
-                if(ethMarket!=null&&ethMarket.size()>quotes.length){
-                    ethMarket.clear();
+                synchronized (this) {
+                    if (ethMarket != null && ethMarket.size() > quotes.length) {
+                        ethMarket.clear();
+                    }
+                    if (!replaceMarket(ethMarket, stat.MarketTicker)) {
+                        return;
+                    }
+                    message.what = NOTIFY_ETH;
+                    mHandler.sendMessage(message);
                 }
-                if(!replaceMarket(ethMarket,stat.MarketTicker)){
-                    return;
-                }
-                message.what=NOTIFY_ETH;
-                mHandler.sendMessage(message);
                 break;
         }
     }
@@ -249,12 +260,14 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
 
 
-    class LeftCoinOnClickListener implements View.OnClickListener {
+    class LeftCoinOnClickListener extends BaseActivity implements View.OnClickListener {
+        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         @Override
         public void onClick(View view) {
             touchColor((TextView) view);//交互特效
             setMarket(view);//设置数据
         }
+
     }
 
     /**
@@ -308,7 +321,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      *
      * @param TextView
      */
-    private void setDownBack(TextView TextView) {
+    private void  setDownBack(TextView TextView) {
+
         TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch, null));
         TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow, null));
     }

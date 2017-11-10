@@ -190,6 +190,11 @@ public class SettingActivity extends BaseActivity{
                                 }
                                 dialog.dismiss();
                                 finish();
+
+                        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+                        //开始新的activity同时移除之前所有的activity
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
                             }
                     });
             themeDialog.show();

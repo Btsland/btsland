@@ -134,7 +134,7 @@ public class Wallet_api {
         names.add(strAccountName);
 
         try {
-            accountObject = mWebsocketApi.get_account_by_name(names);
+            accountObject = mWebsocketApi.get_account_by_name(strAccountName);
         } catch (NetworkStatusException e) {
             e.printStackTrace();
         }

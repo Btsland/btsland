@@ -3,16 +3,12 @@ package info.btsland.app.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
-import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
-
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -98,13 +94,13 @@ public class MarketStat {
                 new Subscription(base, quote, bucketSize, stats,intervalMillis, l);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
-    public void subscribe(List<String> name,String pwd, int stats,
+    /*public void subscribe(List<String> name,String pwd, int stats,
                            OnMarketStatUpdateListener l) {
         Log.e(TAG, "subscribe: name:"+name.get(0) );
         Subscription subscription =
                 new Subscription(name,pwd,stats,l);
         subscriptionHashMap.put("get_accounts", subscription);
-    }
+    }*/
     public void subscribe(String base, String quote, int stats,
                           OnMarketStatUpdateListener l) {
 
@@ -297,7 +293,7 @@ public class MarketStat {
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
-        private Subscription(List<String> name, String pwd,int stats, OnMarketStatUpdateListener l) {
+        /*private Subscription(List<String> name, String pwd,int stats, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.accentName=name;
             this.password=pwd;
@@ -307,7 +303,7 @@ public class MarketStat {
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
-        }
+        }*/
 
         private void cancel() {
             isCancelled.set(true);
@@ -348,6 +344,8 @@ public class MarketStat {
                     stat.prices = getMarketHistory(base,quote,(int)bucketSecs);//1
                 }
                 Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
+
+                /*//登录
                 if (stats== STAT_ACCENTS) {
                     Log.e(TAG, "run: STAT_ACCENTS  accentName:"+accentName);
                     try {
@@ -355,7 +353,7 @@ public class MarketStat {
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }
-                }
+                }*/
                 if ((stats & STAT_MARKET_TICKER) != 0) {
                     try {
                         stat.ticker = mWebsocketApi.get_ticker(base, quote);//2

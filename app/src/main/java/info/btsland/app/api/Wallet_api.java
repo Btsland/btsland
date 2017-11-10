@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.CreateAccountException;
 import info.btsland.app.exception.NetworkStatusException;
 import okhttp3.MediaType;
@@ -25,7 +26,7 @@ public class Wallet_api {
     private Websocket_api mWebsocketApi;
 
     public Wallet_api() {
-        mWebsocketApi = new Websocket_api();
+        mWebsocketApi = BtslandApplication.getMarketStat().mWebsocketApi;
     }
 
 
@@ -63,6 +64,22 @@ public class Wallet_api {
         }
         return nRet;
     }
+
+    public account_object get_account(String strAccountName){
+        account_object accountObject=null;
+        List<String> names=new ArrayList<>();
+        names.add(strAccountName);
+
+        try {
+            accountObject = mWebsocketApi.get_account_by_name(names);
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+        }
+        return accountObject;
+    }
+
+
+
     public int create_account_with_password(String strServerUrl,
                                             String strAccountName,
                                             String strPassword) throws NetworkStatusException, CreateAccountException {

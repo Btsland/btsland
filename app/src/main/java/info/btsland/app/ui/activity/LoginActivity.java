@@ -12,12 +12,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
+import info.btsland.app.api.Wallet_api;
 
 
 /**
@@ -32,11 +29,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText username, password;
     private Button bt_username_clear;
     private Button bt_pwd_clear;
-    private Button forgive_pwd;
+    private Button tourist;
     private Button bt_pwd_eye;
     private Button login;
     private Button register;
-   // private Button tourist;
     private boolean isOpen = false;
 
 
@@ -45,7 +41,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login1);
+        setContentView(R.layout.activity_login);
 
         initView();
 
@@ -132,9 +128,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         register = (Button) findViewById(R.id.register);
         register.setOnClickListener(this);
 
-        forgive_pwd = (Button) findViewById(R.id.forgive_pwd);
-        forgive_pwd.setOnClickListener(this);
-
+        tourist = (Button) findViewById(R.id.tourist);
+        tourist.setOnClickListener(this);
+        
+//        findViewById(R.id.tourist);
 
     }
 
@@ -166,20 +163,24 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
-                MarketStat marketStat = BtslandApplication.getMarketStat();
-                List<String> strings=new ArrayList<>();
-                strings.add("li-8888");
+//                MarketStat marketStat = BtslandApplication.getMarketStat();
+                Wallet_api wallet_api=new Wallet_api();
+//                List<String> strings=new ArrayList<>();
+//                strings.add("li-8888");
+
+                String strings="li-8888";
                 Log.e(TAG, "onClick: login" );
-                marketStat.subscribe(strings,"2313132",MarketStat.STAT_ACCENTS,this);
+//                marketStat.subscribe(strings,"2313132",MarketStat.STAT_ACCENTS,this);
+                wallet_api.get_account(strings);
 
                 break;
             case R.id.register:
                 // 注册按钮
                 Toast.makeText(LoginActivity.this, "注册", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.forgive_pwd:
-                // 忘记密码按钮
-               // Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
+            case R.id.tourist:
+
+               //暂不登录
                 LoginActivity.this.finish();
                 break;
 

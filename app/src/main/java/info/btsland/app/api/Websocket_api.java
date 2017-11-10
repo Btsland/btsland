@@ -279,6 +279,24 @@ public class Websocket_api extends WebSocketListener {
 
         return replyAccountObjectList.result;
     }
+    public sha256_object get_chain_id() throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_chain_id");
+
+        List<Object> listDatabaseParams = new ArrayList<>();
+
+        callObject.params.add(listDatabaseParams);
+
+        ReplyObjectProcess<Reply<sha256_object>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<sha256_object>>(){}.getType());
+        Reply<sha256_object> replyDatabase = sendForReply(callObject, replyObject);
+
+        return replyDatabase.result;
+    }
     private int get_websocket_bitshares_api_id(String strApiName) throws NetworkStatusException {
         Log.i(TAG, "get_websocket_bitshares_api_id: ");
         Call callObject = new Call();

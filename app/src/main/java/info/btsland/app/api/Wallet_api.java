@@ -62,8 +62,28 @@ public class Wallet_api {
     }
     public Wallet_api() {
         mWebsocketApi = BtslandApplication.getMarketStat().mWebsocketApi;
+        initialize();
     }
-
+    public int initialize() {
+        int nRet = mWebsocketApi.connect();
+        if (nRet == 0) {
+            sha256_object sha256Object = null;
+            try {
+                sha256Object = mWebsocketApi.get_chain_id();
+                if (mWalletObject == null) {
+                    mWalletObject = new wallet_object();
+                    mWalletObject.chain_id = sha256Object;
+                } else if (mWalletObject.chain_id != null &&
+                        mWalletObject.chain_id.equals(sha256Object) == false) {
+                    nRet = -1;
+                }
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+                nRet = -1;
+            }
+        }
+        return nRet;
+    }
     /**
      * 注册帐号
      * @param strAccountName

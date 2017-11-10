@@ -1,32 +1,22 @@
 package info.btsland.app;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Looper;
 import android.support.multidex.MultiDexApplication;
-import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.util.TimeUtils;
 import android.widget.Toast;
-
-import com.github.mikephil.charting.data.CandleEntry;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Websocket_api;
+import info.btsland.app.api.account_object;
+import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.DataK;
-import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
 import okhttp3.WebSocket;
@@ -40,7 +30,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     private static BtslandApplication application;
 
+    public static boolean isLogin=false;
+
+    public static account_object accountObject;
+
     public static boolean isWel=false;
+    private static SharedPreferences sharedPreferences;
 
     public static MarketStat marketStat;
     public static WebSocket mWebsocket;
@@ -66,6 +61,28 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     }
 
+    /**
+     *
+     *
+     */
+    public static void queryAccount(){
+
+        sharedPreferences=getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
+        String username=sharedPreferences.getString("username","");
+        if(username==null){
+            isLogin=false;
+            return;
+        }
+        try {
+            accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+            if(accountObject!=null){
+                isLogin=true;
+            }
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static Context getInstance() {
         return instance;
     }
@@ -87,8 +104,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }else {
             Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
         }
-
-
+        queryAccount();
     }
 
     @Override

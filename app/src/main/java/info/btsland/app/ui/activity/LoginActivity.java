@@ -1,5 +1,8 @@
 package info.btsland.app.ui.activity;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -14,6 +17,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.time.Instant;
+
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Wallet_api;
@@ -41,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
    // private Button tourist;
     private boolean isOpen = false;
 
-
+    private SharedPreferences  sps;
 
 
     @Override
@@ -50,6 +56,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         initView();
+        //声明函数文件名与操作模式
+        sps=getSharedPreferences("Login",Context.MODE_PRIVATE);
 
     }
 
@@ -100,7 +108,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if ("".equals(pwd)) {
                     // 密码为空,设置按钮不可见
                     bt_pwd_clear.setVisibility(View.INVISIBLE);
-                    login.setVisibility(View.INVISIBLE);
+
                 } else {
                     // 密码不为空，设置按钮可见
                     bt_pwd_clear.setVisibility(View.VISIBLE);
@@ -168,9 +176,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                 break;
             case R.id.login:
+                if (username.getText().toString()==""){
+                    Toast.makeText(LoginActivity.this,"请输入用户名",0).show();
 
-                AccountThread loginThread=new AccountThread("xjh1010","X123456789zz",AccountThread.LOGIN_BY_PASSWORD);
-                loginThread.start();
+                }else if (password.getText().toString()==""){
+                    Toast.makeText(LoginActivity.this,"请输入密码",0).show();
+
+                }else {
+
+                    AccountThread loginThread=new AccountThread(username.getText().toString(),password.getText().toString(),AccountThread.LOGIN_BY_PASSWORD);
+                    loginThread.start();
+                }
+
+//                AccountThread loginThread=new AccountThread("xjh1010","X123456789zz",AccountThread.LOGIN_BY_PASSWORD);
+//                loginThread.start();
                 break;
             case R.id.register:
                 // 注册按钮
@@ -178,7 +197,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 registerThread.start();
                 break;
             case R.id.tourist:
-                // 忘记密码按钮
+
                // Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
                 LoginActivity.this.finish();
                 break;
@@ -219,7 +238,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    class AccountThread extends Thread{
+   public class AccountThread extends Thread{
         public static final int LOGIN_BY_PASSWORD=1;
         public static final int LOGIN_BY_BIN=2;
         public static final int REGISTER_BY_PASSWORD=3;
@@ -249,9 +268,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     Bundle loginbundle=new Bundle();
                     if(accountObject==null){
                         loginRet="failure";
-                    }else {
-                        loginbundle.putSerializable("account",accountObject);
                     }
+                    BtslandApplication.accountObject=accountObject;
                     loginbundle.putString("login",loginRet);
                     Message loginmsg=Message.obtain();
                     loginmsg.setData(loginbundle);
@@ -290,14 +308,49 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
             }
             if(bundle.getString("login")!=null&&bundle.getString("login").equals("success")){
-                account_object accountObject = (account_object) bundle.get("account");
                 Log.i(TAG, "handleMessage: 登录成功");
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+                rememberPassword();
+                Intent iLogin=new Intent(LoginActivity.this,UserActivity.class);
+                startActivity(iLogin);
+                finish();
+
             }else if(bundle.getString("login")!=null&&bundle.getString("login").equals("failure")){
                 Log.i(TAG, "handleMessage: 登录失败");
             }
         }
     };
+
+
+
+
+    /*
+    *
+    * 初次登陆时记住密码
+    * */
+    private  void rememberPassword(){
+
+        //借助Editor实现共享参数储存
+        SharedPreferences.Editor editor=sps.edit();
+        editor.putString("username",BtslandApplication.accountObject.name);
+//        editor.putString("password",password.getText().toString());
+        editor.commit();
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

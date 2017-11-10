@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.model.Market;
-import info.btsland.app.model.News;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.SettingActivity;
+import info.btsland.app.ui.activity.UserActivity;
 
 /**
  * 通用顶部导航栏碎片类
@@ -133,10 +133,14 @@ public class HeadFragment extends Fragment {
     class ToUserOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Intent intent = new Intent(getActivity(), LoginActivity.class);
-            getActivity().startActivity(intent);
-            News news = new News();
-            Market market = new Market();
+            if (BtslandApplication.isLogin){
+                Intent intent = new Intent(getActivity(), UserActivity.class);
+                getActivity().startActivity(intent);
+            }else {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                getActivity().startActivity(intent);
+            }
+
         }
     }
 

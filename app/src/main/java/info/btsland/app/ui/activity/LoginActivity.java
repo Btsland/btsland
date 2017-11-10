@@ -14,12 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Wallet_api;
@@ -40,7 +34,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText username, password;
     private Button bt_username_clear;
     private Button bt_pwd_clear;
-    private Button forgive_pwd;
+    private Button tourist;
     private Button bt_pwd_eye;
     private Button login;
     private Button register;
@@ -53,7 +47,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login1);
+        setContentView(R.layout.activity_login);
 
         initView();
 
@@ -140,8 +134,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         register = (Button) findViewById(R.id.register);
         register.setOnClickListener(this);
 
-        forgive_pwd = (Button) findViewById(R.id.forgive_pwd);
-        forgive_pwd.setOnClickListener(this);
+        tourist = (Button) findViewById(R.id.tourist);
+        tourist.setOnClickListener(this);
 
 
     }
@@ -184,7 +178,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 AccountThread registerThread=new AccountThread("xjh2233","X123456789xx",AccountThread.REGISTER_BY_PASSWORD);
                 registerThread.start();
                 break;
-            case R.id.forgive_pwd:
+            case R.id.tourist:
                 // 忘记密码按钮
                // Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
                 LoginActivity.this.finish();

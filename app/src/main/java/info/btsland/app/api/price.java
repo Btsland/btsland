@@ -1,6 +1,5 @@
 package info.btsland.app.api;
 
-import static info.btsland.app.R.string.asset;
 
 public class price {
     public asset base;
@@ -11,7 +10,7 @@ public class price {
         quote = assetQuote;
     }
 
-    public static price unit_price(String assetObjectobjectId) {
+    public static price unit_price(object_id<asset_object> assetObjectobjectId) {
         return new price(new asset(1, assetObjectobjectId), new asset(1, assetObjectobjectId));
     }
 }

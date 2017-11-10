@@ -388,17 +388,17 @@ public class MarketStat {
             }
         }
         class dataHandling extends Thread{
-            private final OnMarketStatUpdateListener lostener;
+            private final OnMarketStatUpdateListener listener;
             private final Stat stat;
 
             public dataHandling(OnMarketStatUpdateListener listener, Stat stat) {
-                this.lostener=listener;
+                this.listener=listener;
                 this.stat=stat;
             }
 
             @Override
             public void run() {
-                lostener.onMarketStatUpdate(stat);
+                listener.onMarketStatUpdate(stat);
             }
         }
 

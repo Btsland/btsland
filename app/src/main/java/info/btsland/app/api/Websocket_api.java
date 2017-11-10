@@ -91,7 +91,7 @@ public class Websocket_api extends WebSocketListener {
     public void onMessage(WebSocket webSocket, String text) {
         Log.i(TAG, "onMessage: text:"+text);
         try {
-            Gson gson = new Gson();
+            Gson gson = global_config_object.getInstance().getGsonBuilder().create();
             int id = Integer.parseInt(new JSONObject(text).getString("id"));
             Log.i(TAG, "onMessage: id:"+id);
 //            ReplyBase replyObjectBase = gson.fromJson(text, ReplyBase.class);
@@ -272,7 +272,6 @@ public class Websocket_api extends WebSocketListener {
         ReplyObjectProcess<Reply<account_object>> replyObject =
                 new ReplyObjectProcess<>(new TypeToken<Reply<account_object>>(){}.getType());
         Reply<account_object> replyAccountObjectList = sendForReply(callObject, replyObject);
-
         return replyAccountObjectList.result;
     }
     public sha256_object get_chain_id() throws NetworkStatusException {
@@ -444,7 +443,6 @@ public class Websocket_api extends WebSocketListener {
 //        ReplyObjectProcess<Reply<MarketTicker>> replyObject =
 //                new ReplyObjectProcess<>();
         Reply<MarketTicker> reply = sendForReply(callObject, replyObject);
-
         return reply.result;
     }
     private <T> Reply<T> sendForReply(Call callObject,
@@ -497,6 +495,7 @@ public class Websocket_api extends WebSocketListener {
             }
             try {
                 replyObjectProcess.wait();
+                Log.i(TAG, "sendForReplyImpl: wait");
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
                 //Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
                 String strError = replyObjectProcess.getError();
@@ -557,7 +556,8 @@ public class Websocket_api extends WebSocketListener {
             Log.i(TAG, "processTextToObject: strText:"+strText);
             Log.i(TAG, "processTextToObject: mType:"+mType);
             try {
-                Gson gson = new Gson();
+                Log.i(TAG, "processTextToObject: ");
+                Gson gson = global_config_object.getInstance().getGsonBuilder().create();
                 mT = gson.fromJson(strText, mType);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
@@ -571,6 +571,7 @@ public class Websocket_api extends WebSocketListener {
                 return;
             }
             synchronized (this) {
+                Log.i(TAG, "processTextToObject: synchronized");
                 notify();
             }
         }

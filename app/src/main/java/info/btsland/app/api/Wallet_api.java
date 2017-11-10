@@ -164,7 +164,7 @@ public class Wallet_api {
         createAccountObject.memo_key = publicActiveKeyType;
         createAccountObject.refcode = null;
         createAccountObject.referrer = "bituniverse";
-        Gson gson = new Gson();
+        Gson gson = global_config_object.getInstance().getGsonBuilder().create();
 
         String strAddress = strServerUrl;
         OkHttpClient okHttpClient = new OkHttpClient();
@@ -173,7 +173,7 @@ public class Wallet_api {
                 MediaType.parse("application/json"),
                 gson.toJson(createAccountObject)
         );
-
+        Log.i(TAG, "create_account_with_password:requestBody: "+gson.toJson(createAccountObject));
         Request request = new Request.Builder()
                 .url(strAddress)
                 .addHeader("Accept", "application/json")
@@ -183,8 +183,11 @@ public class Wallet_api {
         create_account_object.create_account_response createAccountResponse = null;
         try {
             Response response = okHttpClient.newCall(request).execute();
+
             if (response.isSuccessful()) {
-                createAccountResponse = gson.fromJson(response.body().string(), create_account_object.create_account_response.class);
+                String responseBody=response.body().string();
+                Log.i(TAG, "create_account_with_password: response:"+responseBody);
+                createAccountResponse = gson.fromJson(responseBody, create_account_object.create_account_response.class);
             } else {
                 if (response.body().contentLength() != 0) {
                     String strResponse = response.body().string();

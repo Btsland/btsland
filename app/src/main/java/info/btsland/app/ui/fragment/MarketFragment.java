@@ -261,7 +261,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
 
     class LeftCoinOnClickListener extends BaseActivity implements View.OnClickListener {
-        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
+//        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         @Override
         public void onClick(View view) {
             touchColor((TextView) view);//交互特效

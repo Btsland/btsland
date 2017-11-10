@@ -27,8 +27,6 @@ public class AssetTableFragment  extends Fragment implements AdapterView.OnItemC
     private  TextView tvMarketOperationTable;
 
     public AssetTableFragment() {
-
-
     }
 
 

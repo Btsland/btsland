@@ -1,10 +1,18 @@
 package info.btsland.app.api;
 
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonPrimitive;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 import com.mrd.bitlib.bitcoinj.Base58;
 import com.mrd.bitlib.crypto.digest.RIPEMD160Digest;
 
 import org.spongycastle.crypto.digests.SHA256Digest;
 
+import java.lang.reflect.Type;
 import java.nio.ByteBuffer;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -259,17 +267,17 @@ public class types {
         }
     }
 
-//    public static class vote_id_type_deserializer implements JsonDeserializer<vote_id_type> {
-//
-//        @Override
-//        public vote_id_type deserialize(JsonElement json,
-//                                        Type typeOfT,
-//                                        JsonDeserializationContext context) throws JsonParseException {
-//            String strSerial = json.getAsString();
-//
-//            return new vote_id_type(strSerial);
-//        }
-//    }
+    public static class vote_id_type_deserializer implements JsonDeserializer<vote_id_type> {
+
+        @Override
+        public vote_id_type deserialize(JsonElement json,
+                                        Type typeOfT,
+                                        JsonDeserializationContext context) throws JsonParseException {
+            String strSerial = json.getAsString();
+
+            return new vote_id_type(strSerial);
+        }
+    }
 
     public static class account_options {
         public String memo_key;
@@ -282,30 +290,30 @@ public class types {
 
     }
 
-//    public static class public_key_type_deserializer implements JsonDeserializer<public_key_type> {
-//
-//        @Override
-//        public public_key_type deserialize(JsonElement json,
-//                                           Type typeOfT,
-//                                           JsonDeserializationContext context) throws JsonParseException {
-//            String strPublicKey = json.getAsString();
-//
-//            try {
-//                return new public_key_type(strPublicKey);
-//            } catch (NoSuchAlgorithmException e) {
-//                e.printStackTrace();
-//
-//                throw new JsonParseException("pubic key is invalid.");
-//            }
-//        }
-//    }
+    public static class public_key_type_deserializer implements JsonDeserializer<public_key_type> {
 
-//    public static class public_type_serializer implements JsonSerializer<public_key_type> {
-//        @Override
-//        public JsonElement serialize(public_key_type src, Type typeOfSrc, JsonSerializationContext context) {
-//            return new JsonPrimitive(src.toString());
-//        }
-//    }
+        @Override
+        public public_key_type deserialize(JsonElement json,
+                                           Type typeOfT,
+                                           JsonDeserializationContext context) throws JsonParseException {
+            String strPublicKey = json.getAsString();
+
+            try {
+                return new public_key_type(strPublicKey);
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+
+                throw new JsonParseException("pubic key is invalid.");
+            }
+        }
+    }
+
+    public static class public_type_serializer implements JsonSerializer<public_key_type> {
+        @Override
+        public JsonElement serialize(public_key_type src, Type typeOfSrc, JsonSerializationContext context) {
+            return new JsonPrimitive(src.toString());
+        }
+    }
 
     public static class void_t {
 

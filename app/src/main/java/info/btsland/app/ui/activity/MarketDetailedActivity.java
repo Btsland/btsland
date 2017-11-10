@@ -1,14 +1,9 @@
 package info.btsland.app.ui.activity;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -17,21 +12,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
-import info.btsland.app.Adapter.ImagePageAdapter;
 import info.btsland.app.R;
-import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
 import info.btsland.app.ui.fragment.DetailedHaveInHandFragment;
 import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 
-public class MarketDetailedActivity extends AppCompatActivity {
+public class MarketDetailedActivity extends AppCompatActivity{
     private HeadFragment headFragment;
     public static MarketTicker market;
+    public TextView textView;
 
     public static String key;
+    public static void startAction(MarketTicker market){
 
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +78,8 @@ public class MarketDetailedActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
+
+
     class OnPage implements ViewPager.OnPageChangeListener{
 
         @Override
@@ -99,4 +97,5 @@ public class MarketDetailedActivity extends AppCompatActivity {
 
         }
     }
+
 }

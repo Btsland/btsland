@@ -6,9 +6,9 @@ import java.math.BigInteger;
 
 public class asset {
     public long amount;
-    public String asset_id;
+    public object_id<asset_object> asset_id;
 
-    public asset(long lAmount, String assetObjectobjectId) {
+    public asset(long lAmount, object_id<asset_object> assetObjectobjectId) {
         amount = lAmount;
         asset_id = assetObjectobjectId;
     }

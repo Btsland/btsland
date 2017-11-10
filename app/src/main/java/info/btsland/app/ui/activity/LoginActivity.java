@@ -169,13 +169,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.login:
 
-                AccountThread loginThread=new AccountThread("xjh2233","X123456789xx",AccountThread.LOGIN_BY_PASSWORD);
+                AccountThread loginThread=new AccountThread("xjh1010","X123456789zz",AccountThread.LOGIN_BY_PASSWORD);
                 loginThread.start();
                 break;
             case R.id.register:
                 // 注册按钮
-                Toast.makeText(LoginActivity.this, "注册", Toast.LENGTH_SHORT).show();
-                AccountThread registerThread=new AccountThread("xjh2233","X123456789xx",AccountThread.REGISTER_BY_PASSWORD);
+                AccountThread registerThread=new AccountThread("what123","X123456789xx",AccountThread.REGISTER_BY_PASSWORD);
                 registerThread.start();
                 break;
             case R.id.tourist:
@@ -241,7 +240,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 //账号登录
                 case LOGIN_BY_PASSWORD:
                     account_object accountObject=null;
-                    int loginRet=0;
+                    String loginRet="success";
                     try {
                         accountObject= wallet_api.import_account_password(name,pwd);
                     } catch (NetworkStatusException e) {
@@ -249,11 +248,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                     Bundle loginbundle=new Bundle();
                     if(accountObject==null){
-                        loginRet=-1;
+                        loginRet="failure";
                     }else {
                         loginbundle.putSerializable("account",accountObject);
                     }
-                    loginbundle.putInt("login",loginRet);
+                    loginbundle.putString("login",loginRet);
                     Message loginmsg=Message.obtain();
                     loginmsg.setData(loginbundle);
                     mHander.sendMessage(loginmsg);
@@ -268,14 +267,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
                     try {
                         Log.i(TAG, "onClick: 注册");
-                        registernRet = wallet_api.create_account_with_password("xjh1010","X123456789zz");
+                        registernRet = wallet_api.create_account_with_password(name,pwd);
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     } catch (CreateAccountException e) {
                         e.printStackTrace();
                     }
                     Bundle registerbundle=new Bundle();
-                    registerbundle.putInt("register",registernRet);
+                    registerbundle.putString("register","success");
                     Message registermsg=Message.obtain();
                     registermsg.setData(registerbundle);
                     mHander.sendMessage(registermsg);
@@ -287,12 +286,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         @Override
         public void handleMessage(Message msg) {
             Bundle bundle=msg.getData();
-            if(bundle.getInt("register")==0){
+            if(bundle.getString("register")!=null&&bundle.getString("register").equals("success")){
                 Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
             }
-            if(bundle.getInt("login")==0){
+            if(bundle.getString("login")!=null&&bundle.getString("login").equals("success")){
                 account_object accountObject = (account_object) bundle.get("account");
+                Log.i(TAG, "handleMessage: 登录成功");
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
+            }else if(bundle.getString("login")!=null&&bundle.getString("login").equals("failure")){
+                Log.i(TAG, "handleMessage: 登录失败");
             }
         }
     };

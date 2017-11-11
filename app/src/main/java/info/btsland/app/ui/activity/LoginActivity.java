@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     // 用户名不为空，设置按钮可见
                     bt_username_clear.setVisibility(View.VISIBLE);
+                    login.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -198,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.tourist:
 
-               // Toast.makeText(LoginActivity.this, "忘记密码", 0).show();
+               // Toast.makeText(LoginActivity.this, "暂不", 0).show();
                 LoginActivity.this.finish();
                 break;
 

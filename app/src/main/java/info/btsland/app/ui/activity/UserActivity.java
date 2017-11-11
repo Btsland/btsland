@@ -9,11 +9,14 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 
 public class UserActivity extends AppCompatActivity {
+
+    private TextView  tvUserName;
     private TextView tvUserInfo;
     private TextView tvUserWhiteList;
     private TextView tvUserPower;
@@ -23,6 +26,8 @@ public class UserActivity extends AppCompatActivity {
     private TextView tvUserLogin;
     private HeadFragment headFragment;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +35,7 @@ public class UserActivity extends AppCompatActivity {
         Log.i("UserActivity", "onCreate: ");
         fillInHead();
         init();
+        tvUserName.setText(BtslandApplication.accountObject.name);
     }
 
     /**
@@ -37,6 +43,7 @@ public class UserActivity extends AppCompatActivity {
      */
     protected void init() {
         //初始化
+        tvUserName = (TextView) findViewById(R.id.tv_user_name);
         tvUserInfo = (TextView) findViewById(R.id.tv_user_info);
         tvUserWhiteList = (TextView) findViewById(R.id.tv_user_whiteList);
 //        tvUserPower = (TextView) findViewById(R.id.tv_user_power);
@@ -66,6 +73,14 @@ public class UserActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
+
+
+
+
+
+
+
+
 
     /**
      * 单击特效

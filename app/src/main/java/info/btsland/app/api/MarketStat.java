@@ -39,7 +39,7 @@ public class MarketStat {
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
     public static final int STAT_ACCENTS = 1;
-    public Websocket_api mWebsocketApi=new Websocket_api();
+    public Websocket_api mWebsocketApi;
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
     public  HashMap<String, Connect> connectHashMap = new HashMap<>();
@@ -48,6 +48,7 @@ public class MarketStat {
     private String[] quotes;
     
     public MarketStat() {
+        mWebsocketApi=new Websocket_api();
 //        if (!isDeserializerRegistered) {
 //            isDeserializerRegistered = true;
 //            global_config_object.getInstance().getGsonBuilder().registerTypeAdapter(

@@ -179,6 +179,8 @@ public class MarketStat {
     }
 
     public static class Stat {
+        public long bucket;
+        public long ago;
         public List<HistoryPrice> prices;
         public MarketTicker ticker;
         public Date latestTradeDate;
@@ -352,6 +354,8 @@ public class MarketStat {
                     Date startDate = new Date(
                             System.currentTimeMillis() -ago);
                     stat.prices = getMarketHistory(base,quote,(int)bucketSecs,startDate);//1
+                    stat.bucket=bucketSecs;
+                    stat.ago=ago;
                 }
                 Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
 

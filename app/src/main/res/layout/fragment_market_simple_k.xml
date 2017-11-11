@@ -35,7 +35,7 @@
         android:id="@+id/cbc_market_simple_K"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/color_white"
+        android:background="@drawable/background_gradient"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

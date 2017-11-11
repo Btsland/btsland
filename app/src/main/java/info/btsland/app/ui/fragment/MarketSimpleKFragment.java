@@ -2,40 +2,38 @@ package info.btsland.app.ui.fragment;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
-import android.support.v4.util.TimeUtils;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.CombinedData;
 import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.formatter.XAxisValueFormatter;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.BtslandApplication;
@@ -54,7 +52,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toMillis(5);
     public static String key;
     private static MarketSimpleKFragment listener;
-
+    private static final int SUCCESS=1;
     private static String quote ="BTS";
     private static String base ="CNY";
     private SimpleDateFormat df = new SimpleDateFormat("HH:mm");
@@ -87,46 +85,16 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
-        Log.i(TAG, "onMarketStatUpdate: Thread:"+Thread.currentThread().getName());
-        Log.i(TAG, String.valueOf("onMarketStatUpdate: stat:"+stat==null));
         if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
-            DataK dataK=new DataK();
-            dataK.prices=stat.prices;
-            String newKey=stat.prices.get(0).quote+"/"+stat.prices.get(0).base;
-            List<CandleEntry> candleEntries=new ArrayList<>();
-            float max=(float)stat.prices.get(0).high;
-            float min=(float)stat.prices.get(0).low;
-            //处理数据
-            for(int i=0;i<stat.prices.size();i++){
-                CandleEntry entry=new CandleEntry(i,
-                        (float) stat.prices.get(i).high, (float) stat.prices.get(i).low,
-                        (float) stat.prices.get(i).open, (float) stat.prices.get(i).close,
-                        stat.prices.get(i).date);
-
-                if((float)stat.prices.get(i).high>max){
-                    max=(float)stat.prices.get(i).high;
-                }
-                if((float)stat.prices.get(i).low<min){
-                    min=(float)stat.prices.get(i).low;
-                }
-                candleEntries.add(entry);
+            MarketStat.HistoryPrice price=stat.prices.get(0);
+            key=constructingKey(price.base,price.quote,stat.bucket,stat.ago);
+            if(BtslandApplication.dataKMap.get(key)!=null){
+                BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(key));
             }
+            BtslandApplication.dataKMap.put(key,stat.prices);
 
-            dataK.max=max;
-            dataK.min=min;
-            dataK.candleEntries=candleEntries;
-            if(BtslandApplication.dataKMap.get(newKey)!=null){
-                BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(newKey));
-            }
-            BtslandApplication.dataKMap.put(newKey,dataK);
-
-            Message message=Message.obtain();
-            message.obj=new MarketTicker(stat.prices.get(0).base,stat.prices.get(0).quote);
-            Log.e(TAG, "onMarketStatUpdate:sendMessage:newKey"+newKey);
-            handler.sendMessage(message);
-
+            handler.sendEmptyMessage(SUCCESS);
         }
-
     }
 
     public static MarketSimpleKFragment newInstance(MarketTicker market) {
@@ -138,18 +106,6 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             simpleKFragment.setArguments(bundle);
         }
         return simpleKFragment;
-    }
-    class MyXAxisValueFormatter implements XAxisValueFormatter {
-        private final List<MarketStat.HistoryPrice> prices;
-
-        public MyXAxisValueFormatter(List<MarketStat.HistoryPrice> prices) {
-            this.prices=prices;
-        }
-
-        @Override
-        public String getXValue(String original, int index, ViewPortHandler viewPortHandler) {
-            return df.format(prices.get(index).date);
-        }
     }
 
     public static void startReceiveMarkets(MarketTicker market) {
@@ -176,101 +132,20 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
         @Override
         public void handleMessage(Message msg) {
-            Log.i(TAG, "handleMessage: Thread:"+Thread.currentThread().getName());
-            MarketTicker market=(MarketTicker) msg.obj;
-            String newKey=market.quote+"/"+market.base;
-
-            drawK(market);
-
+            if( msg.what==SUCCESS){
+                updateChartData();
+            }
         }
     };
 
     public void drawK(MarketTicker market) {
-        simpleK.setDescriptionTextSize(14);
         String newKey=market.quote+"/"+market.base;
-        simpleK.setDescription(key);
-        simpleK.notifyDataSetChanged();
-        simpleK.invalidate();
 
         if(BtslandApplication.dataKMap.get(newKey)!=null) {
-            if(!key.equals(newKey)){
-                return;
-            }
-            DataK dataK = BtslandApplication.dataKMap.get(newKey);
-            List<CandleEntry> candleEntries = dataK.candleEntries;
-            candleDataSet = new CandleDataSet(candleEntries, "");//烛形图图形
-            simpleKInit(candleDataSet, dataK);
-            List<String> xVals = new ArrayList<>();
-            for (int i = 0; i < candleEntries.size(); i++) {
-                xVals.add(i, df.format(candleEntries.get(i).getData()));
-            }
-            Log.i(TAG, "handleMessage: xVals:" + xVals.size());
-            candleData = new CandleData(xVals, candleDataSet);
-            Log.i(TAG, "handleMessage: candleDataSet.getEntryCount():" + candleDataSet.getEntryCount());
-            Log.i(TAG, "handleMessage: candleData.getDataSets().size():" + candleData.getDataSets().size());
-            Log.i(TAG, "handleMessage: candleData.getXValCount():" + candleData.getXValCount());
-            data = new CombinedData(xVals);
-            data.setData(candleData);
-            simpleK.clear();
-            simpleK.setData(data);
-            simpleK.notifyDataSetChanged();
-            simpleK.invalidate();
-            Log.i(TAG, "getAxisLeft: max:" + simpleK.getAxisLeft().getAxisMaxValue());
-            Log.i(TAG, "getAxisLeft: min:" + simpleK.getAxisLeft().getAxisMinValue());
+
         }else {
             startReceiveMarkets(market);
         }
-    }
-
-    private ArrayList<Entry> toEntry(List<Market> markets) {
-        if (markets == null || markets.size() == 0) {
-            return null;
-        }
-        ArrayList<Entry> Entrys = new ArrayList<Entry>();
-        float high = 0;
-        float low = 0;
-        float count;
-        for (int i = 0; i < markets.size(); i++) {
-            Market market = markets.get(i);
-            if (i == 0) {
-            }
-//            将market生成entry对象
-            Entry entry = new Entry(market.getNewPrice(), i);
-            Entrys.add(entry);
-        }
-
-        return Entrys;
-    }
-
-    private void simpleKInit(CandleDataSet candleDataSet,DataK dataK) {
-        candleDataSet.setAxisDependency(YAxis.AxisDependency.LEFT);
-        candleDataSet.setShadowColor(Color.DKGRAY);//影线颜色
-        candleDataSet.setShadowColorSameAsCandle(true);//影线颜色与实体一致
-        candleDataSet.setShadowWidth(0.7f);//影线
-        candleDataSet.setDecreasingColor(Color.RED);
-        candleDataSet.setDecreasingPaintStyle(Paint.Style.FILL);//红涨，实体
-        candleDataSet.setIncreasingColor(Color.GREEN);
-        candleDataSet.setIncreasingPaintStyle(Paint.Style.FILL);//绿跌，空心
-        //candleDataSet.setNeutralColor(Color.RED);//当天价格不涨不跌（一字线）颜色
-        candleDataSet.setColor(Color.RED);
-        candleDataSet.setHighlightLineWidth(1f);//选中蜡烛时的线宽
-        candleDataSet.setDrawValues(false);//在图表中的元素上面是否显示数值
-        XAxis xAxis=simpleK.getXAxis();
-        xAxis.setValueFormatter(new MyXAxisValueFormatter(dataK.prices));
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);//设置X轴标签显示位置
-        xAxis.setDrawGridLines(false);//绘制格网线
-        YAxis leftAxis = simpleK.getAxisLeft();//取得左侧y轴
-        leftAxis.setPosition(YAxis.YAxisLabelPosition.OUTSIDE_CHART);//y轴标签绘制的位置
-        leftAxis.setDrawGridLines(true);//绘制y轴格网线
-        leftAxis.setDrawLabels(true);//显示坐标轴上的值, ...其他样式
-        leftAxis.setStartAtZero(false);
-        leftAxis.setAxisMaxValue((float) (dataK.max*1.1));
-        leftAxis.setAxisMinValue((float) (dataK.min*0.9));
-
-
-        YAxis rightAxis = simpleK.getAxisRight();//取得左侧y轴
-        rightAxis.setDrawGridLines(false);//不绘制y轴格网线
-        rightAxis.setDrawLabels(false);//不显示坐标轴上的值, ...其他样式
     }
 
     @Override
@@ -288,6 +163,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             market= (MarketTicker) getArguments().getSerializable("MarketTicker");
         }
         init(view);
+        initChart();
         listener=this;
         return view;
     }
@@ -306,5 +182,150 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     @Override
     public void onDetach() {
         super.onDetach();
+    }
+
+    private void updateChartData() {
+        List<MarketStat.HistoryPrice> historyPriceList=BtslandApplication.dataKMap.get(key);
+        initializeData(historyPriceList);
+        IAxisValueFormatter xValue = new xAxisValueFormater(historyPriceList);
+        simpleK.getXAxis().setValueFormatter(xValue);
+    }
+    private void initChart() {
+        int colorHomeBg = getResources().getColor(android.R.color.transparent);
+
+        simpleK.setDescription(null);
+        simpleK.setDrawGridBackground(true);
+        //simpleK.setBackgroundColor(colorHomeBg);
+        simpleK.setGridBackgroundColor(colorHomeBg);
+        simpleK.setScaleYEnabled(false);
+        simpleK.setPinchZoom(true);
+
+        simpleK.setNoDataText("数据正在读取中。。。");
+        simpleK.setAutoScaleMinMaxEnabled(true);
+        simpleK.setDragEnabled(true);
+        simpleK.setDoubleTapToZoomEnabled(false);
+
+        XAxis xAxis = simpleK.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setDrawGridLines(true);
+        //xAxis.setGridColor(colorLine);
+        //xAxis.setTextColor(colorText);
+        xAxis.setLabelCount(4);
+        //xAxis.setSpaceBetweenLabels(4);
+
+        YAxis leftAxis = simpleK.getAxisLeft();
+        leftAxis.setLabelCount(4, false);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setDrawAxisLine(true);
+        //leftAxis.setGridColor(colorLine);
+        //leftAxis.setTextColor(colorText);
+
+        YAxis rightAxis = simpleK.getAxisRight();
+        rightAxis.setTextSize(8);
+        rightAxis.setLabelCount(5, false);
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawAxisLine(true);
+//        rightAxis.setGridColor(colorLine);
+//        rightAxis.setTextColor(colorText);
+        rightAxis.setAxisMinimum(0);
+    }
+    private void initializeData(List<MarketStat.HistoryPrice> listHistoryPrice) {
+        List<CandleEntry> candleEntryList = new ArrayList<>();
+        List<BarEntry> barEntryList = new ArrayList<>();
+        int i = 0;
+        for (MarketStat.HistoryPrice price : listHistoryPrice) {
+            int nPosition = i++;
+            CandleEntry candleEntry = new CandleEntry(nPosition, (float)price.high, (float)price.low, (float)price.open, (float)price.close, price);
+            candleEntryList.add(candleEntry);
+
+            BarEntry barEntry = new BarEntry((float)nPosition, (float)price.volume);
+            barEntryList.add(barEntry);
+        }
+
+        CandleDataSet set = new CandleDataSet(candleEntryList, "");
+        set.setAxisDependency(YAxis.AxisDependency.LEFT);
+        set.setShadowWidth(0.7f);
+        set.setDecreasingPaintStyle(Paint.Style.FILL);
+        int nColorGreen = ContextCompat.getColor(getActivity(), R.color.color_font_red);
+        int nColorRed = ContextCompat.getColor(getActivity(), R.color.color_green);
+
+        //设置绿涨红跌
+        set.setDecreasingColor(nColorRed);
+        set.setIncreasingColor(nColorGreen);
+        set.setNeutralColor(nColorGreen);
+
+
+        set.setIncreasingPaintStyle(Paint.Style.FILL);
+        set.setShadowColorSameAsCandle(true);
+        set.setHighlightLineWidth(0.5f);
+        set.setHighLightColor(Color.WHITE);
+        set.setDrawValues(false);
+        set.setForm(Legend.LegendForm.EMPTY);
+
+        BarDataSet barDataSet = new BarDataSet(barEntryList, "");
+        barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
+        barDataSet.setColor(getResources().getColor(R.color.color_Grey), 25);
+        barDataSet.setDrawValues(false);
+        barDataSet.setForm(Legend.LegendForm.EMPTY);
+
+        CombinedData combinedData = simpleK.getCombinedData();
+        if (combinedData == null) {
+            combinedData = new CombinedData();
+        }
+
+        CandleData candleData = combinedData.getCandleData();
+        if (candleData == null) {
+            candleData = new CandleData();
+        }
+        if (candleData.getDataSetCount() > 0) {
+            candleData.removeDataSet(0);
+            candleData.notifyDataChanged();
+            simpleK.notifyDataSetChanged();
+        }
+        candleData.addDataSet(set);
+        candleData.notifyDataChanged();
+        combinedData.setData(candleData);
+
+        BarData barData = combinedData.getBarData();
+        if (barData == null) {
+            barData = new BarData();
+        }
+
+        if (barData.getDataSetCount() > 0) {
+            barData.removeDataSet(0);
+            barData.notifyDataChanged();
+            simpleK.notifyDataSetChanged();
+        }
+        barData.addDataSet(barDataSet);
+        barData.notifyDataChanged();
+        combinedData.setData(barData);
+
+        simpleK.setData(combinedData);
+        simpleK.notifyDataSetChanged();
+        simpleK.fitScreen();
+        simpleK.setVisibleXRangeMaximum(45);
+        simpleK.moveViewToX(simpleK.getXChartMax() - 45);
+    }
+    class xAxisValueFormater implements IAxisValueFormatter {
+        private List<MarketStat.HistoryPrice> mListPrices;
+
+        public xAxisValueFormater(List<MarketStat.HistoryPrice> listPrices) {
+            mListPrices = listPrices;
+        }
+        @Override
+        public String getFormattedValue(float value, AxisBase axis) {
+            int nValue = (int)value;
+            if (nValue < mListPrices.size()) {
+                Date date = mListPrices.get(nValue).date;
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");
+
+                return simpleDateFormat.format(date);
+            } else {
+                return "";
+            }
+        }
+    }
+    public String constructingKey(String base,String quote,long bucket,long ago){
+        return ""+base+"/"+quote+":"+bucket+","+ago;
     }
 }

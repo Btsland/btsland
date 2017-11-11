@@ -16,19 +16,19 @@
     </FrameLayout>
 
     <!--<TextView-->
-        <!--android:id="@+id/tv_market_dual"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="BTC:CNY"-->
-        <!--android:paddingLeft="8dp"-->
-        <!--android:paddingRight="8dp"-->
-        <!--android:paddingTop="4dp"-->
-        <!--android:paddingBottom="4dp"-->
-        <!--android:gravity="center"-->
-        <!--android:background="@color/color_green"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:layout_constraintLeft_toLeftOf="parent"-->
-        <!--app:layout_constraintRight_toRightOf="parent"/>-->
+    <!--android:id="@+id/tv_market_dual"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="BTC:CNY"-->
+    <!--android:paddingLeft="8dp"-->
+    <!--android:paddingRight="8dp"-->
+    <!--android:paddingTop="4dp"-->
+    <!--android:paddingBottom="4dp"-->
+    <!--android:gravity="center"-->
+    <!--android:background="@color/color_green"-->
+    <!--app:layout_constraintTop_toTopOf="parent"-->
+    <!--app:layout_constraintLeft_toLeftOf="parent"-->
+    <!--app:layout_constraintRight_toRightOf="parent"/>-->
     <!--交易对-->
     <TextView
         android:id="@+id/tv_market_left_coin1"

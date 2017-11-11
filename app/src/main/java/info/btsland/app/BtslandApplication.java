@@ -10,6 +10,7 @@ import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import info.btsland.app.api.MarketStat;
@@ -40,7 +41,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static MarketStat marketStat;
     public static WebSocket mWebsocket;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
-    public static Map<String,DataK> dataKMap=new HashMap<>();
+    public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;

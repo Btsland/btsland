@@ -36,7 +36,7 @@
         <item name="colorValue">@color/color_white</item>
         <item name="stringValue">22</item>
         <item name="backgroundPicture">@drawable/welcome3</item>
-        <item name="backgroundColor">@color/color_black</item>
+        <item name="backgroundColor">@color/color_Grey</item>
         <item name="backgroundView">@drawable/select_row</item>
     </style>
 

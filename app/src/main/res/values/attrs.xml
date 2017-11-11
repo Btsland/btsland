@@ -8,7 +8,7 @@
 </resources>
 
 
-<!--<attr name="floatValue" format="float" />-->
-<!--<attr name="integerValue" format="integer" />-->
-<!--<attr name="booleanValue" format="boolean" />-->
-<!--<attr name="dimensionValue" format="dimension" />-->
+    <!--<attr name="floatValue" format="float" />-->
+    <!--<attr name="integerValue" format="integer" />-->
+    <!--<attr name="booleanValue" format="boolean" />-->
+    <!--<attr name="dimensionValue" format="dimension" />-->

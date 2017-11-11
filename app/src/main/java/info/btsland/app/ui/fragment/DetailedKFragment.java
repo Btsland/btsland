@@ -44,7 +44,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
     private long range= TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
 
-    private long ago=TimeUnit.DAYS.toSeconds(1);//距离现在时间
+    private long ago=TimeUnit.DAYS.toMillis(1);//距离现在时间
 
     private static String quote ="BTS";
     private static String base ="CNY";
@@ -100,6 +100,11 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     public void onStart() {
         super.onStart();
         drawK();
+        tvOnClickListener listener=new tvOnClickListener();
+
+        tv5M.setOnClickListener(listener);
+        tv1D.setOnClickListener(listener);
+        tv1H.setOnClickListener(listener);
 
     }
     class tvOnClickListener implements View.OnClickListener{
@@ -107,15 +112,15 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.tv_detailed_foot_5M:
-                    range=TimeUnit.MINUTES.toMillis(5);
-                    ago=TimeUnit.DAYS.toMillis(2);
+                    range=TimeUnit.MINUTES.toSeconds(5);
+                    ago=TimeUnit.DAYS.toMillis(1);
                     break;
                 case R.id.tv_detailed_foot_1H:
-                    range=TimeUnit.HOURS.toMillis(1);
+                    range=TimeUnit.HOURS.toSeconds(1);
                     ago=TimeUnit.DAYS.toMillis(7);
                     break;
                 case R.id.tv_detailed_foot_1D:
-                    range=TimeUnit.DAYS.toMillis(1);
+                    range=TimeUnit.DAYS.toSeconds(1);
                     ago=TimeUnit.DAYS.toMillis(90);
                     break;
             }
@@ -212,6 +217,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
      * 启动查询数据线程
      */
     public void startReceiveMarkets() {
+        Log.i(TAG, "startReceiveMarkets: age:"+ago);
         BtslandApplication.getMarketStat().subscribe(
                 base,
                 quote,

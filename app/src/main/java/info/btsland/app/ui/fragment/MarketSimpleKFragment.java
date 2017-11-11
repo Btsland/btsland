@@ -51,7 +51,7 @@ import info.btsland.app.ui.activity.MarketDetailedActivity;
 
 public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private static String TAG="MarketSimpleKFragment";
-    private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);
+    private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toMillis(5);
     public static String key;
     private static MarketSimpleKFragment listener;
 

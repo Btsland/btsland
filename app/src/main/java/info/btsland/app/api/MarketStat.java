@@ -27,10 +27,10 @@ import info.btsland.app.model.OrderBook;
 
 public class MarketStat {
     private static final String TAG = "MarketStat";
-    public static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
+    public static final long DEFAULT_BUCKET_SECS = TimeUnit.DAYS.toSeconds(1);//每条信息的间隔
 
-    public static final long DEFAULT_UPDATE_SECS = TimeUnit.MINUTES.toSeconds(1);//信息刷新的间隔
-    public static final long DEFAULT_AGO_SECS=TimeUnit.DAYS.toMillis(1);//距离现在时间
+    public static final long DEFAULT_UPDATE_SECS = TimeUnit.MINUTES.toMillis(1);//信息刷新的间隔
+    public static final long DEFAULT_AGO_SECS=TimeUnit.DAYS.toMillis(90);//距离现在时间
     public static final int STAT_MARKET_HISTORY = 0x01;
     public static final int STAT_MARKET_TICKER = 0x02;
     public static final int STAT_MARKET_ORDER_BOOK = 0x04;
@@ -90,9 +90,10 @@ public class MarketStat {
 
     public void subscribe(String base, String quote, long bucketSize,long ago, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
+        Log.i(TAG, "subscribe: ago:"+ago);
         unsubscribe(base, quote,stats);
         Subscription subscription =
-                new Subscription(base, quote, bucketSize, stats ,(int)ago,intervalMillis, l);
+                new Subscription(base, quote, bucketSize, ago,stats ,intervalMillis, l);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
     /*public void subscribe(List<String> name,String pwd, int stats,
@@ -273,6 +274,7 @@ public class MarketStat {
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
+            Log.i(TAG, "Subscription: ago:"+ago);
         }
         private Subscription(String base, String quote, long bucketSecs, int stats, OnMarketStatUpdateListener l) {
             this.base = base;
@@ -344,8 +346,10 @@ public class MarketStat {
                     }
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
+                    Log.i(TAG, "run: ago:"+ago);
+                    Log.i(TAG, "run: ago:"+TimeUnit.DAYS.toMillis(90));
                     Date startDate = new Date(
-                            System.currentTimeMillis() -ago*1000);
+                            System.currentTimeMillis() -ago);
                     stat.prices = getMarketHistory(base,quote,(int)bucketSecs,startDate);//1
                 }
                 Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
@@ -422,7 +426,7 @@ public class MarketStat {
         }
 
         private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs,Date start) {
-            Date endDate = new Date(System.currentTimeMillis());
+            Date endDate = new Date();
             List<bucket_object> buckets= getMarketHistory(base,quote,bucketSecs,start, endDate);
 
             List<HistoryPrice> prices=new ArrayList<>();
@@ -442,7 +446,7 @@ public class MarketStat {
                 quoteAsset = mWebsocketApi.lookup_asset_symbols(quote);
                 Log.e(TAG, "getMarketHistory: quote_object.id:"+quoteAsset.id );
                 return mWebsocketApi.get_market_history(
-                        baseAsset.id, quoteAsset.id,bucketSecs*1000, start, end);
+                        baseAsset.id, quoteAsset.id,bucketSecs, start, end);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
                 return null;

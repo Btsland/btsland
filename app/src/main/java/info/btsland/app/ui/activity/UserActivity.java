@@ -7,10 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.TextView;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 
@@ -25,6 +28,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView tvUserSeting;
     private TextView tvUserLogin;
     private HeadFragment headFragment;
+    private WebView portrait;
 
 
 
@@ -35,7 +39,15 @@ public class UserActivity extends AppCompatActivity {
         Log.i("UserActivity", "onCreate: ");
         fillInHead();
         init();
-        tvUserName.setText("用户名："+BtslandApplication.accountObject.name);
+        if(BtslandApplication.accountObject!=null){
+            createPortrait();//设置头像
+            tvUserName.setText("用户名："+BtslandApplication.accountObject.name);
+
+
+
+
+        }
+
     }
 
     /**
@@ -51,6 +63,7 @@ public class UserActivity extends AppCompatActivity {
         tvUserEntrust = (TextView) findViewById(R.id.tv_user_entrust);
         tvUserSeting = (TextView) findViewById(R.id.tv_user_set);
            tvUserLogin=(TextView) findViewById(R.id.tv_user_login);
+        portrait= (WebView) findViewById(R.id.iv_user_pho);
         //绑定监听器
         tvUserInfo.setOnClickListener(new TextViewListener());
         tvUserWhiteList.setOnClickListener(new TextViewListener());
@@ -73,7 +86,14 @@ public class UserActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
-
+    public void createPortrait(){
+        sha256_object.encoder encoder = new sha256_object.encoder();
+        encoder.write(BtslandApplication.accountObject.name.getBytes());
+        String htmlShareAccountName = "<html><head><style>body,html { margin:0; padding:0; text-align:center;}</style><meta name=viewport content=width=" + portrait.getWidth() + ",user-scalable=no/></head><body><canvas width=" + portrait.getWidth() + " height=" + portrait.getHeight() + " data-jdenticon-hash=" +encoder.result().toString()+ "></canvas><script src=https://cdn.jsdelivr.net/jdenticon/1.3.2/jdenticon.min.js async></script></body></html>";
+        WebSettings webSettings = portrait.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        portrait.loadData(htmlShareAccountName, "text/html", "UTF-8");
+    }
 
 
 

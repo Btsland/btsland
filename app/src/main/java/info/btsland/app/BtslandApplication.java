@@ -69,7 +69,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         sharedPreferences=getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
         String username=sharedPreferences.getString("username","");
-        if(username==null){
+        if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
+            return;
+        }
+        if(username==null||username.equals("")){
             isLogin=false;
             return;
         }
@@ -99,12 +102,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         instance=getApplicationContext();
         application=this;
         if(InternetUtil.isConnected(this)){
-            ConnectThread thread=new ConnectThread();
-            thread.start();
+                ConnectThread thread = new ConnectThread();
+                thread.start();
         }else {
             Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
         }
-        queryAccount();
     }
 
     @Override
@@ -115,6 +117,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             this.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
         }
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
+        QueryAccountThread queryAccountThread=new QueryAccountThread();
+        queryAccountThread.start();
     }
     public static class ConnectThread extends Thread{
         @Override
@@ -132,5 +136,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
         }
     }
-
+    public static class QueryAccountThread extends Thread{
+        @Override
+        public void run() {
+            queryAccount();
+        }
+    }
 }

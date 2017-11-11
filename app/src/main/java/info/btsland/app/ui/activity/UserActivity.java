@@ -35,7 +35,7 @@ public class UserActivity extends AppCompatActivity {
         Log.i("UserActivity", "onCreate: ");
         fillInHead();
         init();
-        tvUserName.setText(BtslandApplication.accountObject.name);
+        tvUserName.setText("用户名："+BtslandApplication.accountObject.name);
     }
 
     /**

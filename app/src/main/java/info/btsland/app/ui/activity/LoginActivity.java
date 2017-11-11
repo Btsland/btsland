@@ -182,7 +182,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }else if (password.getText().toString()==""){
                     Toast.makeText(LoginActivity.this,"请输入密码",0).show();
 
-                }else {
+                }else if(username.getText().toString()!=""&&password.getText().toString()!=""){
 
                     AccountThread loginThread=new AccountThread(username.getText().toString(),password.getText().toString(),AccountThread.LOGIN_BY_PASSWORD);
                     loginThread.start();

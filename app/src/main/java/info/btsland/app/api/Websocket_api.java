@@ -333,19 +333,19 @@ public class Websocket_api extends WebSocketListener {
 
         return replyObject.result.get(0);
     }
-    public MarketTicker  get_ticker_base(String base,String quote) throws NetworkStatusException {
-        Log.i(TAG, "get_ticker_base: ");
-        if(base==null||base=="") {
-            return null;
-        }
-        MarketTicker marketTicker=null;
-
-        marketTicker= get_ticker(base,quote);
-        //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
-
-        return marketTicker;
-
-    }
+//    public MarketTicker  get_ticker_base(String base,String quote) throws NetworkStatusException {
+//        Log.i(TAG, "get_ticker_base: ");
+//        if(base==null||base=="") {
+//            return null;
+//        }
+//        MarketTicker marketTicker=null;
+//
+//        marketTicker= get_ticker(base,quote);
+//        //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
+//
+//        return marketTicker;
+//
+//    }
     public List<bucket_object>  get_market_history(String assetObjectId1,
                                                    String assetObjectId2,
                                                    int nBucket,

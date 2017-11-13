@@ -339,7 +339,7 @@ public class MarketStat {
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
                         for(int i=0;i<quotes.length;i++){
-                            stat.MarketTicker = mWebsocketApi.get_ticker_base(base,quotes[i]);
+                            stat.MarketTicker = mWebsocketApi.get_ticker(base,quotes[i]);
                             new dataHandling(listener,stat).start();
                         }
                         //this.updateImmediately();

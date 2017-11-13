@@ -38,9 +38,12 @@ public class MarketRowAdapter extends BaseAdapter {
     private Map<String,MarketTicker> markets;
     private LayoutInflater inflater;
     private Context context;
-    private String[] quotes;
+    private List<String> quotes;
 
-    public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context,String[] quotes, Map<String,MarketTicker> markets) {
+    public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context,List<String> quotes, Map<String,MarketTicker> markets) {
+        for (int i=0;i<quotes.size();i++){
+            Log.e(TAG, "MarketRowAdapter: "+quotes.get(i) );
+        }
         this.simpleKFragment = simpleKFragment;
         this.quotes=quotes;
         this.markets = markets;
@@ -66,14 +69,14 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
-        Log.i(TAG, "getView: i:"+i+",marketIsNull:"+String.valueOf(markets.get(quotes[i])==null)+",markets.size():"+markets.size()+",markets.keySet():"+markets.keySet().toArray()[i]);
+        Log.i(TAG, "getView: i:"+i+",marketIsNull:"+String.valueOf(markets.get(quotes.get(i))==null)+",markets.size():"+markets.size()+",markets.keySet():"+markets.keySet().toArray()[i]);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.market_row, null);
         }
-        if(markets.get(quotes[i])==null){
+        if(markets.get(quotes.get(i))==null){
             return convertView;
         }
-        MarketTicker market = markets.get(quotes[i]);
+        MarketTicker market = markets.get(quotes.get(i));
         TextView tvCoin = convertView.findViewById(R.id.tv_coin);
         TextView tvFluctuation = convertView.findViewById(R.id.tv_fluctuation);
         TextView tvNewPrice = convertView.findViewById(R.id.tv_newPrice);

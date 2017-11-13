@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/welcome_login"
@@ -19,183 +18,266 @@
 
 
 
-    <RelativeLayout
-        android:id="@+id/login_layout"
-        android:layout_width="fill_parent"
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_login"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginTop="150dp"
-        android:gravity="center"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        >
-
-
-
-
-        <FrameLayout
-            android:id="@+id/username_layout"
-            android:layout_width="fill_parent"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <EditText
+            android:id="@+id/ed_login_userName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="用户:"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_user"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_login_user_point"/>
+        <TextView
+            android:id="@+id/tv_login_user_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_login_userName"
+            app:layout_constraintTop_toTopOf="@+id/ed_login_userName"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_userName"/>
+        <TextView
+            android:id="@+id/tv_login_user_point"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="55dp"
-            android:gravity="center" >
-
-            <!-- android:inputType="number" -->
-
-
-
-            <EditText
-                android:id="@+id/username"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:layout_marginTop="5dp"
-                android:maxLength="20"
-                android:paddingLeft="55dp"
-                android:paddingRight="60dp" >
-            </EditText>
-
-
-
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="21dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/username"
-                android:visibility="visible" />
-
-
-
-            <TextView
-                android:id="@+id/contry_sn"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginTop="0dp"
-                android:gravity="center"
-                android:text="+62"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                android:visibility="invisible" />
-
-
-
-            <Button
-                android:id="@+id/bt_username_clear"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/email_delete_pressed"
-                android:visibility="invisible" />
-
-
-        </FrameLayout>
-
-
-
-
-        <FrameLayout
-            android:id="@+id/usercode_layout"
-            android:layout_width="fill_parent"
+            android:layout_marginLeft="50dp"
+            android:textSize="10sp"
+            android:paddingLeft="40dp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_userName"
+            app:layout_constraintBottom_toTopOf="@+id/ed_login_password"/>
+        <EditText
+            android:id="@+id/ed_login_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="密码:"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_user_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv_login_Pwd_point"/>
+        <TextView
+            android:id="@+id/tv_login_pwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_login_password"
+            app:layout_constraintTop_toTopOf="@+id/ed_login_password"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_password"/>
+        <TextView
+            android:id="@+id/tv_login_Pwd_point"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/username_layout"
-            android:layout_marginTop="6dp"
-            android:gravity="center" >
-
-
-            <EditText
-                android:id="@+id/password"
-                android:layout_width="fill_parent"
-                android:layout_height="40dp"
-                android:inputType="textPassword"
-                android:maxLength="20"
-                android:paddingLeft="55dp"
-                android:paddingRight="60dp" >
-            </EditText>
-
-
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="21dp"
-                android:layout_gravity="left|center_vertical"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/password" />
-
-
-            <Button
-                android:id="@+id/bt_pwd_eye"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/password_close" />
-
-
-            <Button
-                android:id="@+id/bt_pwd_clear"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="right|center_vertical"
-                android:layout_marginRight="45dp"
-                android:background="@drawable/email_delete_pressed"
-                android:visibility="invisible" />
-
-
-        </FrameLayout>
-
+            android:textSize="10sp"
+            android:paddingLeft="40dp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_password"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"/>
 
         <Button
-            android:id="@+id/login"
-            android:layout_width="fill_parent"
-            android:layout_height="40dp"
-            android:layout_below="@id/usercode_layout"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/tv_button"
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/select_login_btn"
+            android:text="登录"
             android:gravity="center"
             android:textSize="@dimen/activity_vertical_margin"
-            android:text="登  录"
-            android:textColor="@android:color/white"
-
-            />
-
-
-        <Button
-            android:id="@+id/tourist"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_Pwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv"/>
+        <TextView
+            android:id="@+id/tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignRight="@id/login"
-            android:layout_below="@id/login"
-            android:background="#00000000"
-            android:text="不想登录，先看看"
-            android:textColor="@color/color_white"
-            android:textSize="16sp" />
-
-
+            android:textSize="10sp"
+            android:paddingLeft="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintBottom_toTopOf="@+id/btn_toRegister"/>
         <Button
-            android:id="@+id/register"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@id/login"
-            android:layout_below="@id/login"
-            android:background="#00000000"
-            android:gravity="left|center_vertical"
-            android:text="没有帐号？注册一个吧^-^"
-            android:textColor="@color/color_white"
+            android:id="@+id/btn_toRegister"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="没有帐号，去注册"
+            android:gravity="center"
+            android:background="@drawable/btn_transparent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/cl_register"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <EditText
+            android:id="@+id/ed_register_userName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="用户:"
             android:textSize="16sp"
-            android:visibility="visible" />
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_user"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_user_point"/>
+        <TextView
+            android:id="@+id/tv_register_user_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_userName"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_userName"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_userName"/>
+        <TextView
+            android:id="@+id/tv_register_user_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_userName"
+            app:layout_constraintBottom_toTopOf="@+id/ed_register_password"/>
+        <EditText
+            android:id="@+id/ed_register_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="密码:"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_user_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_Pwd_point"/>
+        <TextView
+            android:id="@+id/tv_register_Pwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_password"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_password"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_password"/>
+        <TextView
+            android:id="@+id/tv_register_Pwd_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
+            app:layout_constraintBottom_toTopOf="@+id/ed_register_rePassword"/>
+        <EditText
+            android:id="@+id/ed_register_rePassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="确认密码:"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_Pwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_rePwd_point"/>
+        <TextView
+            android:id="@+id/tv_register_rePwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_rePassword"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_rePassword"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_rePassword"/>
+        <TextView
+            android:id="@+id/tv_register_rePwd_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_rePassword"
+            app:layout_constraintBottom_toTopOf="@+id/tv_point"/>
+        <CheckBox
+            android:id="@+id/ck_register"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@+id/tv_point"
+            app:layout_constraintRight_toLeftOf="@+id/tv_point"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <TextView
+            android:id="@+id/tv_point"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="9"
+            android:text="我已确认我已经备份好我的密码（您的密码是登录的唯一凭证，一旦丢失，您的帐号将无法找回，您的资产也会丢失。）"
+            app:layout_constraintLeft_toRightOf="@+id/ck_register"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_rePwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/btn_register"
+            app:layout_constraintRight_toRightOf="parent"/>
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/select_login_btn"
+            android:text="注册"
+            android:gravity="center"
+            android:textSize="@dimen/activity_vertical_margin"
+            app:layout_constraintTop_toBottomOf="@+id/tv_point"/>
+        <Button
+            android:id="@+id/btn_toLogin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:text="已有帐号，去登录"
+            android:gravity="center"
+            android:background="@drawable/btn_transparent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register"/>
+
+
+    </android.support.constraint.ConstraintLayout>
 
 
 
 
-    </RelativeLayout>
-
-
-
-
-</RelativeLayout>
+</android.support.constraint.ConstraintLayout>
 
 
 

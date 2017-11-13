@@ -99,6 +99,7 @@ public class Wallet_api {
                 "https://openledger.io/api/v1/accounts",
                 "https://openledger.hk/api/v1/accounts"
         };*/
+        //https://openledger.io/api/v1/accounts
         String[] strAddress = {"https://openledger.io/api/v1/accounts"};
         Log.i(TAG, "create_account_with_password: ");
 
@@ -143,7 +144,7 @@ public class Wallet_api {
 
 
 
-    public int create_account_with_password(String strServerUrl,
+    private int create_account_with_password(String strServerUrl,
                                             String strAccountName,
                                             String strPassword) throws NetworkStatusException, CreateAccountException {
         private_key privateActiveKey = private_key.from_seed(strAccountName + "active" + strPassword);
@@ -163,7 +164,7 @@ public class Wallet_api {
         createAccountObject.owner_key = publicOwnerKeyType;
         createAccountObject.memo_key = publicActiveKeyType;
         createAccountObject.refcode = null;
-        createAccountObject.referrer = "bituniverse";
+        createAccountObject.referrer = "btsland";
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
 
         String strAddress = strServerUrl;

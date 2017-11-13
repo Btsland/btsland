@@ -4,6 +4,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.2'
     defaultConfig {
+        multiDexEnabled true
         applicationId "info.btsland.app"
         minSdkVersion 22
         targetSdkVersion 26
@@ -60,6 +61,7 @@ dependencies {
     compile 'com.madgag.spongycastle:prov:1.56.0.0'
     compile 'com.madgag.spongycastle:pkix:1.51.0.0'
     compile 'com.madgag.spongycastle:pg:1.51.0.0'
+    compile 'com.kaopiz:kprogresshud:1.0.2'
     testCompile 'junit:junit:4.12'
     implementation 'org.bitcoinj:bitcoinj-core:0.14.5'
 }

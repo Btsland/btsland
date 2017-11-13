@@ -264,7 +264,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
         BarDataSet barDataSet = new BarDataSet(barEntryList, "");
         barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        barDataSet.setColor(getResources().getColor(R.color.color_Grey), 25);
+        barDataSet.setColor(getResources().getColor(R.color.color_Grey), 45);
         barDataSet.setDrawValues(false);
         barDataSet.setForm(Legend.LegendForm.EMPTY);
 

@@ -11,7 +11,7 @@ import java.util.List;
 public class ArrayUtils {
 
 
-    public static String[] remove(String[] array,String str){
+    public static List<String> remove(String[] array,String str){
         List<String> newStr=new ArrayList<>();
         for(int i=0;i<array.length;i++){
             if(array[i].equals(str)){
@@ -20,7 +20,7 @@ public class ArrayUtils {
                 newStr.add(array[i]);
             }
         }
-        return newStr.toArray(new String[newStr.size()]);
+        return newStr;
     }
 
 }

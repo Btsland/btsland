@@ -68,9 +68,13 @@ public class PurseFragment extends Fragment {
     private void init() {
         //全部资产
         tvPurseAllAsset = getActivity().findViewById(R.id.tv_purse_allAsset);
+        //充提记录
         tvPurseRW = getActivity().findViewById(R.id.tv_purse_rw);
+        //交易记录
         tvPurseDeal = getActivity().findViewById(R.id.tv_purse_deal);
+        //全部挂单
         tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
+        //钱包备份
         tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
 
 //        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
@@ -110,22 +114,27 @@ public class PurseFragment extends Fragment {
             switch (view.getId()) {
 
                 case R.id.tv_purse_allAsset:
+                    //全部资产
                     Intent intent = new Intent(getActivity(), PurseAssetActivity.class);
                     getActivity().startActivity(intent);
                     break;
                 case R.id.tv_purse_rw:
+                    //充值记录
                     Intent rw = new Intent(getActivity(), PurseAccessRecordActivity.class);
                     getActivity().startActivity(rw);
                     break;
                 case R.id.tv_purse_deal:
+                    //交易记录
                     Intent deal = new Intent(getActivity(), PurseTradingRecordActivity.class);
                     getActivity().startActivity(deal);
                     break;
                 case R.id.tv_purse_allRemain:
+                    //全部挂单
                     Intent allremain = new Intent(getActivity(), PurseWholeGuadanActivity.class);
                     getActivity().startActivity(allremain);
                     break;
                 case R.id.tv_purse_backup:
+                    //钱包备份
                     Intent backup = new Intent(getActivity(), PurseWalletBackupActivity.class);
                     getActivity().startActivity(backup);
                     break;

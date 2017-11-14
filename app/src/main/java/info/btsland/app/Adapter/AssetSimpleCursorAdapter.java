@@ -1,15 +1,17 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
 
 import java.util.List;
 
-
-import java.util.Map;
+import info.btsland.app.R;
+import info.btsland.app.api.asset;
 
 /**
  * author：lw1000
@@ -17,53 +19,48 @@ import java.util.Map;
  * 2017/10/21.
  */
 
-public class AssetSimpleCursorAdapter extends SimpleAdapter {
-
-
-    public AssetSimpleCursorAdapter(Context context, List<? extends Map<String, ?>> data, int resource, String[] from, int[] to) {
-
-        super(context, data, resource, from, to);
-
+public class AssetSimpleCursorAdapter extends BaseAdapter {
+    private static final String TAG="AssetSimpleCursorAdapter";
+    private  Context context;
+    private  List<asset> assets;
+    private LayoutInflater inflater;
+    public AssetSimpleCursorAdapter(Context context, List<asset> assets) {
+        this.context=context;
+        this.assets=assets;
+        this.inflater=LayoutInflater.from(context);
     }
 
+    @Override
+    public int getCount() {
+        return assets.size();
+    }
 
+    @Override
+    public Object getItem(int position) {
+        return assets.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-        // TODO Auto-generated method stub
-        // listview每次得到一个item，都要view去绘制，通过getView方法得到view
-        // position为item的序号
-        View view = null;
-
-        if (convertView != null) {
-
-            view = convertView;
-            // 使用缓存的view,节约内存
-            // 当listview的item过多时，拖动会遮住一部分item，被遮住的item的view就是convertView保存着。
-            // 当滚动条回到之前被遮住的item时，直接使用convertView，而不必再去new view()
-
-        } else {
-
-            view = super.getView(position, convertView, parent);
-
-
+        Log.e("AssetSimple", "getView: "+position+"//"+assets.size());
+        Log.e("AssetSimple", "getView: "+assets.get(position) );
+        if (convertView == null) {
+            convertView = inflater.inflate(R.layout.asset_item, null);
         }
-
-
-        int[] colors = {Color.WHITE, Color.rgb(219, 238, 244) };//RGB颜色
-
-
-        view.setBackgroundColor(colors[position % 2]);// 每隔item之间颜色不同
-
-
-        return super.getView(position, view, parent);
-
-
-
+        if(assets.get(position)==null){
+            return convertView;
+        }
+        TextView tvAssetCoin=convertView.findViewById(R.id.tv_asset_coin);
+        TextView tvAssetNum=convertView.findViewById(R.id.tv_asset_num);
+        tvAssetCoin.setText(String.valueOf(assets.get(position).asset_id));
+        tvAssetNum.setText(String.valueOf(assets.get(position).amount));
+        return convertView;
     }
-
-
 }
 
 

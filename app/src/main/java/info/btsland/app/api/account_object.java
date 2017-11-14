@@ -2,6 +2,7 @@ package info.btsland.app.api;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class account_object implements Serializable {
@@ -26,10 +27,14 @@ public class account_object implements Serializable {
     public List<Object> active_special_authority;
     public Integer top_n_control_flags;
 
+    public List<asset> assetlist=new ArrayList <>();
+
+
+
     @Override
     public String toString() {
         return "account_object{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", membership_expiration_date='" + membership_expiration_date + '\'' +
                 ", registrar='" + registrar + '\'' +
                 ", referrer='" + referrer + '\'' +
@@ -49,8 +54,10 @@ public class account_object implements Serializable {
                 ", owner_special_authority=" + owner_special_authority +
                 ", active_special_authority=" + active_special_authority +
                 ", top_n_control_flags=" + top_n_control_flags +
+                ", assetlist=" + assetlist +
                 '}';
     }
+
     public object_id toObject_id(String id){
         String strContent = id;
         int nFirstDot = strContent.indexOf('.');

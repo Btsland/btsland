@@ -28,4 +28,12 @@ public class asset {
             throw new RuntimeException("invalid price object");
         }
     }
+
+    @Override
+    public String toString() {
+        return "asset{" +
+                "amount=" + amount +
+                ", asset_id=" + asset_id +
+                '}';
+    }
 }

@@ -2,17 +2,13 @@ package info.btsland.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Looper;
 import android.support.multidex.MultiDexApplication;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.widget.Toast;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,11 +17,8 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.api.asset;
-import info.btsland.app.api.asset_object;
 import info.btsland.app.exception.NetworkStatusException;
-import info.btsland.app.model.DataK;
 import info.btsland.app.ui.activity.WelcomeActivity;
-import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.InternetUtil;
 import okhttp3.WebSocket;
 
@@ -41,7 +34,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static boolean isLogin=false;
 
-    public static account_object accountObject;
+    public static account_object accountObject=new account_object();
 
     public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
@@ -68,32 +61,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public BtslandApplication() {
 
-    }
-
-    /**
-     *
-     *
-     */
-    public static void queryAccount(){
-
-        sharedPreferences=getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
-        String username=sharedPreferences.getString("username","");
-        if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
-            return;
-        }
-        if(username==null||username.equals("")){
-            isLogin=false;
-            return;
-        }
-        try {
-            accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
-            //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
-            if(accountObject!=null){
-                isLogin=true;
-            }
-        } catch (NetworkStatusException e) {
-            e.printStackTrace();
-        }
     }
 
     public static Context getInstance() {
@@ -127,18 +94,89 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             this.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
         }
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
-        QueryAccountThread queryAccountThread=new QueryAccountThread();
-        queryAccountThread.start();
+        queryAccount();
+
     }
     public static void ConnectThread(){
         MarketStat marketStat = getMarketStat();
         MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
         connect.start();
     }
-    public static class QueryAccountThread extends Thread{
+
+
+    /**
+     * 登陆线程外部调用方法
+     *
+     */
+    public static void queryAccount(){
+        new QueryAccountThread().start();
+    }
+
+
+    /**
+     * 登录线程
+     *
+     */
+    private static class QueryAccountThread extends Thread{
         @Override
         public void run() {
-            queryAccount();
+            sharedPreferences=getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
+            String username=sharedPreferences.getString("username","");
+            if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
+                return;
+            }
+            if(username==null||username.equals("")){
+                isLogin=false;
+                return;
+            }
+            try {
+                accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+                queryAsset();
+                //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
+                if(accountObject!=null){
+                    isLogin=true;
+                }
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+            }
         }
     }
+
+
+
+
+    /**
+     * 查询用余额线程外部调用方法
+     */
+    public static void queryAsset(){
+        new AccetThread().start();
+    }
+
+    /**
+     * 查询用余额线程
+     *
+     */
+    private static class AccetThread extends Thread{
+        @Override
+        public void run() {
+            super.run();
+            synchronized (accountObject.assetlist) {
+                try {
+                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("btsland");
+                    if(assets!=null){
+                        accountObject.assetlist=assets;
+                    }else {
+                        accountObject.assetlist=new ArrayList <>();
+                    }
+                } catch (NetworkStatusException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+
+
+
 }

@@ -10,8 +10,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -22,11 +20,8 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
-import java.time.Instant;
-
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Wallet_api;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
@@ -249,9 +244,9 @@ public class LoginActivity extends AppCompatActivity {
                         hud=KProgressHUD.create(LoginActivity.this);
                         hud.setLabel(getResources().getString(R.string.please_wait));
                         hud.show();
+                        thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD);
+                        thread.start();
                     }
-                    thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD);
-                    thread.start();
                     break;
                 case R.id.btn_toLogin:
                     loginLayout.setVisibility(View.VISIBLE);

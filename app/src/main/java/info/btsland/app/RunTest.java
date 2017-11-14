@@ -15,10 +15,12 @@ import java.io.InputStreamReader;
  */
 public class RunTest {
     public static void main(String[] args) {
-        websocket_api wsapi = new websocket_api("wss://bitshares.dacplay.org/ws");
-        wsapi.connect();
-        wsapi.get_ticker();
-
+//        websocket_api wsapi =new websocket_api("wss://bitshares.dacplay.org/ws");
+//        wsapi.connect();
+//        wsapi.get_ticker();
+            websocket_api websocket_api=new websocket_api("wss://bitshares.dacplay.org/ws");
+            websocket_api.connect();
+            websocket_api.get_ticker();
 
     }
 

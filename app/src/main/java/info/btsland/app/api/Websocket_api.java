@@ -240,6 +240,9 @@ public class Websocket_api extends WebSocketListener {
                 Log.i(TAG, "connect: _nDatabaseId:"+BtslandApplication._nDatabaseId);
                 Log.i(TAG, "connect: _nHistoryId:"+BtslandApplication._nHistoryId);
                 Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
+//                String query9="{\"id\":111111,\"method\":\"call\",\"params\":[2,\"list_account_balances\",[\"li-88888\",[]]]}";
+//                Log.e(TAG, "connect: 99999999999999999999999999999999999999999" );
+//                mWebsocket.send(query9);
             } else {
                 nRet = -9;
             }

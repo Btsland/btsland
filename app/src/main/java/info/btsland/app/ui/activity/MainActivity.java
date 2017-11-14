@@ -12,14 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
-
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.MarketStat;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
@@ -56,8 +49,10 @@ public class MainActivity extends BaseActivity {
         fillInHead();
         fillInBody();
         init();
-
     }
+
+
+
 
 
     /**

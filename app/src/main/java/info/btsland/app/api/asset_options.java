@@ -53,4 +53,22 @@ public class asset_options {
 
     /// Perform internal consistency checks.
     /// @throws fc::exception if any check fails
+
+    @Override
+    public String toString() {
+        return "asset_options{" +
+                "max_supply=" + max_supply +
+                ", market_fee_percent=" + market_fee_percent +
+                ", max_market_fee=" + max_market_fee +
+                ", issuer_permissions=" + issuer_permissions +
+                ", flags=" + flags +
+                ", core_exchange_rate=" + core_exchange_rate +
+                ", whitelist_authorities=" + whitelist_authorities +
+                ", blacklist_authorities=" + blacklist_authorities +
+                ", whitelist_markets=" + whitelist_markets +
+                ", blacklist_markets=" + blacklist_markets +
+                ", description='" + description + '\'' +
+                ", extensions=" + extensions +
+                '}';
+    }
 }

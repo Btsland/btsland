@@ -1,7 +1,6 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparent">
@@ -16,33 +15,43 @@
         app:layout_constraintRight_toLeftOf="@+id/cl_detailed_sell"
         app:layout_constraintBottom_toTopOf="@+id/cl_detailed_newPrice">
         <TextView
+            android:id="@+id/tv_sell_buy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="买入"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+        <TextView
             android:id="@+id/tv_buy_price"
             android:text="价格"
             android:textSize="14sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/tv_buy_quantity" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_sell_buy"
+            app:layout_constraintRight_toLeftOf="@+id/tv_buy_vol" />
         <TextView
-            android:id="@+id/tv_buy_quantity"
+            android:id="@+id/tv_buy_vol"
             android:text="量"
             android:textSize="14sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sell_buy"
             app:layout_constraintLeft_toRightOf="@+id/tv_buy_price"
             />
-        <ListView
-            android:id="@+id/lv_detailed_buy"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_detailed_buy"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_buy_quantity"
+            app:layout_constraintTop_toBottomOf="@+id/tv_buy_vol"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_detailed_sell"
@@ -53,33 +62,43 @@
         app:layout_constraintLeft_toRightOf="@+id/cl_detailed_buy"
         app:layout_constraintBottom_toTopOf="@+id/cl_detailed_newPrice">
         <TextView
+            android:id="@+id/tv_sell_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:text="卖出"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"/>
+        <TextView
             android:id="@+id/tv_sell_price"
             android:text="价格"
             android:textSize="14sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/tv_sell_quantity" />
+            app:layout_constraintTop_toBottomOf="@+id/tv_sell_title"
+            app:layout_constraintRight_toLeftOf="@+id/tv_sell_vol" />
         <TextView
-            android:id="@+id/tv_sell_quantity"
+            android:id="@+id/tv_sell_vol"
             android:text="量"
             android:textSize="14sp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sell_title"
             app:layout_constraintLeft_toRightOf="@+id/tv_sell_price"
             />
-        <ListView
-            android:id="@+id/lv_detailed_sell"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv_detailed_sell"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_sell_quantity"
+            app:layout_constraintTop_toBottomOf="@+id/tv_sell_vol"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent">
-        </ListView>
+        </android.support.v7.widget.RecyclerView>
     </android.support.constraint.ConstraintLayout>
     <android.support.constraint.ConstraintLayout
         android:id="@+id/cl_detailed_newPrice"

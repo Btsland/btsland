@@ -347,7 +347,7 @@ public class Websocket_api extends WebSocketListener {
 //        return marketTicker;
 //
 //    }
-    public List<asset> list_account_balances(object_id<account_object> accountId) throws NetworkStatusException {
+    public List<asset> list_account_balances_by_id(object_id<account_object> accountId) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -357,6 +357,26 @@ public class Websocket_api extends WebSocketListener {
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
         listAccountBalancesParam.add(accountId);
+        listAccountBalancesParam.add(new ArrayList<Object>());
+        callObject.params.add(listAccountBalancesParam);
+
+
+        ReplyObjectProcess<Reply<List<asset>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset>>>(){}.getType());
+        Reply<List<asset>> replyLookupAccountNames = sendForReply(callObject, replyObject);
+
+        return replyLookupAccountNames.result;
+    }
+    public List<asset> list_account_balances_by_name(String accountName) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_named_account_balances");
+
+        List<Object> listAccountBalancesParam = new ArrayList<>();
+        listAccountBalancesParam.add(accountName);
         listAccountBalancesParam.add(new ArrayList<Object>());
         callObject.params.add(listAccountBalancesParam);
 

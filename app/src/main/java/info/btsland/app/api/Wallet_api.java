@@ -260,7 +260,7 @@ public class Wallet_api {
         listPublicKeyType.add(publicActiveKeyType);
         listPublicKeyType.add(publicOwnerKeyType);
         mWalletObject.update_account(accountObject);
-        mWalletObject.extra_keys.put(accountObject.toObject_id(accountObject.id), listPublicKeyType);
+        mWalletObject.extra_keys.put(accountObject.id, listPublicKeyType);
         mHashMapPub2Priv.put(publicActiveKeyType, new types.private_key_type(privateActiveKey));
         mHashMapPub2Priv.put(publicOwnerKeyType, new types.private_key_type(privateOwnerKey));
 

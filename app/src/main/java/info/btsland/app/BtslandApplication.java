@@ -20,6 +20,8 @@ import java.util.Map;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
+import info.btsland.app.api.asset;
+import info.btsland.app.api.asset_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.DataK;
 import info.btsland.app.ui.activity.WelcomeActivity;
@@ -85,6 +87,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
         try {
             accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+            //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             if(accountObject!=null){
                 isLogin=true;
             }
@@ -108,6 +111,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
         instance=getApplicationContext();
         application=this;
+
         if(InternetUtil.isConnected(this)){
                 ConnectThread();
         }else {

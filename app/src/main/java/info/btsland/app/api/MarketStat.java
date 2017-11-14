@@ -501,7 +501,7 @@ public class MarketStat {
         private OrderBook getOrderBook() {
             try {
                 List<limit_order_object> orders =
-                        mWebsocketApi.get_limit_orders(baseAsset.id, quoteAsset.id, 200);
+                        mWebsocketApi.get_limit_orders(base, quote, 200);
                 if (orders != null) {
                     OrderBook orderBook = new OrderBook();
                     orderBook.base = baseAsset.symbol;

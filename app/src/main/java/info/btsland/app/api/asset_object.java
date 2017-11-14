@@ -109,4 +109,17 @@ public class asset_object {
         }
         return scaled_precision;
     }
+
+    @Override
+    public String toString() {
+        return "asset_object{" +
+                "id='" + id + '\'' +
+                ", symbol='" + symbol + '\'' +
+                ", precision=" + precision +
+                ", issuer='" + issuer + '\'' +
+                ", options=" + options +
+                ", dynamic_asset_data_id='" + dynamic_asset_data_id + '\'' +
+                ", bitasset_data_id='" + bitasset_data_id + '\'' +
+                '}';
+    }
 }

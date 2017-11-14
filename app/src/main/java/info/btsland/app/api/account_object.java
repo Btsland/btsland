@@ -1,16 +1,11 @@
 package info.btsland.app.api;
 
 
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParseException;
-
 import java.io.Serializable;
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class account_object implements Serializable {
-    public String id;
+    public object_id<account_object> id;
     public String membership_expiration_date;
     public String registrar;
     public String referrer;

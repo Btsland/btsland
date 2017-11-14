@@ -1,7 +1,6 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,15 +12,11 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.mikephil.charting.charts.CombinedChart;
-
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
@@ -71,7 +66,7 @@ public class MarketRowAdapter extends BaseAdapter {
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
         Log.i(TAG, "getView: i:"+i+",marketIsNull:"+String.valueOf(markets.get(quotes.get(i))==null)+",markets.size():"+markets.size()+",markets.keySet():"+markets.keySet().toArray()[i]);
         if (convertView == null) {
-            convertView = inflater.inflate(R.layout.market_row, null);
+            convertView = inflater.inflate(R.layout.market_item, null);
         }
         if(markets.get(quotes.get(i))==null){
             return convertView;

@@ -107,4 +107,8 @@
     <string name="please_wait">请稍等。。。</string>
     <string name="interval">间隔</string>
     <string name="span">跨度</string>
+    <string name="total">总价：</string>
+    <string name="charge">手续费：</string>
+    <string name="price">价格：</string>
+    <string name="vol">数量：</string>
 </resources>

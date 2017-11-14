@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.CombinedChart;
@@ -25,9 +26,13 @@ import com.github.mikephil.charting.data.CandleData;
 import com.github.mikephil.charting.data.CandleDataSet;
 import com.github.mikephil.charting.data.CandleEntry;
 import com.github.mikephil.charting.data.CombinedData;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +45,7 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.DataK;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.ui.view.IViewPager;
 
 public class DetailedKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     // TODO: Rename parameter arguments, choose names that match
@@ -47,6 +53,13 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private static final String MARKET = "market";
     private static final String TAG ="DetailedKFragment" ;
     private static final int SUCCESS=1;
+    private static final long INTERVAL5M=TimeUnit.MINUTES.toSeconds(5);
+    private static final long INTERVAL1H=TimeUnit.HOURS.toSeconds(1);
+    private static final long INTERVAL1D=TimeUnit.DAYS.toSeconds(1);
+    private static final long SPAN1D=TimeUnit.DAYS.toMillis(1);
+    private static final long SPAN1W=TimeUnit.DAYS.toMillis(7);
+    private static final long SPAN1M=TimeUnit.DAYS.toMillis(30);
+    private static final long SPAN3M=TimeUnit.DAYS.toMillis(90);
     private long range= TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
 
     private long ago=TimeUnit.DAYS.toMillis(1);//距离现在时间
@@ -61,9 +74,22 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private String key;
 
     private CombinedChart simpleK;//图表
-    private TextView tv5M;
-    private TextView tv1H;
-    private TextView tv1D;
+    private TextView tvInterval5M;
+    private TextView tvInterval1H;
+    private TextView tvInterval1D;
+    private TextView tvSpan1D;
+    private TextView tvSpan1W;
+    private TextView tvSpan1M;
+    private TextView tvSpan3M;
+    private LinearLayout layout1;
+    private IViewPager iViewPager;
+
+    private TextView tvDateNum;
+    private TextView tvOpenNum;
+    private TextView tvHighNum;
+    private TextView tvVolumeNum;
+    private TextView tvCloseNum;
+    private TextView tvLowNum;
 
     private static DetailedKFragment listener;
     private MarketTicker market;
@@ -108,28 +134,107 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         super.onStart();
         tvOnClickListener listener=new tvOnClickListener();
 
-        tv5M.setOnClickListener(listener);
-        tv1D.setOnClickListener(listener);
-        tv1H.setOnClickListener(listener);
+        tvInterval5M.setOnClickListener(listener);
+        tvInterval1D.setOnClickListener(listener);
+        tvInterval1H.setOnClickListener(listener);
+        tvSpan1D.setOnClickListener(listener);
+        tvSpan1M.setOnClickListener(listener);
+        tvSpan1W.setOnClickListener(listener);
+        tvSpan3M.setOnClickListener(listener);
+
+
+        simpleK.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
+            @Override
+            public void onValueSelected(Entry e, Highlight h) {
+                layout1.setVisibility(View.VISIBLE);
+//                e.getData();
+//                CandleEntry candleEntry = (CandleEntry)e;
+                if(e.getData()!=null) {
+                    MarketStat.HistoryPrice historyPrice = (MarketStat.HistoryPrice) e.getData();
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd HH:mm");
+
+                    if (historyPrice.date != null) {
+                        tvDateNum.setText(simpleDateFormat.format(historyPrice.date));
+                    } else {
+                        tvDateNum.setText("");
+                    }
+                    tvHighNum.setText(String.valueOf(historyPrice.high));
+                    tvLowNum.setText(String.valueOf(historyPrice.low));
+                    tvOpenNum.setText(String.valueOf(historyPrice.open));
+                    tvCloseNum.setText(String.valueOf(historyPrice.close));
+                    tvVolumeNum.setText(String.valueOf(num(historyPrice.volume)));
+                    Log.e(TAG, "onValueSelected: "+num(historyPrice.volume) );
+                }
+            }
+            private String num(double n){
+                DecimalFormat decimalFormat = new DecimalFormat("#.##");
+                double b=0.0;
+                String str="";
+                if(n < 1000) {
+                    str = decimalFormat.format(n);
+                } else if(n >=1000 && n < 1000000){
+                    b = n/1000;
+                    str=decimalFormat.format(b)+"K";
+                }else if(n >=1000000 && n < 1000000000){
+                    b = n/1000000;
+                    str = decimalFormat.format(b)+"M";
+                }
+                return str;
+            }
+
+            @Override
+            public void onNothingSelected() {
+
+            }
+        });
 
     }
+    private TextView a;
+    private TextView b;
     class tvOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
             switch (view.getId()){
-                case R.id.tv_detailed_foot_5M:
-                    range=TimeUnit.MINUTES.toSeconds(5);
-                    ago=TimeUnit.DAYS.toMillis(1);
+                case R.id.tv_foot_interval_5M:
+                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    range=INTERVAL5M;
+                    a=tvInterval5M;
                     break;
-                case R.id.tv_detailed_foot_1H:
-                    range=TimeUnit.HOURS.toSeconds(1);
-                    ago=TimeUnit.DAYS.toMillis(7);
+                case R.id.tv_foot_interval_1H:
+                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    range=INTERVAL1H;
+                    a=tvInterval1H;
                     break;
-                case R.id.tv_detailed_foot_1D:
-                    range=TimeUnit.DAYS.toSeconds(1);
-                    ago=TimeUnit.DAYS.toMillis(90);
+                case R.id.tv_foot_interval_1D:
+                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    range=INTERVAL1D;
+                    a=tvInterval1D;
+                    break;
+                case R.id.tv_foot_span_1D:
+                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    ago=SPAN1D;
+                    b=tvSpan1D;
+                    break;
+                case R.id.tv_foot_span_1W:
+                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    ago=SPAN1W;
+                    b=tvSpan1W;
+                    break;
+                case R.id.tv_foot_span_1M:
+                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    ago=SPAN1M;
+                    b=tvSpan1M;
+                    break;
+                case R.id.tv_foot_span_3M:
+                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    ago=SPAN3M;
+                    b=tvSpan3M;
                     break;
             }
+            Log.i(TAG, "onClick: ago:"+TimeUnit.MILLISECONDS.toDays(ago));
+            Log.i(TAG, "onClick: range:"+TimeUnit.SECONDS.toMinutes(range));
+            a.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
+            b.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
             startReceiveMarkets();
 
         }
@@ -137,9 +242,26 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private void init(View view) {
         simpleK=view.findViewById(R.id.cbc_detailed_K);
         simpleK.setNoDataText("数据正在读取中。。。");
-        tv5M=view.findViewById(R.id.tv_detailed_foot_5M);
-        tv1H=view.findViewById(R.id.tv_detailed_foot_1H);
-        tv1D=view.findViewById(R.id.tv_detailed_foot_1D);
+        tvInterval5M=view.findViewById(R.id.tv_foot_interval_5M);
+        tvInterval1H=view.findViewById(R.id.tv_foot_interval_1H);
+        tvInterval1D=view.findViewById(R.id.tv_foot_interval_1D);
+        tvSpan1D=view.findViewById(R.id.tv_foot_span_1D);
+        tvSpan1W=view.findViewById(R.id.tv_foot_span_1W);
+        tvSpan1M=view.findViewById(R.id.tv_foot_span_1M);
+        tvSpan3M=view.findViewById(R.id.tv_foot_span_3M);
+        layout1=view.findViewById(R.id.ll_detailed1);
+        tvDateNum=view.findViewById(R.id.tv_date_num);
+        tvOpenNum=view.findViewById(R.id.tv_open_num);
+        tvHighNum=view.findViewById(R.id.tv_high_num);
+        tvVolumeNum=view.findViewById(R.id.tv_volume_num);
+        tvCloseNum=view.findViewById(R.id.tv_close_num);
+        tvLowNum=view.findViewById(R.id.tv_low_num);
+        iViewPager=getActivity().findViewById(R.id.vp_detailed_page);
+
+        tvInterval5M.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
+        tvSpan1D.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
+        a=tvInterval5M;
+        b=tvSpan1D;
     }
 
     private void initChart() {
@@ -156,6 +278,13 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         simpleK.setAutoScaleMinMaxEnabled(true);
         simpleK.setDragEnabled(true);
         simpleK.setDoubleTapToZoomEnabled(false);
+//        simpleK.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                iViewPager.setScanScroll(false);
+//            }
+//        });
 
         XAxis xAxis = simpleK.getXAxis();
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -188,9 +317,11 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
     private void updateChartData() {
         List<MarketStat.HistoryPrice> historyPriceList=BtslandApplication.dataKMap.get(key);
-        initializeData(historyPriceList);
-        IAxisValueFormatter xValue = new xAxisValueFormater(historyPriceList);
-        simpleK.getXAxis().setValueFormatter(xValue);
+        if(historyPriceList!=null&&historyPriceList.size()>0){
+            initializeData(historyPriceList);
+            IAxisValueFormatter xValue = new xAxisValueFormater(historyPriceList);
+            simpleK.getXAxis().setValueFormatter(xValue);
+        }
     }
     private void initializeData(List<MarketStat.HistoryPrice> listHistoryPrice) {
         List<CandleEntry> candleEntryList = new ArrayList<>();
@@ -227,7 +358,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
         BarDataSet barDataSet = new BarDataSet(barEntryList, "");
         barDataSet.setAxisDependency(YAxis.AxisDependency.RIGHT);
-        barDataSet.setColor(getResources().getColor(R.color.color_Grey), 25);
+        barDataSet.setColor(getResources().getColor(R.color.color_Grey), 45);
         barDataSet.setDrawValues(false);
         barDataSet.setForm(Legend.LegendForm.EMPTY);
 

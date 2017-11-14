@@ -89,7 +89,6 @@ public class Websocket_api extends WebSocketListener {
     /** Invoked when a text (type {@code 0x1}) message has been received. */
     @Override
     public void onMessage(WebSocket webSocket, String text) {
-        Log.i(TAG, "onMessage: text:"+text);
         try {
             Gson gson = global_config_object.getInstance().getGsonBuilder().create();
             int id = Integer.parseInt(new JSONObject(text).getString("id"));
@@ -145,9 +144,11 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
+        Log.i(TAG, "onFailure: ");
         mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
-        BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
-        thread.start();
+        MarketStat marketStat = BtslandApplication.getMarketStat();
+        MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
+        connect.start();
 
     }
 
@@ -346,6 +347,26 @@ public class Websocket_api extends WebSocketListener {
 //        return marketTicker;
 //
 //    }
+    public List<asset> list_account_balances(object_id<account_object> accountId) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_account_balances");
+
+        List<Object> listAccountBalancesParam = new ArrayList<>();
+        listAccountBalancesParam.add(accountId);
+        listAccountBalancesParam.add(new ArrayList<Object>());
+        callObject.params.add(listAccountBalancesParam);
+
+
+        ReplyObjectProcess<Reply<List<asset>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset>>>(){}.getType());
+        Reply<List<asset>> replyLookupAccountNames = sendForReply(callObject, replyObject);
+
+        return replyLookupAccountNames.result;
+    }
     public List<bucket_object>  get_market_history(String assetObjectId1,
                                                    String assetObjectId2,
                                                    int nBucket,
@@ -449,13 +470,9 @@ public class Websocket_api extends WebSocketListener {
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
-            BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
+            MarketStat marketStat = BtslandApplication.getMarketStat();
+            MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
+            connect.start();
         }
 
         return sendForReplyImpl(callObject, replyObjectProcess);
@@ -479,12 +496,9 @@ public class Websocket_api extends WebSocketListener {
                 }else if(BtslandApplication.mWebsocket!=null) {
                     bRet = BtslandApplication.mWebsocket.send(strMessage);
                 }else {
-                    BtslandApplication.ConnectThread thread=new BtslandApplication.ConnectThread();
-                    try {
-                        thread.join();
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                    MarketStat marketStat = BtslandApplication.getMarketStat();
+                    MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
+                    connect.start();
                 }
 
                 if (bRet==false) {

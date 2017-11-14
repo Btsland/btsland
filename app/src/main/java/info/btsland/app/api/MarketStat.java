@@ -3,6 +3,7 @@ package info.btsland.app.api;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.os.Looper;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -23,6 +24,7 @@ import info.btsland.app.model.MarketTrade;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.util.IDateUitl;
 
 
 public class MarketStat {
@@ -76,11 +78,10 @@ public class MarketStat {
 
 
     }
-    public void connect(int stats,
+    public Connect connect(int stats,
                           OnMarketStatUpdateListener l) {
         Connect connect = new Connect(stats, l);
-        connectHashMap.put("connect", connect);
-
+        return connect;
     }
     public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
@@ -133,12 +134,12 @@ public class MarketStat {
             subscription.updateImmediately();
         }
     }
-    public void updateConnect(String name) {
-        Connect connect = connectHashMap.get(name);
-        if (connect != null) {
-            connect.updateConnect();
-        }
-    }
+//    public void updateConnect(String name) {
+//        Connect connect = connectHashMap.get(name);
+//        if (connect != null) {
+//            connect.updateConnect();
+//        }
+//    }
     public static String makeMarketName(String base, String quote,int stats) {
         if((base==null||base=="")&&(quote==null||quote=="")){
             return "";
@@ -210,42 +211,25 @@ public class MarketStat {
         void onMarketStatUpdate(Stat stat);
     }
 
-    public class Connect implements Runnable {
+    public class Connect extends Thread {
         private int stats;
         private OnMarketStatUpdateListener listener;
-        private HandlerThread statThread;
-        private Handler statHandler;
-        private Handler handler=new Handler();
-        private Connect(int stats, OnMarketStatUpdateListener l) {
+        public HandlerThread statThread;
+        public Connect(int stats, OnMarketStatUpdateListener l) {
             this.stats = stats;
             this.listener = l;
-            this.statThread = new HandlerThread("connect");
-            this.statThread.start();
-            this.statHandler = new Handler(this.statThread.getLooper());
-            this.statHandler.post(this);
 
-        }
-        public void unConnect(String name) {
-            Connect connect = connectHashMap.get(name);
-            if (connect != null) {
-                connectHashMap.remove(connect);
-            }
         }
 
         @Override
-        public void run() {
+        public synchronized void run() {
             Log.i(TAG, "run: "+Thread.currentThread().getName());
             //登录
             final Stat stat = new Stat();
             if ((stats & STAT_COUNECT) != 0) {
                 stat.nRet= mWebsocketApi.connect();
-
                 listener.onMarketStatUpdate(stat);
             }
-        }
-
-        public void updateConnect() {
-            statHandler.post(this);
         }
     }
 
@@ -339,8 +323,10 @@ public class MarketStat {
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
                         for(int i=0;i<quotes.length;i++){
+                            Log.e(TAG, "run: base:"+base+"quotes[i]:"+quotes[i] );
                             stat.MarketTicker = mWebsocketApi.get_ticker(base,quotes[i]);
-                            new dataHandling(listener,stat).start();
+                            //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
+                            listener.onMarketStatUpdate(stat);
                         }
                         //this.updateImmediately();
                         return;
@@ -351,9 +337,11 @@ public class MarketStat {
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
                     Log.i(TAG, "run: ago:"+ago);
                     Log.i(TAG, "run: ago:"+TimeUnit.DAYS.toMillis(90));
-                    Date startDate = new Date(
-                            System.currentTimeMillis() -ago);
-                    stat.prices = getMarketHistory(base,quote,(int)bucketSecs,startDate);//1
+                    //设置初始时间和结束时间转化为国际时间
+                    Date startDate = IDateUitl.toUniversalTime(new Date(System.currentTimeMillis() -ago));
+                    Date endDate=IDateUitl.toUniversalTime(new Date());
+                    stat.prices = getMarketHistory(base,quote,(int)bucketSecs,startDate,endDate);//1
+                    //打印总条数
                     stat.bucket=bucketSecs;
                     stat.ago=ago;
                 }
@@ -402,8 +390,8 @@ public class MarketStat {
             }
         }
         class dataHandling extends Thread{
-            private final OnMarketStatUpdateListener listener;
-            private final Stat stat;
+            private OnMarketStatUpdateListener listener;
+            private Stat stat;
 
             public dataHandling(OnMarketStatUpdateListener listener, Stat stat) {
                 this.listener=listener;
@@ -430,28 +418,23 @@ public class MarketStat {
             return false;
         }
 
-        private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs,Date start) {
-            Date endDate = new Date();
-            List<bucket_object> buckets= getMarketHistory(base,quote,bucketSecs,start, endDate);
 
-            List<HistoryPrice> prices=new ArrayList<>();
-
-            if (buckets != null) {
-                for (int i = 0; i < buckets.size(); i++) {
-                    prices.add(priceFromBucket(base,quote,buckets.get(i)));
-                }
-            }
-            return prices;
-        }
-
-        private List<bucket_object> getMarketHistory(String base,String quote,int bucketSecs, Date start, Date end) {
+        private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs, Date start, Date end) {
             try {
                 baseAsset = mWebsocketApi.lookup_asset_symbols(base);
                 Log.e(TAG, "getMarketHistory: base_object.id:"+baseAsset.id );
                 quoteAsset = mWebsocketApi.lookup_asset_symbols(quote);
                 Log.e(TAG, "getMarketHistory: quote_object.id:"+quoteAsset.id );
-                return mWebsocketApi.get_market_history(
+                List<bucket_object> buckets=mWebsocketApi.get_market_history(
                         baseAsset.id, quoteAsset.id,bucketSecs, start, end);
+                List<HistoryPrice> prices=new ArrayList<>();
+
+                if (buckets != null) {
+                    for (int i = 0; i < buckets.size(); i++) {
+                        prices.add(priceFromBucket(base,quote,buckets.get(i)));
+                    }
+                }
+                return prices;
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
                 return null;
@@ -467,7 +450,8 @@ public class MarketStat {
             price.quote=quote;
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
             try {
-                price.date = df.parse(bucket.key.open);
+                //把国际时间转化为本地时间
+                price.date =IDateUitl.toLocalTime(df.parse(bucket.key.open));
             } catch (ParseException e) {
                 e.printStackTrace();
             }

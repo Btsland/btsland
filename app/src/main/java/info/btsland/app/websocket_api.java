@@ -149,10 +149,11 @@ public class websocket_api extends WebSocketListener {
 
         String network_broadcast = "{\"id\":9,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
         mWebsocket.send(network_broadcast);
+        String query5="{\"id\":5,\"method\":\"call\",\"params\":[1,\"list_account_balances\",[\"li-88888\"]]}";
+        mWebsocket.send(query5);
 
-
-        String query6 = "{\"id\":10,\"method\":\"call\",\"params\":[2,\"get_account_by_name\",[\"li-8888\"]]}";
-        mWebsocket.send(query6);
+//        String query6 = "{\"id\":10,\"method\":\"call\",\"params\":[2,\"get_account_by_name\",[\"li-8888\"]]}";
+//        mWebsocket.send(query6);
 
   /*      String query7 = "{\"id\":11,\"method\":\"call\",\"params\":[2,\"verify_account_authority\",[\"li-8888\",\"\"]]}";
         mWebsocket.send(query7);*/

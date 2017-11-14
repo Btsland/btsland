@@ -20,6 +20,7 @@ import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
 import info.btsland.app.ui.fragment.DetailedHaveInHandFragment;
 import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.view.IViewPager;
 
 public class MarketDetailedActivity extends AppCompatActivity{
     private HeadFragment headFragment;
@@ -54,7 +55,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
      */
     private void init(){
 
-        ViewPager viewPager= (ViewPager) findViewById(R.id.vp_detailed_page);
+        IViewPager viewPager= (IViewPager) findViewById(R.id.vp_detailed_page);
         String[] titles={"详情","买/卖","进行中"};
         List<Fragment> fragments=new ArrayList<Fragment>();
         DetailedKFragment detailedKFragment=DetailedKFragment.newInstance(market);

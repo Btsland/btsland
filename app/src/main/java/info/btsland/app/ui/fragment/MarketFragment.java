@@ -90,6 +90,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 break;
             case "BTS":
                 synchronized (this) {
+                    if(stat.MarketTicker.quote.equals("CNY")){
+                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:"+stat.MarketTicker);
+                    }
                     if (btsMarket != null && btsMarket.size() > quotes.length) {
                         btsMarket.clear();
                     }

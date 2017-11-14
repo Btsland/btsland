@@ -4,11 +4,15 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Looper;
 import android.support.multidex.MultiDexApplication;
+import android.text.format.DateUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +23,7 @@ import info.btsland.app.api.account_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.DataK;
 import info.btsland.app.ui.activity.WelcomeActivity;
+import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.InternetUtil;
 import okhttp3.WebSocket;
 
@@ -27,6 +32,7 @@ import okhttp3.WebSocket;
  */
 
 public class BtslandApplication  extends MultiDexApplication implements MarketStat.OnMarketStatUpdateListener{
+    private static final String TAG="BtslandApplication";
     private static Context instance;
 
     private static BtslandApplication application;
@@ -103,8 +109,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         instance=getApplicationContext();
         application=this;
         if(InternetUtil.isConnected(this)){
-                ConnectThread thread = new ConnectThread();
-                thread.start();
+                ConnectThread();
         }else {
             Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
         }
@@ -121,21 +126,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         QueryAccountThread queryAccountThread=new QueryAccountThread();
         queryAccountThread.start();
     }
-    public static class ConnectThread extends Thread{
-        @Override
-        public void run() {
-            Looper.prepare();
-            MarketStat marketStat = getMarketStat();
-            if(marketStat.connectHashMap!=null){
-                MarketStat.Connect connect = marketStat.connectHashMap.get("connect");
-                if(connect!=null){
-                    connect.updateConnect();
-                }
-                else{
-                    marketStat.connect(MarketStat.STAT_COUNECT,getListener());
-                }
-            }
-        }
+    public static void ConnectThread(){
+        MarketStat marketStat = getMarketStat();
+        MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
+        connect.start();
     }
     public static class QueryAccountThread extends Thread{
         @Override

@@ -24,10 +24,10 @@ import info.btsland.app.ui.view.IViewPager;
 
 public class MarketDetailedActivity extends AppCompatActivity{
     private HeadFragment headFragment;
-    public MarketTicker market;
-    public TextView textView;
+    public static MarketTicker market;
 
-    public static String key;
+    public static String title;
+
     public static void startAction(Context context, MarketTicker market){
         Intent intent = new Intent(context, MarketDetailedActivity.class);
         intent.putExtra("MarketTicker", market);
@@ -38,7 +38,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
         this.market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
-        this.key=market.quote+"/"+market.base;
+        this.title=market.quote+":"+market.base;
         fillInHead();
         init();
     }
@@ -47,7 +47,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
     protected void onStart() {
         super.onStart();
         TextView textView = headFragment.getView().findViewById(R.id.tv_head_title);
-        textView.setText(key);
+        textView.setText(title);
     }
     int index = 0 ;
     /**

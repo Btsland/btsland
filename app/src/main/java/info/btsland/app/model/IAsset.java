@@ -21,6 +21,10 @@ public class IAsset {
     public Double usable;
     public Double orders;
     public String coinName;
+    public IAsset( String coinName){
+        this.coinName=coinName;
+        mAsset=new asset();
+    }
     public IAsset(asset mAsset) {
         this.mAsset=mAsset;
         fillIn();

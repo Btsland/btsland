@@ -53,16 +53,22 @@ public class PurseAssetActivity extends AppCompatActivity {
 
     private void setLvAsset(){
         assets =BtslandApplication.accountObject.assetlist;
-        if(assets==null||assets.size()==0){
-            return ;
-        }
-        List<IAsset> iAssets=new ArrayList <>();
-        for(int i=0;i<assets.size();i++){
-            iAssets.add(new IAsset(assets.get(i)));
-        }
         Log.e(TAG, "setLvAsset: "+assets.size() );
-        adapter=new AssetSimpleCursorAdapter(this,iAssets);
-        lvAsset.setAdapter(adapter);
+        List<IAsset> iAssets=new ArrayList <>();
+        if(assets==null||assets.size()==0){
+            iAssets.add(new IAsset("BTS"));
+            iAssets.add(new IAsset("CNY"));
+
+            adapter=new AssetSimpleCursorAdapter(this,iAssets);
+            lvAsset.setAdapter(adapter);
+        }else{
+            for(int i=0;i<assets.size();i++){
+                iAssets.add(new IAsset(assets.get(i)));
+            }
+            Log.e(TAG, "setLvAsset: "+assets.size() );
+            adapter=new AssetSimpleCursorAdapter(this,iAssets);
+            lvAsset.setAdapter(adapter);
+        }
     }
 
 

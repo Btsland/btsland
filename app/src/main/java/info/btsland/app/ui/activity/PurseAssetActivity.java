@@ -13,6 +13,7 @@ import info.btsland.app.Adapter.AssetSimpleCursorAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.asset;
+import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 /**
@@ -52,8 +53,15 @@ public class PurseAssetActivity extends AppCompatActivity {
 
     private void setLvAsset(){
         assets =BtslandApplication.accountObject.assetlist;
+        if(assets==null||assets.size()==0){
+            return ;
+        }
+        List<IAsset> iAssets=new ArrayList <>();
+        for(int i=0;i<assets.size();i++){
+            iAssets.add(new IAsset(assets.get(i)));
+        }
         Log.e(TAG, "setLvAsset: "+assets.size() );
-        adapter=new AssetSimpleCursorAdapter(this,assets);
+        adapter=new AssetSimpleCursorAdapter(this,iAssets);
         lvAsset.setAdapter(adapter);
     }
 

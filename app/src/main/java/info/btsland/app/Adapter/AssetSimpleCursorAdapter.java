@@ -11,7 +11,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import info.btsland.app.R;
-import info.btsland.app.api.asset;
+import info.btsland.app.model.IAsset;
 
 /**
  * author：lw1000
@@ -22,9 +22,9 @@ import info.btsland.app.api.asset;
 public class AssetSimpleCursorAdapter extends BaseAdapter {
     private static final String TAG="AssetSimpleCursorAdapter";
     private  Context context;
-    private  List<asset> assets;
+    private  List<IAsset> assets;
     private LayoutInflater inflater;
-    public AssetSimpleCursorAdapter(Context context, List<asset> assets) {
+    public AssetSimpleCursorAdapter(Context context, List<IAsset> assets) {
         this.context=context;
         this.assets=assets;
         this.inflater=LayoutInflater.from(context);
@@ -57,8 +57,8 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         }
         TextView tvAssetCoin=convertView.findViewById(R.id.tv_asset_coin);
         TextView tvAssetNum=convertView.findViewById(R.id.tv_asset_num);
-        tvAssetCoin.setText(String.valueOf(assets.get(position).asset_id));
-        tvAssetNum.setText(String.valueOf(assets.get(position).amount));
+        tvAssetCoin.setText(String.valueOf(assets.get(position).coinName));
+        tvAssetNum.setText(String.valueOf(assets.get(position).total));
         return convertView;
     }
 }

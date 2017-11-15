@@ -32,6 +32,8 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
+import static info.btsland.app.BtslandApplication._nDatabaseId;
+
 public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
     private String TAG="websocket_api";
@@ -234,10 +236,10 @@ public class Websocket_api extends WebSocketListener {
         try {
             bLogin = login("","");
             if (bLogin == true) {
-                BtslandApplication._nDatabaseId = get_websocket_bitshares_api_id("database");
+                _nDatabaseId = get_websocket_bitshares_api_id("database");
                 BtslandApplication._nHistoryId = get_websocket_bitshares_api_id("history");
                 BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
-                Log.i(TAG, "connect: _nDatabaseId:"+BtslandApplication._nDatabaseId);
+                Log.i(TAG, "connect: _nDatabaseId:"+ _nDatabaseId);
                 Log.i(TAG, "connect: _nHistoryId:"+BtslandApplication._nHistoryId);
                 Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
 //                String query9="{\"id\":111111,\"method\":\"call\",\"params\":[2,\"list_account_balances\",[\"li-88888\",[]]]}";
@@ -262,12 +264,34 @@ public class Websocket_api extends WebSocketListener {
 
         return nRet;
     }
+    public List<asset_object> get_assets(List<object_id<asset_object>> listAssetObjectId) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_assets");
+
+        List<Object> listAssetsParam = new ArrayList<>();
+
+        List<Object> listObjectId = new ArrayList<>();
+        listObjectId.addAll(listAssetObjectId);
+
+        listAssetsParam.add(listObjectId);
+        callObject.params.add(listAssetsParam);
+
+        ReplyObjectProcess<Reply<List<asset_object>>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset_object>>>(){}.getType());
+        Reply<List<asset_object>> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+    }
     public account_object get_account_by_name(String name) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_account_by_name");
         List<String> list=new ArrayList<>();
         list.add(name);
@@ -278,12 +302,33 @@ public class Websocket_api extends WebSocketListener {
         Reply<account_object> replyAccountObjectList = sendForReply(callObject, replyObject);
         return replyAccountObjectList.result;
     }
+    public List<account_object> get_accounts(List<object_id<account_object>> listAccountObjectId) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_accounts");
+
+        List<Object> listAccountIds = new ArrayList<>();
+        listAccountIds.add(listAccountObjectId);
+
+        List<Object> listAccountNamesParams = new ArrayList<>();
+        listAccountNamesParams.add(listAccountIds);
+
+        callObject.params.add(listAccountIds);
+        ReplyObjectProcess<Reply<List<account_object>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<account_object>>>(){}.getType());
+        Reply<List<account_object>> replyAccountObjectList = sendForReply(callObject, replyObject);
+
+        return replyAccountObjectList.result;
+    }
     public sha256_object get_chain_id() throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_chain_id");
 
         List<Object> listDatabaseParams = new ArrayList<>();
@@ -320,7 +365,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("lookup_asset_symbols");
 
         List<Object> listAssetsParam = new ArrayList<>();
@@ -337,25 +382,65 @@ public class Websocket_api extends WebSocketListener {
 
         return replyObject.result.get(0);
     }
-//    public MarketTicker  get_ticker_base(String base,String quote) throws NetworkStatusException {
-//        Log.i(TAG, "get_ticker_base: ");
-//        if(base==null||base=="") {
-//            return null;
-//        }
-//        MarketTicker marketTicker=null;
-//
-//        marketTicker= get_ticker(base,quote);
-//        //Log.e("websocket_ap1", "get_ticker_base: marketTicker"+marketTicker.toString() );
-//
-//        return marketTicker;
-//
-//    }
+    public int broadcast_transaction(signed_transaction tx) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nBroadcastId);
+        callObject.params.add("broadcast_transaction");
+        List<Object> listTransaction = new ArrayList<>();
+        listTransaction.add(tx);
+        callObject.params.add(listTransaction);
+
+        ReplyObjectProcess<Reply<Object>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<Integer>>(){}.getType());
+        Reply<Object> replyObject = sendForReply(callObject, replyObjectProcess);
+        if (replyObject.error != null) {
+            throw new NetworkStatusException(replyObject.error.message);
+        } else {
+            return 0;
+        }
+    }
+    public global_property_object get_global_properties() throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_global_properties");
+
+        callObject.params.add(new ArrayList<>());
+
+        ReplyObjectProcess<Reply<global_property_object>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<global_property_object>>(){}.getType());
+        Reply<global_property_object> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+    }
+    public dynamic_global_property_object get_dynamic_global_properties() throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_dynamic_global_properties");
+
+        callObject.params.add(new ArrayList<Object>());
+
+        ReplyObjectProcess<Reply<dynamic_global_property_object>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<dynamic_global_property_object>>(){}.getType());
+        Reply<dynamic_global_property_object> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+
+    }
     public List<asset> list_account_balances_by_id(object_id<account_object> accountId) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_account_balances");
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
@@ -375,7 +460,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_named_account_balances");
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
@@ -390,8 +475,8 @@ public class Websocket_api extends WebSocketListener {
 
         return replyLookupAccountNames.result;
     }
-    public List<bucket_object>  get_market_history(String assetObjectId1,
-                                                   String assetObjectId2,
+    public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
+                                                   object_id<asset_object> assetObjectId2,
                                                    int nBucket,
                                                    Date dateStart,
                                                    Date dateEnd) throws NetworkStatusException {
@@ -404,8 +489,8 @@ public class Websocket_api extends WebSocketListener {
         callObject.params.add("get_market_history");
 
         List<Object> listParams = new ArrayList<>();
-        listParams.add(assetObjectId1);
-        listParams.add(assetObjectId2);
+        listParams.add(assetObjectId1.toString());
+        listParams.add(assetObjectId2.toString());
         listParams.add(nBucket);
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
         listParams.add(df.format(dateStart));
@@ -418,20 +503,20 @@ public class Websocket_api extends WebSocketListener {
         return replyObject.result;
 
     }
-    public List<limit_order_object> get_limit_orders(String base,
-                                                     String quote,
+    public List<limit_order_object> get_limit_orders(object_id<asset_object> baseid,
+                                                     object_id<asset_object> quoteid,
                                                      int limit) throws NetworkStatusException {
         Log.i(TAG, "get_limit_orders: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_limit_orders");
 
         List<Object> listParams = new ArrayList<>();
-        listParams.add(base);
-        listParams.add(quote);
+        listParams.add(baseid.toString());
+        listParams.add(quoteid.toString());
         listParams.add(limit);
         callObject.params.add(listParams);
 
@@ -448,7 +533,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_trade_history");
 
         List<Object> listParams = new ArrayList<>();
@@ -474,7 +559,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_ticker");
 
         List<Object> listParams = new ArrayList<>();

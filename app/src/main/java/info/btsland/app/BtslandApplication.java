@@ -162,7 +162,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             super.run();
             synchronized (accountObject.assetlist) {
                 try {
-                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("btsland");
+                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
                     if(assets!=null){
                         accountObject.assetlist=assets;
                     }else {

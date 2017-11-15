@@ -377,6 +377,7 @@ public class MarketStat {
                     }
                 }
                 if ((stats & STAT_MARKET_ORDER_BOOK) != 0) {
+
                     stat.orderBook = getOrderBook();
                 }
                 if (isCancelled.get()) {
@@ -499,9 +500,10 @@ public class MarketStat {
         }
 
         private OrderBook getOrderBook() {
+            getAssets();
             try {
                 List<limit_order_object> orders =
-                        mWebsocketApi.get_limit_orders(base, quote, 200);
+                        mWebsocketApi.get_limit_orders(baseAsset.id, quoteAsset.id, 50);
                 if (orders != null) {
                     OrderBook orderBook = new OrderBook();
                     orderBook.base = baseAsset.symbol;

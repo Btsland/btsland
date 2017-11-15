@@ -10,12 +10,16 @@
         android:layout_weight="1"
         android:layout_height="30dp"
         android:textSize="14sp"
-        android:gravity="center|left"/>
+        android:maxLength="8"
+        android:textColor="@color/color_darkGrey"
+        android:gravity="center"/>
     <TextView
         android:id="@+id/tv_item_vol"
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="30dp"
         android:text="14sp"
-        android:gravity="center|right"/>
+        android:maxLength="8"
+        android:textColor="@color/color_darkGrey"
+        android:gravity="center"/>
 </LinearLayout>

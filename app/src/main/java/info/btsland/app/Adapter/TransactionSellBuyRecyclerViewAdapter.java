@@ -1,6 +1,7 @@
 package info.btsland.app.Adapter;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,11 +24,11 @@ public class TransactionSellBuyRecyclerViewAdapter extends RecyclerView.Adapter<
     }
 
     public void setList(List<Order> list){
-        if(getItemCount()>0){
-            notifyItemRangeRemoved(0,getItemCount());
-        }
+//        if(getItemCount()>0){
+//            notifyItemRangeRemoved(0,getItemCount());
+//        }
         this.list = list;
-        notifyItemRangeInserted(0,getItemCount());
+//        notifyItemRangeInserted(0,getItemCount());
     }
 
     @Override
@@ -56,13 +57,14 @@ public class TransactionSellBuyRecyclerViewAdapter extends RecyclerView.Adapter<
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            tvPrice = (TextView) view.findViewById(R.id.tv_item_vol);
+            tvPrice = (TextView) view.findViewById(R.id.tv_item_price);
             tvVol = (TextView) view.findViewById(R.id.tv_item_vol);
         }
 
         public void update(Order order){
-            tvPrice.setText(String .format("%.4f",order.price));
-            tvVol.setText(String .format("%.4f",order.quote));
+            Log.i("adapder", "update: order:"+order);
+            tvPrice.setText(String.valueOf(order.price));
+            tvVol.setText(String.valueOf(order.quote));
         }
     }
 }

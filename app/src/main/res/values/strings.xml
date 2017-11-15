@@ -111,4 +111,12 @@
     <string name="charge">手续费：</string>
     <string name="price">价格：</string>
     <string name="vol">数量：</string>
+    <string name="label_want">操作：</string>
+    <string name="label_price">价格：</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确认</string>
+    <string name="label_please_confirm">请确认订单</string>
+    <string name="pwd_point">请输入你的密码</string>
+    <string name="password_invalid">密码错误</string>
+    <string name="please_enter_password">请输入密码</string>
 </resources>

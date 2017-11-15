@@ -1,9 +1,14 @@
 package info.btsland.app.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +23,10 @@ import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.ui.view.ConfirmOrderDialog;
 
-public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
+public class DetailedBuyAndSellFragment extends Fragment
+        implements MarketStat.OnMarketStatUpdateListener {
     private static final String MARKET = "market";
     public static String TAG = "DetailedBuyAndSellFragment";
 
@@ -37,6 +44,11 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
 
     private TextView tvChargeNum;//手续费数组
     private TextView tvChageCoin;//手续费货币
+
+    private TextView tvBuy;
+    private TextView tvSell;
+
+    private Double total;
 
     private double lowSellPrice = -1;
     private double highBuyPrice = -1;
@@ -80,6 +92,7 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
     @Override
     public void onStart() {
         super.onStart();
+        fillIn();
         startReceiveMarkets();
     }
 
@@ -97,6 +110,9 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
         tvTotalCoin=view.findViewById(R.id.tv_total_coin);
         tvChageCoin=view.findViewById(R.id.tv_charge_coin);
 
+        tvBuy=view.findViewById(R.id.tv_detailed_buy);
+        tvSell=view.findViewById(R.id.tv_detailed_sell);
+
         rlvBuy.setLayoutManager(new LinearLayoutManager(getContext()));
         rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter();
         rlvBuy.setAdapter(rlvBuyAdapter);
@@ -109,9 +125,8 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
 
         tvChargeNum.setText("0.00");
         tvTotalNum.setText("0.00");
-        setText();
     }
-    private void setText(){
+    private void fillIn(){
         MarketTicker market=MarketDetailedActivity.market;
         tvNewPrice.setText(market.latest);
         if (MarketDetailedActivity.market.percent_change > 0) {
@@ -126,14 +141,107 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
         tvNewPriceCoin.setText(market.base+"/"+market.quote);
         tvPriceCoin.setText(market.base);
         tvVolCoin.setText(market.quote);
+        edPrice.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Double price= 0.0;
+                Double vol=0.0;
+                String strPrice = editable.toString();
+                if(strPrice!=null&&strPrice.length()!=0){
+                    price= Double.valueOf(strPrice);
+                }
+                String strVol = edVol.getText().toString();
+                if(strVol!=null&&strVol.length()!=0){
+                    vol= Double.valueOf(edVol.getText().toString());
+                }
+                total=price*vol;
+                tvTotalNum.setText(String.valueOf(total));
+            }
+        });
+        edVol.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                Double vol= 0.0;
+                Double price=0.0;
+                String strVol = editable.toString();
+                if(strVol!=null&&strVol.length()!=0){
+                    vol= Double.valueOf(strVol);
+                }
+                String strPrice = edPrice.getText().toString();
+                if(strPrice!=null&&strPrice.length()!=0){
+                    price= Double.valueOf(edPrice.getText().toString());
+                }
+                total=price*vol;
+                tvTotalNum.setText(String.valueOf(total));
+            }
+        });
         tvTotalCoin.setText(market.base);
         tvChageCoin.setText("BTS");
+        tvBuy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ConfirmOrderDialog dialog=new ConfirmOrderDialog(getActivity(),
+                        new ConfirmOrderDialog.ConfirmOrderData(
+                                "买入",
+                                edPrice.getText().toString(),
+                                tvPriceCoin.getText().toString(),
+                                tvTotalNum.getText().toString(),
+                                edVol.getText().toString(),
+                                tvChargeNum.getText().toString(),
+                                tvVolCoin.getText().toString(),
+                                tvTotalCoin.getText().toString(),
+                                tvChageCoin.getText().toString()
+                        ),
+                        new DialogListener());
+                dialog.show();
+            }
+        });
+        tvSell.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ConfirmOrderDialog dialog=new ConfirmOrderDialog(getActivity(),
+                        new ConfirmOrderDialog.ConfirmOrderData(
+                                "卖出",
+                                edPrice.getText().toString(),
+                                tvPriceCoin.getText().toString(),
+                                tvTotalNum.getText().toString(),
+                                edVol.getText().toString(),
+                                tvChargeNum.getText().toString(),
+                                tvVolCoin.getText().toString(),
+                                tvTotalCoin.getText().toString(),
+                                tvChageCoin.getText().toString()
+                        ),
+                        new DialogListener());
+                dialog.show();
+            }
+        });
     }
 
     /**
      * 启动查询数据线程
      */
     public void startReceiveMarkets() {
+
         Log.i(TAG, "startReceiveMarkets: ");
         BtslandApplication.getMarketStat().subscribe(
                 MarketDetailedActivity.market.base,
@@ -150,14 +258,42 @@ public class DetailedBuyAndSellFragment extends Fragment implements MarketStat.O
         if (stat.orderBook.bids != null && !stat.orderBook.bids.isEmpty()) {
             rlvBuyAdapter.setList(stat.orderBook.bids.subList(0, 15));
             highBuyPrice = stat.orderBook.bids.get(0).price;
+            handler.sendEmptyMessage(1);
         } else {
             highBuyPrice = -1;
         }
         if (stat.orderBook.asks != null && !stat.orderBook.asks.isEmpty()) {
             rlvSellAdapter.setList(stat.orderBook.asks.subList(0, 15));
             lowSellPrice = stat.orderBook.asks.get(0).price;
+            handler.sendEmptyMessage(2);
         } else {
             lowSellPrice = -1;
+            handler.sendEmptyMessage(-1);
         }
     }
-}
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                rlvBuyAdapter.notifyDataSetChanged();
+            }else if(msg.what==2){
+                rlvSellAdapter.notifyDataSetChanged();
+            }else if(msg.what==-1){
+
+            }
+        }
+    };
+
+    class DialogListener implements ConfirmOrderDialog.OnDialogInterationListener {
+
+        @Override
+        public void onConfirm() {
+
+        }
+
+        @Override
+        public void onReject() {
+        }
+    }
+
+ }

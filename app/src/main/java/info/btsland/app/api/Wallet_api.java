@@ -10,9 +10,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.CreateAccountException;
@@ -344,4 +349,158 @@ public class Wallet_api {
         return;
 
     }
+    public signed_transaction sell_asset(String amountToSell, String symbolToSell,
+                                         String minToReceive, String symbolToReceive,
+                                         int timeoutSecs, boolean fillOrKill)
+            throws NetworkStatusException {
+        // 这是用于出售的帐号
+        account_object accountObject = BtslandApplication.accountObject;
+        operations.limit_order_create_operation op = new operations.limit_order_create_operation();
+        op.seller = accountObject.id;
+
+        // 填充数据
+        op.amount_to_sell =mWebsocketApi.lookup_asset_symbols(symbolToSell).amount_from_string(amountToSell);
+        op.min_to_receive =mWebsocketApi.lookup_asset_symbols(symbolToReceive).amount_from_string(minToReceive);
+        if (timeoutSecs > 0) {
+            op.expiration = new Date(
+                    System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSecs));
+        } else {
+            op.expiration = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365));
+        }
+        op.fill_or_kill = fillOrKill;
+        op.extensions = new HashSet<>();
+
+        operations.operation_type operationType = new operations.operation_type();
+        operationType.nOperationType = operations.ID_CREATE_LIMIT_ORDER_OPERATION;
+        operationType.operationContent = op;
+
+        signed_transaction tx = new signed_transaction();
+        tx.operations = new ArrayList<>();
+        tx.operations.add(operationType);
+
+        tx.extensions = new HashSet<>();
+        set_operation_fees(tx, mWebsocketApi.get_global_properties().parameters.current_fees);
+
+        return sign_transaction(tx);
+    }
+
+    /**
+     * @param symbolToSell 卖出的货币符号
+     * @param symbolToReceive 买入的货币符号
+     * @param rate 多少个<t>symbolToReceive</t>可以兑换一个<t>symbolToSell</t>
+     * @param amount 要卖出多少个<t>symbolToSell</t>
+     * @throws NetworkStatusException
+     */
+    public signed_transaction sell(String symbolToSell, String symbolToReceive, double rate,
+                                   double amount) throws NetworkStatusException {
+        return sell_asset(Double.toString(amount), symbolToSell, Double.toString(rate * amount),
+                symbolToReceive, 0, false);
+    }
+
+    public signed_transaction sell(String symbolToSell, String symbolToReceive, double rate,
+                                   double amount, int timeoutSecs) throws NetworkStatusException {
+        return sell_asset(Double.toString(amount), symbolToSell, Double.toString(rate * amount),
+                symbolToReceive, timeoutSecs, false);
+    }
+
+    /**
+     * @param symbolToReceive 买入的货币符号
+     * @param symbolToSell 卖出的货币符号
+     * @param rate 多少个<t>symbolToSell</t>可以兑换一个<t>symbolToReceive</t>
+     * @param amount 要买入多少个<t>symbolToReceive</t>
+     * @throws NetworkStatusException
+     */
+    public signed_transaction buy(String symbolToReceive, String symbolToSell, double rate,
+                                  double amount) throws NetworkStatusException {
+        return sell_asset(Double.toString(rate * amount), symbolToSell, Double.toString(amount),
+                symbolToReceive, 0, false);
+    }
+
+    public signed_transaction buy(String symbolToReceive, String symbolToSell, double rate,
+                                  double amount, int timeoutSecs) throws NetworkStatusException {
+        return sell_asset(Double.toString(rate * amount), symbolToSell, Double.toString(amount),
+                symbolToReceive, timeoutSecs, false);
+    }
+    private void set_operation_fees(signed_transaction tx, fee_schedule feeSchedule) {
+        for (operations.operation_type operationType : tx.operations) {
+            feeSchedule.set_fee(operationType, price.unit_price(new object_id<asset_object>(0, asset_object.class)));
+        }
+    }
+    private signed_transaction sign_transaction(signed_transaction tx) throws NetworkStatusException {
+        // // TODO: 07/09/2017 这里的set应出问题
+        signed_transaction.required_authorities requiresAuthorities = tx.get_required_authorities();
+
+        Set<object_id<account_object>> req_active_approvals = new HashSet<>();
+        req_active_approvals.addAll(requiresAuthorities.active);
+
+        Set<object_id<account_object>> req_owner_approvals = new HashSet<>();
+        req_owner_approvals.addAll(requiresAuthorities.owner);
+
+
+        for (authority authorityObject : requiresAuthorities.other) {
+            for (object_id<account_object> accountObjectId : authorityObject.account_auths.keySet()) {
+                req_active_approvals.add(accountObjectId);
+            }
+        }
+
+        Set<object_id<account_object>> accountObjectAll = new HashSet<>();
+        accountObjectAll.addAll(req_active_approvals);
+        accountObjectAll.addAll(req_owner_approvals);
+
+
+        List<object_id<account_object>> listAccountObjectId = new ArrayList<>();
+        listAccountObjectId.addAll(accountObjectAll);
+
+        List<account_object> listAccountObject = mWebsocketApi.get_accounts(listAccountObjectId);
+        HashMap<object_id<account_object>, account_object> hashMapIdToObject = new HashMap<>();
+        for (account_object accountObject : listAccountObject) {
+            hashMapIdToObject.put(accountObject.id, accountObject);
+        }
+
+        HashSet<types.public_key_type> approving_key_set = new HashSet<>();
+        for (object_id<account_object> accountObjectId : req_active_approvals) {
+            account_object accountObject = hashMapIdToObject.get(accountObjectId);
+            approving_key_set.addAll(accountObject.active.get_keys());
+        }
+
+        for (object_id<account_object> accountObjectId : req_owner_approvals) {
+            account_object accountObject = hashMapIdToObject.get(accountObjectId);
+            approving_key_set.addAll(accountObject.owner.get_keys());
+        }
+
+        for (authority authorityObject : requiresAuthorities.other) {
+            for (types.public_key_type publicKeyType : authorityObject.get_keys()) {
+                approving_key_set.add(publicKeyType);
+            }
+        }
+
+        // // TODO: 07/09/2017 被简化了
+        dynamic_global_property_object dynamicGlobalPropertyObject = mWebsocketApi.get_dynamic_global_properties();
+        tx.set_reference_block(dynamicGlobalPropertyObject.head_block_id);
+
+        Date dateObject = dynamicGlobalPropertyObject.time;
+        Calendar calender = Calendar.getInstance();
+        calender.setTime(dateObject);
+        calender.add(Calendar.SECOND, 30);
+
+        dateObject = calender.getTime();
+
+        tx.set_expiration(dateObject);
+
+        for (types.public_key_type pulicKeyType : approving_key_set) {
+            types.private_key_type privateKey = mHashMapPub2Priv.get(pulicKeyType);
+            if (privateKey != null) {
+                tx.sign(privateKey, mWalletObject.chain_id);
+            }
+        }
+
+        // 发出tx，进行广播，这里也涉及到序列化
+            int nRet = mWebsocketApi.broadcast_transaction(tx);
+        if (nRet == 0) {
+            return tx;
+        } else {
+            return null;
+        }
+    }
+
 }

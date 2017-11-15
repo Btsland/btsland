@@ -5,8 +5,11 @@ import java.math.BigInteger;
 
 
 public class asset {
-    public long amount;
+    public long amount=0;
     public object_id<asset_object> asset_id;
+
+    public asset() {
+    }
 
     public asset(long lAmount, object_id<asset_object> assetObjectobjectId) {
         amount = lAmount;

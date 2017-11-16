@@ -3,6 +3,7 @@ package info.btsland.app;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
@@ -36,7 +37,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static boolean isLogin=false;
 
-    public static account_object accountObject=new account_object();
+    public static account_object accountObject;
     public static List<IAsset> iAssets;
     public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
@@ -122,7 +123,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
 
     /**
-     * 登录线程
+     * 第二次登录线程
      *
      */
     private static class QueryAccountThread extends Thread{
@@ -139,11 +140,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+                Log.e(TAG, "run: accountObject:"+accountObject.toString());
                 queryAsset();
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
-                if(accountObject!=null){
-                    isLogin=true;
-                }
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
             }

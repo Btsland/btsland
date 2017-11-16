@@ -78,19 +78,19 @@
         android:background="?attr/backgroundColor"
         app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin3"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tv_market_left_coin5"/>
-    <TextView
-        android:id="@+id/tv_market_left_coin5"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:textSize="14sp"
-        android:text="ETH"
-        android:gravity="center"
-        android:textColor="@color/color_white"
-        android:background="@color/color_darkGrey"
-        app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin4"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
+    <!--<TextView-->
+        <!--android:id="@+id/tv_market_left_coin5"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:textSize="14sp"-->
+        <!--android:text="ETH"-->
+        <!--android:gravity="center"-->
+        <!--android:textColor="@color/color_white"-->
+        <!--android:background="@color/color_darkGrey"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/tv_market_left_coin4"-->
+        <!--app:layout_constraintLeft_toLeftOf="parent"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"/>-->
 
     <ListView
         android:id="@+id/lv_market_info"

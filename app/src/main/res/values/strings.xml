@@ -98,7 +98,7 @@
     <string name="User_name_cannot_end_with_一">用户名不能以“-”结尾</string>
     <string name="User_name_must_not_contain_only_letters">用户名不能只包含字母</string>
     <string name="The_password_needs_at_least_12_characters_and_contains_at_least_1_capitals_and_1_digits">
-        密码需要至少12个字符，并至少包含1个大写字母和1个数字
+        密码长度至少12位，至少包含1个大写字母和1个数字
     </string>
     <string name="The_password_for_the_two_input_is_inconsistent">两个输入的密码不一致</string>
     <string name="User_name_is_valid_Query_is_already_available">用户名合法，正在查询是否已存在</string>

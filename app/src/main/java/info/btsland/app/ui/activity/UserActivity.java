@@ -29,6 +29,7 @@ public class UserActivity extends AppCompatActivity {
     private TextView tvUserEntrust;
     private TextView tvUserSeting;
     private TextView tvUserLogoff;
+    private TextView tvUserAnotherName;
     private HeadFragment headFragment;
     private WebView portrait;
     private SharedPreferences sharedPreferences;
@@ -44,7 +45,8 @@ public class UserActivity extends AppCompatActivity {
         init();
         if(BtslandApplication.accountObject!=null){
             createPortrait();//设置头像
-            tvUserName.setText("用户名："+BtslandApplication.accountObject.name);
+            tvUserName.setText(BtslandApplication.accountObject.name);
+            tvUserAnotherName.setText("#"+BtslandApplication.accountObject.id.get_instance());
         }
         sharedPreferences= getSharedPreferences("Login", Context.MODE_PRIVATE);
 
@@ -56,13 +58,14 @@ public class UserActivity extends AppCompatActivity {
     protected void init() {
         //初始化
         tvUserName = (TextView) findViewById(R.id.tv_user_name);
+        tvUserAnotherName = (TextView)findViewById(R.id.tv_user_anotherName);
         tvUserInfo = (TextView) findViewById(R.id.tv_user_info);
         tvUserWhiteList = (TextView) findViewById(R.id.tv_user_whiteList);
 //        tvUserPower = (TextView) findViewById(R.id.tv_user_power);
         tvUserRecent = (TextView) findViewById(R.id.tv_user_recent);
         tvUserEntrust = (TextView) findViewById(R.id.tv_user_entrust);
         tvUserSeting = (TextView) findViewById(R.id.tv_user_set);
-           tvUserLogoff=(TextView) findViewById(R.id.tv_user_logoff);
+        tvUserLogoff=(TextView) findViewById(R.id.tv_user_logoff);
         portrait= (WebView) findViewById(R.id.iv_user_pho);
         //绑定监听器
         tvUserInfo.setOnClickListener(new TextViewListener());

@@ -1,5 +1,6 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,8 +25,14 @@ import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
+import info.btsland.app.api.account_object;
+import info.btsland.app.api.asset;
+import info.btsland.app.api.asset_object;
+import info.btsland.app.api.global_property_object;
+import info.btsland.app.api.utils;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
 import info.btsland.app.ui.view.PasswordDialog;
@@ -56,6 +63,12 @@ public class DetailedBuyAndSellFragment extends Fragment
     private Double total;
 
     private KProgressHUD hud;
+    private PasswordDialog builder;
+    private asset_object btsAssetObj;
+    private asset_object baseAssetObj;
+    private asset_object quoteAssetObj;
+    private global_property_object globalPropertyObject;
+    private boolean isAssetObjIsInit;
 
     private double lowSellPrice = -1;
     private double highBuyPrice = -1;
@@ -105,6 +118,7 @@ public class DetailedBuyAndSellFragment extends Fragment
     @Override
     public void onStart() {
         super.onStart();
+        initFee();
         fillIn();
         startReceiveMarkets();
     }
@@ -171,7 +185,10 @@ public class DetailedBuyAndSellFragment extends Fragment
                 Double vol=0.0;
                 String strPrice = editable.toString();
                 if(strPrice!=null&&strPrice.length()!=0){
-                    price= Double.valueOf(strPrice);
+                    if(strPrice.substring(0,1).equals(".")){
+                        editable.insert(0,"0");
+                    }
+                    price= Double.valueOf(editable.toString());
                 }
                 String strVol = edVol.getText().toString();
                 if(strVol!=null&&strVol.length()!=0){
@@ -179,6 +196,8 @@ public class DetailedBuyAndSellFragment extends Fragment
                 }
                 total=price*vol;
                 tvTotalNum.setText(String.valueOf(total));
+                double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
+                tvChargeNum.setText(String.valueOf(fee));
             }
         });
         edVol.addTextChangedListener(new TextWatcher() {
@@ -198,7 +217,10 @@ public class DetailedBuyAndSellFragment extends Fragment
                 Double price=0.0;
                 String strVol = editable.toString();
                 if(strVol!=null&&strVol.length()!=0){
-                    vol= Double.valueOf(strVol);
+                    if(strVol.substring(0,1).equals(".")){
+                        editable.insert(0,"0");
+                    }
+                    vol= Double.valueOf(editable.toString());
                 }
                 String strPrice = edPrice.getText().toString();
                 if(strPrice!=null&&strPrice.length()!=0){
@@ -206,8 +228,11 @@ public class DetailedBuyAndSellFragment extends Fragment
                 }
                 total=price*vol;
                 tvTotalNum.setText(String.valueOf(total));
+                double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
+                tvChargeNum.setText(String.valueOf(fee));
             }
         });
+
         tvTotalCoin.setText(market.base);
         tvChageCoin.setText("BTS");
         tvBuy.setOnClickListener(new View.OnClickListener() {
@@ -304,20 +329,22 @@ public class DetailedBuyAndSellFragment extends Fragment
             }
         }
     };
-
+    private String strVolCoin;
+    private String strPriceCoin;
+    private double price;
+    private double vol;
+    private String mwant;
     class DialogListener implements ConfirmOrderDialog.OnDialogInterationListener {
         @Override
-        public void onConfirm(final String want) {
+        public void onConfirm(String want) {
+            mwant=want;
             String strPrice = edPrice.getText().toString();
             String strVol = edVol.getText().toString();
-            final String strVolCoin = tvVolCoin.getText().toString();
-            final String strPriceCoin= tvPriceCoin.getText().toString();
+            strVolCoin = tvVolCoin.getText().toString();
+            strPriceCoin= tvPriceCoin.getText().toString();
             if (strPrice.equals("") || strVol.equals("")) {
                 return;
             }
-
-            final double price;
-            final double vol;
             try {
                 price = Double.parseDouble(strPrice);
                 vol = Double.parseDouble(strVol);
@@ -329,72 +356,163 @@ public class DetailedBuyAndSellFragment extends Fragment
             if (price <= 0 || vol <= 0) {
                 return;
             }
-            if(want.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
-                try {
-                    BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-                }
-            }else if(want.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
-                try {
-                    BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-                }
+            if(!BtslandApplication.isLogin){
+                builder = new PasswordDialog(getActivity());
+                builder.setListener(new PasswordDialog.OnDialogInterationListener(){
+                    @Override
+                    public void onConfirm(AlertDialog dialog, String passwordString) {
+                        hud=KProgressHUD.create(getActivity());
+                        hud.setLabel(getResources().getString(R.string.please_wait));
+                        hud.show();
+                        try {
+                            account_object accountObject= BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
+                            if(accountObject!=null){
+                                BtslandApplication.isLogin=true;
+                                dialog.dismiss();
+                                goTrading();
+                            }
+                        } catch (NetworkStatusException e) {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onReject(AlertDialog dialog) {
+
+                    }
+                });
+                builder.show();
+            }else {
+
+                goTrading();
             }
-//            if (!BtslandApplication.getWalletApi().is_locked()) {
-//                if(want.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
-//                    try {
-//                        BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
-//                    } catch (NetworkStatusException e) {
-//                        e.printStackTrace();
-//                    }
-//                }else if(want.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
-//                    try {
-//                        BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
-//                    } catch (NetworkStatusException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            } else {
-//                PasswordDialog builder = new PasswordDialog(getActivity());
-//                builder.setListener(new PasswordDialog.OnDialogInterationListener() {
-//                    @Override
-//                    public void onConfirm(AlertDialog dialog, String passwordString) {
-//                        if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
-//                            dialog.dismiss();
-//                            if(want.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
-//                                try {
-//                                    BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
-//                                } catch (NetworkStatusException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }else if(want.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
-//                                try {
-//                                    BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
-//                                } catch (NetworkStatusException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        } else {
-//                            Toast.makeText(getContext(), getContext().getString(R.string.password_invalid), Toast.LENGTH_LONG).show();
-//                        }
-//                    }
-//
-//                    @Override
-//                    public void onReject(AlertDialog dialog) {
-//                        dialog.dismiss();
-//                    }
-//                });
-//                builder.show();
-//            }
+
         }
 
         @Override
         public void onReject() {
         }
 
+        private void goTrading(){
+            if (!BtslandApplication.getWalletApi().is_locked()) {
+                if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
+                    try {
+                        BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
+                    try {
+                        BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                builder = new PasswordDialog(getActivity());
+                builder.setListener(new PasswordDialog.OnDialogInterationListener() {
+                    @Override
+                    public void onConfirm(AlertDialog dialog, String passwordString) {
+                        if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
+                            dialog.dismiss();
+                            if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
+                                buy();
+                            }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
+                                sell();
+                            }
+                        } else {
+                            Toast.makeText(getContext(), getContext().getString(R.string.password_invalid), Toast.LENGTH_LONG).show();
+                        }
+                    }
+
+                    @Override
+                    public void onReject(AlertDialog dialog) {
+                        dialog.dismiss();
+                    }
+                });
+            }
+        }
     }
+    private void buy() {
+        hud.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
 
+                    handler2.sendEmptyMessage(1);
+                } catch (Exception e) {
+                    handler2.sendEmptyMessage(-1);
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void sell() {
+        hud.show();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
+                    handler2.sendEmptyMessage(1);
 
+                } catch (Exception e) {
+                    handler2.sendEmptyMessage(-1);
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private double calculateBuyFee(asset_object symbolToReceive, asset_object symbolToSell, double rate,
+                                   double amount) {
+        if (!isAssetObjIsInit) {
+            return 0;
+        }
+        asset a = BtslandApplication.getWalletApi().calculate_buy_fee(symbolToReceive, symbolToSell,
+                rate, amount, globalPropertyObject);
+        if (a.asset_id.equals(btsAssetObj.id)) {
+            tvChageCoin.setText(btsAssetObj.symbol);
+            return utils.get_asset_amount(a.amount, btsAssetObj);
+        } else if (a.asset_id.equals(baseAssetObj.id)) {
+            tvChageCoin.setText(baseAssetObj.symbol);
+            return utils.get_asset_amount(a.amount, baseAssetObj);
+        } else {
+            tvChageCoin.setText(quoteAssetObj.symbol);
+            return utils.get_asset_amount(a.amount, quoteAssetObj);
+        }
+    }
+    private void initFee() {
+        isAssetObjIsInit = false;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    btsAssetObj = BtslandApplication.getMarketStat().mWebsocketApi.lookup_asset_symbols("BTS");
+                    baseAssetObj = BtslandApplication.getMarketStat().mWebsocketApi.lookup_asset_symbols(MarketDetailedActivity.market.base);
+                    quoteAssetObj = BtslandApplication.getMarketStat().mWebsocketApi.lookup_asset_symbols(MarketDetailedActivity.market.quote);
+                    globalPropertyObject = BtslandApplication.getMarketStat().mWebsocketApi.get_global_properties();
+                    isAssetObjIsInit = true;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private Handler handler2=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                hud.dismiss();
+                Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
+            }else if(msg.what==-1){
+                hud.dismiss();
+                Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
  }

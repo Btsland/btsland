@@ -133,7 +133,7 @@ public class HeadFragment extends Fragment {
     class ToUserOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if (BtslandApplication.isLogin){
+            if (BtslandApplication.accountObject!=null){
                 Intent intent = new Intent(getActivity(), UserActivity.class);
                 getActivity().startActivity(intent);
             }else {

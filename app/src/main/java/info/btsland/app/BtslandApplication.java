@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import info.btsland.app.api.MarketStat;
+import info.btsland.app.api.Wallet_api;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.api.asset;
@@ -39,8 +40,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
 
-    public static MarketStat marketStat;
+    private static MarketStat marketStat;
     public static WebSocket mWebsocket;
+    private static Wallet_api walletApi;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
     public static int _nDatabaseId = -1;
@@ -52,13 +54,18 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static String[] quotes2={"CNY","BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
 
 
+    public static Wallet_api getWalletApi() {
+        if(walletApi==null){
+            walletApi=new Wallet_api();
+        }
+        return walletApi;
+    }
     public static MarketStat getMarketStat() {
         if(marketStat==null){
             marketStat=new MarketStat();
         }
         return marketStat;
     }
-
     public BtslandApplication() {
 
     }

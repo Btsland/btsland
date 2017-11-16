@@ -26,8 +26,11 @@ public class ConfirmOrderDialog {
     private TextView tvVolCoin;
     private TextView tvChargeCoin;
     private TextView tvTotalCoin;
+    private String want;
 
     public static class ConfirmOrderData {
+        public static final String BUY="buy";
+        public static final String SELL="sell";
         private String want;
         private String priceNum;
         private String priceCoin;
@@ -171,7 +174,13 @@ public class ConfirmOrderDialog {
     }
     public void fillin(){
         tvTitle.setText("请确认订单");
-        tvWant.setText(confirmOrderData.getWant());
+        if(confirmOrderData.getWant().equals(ConfirmOrderData.BUY)){
+            tvWant.setText("买入");
+            want=ConfirmOrderData.BUY;
+        }else if(confirmOrderData.getWant().equals(ConfirmOrderData.SELL)){
+            want=ConfirmOrderData.SELL;
+            tvWant.setText("卖出");
+        }
         tvPriceNum.setText(confirmOrderData.getPriceNum());
         tvPriceCoin.setText(confirmOrderData.getPriceCoin());
         tvVolNum.setText(confirmOrderData.getVolNum());
@@ -186,7 +195,7 @@ public class ConfirmOrderDialog {
             public void onClick(View v) {
                 mDialog.dismiss();
                 if(mListener != null){
-                    mListener.onConfirm();
+                    mListener.onConfirm(want);
                 }
             }
         });
@@ -212,7 +221,7 @@ public class ConfirmOrderDialog {
     }
 
     public interface OnDialogInterationListener {
-        void onConfirm();
+        void onConfirm(String want);
         void onReject();
     }
 }

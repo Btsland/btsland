@@ -6,6 +6,7 @@ import com.google.common.primitives.UnsignedInteger;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -34,6 +35,7 @@ import okhttp3.Response;
  */
 
 public class Wallet_api {
+    private static int buyTimeSec = 5 * 365 * 24 * 60 * 60;
     private static final String TAG="Wallet_api";
 
     private Websocket_api mWebsocketApi;
@@ -133,7 +135,43 @@ public class Wallet_api {
         }
         return nRet;
     }
+    public boolean is_locked() {
+        if (mWalletObject.cipher_keys.array().length > 0 &&
+                mCheckSum.equals(new sha512_object())) {
+            return true;
+        }
 
+        return false;
+    }
+    public int unlock(String strPassword) {
+        assert(strPassword.length() > 0);
+        sha512_object passwordHash = sha512_object.create_from_string(strPassword);
+        byte[] byteKey = new byte[32];
+        System.arraycopy(passwordHash.hash, 0, byteKey, 0, byteKey.length);
+        byte[] ivBytes = new byte[16];
+        System.arraycopy(passwordHash.hash, 32, ivBytes, 0, ivBytes.length);
+
+        ByteBuffer byteDecrypt = aes.decrypt(byteKey, ivBytes, mWalletObject.cipher_keys.array());
+        if (byteDecrypt == null || byteDecrypt.array().length == 0) {
+            return -1;
+        }
+
+        plain_keys dataResult = plain_keys.from_input_stream(
+                new ByteArrayInputStream(byteDecrypt.array())
+        );
+
+        for (Map.Entry<types.public_key_type, String> entry : dataResult.keys.entrySet()) {
+            types.private_key_type privateKeyType = new types.private_key_type(entry.getValue());
+            mHashMapPub2Priv.put(entry.getKey(), privateKeyType);
+        }
+
+        mCheckSum = passwordHash;
+        if (passwordHash.equals(dataResult.checksum)) {
+            return 0;
+        } else {
+            return -1;
+        }
+    }
     public account_object get_account(String strAccountName){
         account_object accountObject=null;
         List<String> names=new ArrayList<>();
@@ -394,7 +432,7 @@ public class Wallet_api {
     public signed_transaction sell(String symbolToSell, String symbolToReceive, double rate,
                                    double amount) throws NetworkStatusException {
         return sell_asset(Double.toString(amount), symbolToSell, Double.toString(rate * amount),
-                symbolToReceive, 0, false);
+                symbolToReceive, buyTimeSec, false);
     }
 
     public signed_transaction sell(String symbolToSell, String symbolToReceive, double rate,
@@ -413,7 +451,7 @@ public class Wallet_api {
     public signed_transaction buy(String symbolToReceive, String symbolToSell, double rate,
                                   double amount) throws NetworkStatusException {
         return sell_asset(Double.toString(rate * amount), symbolToSell, Double.toString(amount),
-                symbolToReceive, 0, false);
+                symbolToReceive, buyTimeSec, false);
     }
 
     public signed_transaction buy(String symbolToReceive, String symbolToSell, double rate,

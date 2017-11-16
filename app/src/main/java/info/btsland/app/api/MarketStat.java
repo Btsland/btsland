@@ -50,12 +50,6 @@ public class MarketStat {
     private String[] quotes;
     
     public MarketStat() {
-//        if (!isDeserializerRegistered) {
-//            isDeserializerRegistered = true;
-//            global_config_object.getInstance().getGsonBuilder().registerTypeAdapter(
-//                    full_account_object.class, new full_account_object.deserializer());
-//        }
-
 
     }
 

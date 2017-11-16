@@ -22,7 +22,6 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.Wallet_api;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.exception.CreateAccountException;
@@ -295,14 +294,13 @@ public class LoginActivity extends AppCompatActivity {
 
         @Override
         public void run() {
-            Wallet_api wallet_api=new Wallet_api();
             switch (want){
                 //账号登录
                 case LOGIN_BY_PASSWORD:
                     account_object accountObject=null;
                     String loginRet="success";
                     try {
-                        accountObject= wallet_api.import_account_password(name,pwd);
+                        accountObject= BtslandApplication.getWalletApi().import_account_password(name,pwd);
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }
@@ -327,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
 
                     try {
                         Log.i(TAG, "onClick: 注册");
-                        registerNRet = wallet_api.create_account_with_password(name,pwd);
+                        registerNRet = BtslandApplication.getWalletApi().create_account_with_password(name,pwd);
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     } catch (CreateAccountException e) {

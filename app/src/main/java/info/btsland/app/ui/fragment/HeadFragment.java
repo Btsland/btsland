@@ -105,8 +105,8 @@ public class HeadFragment extends Fragment {
                 break;
             case HeadType.USER_SET:
 //                leftTextView.setBackground(getActivity().getDrawable(R.drawable.image_user));
-                leftTextView.setCompoundDrawables(null,null,drawable,null);
-                leftTextView.setOnClickListener(toUser);
+                //leftTextView.setCompoundDrawables(null,null,drawable,null);
+                //leftTextView.setOnClickListener(toUser);
                 rightTextView.setOnClickListener(toSetting);
                 break;
             case HeadType.BACK_SELECT_NULL:

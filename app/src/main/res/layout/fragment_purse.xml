@@ -12,7 +12,6 @@
         android:layout_height="200dp"
         android:layout_marginTop="4dp"
         android:background="@color/colorAccent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -20,12 +19,9 @@
         android:id="@+id/iv_user_pho"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="13dp"
-        app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintTop_toTopOf="@+id/v_user_back"
-
-        android:layout_marginStart="13dp"
+        android:layout_margin="20dp"
+        app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
+        app:layout_constraintTop_toTopOf="@+id/v_purse_back"
         />
 
 
@@ -33,41 +29,34 @@
         android:id="@+id/tv_purse_convert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
         android:text="折合总金额约为：0.0000CNY"
         android:textColor="@color/color_white"
+        android:layout_marginTop="10dp"
         android:textSize="20sp"
-        app:layout_constraintTop_toTopOf="@+id/v_purse_back"
-        app:layout_constraintRight_toRightOf="@+id/v_purse_back"
-
-        app:layout_constraintBottom_toTopOf="@+id/tv_purse_hang"
-        app:layout_constraintVertical_chainStyle="spread_inside"/>
+        app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
+        app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"/>
 
     <TextView
         android:id="@+id/tv_purse_hang"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="76dp"
-        android:layout_marginTop="20dp"
         android:text="可用额:4532.34CNY"
         android:textColor="@color/color_white"
+        android:layout_marginTop="10dp"
         android:textSize="18sp"
-
-        app:layout_constraintLeft_toRightOf="@+id/tv_user_name"
-        app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"/>
+        app:layout_constraintLeft_toLeftOf="@+id/tv_purse_convert"
+        app:layout_constraintTop_toBottomOf="@+id/tv_purse_convert"/>
 
     <TextView
         android:id="@+id/tv_purse_remain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="132dp"
         android:text="挂单数:5"
         android:textColor="@color/color_white"
         android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
-        app:layout_constraintLeft_toRightOf="@+id/tv_user_anotherName"
-        app:layout_constraintTop_toBottomOf="@+id/tv_purse_hang"
-        app:layout_constraintVertical_bias="1.0"/>
+        android:layout_marginRight="20dp"
+        app:layout_constraintRight_toRightOf="@+id/v_purse_back"
+        app:layout_constraintTop_toTopOf="@+id/tv_purse_hang"/>
 
     <TextView
         android:id="@+id/tv_user_name"
@@ -75,29 +64,27 @@
         android:layout_height="wrap_content"
         android:text="@string/username"
         android:textSize="20sp"
+        android:layout_marginLeft="20dp"
         android:gravity="center_vertical"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="13dp"
         android:textColor="@color/color_white"
-        app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
+        app:layout_constraintLeft_toRightOf="@+id/iv_user_pho"
+        app:layout_constraintTop_toTopOf="@+id/iv_user_pho"
+        app:layout_constraintRight_toRightOf="@+id/v_purse_back"
         app:layout_constraintBottom_toTopOf="@+id/tv_user_anotherName"
-        app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintRight_toRightOf="@+id/tv_purse_hang"
-
         />
 
     <TextView
         android:id="@+id/tv_user_anotherName"
-        android:layout_width="120dp"
-        android:layout_height="30dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:text="@string/alias"
-        android:gravity="center_vertical"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="13dp"
+        android:textSize="20dp"
+        android:gravity="center|left"
         android:textColor="@color/color_white"
-        app:layout_constraintLeft_toLeftOf="@+id/v_user_back"
-        app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
+        app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
+        app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+        app:layout_constraintBottom_toBottomOf="@+id/iv_user_pho"
+        app:layout_constraintRight_toRightOf="@+id/tv_user_name"
         />
 
 

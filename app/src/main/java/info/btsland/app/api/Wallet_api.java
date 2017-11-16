@@ -136,11 +136,12 @@ public class Wallet_api {
         return nRet;
     }
     public boolean is_locked() {
-        if (mWalletObject.cipher_keys.array().length > 0 &&
-                mCheckSum.equals(new sha512_object())) {
-            return true;
+        if(mWalletObject.cipher_keys!=null){
+            if (mWalletObject.cipher_keys.array().length > 0 &&
+                    mCheckSum.equals(new sha512_object())) {
+                return true;
+            }
         }
-
         return false;
     }
     public int unlock(String strPassword) {
@@ -280,7 +281,7 @@ public class Wallet_api {
         if (nRet == 0) {
             return nRet;
         }*/
-
+        set_passwrod(strPassword);
         private_key privateActiveKey = private_key.from_seed(strAccountName + "active" + strPassword);
         private_key privateOwnerKey = private_key.from_seed(strAccountName + "owner" + strPassword);
 
@@ -539,6 +540,32 @@ public class Wallet_api {
         } else {
             return null;
         }
+    }
+    public asset calculate_buy_fee(asset_object assetToReceive, asset_object assetToSell,
+                                   double rate, double amount,
+                                   global_property_object globalPropertyObject) {
+        return calculate_sell_asset_fee(Double.toString(rate * amount), assetToSell,
+                Double.toString(amount), assetToReceive, globalPropertyObject);
+    }
+    public asset calculate_sell_asset_fee(String amountToSell, asset_object assetToSell,
+                                          String minToReceive, asset_object assetToReceive,
+                                          global_property_object globalPropertyObject) {
+        operations.limit_order_create_operation op = new operations.limit_order_create_operation();
+        op.amount_to_sell = assetToSell.amount_from_string(amountToSell);
+        op.min_to_receive = assetToReceive.amount_from_string(minToReceive);
+
+        operations.operation_type operationType = new operations.operation_type();
+        operationType.nOperationType = operations.ID_CREATE_LIMIT_ORDER_OPERATION;
+        operationType.operationContent = op;
+
+        signed_transaction tx = new signed_transaction();
+        tx.operations = new ArrayList<>();
+        tx.operations.add(operationType);
+
+        tx.extensions = new HashSet<>();
+        set_operation_fees(tx, globalPropertyObject.parameters.current_fees);
+
+        return op.fee;
     }
 
 }

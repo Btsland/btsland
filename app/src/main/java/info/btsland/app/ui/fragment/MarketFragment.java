@@ -36,18 +36,18 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private TextView tvMarketLeftCoin_2;
     private TextView tvMarketLeftCoin_3;
     private TextView tvMarketLeftCoin_4;
-    private TextView tvMarketLeftCoin_5;
+//    private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
     private Map<String,MarketTicker> cnyMarket=new HashMap<>();
     private Map<String,MarketTicker> btsMarket=new HashMap<>();
     private Map<String,MarketTicker> usdMarket=new HashMap<>();
     private Map<String,MarketTicker> btcMarket=new HashMap<>();
-    private Map<String,MarketTicker> ethMarket=new HashMap<>();
+//    private Map<String,MarketTicker> ethMarket=new HashMap<>();
     private MarketRowAdapter cnyRowAdapter ;
     private MarketRowAdapter btsRowAdapter ;
     private MarketRowAdapter btcRowAdapter ;
     private MarketRowAdapter usdRowAdapter ;
-    private MarketRowAdapter ethRowAdapter ;
+//    private MarketRowAdapter ethRowAdapter ;
     private MarketStat marketStat;
     public static int NOTIFY_CNY=1;
     public static int NOTIFY_BTS=2;
@@ -128,18 +128,18 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     mHandler.sendMessage(message);
                 }
                 break;
-            case "ETH":
-                synchronized (this) {
-                    if (ethMarket != null && ethMarket.size() > quotes.length) {
-                        ethMarket.clear();
-                    }
-                    if (!replaceMarket(ethMarket, stat.MarketTicker)) {
-                        return;
-                    }
-                    message.what = NOTIFY_ETH;
-                    mHandler.sendMessage(message);
-                }
-                break;
+//            case "ETH":
+//                synchronized (this) {
+//                    if (ethMarket != null && ethMarket.size() > quotes.length) {
+//                        ethMarket.clear();
+//                    }
+//                    if (!replaceMarket(ethMarket, stat.MarketTicker)) {
+//                        return;
+//                    }
+//                    message.what = NOTIFY_ETH;
+//                    mHandler.sendMessage(message);
+//                }
+//                break;
         }
     }
     public boolean replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
@@ -176,9 +176,10 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 usdRowAdapter.notifyDataSetChanged();
             }else if(msg.what==NOTIFY_BTC){
                 btcRowAdapter.notifyDataSetChanged();
-            }else if(msg.what==NOTIFY_ETH){
-                ethRowAdapter.notifyDataSetChanged();
             }
+//            else if(msg.what==NOTIFY_ETH){
+//                ethRowAdapter.notifyDataSetChanged();
+//            }
         }
     };
 
@@ -228,19 +229,19 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         tvMarketLeftCoin_2 = getActivity().findViewById(R.id.tv_market_left_coin2);
         tvMarketLeftCoin_3 = getActivity().findViewById(R.id.tv_market_left_coin3);
         tvMarketLeftCoin_4 = getActivity().findViewById(R.id.tv_market_left_coin4);
-        tvMarketLeftCoin_5 = getActivity().findViewById(R.id.tv_market_left_coin5);
+        //tvMarketLeftCoin_5 = getActivity().findViewById(R.id.tv_market_left_coin5);
         lvMarketInfo = getActivity().findViewById(R.id.lv_market_info);
         LeftCoinOnClickListener onClickListener = new LeftCoinOnClickListener();
         tvMarketLeftCoin_1.setOnClickListener(onClickListener);
         tvMarketLeftCoin_2.setOnClickListener(onClickListener);
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
-        tvMarketLeftCoin_5.setOnClickListener(onClickListener);
+        //tvMarketLeftCoin_5.setOnClickListener(onClickListener);
         cnyRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"CNY"), cnyMarket);
         btsRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTS"), btsMarket);
         btcRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTC"), btcMarket);
         usdRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"USD"), usdMarket);
-        ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"ETH"), ethMarket);
+        //ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"ETH"), ethMarket);
 
     }
 
@@ -283,36 +284,36 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 setUpBack(tvMarketLeftCoin_2);
                 setUpBack(tvMarketLeftCoin_3);
                 setUpBack(tvMarketLeftCoin_4);
-                setUpBack(tvMarketLeftCoin_5);
+                //setUpBack(tvMarketLeftCoin_5);
                 break;
             case R.id.tv_market_left_coin2:
                 setDownBack(tvMarketLeftCoin_2);
                 setUpBack(tvMarketLeftCoin_1);
                 setUpBack(tvMarketLeftCoin_3);
                 setUpBack(tvMarketLeftCoin_4);
-                setUpBack(tvMarketLeftCoin_5);
+                //setUpBack(tvMarketLeftCoin_5);
                 break;
             case R.id.tv_market_left_coin3:
                 setDownBack(tvMarketLeftCoin_3);
                 setUpBack(tvMarketLeftCoin_2);
                 setUpBack(tvMarketLeftCoin_1);
                 setUpBack(tvMarketLeftCoin_4);
-                setUpBack(tvMarketLeftCoin_5);
+                //setUpBack(tvMarketLeftCoin_5);
                 break;
             case R.id.tv_market_left_coin4:
                 setDownBack(tvMarketLeftCoin_4);
                 setUpBack(tvMarketLeftCoin_2);
                 setUpBack(tvMarketLeftCoin_3);
                 setUpBack(tvMarketLeftCoin_1);
-                setUpBack(tvMarketLeftCoin_5);
+                //setUpBack(tvMarketLeftCoin_5);
                 break;
-            case R.id.tv_market_left_coin5:
-                setDownBack(tvMarketLeftCoin_5);
-                setUpBack(tvMarketLeftCoin_2);
-                setUpBack(tvMarketLeftCoin_3);
-                setUpBack(tvMarketLeftCoin_4);
-                setUpBack(tvMarketLeftCoin_1);
-                break;
+//            case R.id.tv_market_left_coin5:
+//                setDownBack(tvMarketLeftCoin_5);
+//                setUpBack(tvMarketLeftCoin_2);
+//                setUpBack(tvMarketLeftCoin_3);
+//                setUpBack(tvMarketLeftCoin_4);
+//                setUpBack(tvMarketLeftCoin_1);
+//                break;
         }
     }
 
@@ -351,9 +352,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
             case R.id.tv_market_left_coin4:
                 lvMarketInfo.setAdapter(btcRowAdapter);
                 break;
-            case R.id.tv_market_left_coin5:
-                lvMarketInfo.setAdapter(ethRowAdapter);
-                break;
+//            case R.id.tv_market_left_coin5:
+//                lvMarketInfo.setAdapter(ethRowAdapter);
+//                break;
         }
     }
 

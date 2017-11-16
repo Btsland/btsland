@@ -73,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean userIsPual=false;
     private String registerUser;
     private String registerPwd;
-    KProgressHUD hud;
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,12 +190,19 @@ public class LoginActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
             @Override
             public void afterTextChanged(Editable s) {
+                tvRegisterRePwdPoint.setText("");
                 pwdIsPual=false;
                 String strPwd = edRegisterPwd.getText().toString();
                 String strRePsd = s.toString();
+
                 if (strPwd.compareTo(strRePsd) == 0) {
-                    tvRegisterRePwdPoint.setText("");
-                    pwdIsPual=true;//设置密码合格
+                    if(strPwd.length()>0&&strRePsd.length()>0){
+                        tvRegisterRePwdPoint.setText("");
+                        pwdIsPual=true;//设置密码合格
+                    }else {
+                        tvRegisterRePwdPoint.setText("");
+                        pwdIsPual = false;//设置密码不合格
+                    }
                 } else {
                     tvRegisterRePwdPoint.setText(R.string.The_password_for_the_two_input_is_inconsistent);
                     pwdIsPual=false;
@@ -243,7 +250,7 @@ public class LoginActivity extends AppCompatActivity {
                         hud=KProgressHUD.create(LoginActivity.this);
                         hud.setLabel(getResources().getString(R.string.please_wait));
                         hud.show();
-                        thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD);
+                        thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD,mHander);
                         thread.start();
                     }
                     break;
@@ -264,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
                                 hud=KProgressHUD.create(LoginActivity.this);
                                 hud.setLabel(getResources().getString(R.string.please_wait));
                                 hud.show();
-                                thread=new AccountThread(registerUser,registerPwd,AccountThread.REGISTER_BY_PASSWORD);
+                                thread=new AccountThread(registerUser,registerPwd,AccountThread.REGISTER_BY_PASSWORD,mHander);
                                 thread.start();
                             }
                         }
@@ -278,21 +285,24 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-   public class AccountThread extends Thread{
+   public static class AccountThread extends Thread{
         public static final int LOGIN_BY_PASSWORD=1;
         public static final int LOGIN_BY_BIN=2;
         public static final int REGISTER_BY_PASSWORD=3;
-        private int want;
+       private  Handler handler;
+       private int want;
         private String name;
         private String pwd;
 
-        public AccountThread(String name, String pwd,int want) {
+        public AccountThread(String name, String pwd,int want,Handler handler) {
             this.name=name;
             this.pwd=pwd;
             this.want=want;
+            this.handler=handler;
         }
 
-        @Override
+
+       @Override
         public void run() {
             switch (want){
                 //账号登录
@@ -315,7 +325,7 @@ public class LoginActivity extends AppCompatActivity {
                     loginBundle.putString("login",loginRet);
                     Message loginMsg=Message.obtain();
                     loginMsg.setData(loginBundle);
-                    mHander.sendMessage(loginMsg);
+                    handler.sendMessage(loginMsg);
                     break;
                 //钱包登录
                 case LOGIN_BY_BIN:
@@ -342,7 +352,7 @@ public class LoginActivity extends AppCompatActivity {
                         registerBundle.putString("register","fail");
                     }
                     registerMsg.setData(registerBundle);
-                    mHander.sendMessage(registerMsg);
+                    handler.sendMessage(registerMsg);
                     break;
             }
         }
@@ -357,7 +367,7 @@ public class LoginActivity extends AppCompatActivity {
             Bundle bundle=msg.getData();
             if(bundle.getString("register")!=null&&bundle.getString("register").equals("success")){
                 Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD);
+                AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD,this);
                 accountThread.start();
             }else if(bundle.getString("register")!=null&&bundle.getString("register").equals("fail")){
                 Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();

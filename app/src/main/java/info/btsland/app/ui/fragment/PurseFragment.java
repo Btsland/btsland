@@ -42,6 +42,8 @@ public class PurseFragment extends Fragment {
     //备份
     private TextView tvPurseBackup;
 
+    private TextView tvPurseConvert;
+
     public PurseFragment() {
         // Required empty public constructor
     }
@@ -76,6 +78,8 @@ public class PurseFragment extends Fragment {
         tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
         //钱包备份
         tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
+        tvPurseConvert=getActivity().findViewById(R.id.tv_purse_convert);
+     //   tvPurseConvert.setText();
 
 //        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
 //        tvPurseAllAsset.setOnTouchListener(onTouchlistener);

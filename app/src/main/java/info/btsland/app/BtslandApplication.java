@@ -19,6 +19,7 @@ import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.api.asset;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
 import okhttp3.WebSocket;
@@ -36,7 +37,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static boolean isLogin=false;
 
     public static account_object accountObject=new account_object();
-
+    public static List<IAsset> iAssets;
     public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
 
@@ -171,10 +172,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 try {
                     List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
-                    if(assets!=null){
-                        accountObject.assetlist=assets;
+                    accountObject.assetlist=assets;
+                    iAssets=new ArrayList <>();
+                    if(assets==null||assets.size()==0){
+                        iAssets.add(new IAsset("CNY"));
                     }else {
-                        accountObject.assetlist=new ArrayList <>();
+                        for(int i=0;i<assets.size();i++) {
+                            iAssets.add(new IAsset(assets.get(i)));
+                        }
                     }
                 } catch (NetworkStatusException e) {
                     e.printStackTrace();

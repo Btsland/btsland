@@ -19,7 +19,12 @@
 <TextView
     android:id="@+id/tv_title"
     android:layout_width="0dp"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
+    android:text="分类资产:"
+    android:textSize="20sp"
+    android:textStyle="bold"
+    android:gravity="center"
+    android:textColor="@color/black"
     app:layout_constraintTop_toBottomOf="@+id/fra_asset_head"
     />
 

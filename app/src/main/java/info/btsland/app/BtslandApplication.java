@@ -173,7 +173,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
                     accountObject.assetlist=assets;
-                    CuntTotalCNY();
                     iAssets=new ArrayList <>();
                     if(assets==null||assets.size()==0){
                         iAssets.add(new IAsset("CNY"));
@@ -182,6 +181,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             iAssets.add(new IAsset(assets.get(i)));
                         }
                     }
+                    CuntTotalCNY();
                 } catch (NetworkStatusException e) {
                     e.printStackTrace();
                 }
@@ -209,24 +209,21 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         @Override
         public void run() {
-
                 for (int i=0; i < iAssets.size(); i++) {
                     try {
                         Double price=Double.parseDouble(getMarketStat().mWebsocketApi.get_ticker("CNY", iAssets.get(i).coinName).latest);
-                        if (price!= null) {
-                            accountObject.totalCNY=iAssets.get(i).total * price;
-                        } else {
+                        if(price==null){
                             accountObject.totalCNY=0.0;
+                        }else if (price!=null){
+
+                            accountObject.totalCNY=iAssets.get(i).total * price;
                         }
+
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }
                 }
             }
-
-
-
-
 
         }
 

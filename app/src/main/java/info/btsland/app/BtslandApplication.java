@@ -163,6 +163,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             synchronized (accountObject.assetlist) {
                 try {
                     List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
+//                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
                     if(assets!=null){
                         accountObject.assetlist=assets;
                     }else {

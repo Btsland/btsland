@@ -275,8 +275,10 @@ public class Websocket_api extends WebSocketListener {
         List<Object> listAssetsParam = new ArrayList<>();
 
         List<Object> listObjectId = new ArrayList<>();
-        listObjectId.addAll(listAssetObjectId);
-
+        for(int i=0;i<listAssetObjectId.size();i++){
+            String str = listAssetObjectId.get(i).toString();
+            listObjectId.add(str);
+        }
         listAssetsParam.add(listObjectId);
         callObject.params.add(listAssetsParam);
 

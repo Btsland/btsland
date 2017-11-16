@@ -43,10 +43,6 @@ public class IAsset {
                 asset_object objects = assetObjects.get(0);
                 coinName=objects.symbol;
                 total=mAsset.amount/Math.pow(10,objects.precision);
-
-
-
-
             }
         } catch (NetworkStatusException e) {
             e.printStackTrace();

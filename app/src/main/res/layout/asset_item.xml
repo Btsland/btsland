@@ -50,19 +50,19 @@
       android:layout_marginLeft="10dp"
       />
 
-    <TextView
-        android:id="@+id/tv_asset_num"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:textColor="@color/black"
-        android:text="0.00000"
-        android:gravity="left"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
-        app:layout_constraintLeft_toRightOf="@+id/tv_all_asset"
-       app:layout_constraintRight_toLeftOf="@+id/tv_borrow"
+  <TextView
+      android:id="@+id/tv_asset_num"
+      android:layout_width="0dp"
+      android:layout_height="20dp"
+      android:gravity="left"
+      android:text="0.00000"
+      android:textColor="@color/black"
+      android:textSize="16sp"
+      app:layout_constraintLeft_toRightOf="@+id/tv_all_asset"
+      app:layout_constraintRight_toLeftOf="@+id/tv_borrow"
+      app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
 
-        />
+      />
 
     <TextView
         android:id="@+id/tv_borrow"
@@ -100,7 +100,7 @@
         android:textSize="16sp"
         android:textColor="@color/black"
         android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_all_asset"
+        app:layout_constraintTop_toBottomOf="@+id/tv_asset_num"
         app:layout_constraintLeft_toRightOf="@+id/tv_orders"
         app:layout_constraintRight_toLeftOf="@+id/tv_orders_handle"
         />
@@ -136,14 +136,14 @@
     <TextView
         android:id="@+id/tv_usable_asset_num"
         android:layout_width="0dp"
-        android:layout_height="31dp"
+        android:layout_height="20dp"
         android:gravity="left"
         android:text="0.0000"
         android:textSize="16sp"
         android:textColor="@color/black"
         app:layout_constraintLeft_toRightOf="@+id/tv_usable_asset"
         app:layout_constraintRight_toLeftOf="@+id/tv_recharge_withdrawals"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders"
+        app:layout_constraintTop_toBottomOf="@+id/tv_orders_num"
         />
 
     <TextView

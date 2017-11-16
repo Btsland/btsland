@@ -113,7 +113,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
 
     /**
-     * 登陆线程外部调用方法
+     * 查询账户线程外部调用方法
      *
      */
     public static void queryAccount(){
@@ -122,7 +122,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
 
     /**
-     * 登录线程
+     * 查询账户线程
      *
      */
     private static class QueryAccountThread extends Thread{
@@ -173,6 +173,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
                     accountObject.assetlist=assets;
+                    CuntTotalCNY();
                     iAssets=new ArrayList <>();
                     if(assets==null||assets.size()==0){
                         iAssets.add(new IAsset("CNY"));
@@ -188,6 +189,49 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
         }
     }
+
+
+    /**
+     * 外部调用查询总资产线程的方法
+     */
+    public static void CuntTotalCNY(){
+
+        new CuntTotalCNYThread().start();
+
+    }
+
+
+
+    /**
+     * 查询总资产线程
+     */
+    private static class CuntTotalCNYThread extends Thread{
+
+        @Override
+        public void run() {
+
+                for (int i=0; i < iAssets.size(); i++) {
+                    try {
+                        Double price=Double.parseDouble(getMarketStat().mWebsocketApi.get_ticker("CNY", iAssets.get(i).coinName).latest);
+                        if (price!= null) {
+                            accountObject.totalCNY=iAssets.get(i).total * price;
+                        } else {
+                            accountObject.totalCNY=0.0;
+                        }
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+
+
+
+
+        }
+
+
+
 
 
 

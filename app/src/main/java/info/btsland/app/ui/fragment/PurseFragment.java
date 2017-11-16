@@ -2,16 +2,22 @@ package info.btsland.app.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.sha256_object;
+import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.PurseAccessRecordActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
@@ -43,6 +49,16 @@ public class PurseFragment extends Fragment {
     private TextView tvPurseBackup;
 
     private TextView tvPurseConvert;
+    //头像
+    private WebView portrait;
+    //用户名
+    private TextView tvUserName;
+    //别名
+    private TextView tvUserAnotherName;
+
+    private TextView tvUserLogoff;
+
+    private SharedPreferences sharedPreferences;
 
     public PurseFragment() {
         // Required empty public constructor
@@ -65,7 +81,37 @@ public class PurseFragment extends Fragment {
     public void onStart() {
         super.onStart();
         init();
+
+        if (BtslandApplication.accountObject != null) {
+            createPortrait();//设置头像
+            tvUserName.setText("用户名：" + BtslandApplication.accountObject.name);
+
+            tvPurseConvert.setText("折合总金额约为："+BtslandApplication.accountObject.totalCNY+"CNY");
+        }
+        //        sharedPreferences= getSharedPreferences("Login", Context.MODE_PRIVATE);
+
+
+
     }
+
+
+
+
+    /**
+     * 设置头像
+     */
+    public void createPortrait(){
+        sha256_object.encoder encoder = new sha256_object.encoder();
+        encoder.write(BtslandApplication.accountObject.name.getBytes());
+        String htmlShareAccountName = "<html><head><style>body,html { margin:0; padding:0; text-align:center;}</style><meta name=viewport content=width=" +100+ ",user-scalable=no/></head><body><canvas width=" +100+ " height=" + 100+ " data-jdenticon-hash=" +encoder.result().toString()+ "></canvas><script src=https://cdn.jsdelivr.net/jdenticon/1.3.2/jdenticon.min.js async></script></body></html>";
+        WebSettings webSettings = portrait.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        portrait.loadData(htmlShareAccountName, "text/html", "UTF-8");
+    }
+
+
+
+
 
     private void init() {
         //全部资产
@@ -78,8 +124,15 @@ public class PurseFragment extends Fragment {
         tvPurseAllRemain = getActivity().findViewById(R.id.tv_purse_allRemain);
         //钱包备份
         tvPurseBackup = getActivity().findViewById(R.id.tv_purse_backup);
+        //折合总金额
         tvPurseConvert=getActivity().findViewById(R.id.tv_purse_convert);
-     //   tvPurseConvert.setText();
+
+        portrait= getActivity().findViewById(R.id.iv_user_pho);
+        tvUserName =getActivity().findViewById(R.id.tv_user_name);
+        tvUserAnotherName=getActivity().findViewById(R.id.tv_user_anotherName);
+         tvUserLogoff=getActivity().findViewById(R.id.tv_user_logoff);
+//        tvPurseConvert.setText();
+
 
 //        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
 //        tvPurseAllAsset.setOnTouchListener(onTouchlistener);
@@ -94,6 +147,7 @@ public class PurseFragment extends Fragment {
         tvPurseDeal.setOnClickListener(onCLickListener);
         tvPurseAllRemain.setOnClickListener(onCLickListener);
         tvPurseBackup.setOnClickListener(onCLickListener);
+        tvUserLogoff.setOnClickListener(onCLickListener);
     }
 
     /**
@@ -142,6 +196,21 @@ public class PurseFragment extends Fragment {
                     Intent backup = new Intent(getActivity(), PurseWalletBackupActivity.class);
                     getActivity().startActivity(backup);
                     break;
+
+                case R.id.tv_user_logoff:
+                    Intent iUserLogin=new Intent(getActivity(),LoginActivity.class);
+                    startActivity(iUserLogin);
+                    SharedPreferences.Editor editor=sharedPreferences.edit();
+                    editor.clear();
+                    editor.commit();
+
+                    BtslandApplication.isLogin=false;
+                    BtslandApplication.accountObject=null;
+
+
+                    break;
+
+
             }
         }
     }
@@ -165,6 +234,9 @@ public class PurseFragment extends Fragment {
                 case R.id.tv_purse_backup:
                     touchColor(tvPurseBackup, motionEvent);
                     break;
+
+
+
             }
             return false;
         }

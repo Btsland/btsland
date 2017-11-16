@@ -10,8 +10,8 @@ import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 
 /**
- * author：
- * function：
+ * author：lw1000
+ * function：分类资产
  * 2017/11/15.
  */
 

@@ -43,7 +43,6 @@ public class PurseAssetActivity extends AppCompatActivity {
         super.onStart();
         if(BtslandApplication.accountObject.assetlist==null||BtslandApplication.accountObject.assetlist.size()==0){
             Log.e("PurseAssetActivity", "BtslandApplication.accountObject.assetlist: "+BtslandApplication.accountObject.assetlist );
-
             BtslandApplication.queryAsset();
         }
         setLvAsset();

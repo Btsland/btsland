@@ -301,6 +301,7 @@ public class LoginActivity extends AppCompatActivity {
                     String loginRet="success";
                     try {
                         accountObject= BtslandApplication.getWalletApi().import_account_password(name,pwd);
+
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }
@@ -309,6 +310,7 @@ public class LoginActivity extends AppCompatActivity {
                         loginRet="failure";
                     }
                     BtslandApplication.accountObject=accountObject;
+                    BtslandApplication.queryAsset();
                     BtslandApplication.isLogin=true;
                     loginBundle.putString("login",loginRet);
                     Message loginMsg=Message.obtain();

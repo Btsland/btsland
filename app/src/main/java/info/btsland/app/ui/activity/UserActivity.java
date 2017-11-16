@@ -48,6 +48,7 @@ public class UserActivity extends AppCompatActivity {
         }
         sharedPreferences= getSharedPreferences("Login", Context.MODE_PRIVATE);
 
+
     }
 
     /**

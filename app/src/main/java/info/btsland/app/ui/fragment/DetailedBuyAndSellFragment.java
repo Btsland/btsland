@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
@@ -24,6 +25,7 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
+import info.btsland.app.ui.view.PasswordDialog;
 
 public class DetailedBuyAndSellFragment extends Fragment
         implements MarketStat.OnMarketStatUpdateListener {
@@ -288,7 +290,38 @@ public class DetailedBuyAndSellFragment extends Fragment
 
         @Override
         public void onConfirm() {
+            String strPrice = edPrice.getText().toString();
+            String strVol = edVol.getText().toString();
+            if (strPrice.equals("") || strVol.equals("")) {
+                return;
+            }
 
+            final double price;
+            final double vol;
+            try {
+                price = Double.parseDouble(strPrice);
+                vol = Double.parseDouble(strVol);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
+
+            if (price <= 0 || vol <= 0) {
+                return;
+            }
+            PasswordDialog builder = new PasswordDialog(getActivity());
+            builder.setListener(new PasswordDialog.OnDialogInterationListener() {
+                @Override
+                public void onConfirm(AlertDialog dialog, String passwordString) {
+                    dialog.dismiss();
+                }
+
+                @Override
+                public void onReject(AlertDialog dialog) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
         }
 
         @Override

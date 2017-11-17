@@ -41,6 +41,7 @@ public class types {
         public static final int account_object_type = 2;
         public static final int asset_object_type = 3;
         public static final int limit_order_object_type = 7;
+        public static final int operation_history_object_type = 11;
     }
     /*public enum object_type
     {
@@ -108,7 +109,7 @@ public class types {
     public final static int committee_fed_asset  = 0x100; /**< allow the asset to be fed by the committee */
 
     public final static int ASSET_ISSUER_PERMISSION_MASK = charge_market_fee|white_list|override_authority|transfer_restricted|disable_force_settle|global_settle|disable_confidential
-            |witness_fed_asset|committee_fed_asset;
+                    |witness_fed_asset|committee_fed_asset;
     public final static int UIA_ASSET_ISSUER_PERMISSION_MASK = charge_market_fee|white_list|override_authority|transfer_restricted|disable_confidential;
 
 
@@ -147,7 +148,7 @@ public class types {
 
         @Override
         public String toString() {
-            RIPEMD160Digest dig = new RIPEMD160Digest();
+            org.spongycastle.crypto.digests.RIPEMD160Digest dig = new org.spongycastle.crypto.digests.RIPEMD160Digest();
             dig.update(key_data, 0, key_data.length);
             byte[] out = new byte[20];
             dig.doFinal(out, 0);
@@ -167,7 +168,7 @@ public class types {
             byte[] byteKeyData = Base58.decode(strBase58.substring(strPrefix.length()));
             binary_key binaryKey = new binary_key(byteKeyData);
 
-            RIPEMD160Digest digest = new RIPEMD160Digest();
+            org.spongycastle.crypto.digests.RIPEMD160Digest digest = new org.spongycastle.crypto.digests.RIPEMD160Digest();
             digest.update(binaryKey.data, 0, binaryKey.data.length);
             byte[] out = new byte[20];
             digest.doFinal(out, 0);
@@ -280,7 +281,7 @@ public class types {
     }
 
     public static class account_options {
-        public String memo_key;
+        public public_key_type memo_key;
         public String voting_account;
         public Integer num_witness;
         public Integer num_committee;
@@ -315,14 +316,14 @@ public class types {
         }
     }
 
-    public static class void_t {
+    class void_t {
 
     }
-//    public static class TestClass {
-//        public String id;
-//    }
+    public static class TestClass {
+        public String id;
+    }
 
-//    public static class TestClass2 {
-//        public object_id<account_object> id;
-//    }
+    public static class TestClass2 {
+        public object_id<account_object> id;
+    }
 }

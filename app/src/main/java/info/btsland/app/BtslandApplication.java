@@ -36,7 +36,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static boolean isLogin=false;
 
-    public static account_object accountObject=new account_object();
+    public static account_object accountObject;
     public static List<IAsset> iAssets;
     public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
@@ -141,9 +141,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
                 queryAsset();
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
-                if(accountObject!=null){
-                    isLogin=true;
-                }
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
             }
@@ -168,25 +165,23 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         @Override
         public void run() {
             super.run();
-            synchronized (accountObject.assetlist) {
-                try {
-                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
+            try {
+                List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
-                    accountObject.assetlist=assets;
-                    iAssets=new ArrayList <>();
-                    if(assets==null||assets.size()==0){
-                        iAssets.add(new IAsset("CNY"));
-                    }else {
-                        for(int i=0;i<assets.size();i++) {
-                            iAssets.add(new IAsset(assets.get(i)));
-                        }
+                accountObject.assetlist=assets;
+                iAssets=new ArrayList <>();
+                if(assets==null||assets.size()==0){
+                    iAssets.add(new IAsset("CNY"));
+                }else {
+                    for(int i=0;i<assets.size();i++) {
+                        iAssets.add(new IAsset(assets.get(i)));
                     }
-                    CuntTotalCNY();
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
                 }
-
+                CuntTotalCNY();
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
             }
+
         }
     }
 

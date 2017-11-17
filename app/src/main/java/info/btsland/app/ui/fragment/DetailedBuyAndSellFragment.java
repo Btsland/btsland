@@ -32,6 +32,7 @@ import info.btsland.app.api.global_property_object;
 import info.btsland.app.api.utils;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.model.Order;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
@@ -108,7 +109,7 @@ public class DetailedBuyAndSellFragment extends Fragment
         listener=this;
         hud = KProgressHUD.create(getActivity())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("Please Wait")
+                .setLabel("正在发布广播。。。")
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);
@@ -141,12 +142,12 @@ public class DetailedBuyAndSellFragment extends Fragment
         tvSell=view.findViewById(R.id.tv_detailed_sell);
 
         rlvBuy.setLayoutManager(new LinearLayoutManager(getContext()));
-        rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter();
+        rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice);
         rlvBuy.setAdapter(rlvBuyAdapter);
         rlvBuy.setItemAnimator(null);
 
         rlvSell.setLayoutManager(new LinearLayoutManager(getContext()));
-        rlvSellAdapter = new TransactionSellBuyRecyclerViewAdapter();
+        rlvSellAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice);
         rlvSell.setAdapter(rlvSellAdapter);
         rlvSell.setItemAnimator(null);
 
@@ -367,7 +368,6 @@ public class DetailedBuyAndSellFragment extends Fragment
                         try {
                             account_object accountObject= BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
                             if(accountObject!=null){
-                                BtslandApplication.isLogin=true;
                                 dialog.dismiss();
                                 goTrading();
                             }
@@ -397,18 +397,11 @@ public class DetailedBuyAndSellFragment extends Fragment
 
         private void goTrading(){
             if (!BtslandApplication.getWalletApi().is_locked()) {
+                hud.show();
                 if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
-                    try {
-                        BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
-                    }
+                    buy();
                 }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
-                    try {
-                        BtslandApplication.getWalletApi().sell(strVolCoin, strPriceCoin,price,vol);
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
-                    }
+                    sell();
                 }
             } else {
                 builder = new PasswordDialog(getActivity());
@@ -417,6 +410,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                     public void onConfirm(AlertDialog dialog, String passwordString) {
                         if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
                             dialog.dismiss();
+                            hud.show();
                             if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
                                 buy();
                             }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
@@ -436,13 +430,12 @@ public class DetailedBuyAndSellFragment extends Fragment
         }
     }
     private void buy() {
-        hud.show();
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     BtslandApplication.getWalletApi().buy(strVolCoin,strPriceCoin,price,vol);
-
                     handler2.sendEmptyMessage(1);
                 } catch (Exception e) {
                     handler2.sendEmptyMessage(-1);
@@ -452,7 +445,6 @@ public class DetailedBuyAndSellFragment extends Fragment
         }).start();
     }
     private void sell() {
-        hud.show();
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -503,6 +495,23 @@ public class DetailedBuyAndSellFragment extends Fragment
             }
         }).start();
     }
+    public class orderItemOnClickListener implements View.OnClickListener{
+        private Order order;
+
+        public orderItemOnClickListener(Order order) {
+            this.order = order;
+        }
+
+        @Override
+        public void onClick(View view) {
+            edPrice.getEditableText().clear();
+            edPrice.getEditableText().append(String.valueOf(order.price));
+            if(edVol.getEditableText().toString()==null){
+                edVol.getEditableText().append("1");
+            }
+        }
+    }
+
     private Handler handler2=new Handler(){
         @Override
         public void handleMessage(Message msg) {

@@ -33,6 +33,7 @@ import okhttp3.WebSocketListener;
 import okio.ByteString;
 
 import static info.btsland.app.BtslandApplication._nDatabaseId;
+import static info.btsland.app.BtslandApplication._nHistoryId;
 
 public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
@@ -237,10 +238,10 @@ public class Websocket_api extends WebSocketListener {
             bLogin = login("","");
             if (bLogin == true) {
                 _nDatabaseId = get_websocket_bitshares_api_id("database");
-                BtslandApplication._nHistoryId = get_websocket_bitshares_api_id("history");
+                _nHistoryId = get_websocket_bitshares_api_id("history");
                 BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
                 Log.i(TAG, "connect: _nDatabaseId:"+ _nDatabaseId);
-                Log.i(TAG, "connect: _nHistoryId:"+BtslandApplication._nHistoryId);
+                Log.i(TAG, "connect: _nHistoryId:"+ _nHistoryId);
                 Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
 //                String query9="{\"id\":111111,\"method\":\"call\",\"params\":[2,\"list_account_balances\",[\"li-88888\",[]]]}";
 //                Log.e(TAG, "connect: 99999999999999999999999999999999999999999" );
@@ -264,6 +265,30 @@ public class Websocket_api extends WebSocketListener {
 
         return nRet;
     }
+    public List<operation_history_object> get_account_history(object_id<account_object> accountId,
+                                                              object_id<operation_history_object> startId,
+                                                              int nLimit) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nHistoryId);
+        callObject.params.add("get_account_history");
+
+        List<Object> listAccountHistoryParam = new ArrayList<>();
+        listAccountHistoryParam.add(accountId);
+        listAccountHistoryParam.add(startId);
+        listAccountHistoryParam.add(nLimit);
+        listAccountHistoryParam.add("1.11.0");
+        callObject.params.add(listAccountHistoryParam);
+
+        ReplyObjectProcess<Reply<List<operation_history_object>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<operation_history_object>>>(){}.getType());
+        Reply<List<operation_history_object>> replyAccountHistory = sendForReply(callObject, replyObject);
+
+        return replyAccountHistory.result;
+    }
+
     public List<asset_object> get_assets(List<object_id<asset_object>> listAssetObjectId) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
@@ -485,7 +510,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nHistoryId);
+        callObject.params.add(_nHistoryId);
         callObject.params.add("get_market_history");
 
         List<Object> listParams = new ArrayList<>();

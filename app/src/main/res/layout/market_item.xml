@@ -13,7 +13,7 @@
         android:layout_marginBottom="3dp"
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
-        android:background="?attr/backgroundView"
+        android:background="@drawable/select_row_white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,7 +23,7 @@
         android:textSize="14sp"
         android:gravity="center"
         android:lines="1"
-        android:textColor="?attr/colorValue"
+        android:textColor="@color/color_black"
         android:layout_width="90dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@+id/tv_back"
@@ -45,8 +45,6 @@
     <TextView
         android:id="@+id/tv_newPrice"
         android:textSize="20sp"
-        android:lines="1"
-        android:ellipsize="none"
         android:maxLength="8"
         android:gravity="center"
         android:textColor="@color/color_white"
@@ -78,8 +76,6 @@
         app:layout_constraintRight_toLeftOf="@+id/tv_bestBidNum"/>
     <TextView
         android:id="@+id/tv_bestAskNum"
-        android:lines="1"
-        android:ellipsize="none"
         android:maxLength="8"
         android:textSize="12sp"
         android:textColor="@color/color_lightGrey"
@@ -90,8 +86,6 @@
         app:layout_constraintRight_toRightOf="@+id/tv_back"/>
     <TextView
         android:id="@+id/tv_bestBidNum"
-        android:lines="1"
-        android:ellipsize="none"
         android:maxLength="8"
         android:textSize="12sp"
         android:textColor="@color/color_lightGrey"

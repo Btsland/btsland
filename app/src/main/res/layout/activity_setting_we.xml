@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/color_white2"
     android:orientation="vertical">
 
     <!--顶部导航栏-->
@@ -15,7 +15,7 @@
         android:id="@+id/iv_about_back"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="?attr/backgroundPicture"
+        android:background="@drawable/welcome2"
         android:scaleType="fitXY" />
 
 
@@ -23,7 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="?attr/colorValue"
+        android:textColor="@color/color_black"
         android:textStyle="bold"
         android:text="比特股 -- 去中心化的工业级数字资产交易中心"
         android:layout_marginTop="10dp" />
@@ -32,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:textColor="?attr/colorValue"
+        android:textColor="@color/color_black"
         android:textStyle="bold"
         android:text="技术特色"
         android:layout_marginTop="10dp" />
@@ -43,7 +43,7 @@
         android:gravity="center"
         android:textStyle="bold"
         android:text="基于石墨烯技术的区块链平台, 提供符合国人习惯的数字资产交易中心。"
-        android:textColor="?attr/colorValue"/>
+        android:textColor="@color/color_black"/>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
             android:autoLink="web"
             android:text="官网地址：https://www.btsland.info/"
             android:textSize="20dp"
-            android:textColor="?attr/colorValue"
+            android:textColor="@color/color_black"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp" />
     </RelativeLayout>

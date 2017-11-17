@@ -321,7 +321,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     BtslandApplication.accountObject=accountObject;
                     BtslandApplication.queryAsset();
-                    BtslandApplication.isLogin=true;
+
                     loginBundle.putString("login",loginRet);
                     Message loginMsg=Message.obtain();
                     loginMsg.setData(loginBundle);
@@ -377,8 +377,6 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 hud.dismiss();
                 saveUser();
-                Intent iLogin=new Intent(LoginActivity.this,UserActivity.class);
-                startActivity(iLogin);
                 finish();
 
             }else if(bundle.getString("login")!=null&&bundle.getString("login").equals("failure")){

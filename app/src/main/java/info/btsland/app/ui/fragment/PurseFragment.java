@@ -18,6 +18,7 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.activity.LoginActivity;
+import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.activity.PurseAccessRecordActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
@@ -60,6 +61,7 @@ public class PurseFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
+
     public PurseFragment() {
         // Required empty public constructor
     }
@@ -74,27 +76,36 @@ public class PurseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_purse, container, false);
+        View view =inflater.inflate(R.layout.fragment_purse, container, false);
+
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         init();
-
-        if (BtslandApplication.accountObject != null) {
-            createPortrait();//设置头像
-            tvUserName.setText("用户名：" + BtslandApplication.accountObject.name);
-
-            tvPurseConvert.setText("折合总金额约为："+BtslandApplication.accountObject.totalCNY+"CNY");
-        }
-        //        sharedPreferences= getSharedPreferences("Login", Context.MODE_PRIVATE);
-
-
+        fillIn();
 
     }
 
+    private void fillIn() {
+        if (BtslandApplication.accountObject != null) {
+            createPortrait();//设置头像
+            tvUserName.setText(BtslandApplication.accountObject.name);
 
+            tvPurseConvert.setText("折合总金额约为："+BtslandApplication.accountObject.totalCNY+"CNY");
+            tvUserAnotherName.setText("#"+BtslandApplication.accountObject.id.get_instance());
+        }else {
+            portrait.stopLoading();
+            portrait.clearHistory();
+            tvUserName.setText("");
+            tvPurseConvert.setText("");
+            tvUserAnotherName.setText("");
+        }
+        sharedPreferences= BtslandApplication.getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
+
+    }
 
 
     /**
@@ -188,8 +199,7 @@ public class PurseFragment extends Fragment {
                     break;
                 case R.id.tv_purse_allRemain:
                     //全部挂单
-                    Intent allremain = new Intent(getActivity(), PurseWholeGuadanActivity.class);
-                    getActivity().startActivity(allremain);
+                    MarketDetailedActivity.startAction(getActivity(),null,2);
                     break;
                 case R.id.tv_purse_backup:
                     //钱包备份
@@ -198,15 +208,13 @@ public class PurseFragment extends Fragment {
                     break;
 
                 case R.id.tv_user_logoff:
-                    Intent iUserLogin=new Intent(getActivity(),LoginActivity.class);
-                    startActivity(iUserLogin);
                     SharedPreferences.Editor editor=sharedPreferences.edit();
                     editor.clear();
                     editor.commit();
 
                     BtslandApplication.isLogin=false;
                     BtslandApplication.accountObject=null;
-
+                    fillIn();
 
                     break;
 

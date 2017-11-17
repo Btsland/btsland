@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="?attr/backgroundColor"
+    android:background="@color/color_white2"
     android:orientation="vertical">
 
     <!--顶部导航栏-->
@@ -19,7 +19,7 @@
         android:id="@+id/iv_users_back"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="?attr/backgroundPicture"
+        android:background="@drawable/welcome2"
         android:scaleType="fitXY"/>
 
     <TextView

@@ -310,6 +310,8 @@ public class Wallet_api {
 
         encrypt_keys();
 
+        BtslandApplication.isLogin=false;
+
         // 保存至文件
 
         return accountObject;
@@ -567,5 +569,9 @@ public class Wallet_api {
 
         return op.fee;
     }
-
+    public List<operation_history_object> get_account_history(object_id<account_object> accountId,
+                                                              object_id<operation_history_object> startId,
+                                                              int nLimit) throws NetworkStatusException {
+        return mWebsocketApi.get_account_history(accountId, startId, nLimit);
+    }
 }

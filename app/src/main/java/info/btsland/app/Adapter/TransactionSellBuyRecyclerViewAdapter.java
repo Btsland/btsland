@@ -5,22 +5,25 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.Order;
+import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
 
 /**
  * Created by Administrator on 2017/11/14.
  */
 
 public class TransactionSellBuyRecyclerViewAdapter extends RecyclerView.Adapter<TransactionSellBuyRecyclerViewAdapter.ViewHolder>  {
+    private EditText edPrice;
     private List<Order> list;
 
-    public TransactionSellBuyRecyclerViewAdapter() {
-
+    public TransactionSellBuyRecyclerViewAdapter(EditText edPrice) {
+        this.edPrice=edPrice;
     }
 
     public void setList(List<Order> list){
@@ -57,12 +60,19 @@ public class TransactionSellBuyRecyclerViewAdapter extends RecyclerView.Adapter<
         public ViewHolder(View view) {
             super(view);
             this.view = view;
-            tvPrice = (TextView) view.findViewById(R.id.tv_item_price);
-            tvVol = (TextView) view.findViewById(R.id.tv_item_vol);
+            tvPrice = view.findViewById(R.id.tv_item_price);
+            tvVol = view.findViewById(R.id.tv_item_vol);
+
         }
 
-        public void update(Order order){
-            Log.i("adapder", "update: order:"+order);
+        public void update(final Order order){
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    edPrice.getEditableText().clear();
+                    edPrice.getEditableText().append(String.valueOf(order.price));
+                }
+            });
             tvPrice.setText(String.valueOf(order.price));
             tvVol.setText(String.valueOf(order.quote));
         }

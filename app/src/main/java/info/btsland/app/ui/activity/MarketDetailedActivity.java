@@ -24,21 +24,28 @@ import info.btsland.app.ui.view.IViewPager;
 
 public class MarketDetailedActivity extends AppCompatActivity{
     private HeadFragment headFragment;
-    public static MarketTicker market;
+    public static MarketTicker market=new MarketTicker("CNY","BTS");
 
     public static String title;
+    private int index = 1 ;
 
-    public static void startAction(Context context, MarketTicker market){
+    public static void startAction(Context context, MarketTicker market,int index){
         Intent intent = new Intent(context, MarketDetailedActivity.class);
-        intent.putExtra("MarketTicker", market);
+        if(market!=null){
+            intent.putExtra("MarketTicker", market);
+        }
+        intent.putExtra("index", index);
         context.startActivity(intent);
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
-        this.market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+        if(getIntent().getSerializableExtra("MarketTicker")!=null){
+            this.market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+        }
         this.title=market.quote+":"+market.base;
+        this.index=getIntent().getIntExtra("index",index);
         fillInHead();
         init();
     }
@@ -49,7 +56,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         TextView textView = headFragment.getView().findViewById(R.id.tv_head_title);
         textView.setText(title);
     }
-    int index = 0 ;
+
     /**
      * 初始化
      */
@@ -67,7 +74,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles);
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.psts_detailed_title);
         viewPager.setAdapter(adapter);
-        viewPager.setCurrentItem(0);
+        viewPager.setCurrentItem(index);
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(new OnPage());
     }

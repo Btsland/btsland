@@ -105,8 +105,8 @@ public class HeadFragment extends Fragment {
                 break;
             case HeadType.USER_SET:
 //                leftTextView.setBackground(getActivity().getDrawable(R.drawable.image_user));
-                //leftTextView.setCompoundDrawables(null,null,drawable,null);
-                //leftTextView.setOnClickListener(toUser);
+                leftTextView.setCompoundDrawables(null,null,drawable,null);
+                leftTextView.setOnClickListener(toUser);
                 rightTextView.setOnClickListener(toSetting);
                 break;
             case HeadType.BACK_SELECT_NULL:
@@ -134,8 +134,6 @@ public class HeadFragment extends Fragment {
         @Override
         public void onClick(View view) {
             if (BtslandApplication.accountObject!=null){
-                Intent intent = new Intent(getActivity(), UserActivity.class);
-                getActivity().startActivity(intent);
             }else {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 getActivity().startActivity(intent);

@@ -1,7 +1,6 @@
 package info.btsland.app.ui.activity;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -68,21 +67,20 @@ public class LoginActivity extends AppCompatActivity {
    // private Button tourist;
     private boolean isOpen = false;
 
-    private SharedPreferences  sps;
     private boolean pwdIsPual=false;
     private boolean userIsPual=false;
     private String registerUser;
     private String registerPwd;
     private KProgressHUD hud;
+    private Handler purseHander;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        purseHander =(Handler) getIntent().getSerializableExtra("hander");
         initView();
         //声明函数文件名与操作模式
-        sps=getSharedPreferences("Login",Context.MODE_PRIVATE);
 
     }
     private void initView() {
@@ -250,7 +248,7 @@ public class LoginActivity extends AppCompatActivity {
                         hud=KProgressHUD.create(LoginActivity.this);
                         hud.setLabel(getResources().getString(R.string.please_wait));
                         hud.show();
-                        thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD,mHander);
+                        thread=new AccountThread(loginUserName,loginPassword,AccountThread.LOGIN_BY_PASSWORD,mHander,purseHander);
                         thread.start();
                     }
                     break;
@@ -271,7 +269,7 @@ public class LoginActivity extends AppCompatActivity {
                                 hud=KProgressHUD.create(LoginActivity.this);
                                 hud.setLabel(getResources().getString(R.string.please_wait));
                                 hud.show();
-                                thread=new AccountThread(registerUser,registerPwd,AccountThread.REGISTER_BY_PASSWORD,mHander);
+                                thread=new AccountThread(registerUser,registerPwd,AccountThread.REGISTER_BY_PASSWORD,mHander,purseHander);
                                 thread.start();
                             }
                         }
@@ -290,15 +288,18 @@ public class LoginActivity extends AppCompatActivity {
         public static final int LOGIN_BY_BIN=2;
         public static final int REGISTER_BY_PASSWORD=3;
        private  Handler handler;
+       private Handler purseHander;
+
        private int want;
         private String name;
         private String pwd;
 
-        public AccountThread(String name, String pwd,int want,Handler handler) {
+       public AccountThread(String name, String pwd,int want,Handler handler,Handler purseHander) {
             this.name=name;
             this.pwd=pwd;
             this.want=want;
             this.handler=handler;
+            this.purseHander=purseHander;
         }
 
 
@@ -318,14 +319,21 @@ public class LoginActivity extends AppCompatActivity {
                     Bundle loginBundle=new Bundle();
                     if(accountObject==null){
                         loginRet="failure";
+                    }else {
+                        BtslandApplication.accountObject=accountObject;
+                        BtslandApplication.queryAsset();
+                        BtslandApplication.isLogin=true;
                     }
-                    BtslandApplication.accountObject=accountObject;
-                    BtslandApplication.queryAsset();
-
                     loginBundle.putString("login",loginRet);
+
                     Message loginMsg=Message.obtain();
                     loginMsg.setData(loginBundle);
+                    if(purseHander!=null){
+
+                        purseHander.sendEmptyMessage(1);
+                    }
                     handler.sendMessage(loginMsg);
+
                     break;
                 //钱包登录
                 case LOGIN_BY_BIN:
@@ -352,7 +360,12 @@ public class LoginActivity extends AppCompatActivity {
                         registerBundle.putString("register","fail");
                     }
                     registerMsg.setData(registerBundle);
+                    if(purseHander!=null){
+
+                        purseHander.sendEmptyMessage(1);
+                    }
                     handler.sendMessage(registerMsg);
+
                     break;
             }
         }
@@ -367,7 +380,7 @@ public class LoginActivity extends AppCompatActivity {
             Bundle bundle=msg.getData();
             if(bundle.getString("register")!=null&&bundle.getString("register").equals("success")){
                 Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
-                AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD,this);
+                AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD,this,purseHander);
                 accountThread.start();
             }else if(bundle.getString("register")!=null&&bundle.getString("register").equals("fail")){
                 Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
@@ -377,7 +390,11 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 hud.dismiss();
                 saveUser();
+//                Intent iLogin=new Intent(LoginActivity.this,MainActivity.class);
+//                startActivity(iLogin);
                 finish();
+
+
 
             }else if(bundle.getString("login")!=null&&bundle.getString("login").equals("failure")){
                 Log.i(TAG, "handleMessage: 登录失败");
@@ -408,8 +425,9 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * 保存用户
      */
-    private  void saveUser(){
+    public static void saveUser(){
         //借助Editor实现共享参数储存
+        SharedPreferences  sps=BtslandApplication.getInstance().getSharedPreferences("Login",Context.MODE_PRIVATE);
         SharedPreferences.Editor editor=sps.edit();
         editor.putString("username",BtslandApplication.accountObject.name);
         editor.commit();

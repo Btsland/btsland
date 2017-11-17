@@ -30,6 +30,21 @@ public class IAsset {
         fillIn();
     }
 
+    public IAsset() {
+    }
+
+//    public IAsset(asset mAsset, Double total, Double usable, Double orders, String coinName) {
+//        this.mAsset=mAsset;
+//        this.total=total;
+//        this.usable=usable;
+//        this.orders=orders;
+//        this.coinName=coinName;
+//    }
+
+
+
+
+
 
     /**
      *

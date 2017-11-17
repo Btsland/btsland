@@ -212,7 +212,6 @@ public class PurseFragment extends Fragment {
     class TextViewOnCLickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Toast.makeText(getActivity(), "全部", Toast.LENGTH_SHORT).show();
             switch (view.getId()) {
 
                 case R.id.tv_purse_allAsset:

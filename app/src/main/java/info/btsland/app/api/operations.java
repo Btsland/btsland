@@ -62,6 +62,14 @@ public class operations {
         public int nOperationType;
         public Object operationContent;
 
+        @Override
+        public String toString() {
+            return "operation_type{" +
+                    "nOperationType=" + nOperationType +
+                    ", operationContent=" + operationContent +
+                    '}';
+        }
+
         public static class operation_type_deserializer implements JsonDeserializer<operation_type> {
             @Override
             public operation_type deserialize(JsonElement json,
@@ -227,6 +235,17 @@ public class operations {
 
             return lFee;
         }
+        @Override
+        public String toString() {
+            return "transfer_operation{" +
+                    "fee=" + fee +
+                    ", from=" + from +
+                    ", to=" + to +
+                    ", amount=" + amount +
+                    ", memo=" + memo +
+                    ", extensions=" + extensions +
+                    '}';
+        }
     }
 
     public static class limit_order_create_operation implements base_operation {
@@ -326,6 +345,19 @@ public class operations {
             listAssetId.add(min_to_receive.asset_id);
             return listAssetId;
         }
+
+        @Override
+        public String toString() {
+            return "limit_order_create_operation{" +
+                    "fee=" + fee +
+                    ", seller=" + seller +
+                    ", amount_to_sell=" + amount_to_sell +
+                    ", min_to_receive=" + min_to_receive +
+                    ", expiration=" + expiration +
+                    ", fill_or_kill=" + fill_or_kill +
+                    ", extensions=" + extensions +
+                    '}';
+        }
     }
 
     public static class limit_order_cancel_operation implements base_operation {
@@ -404,6 +436,16 @@ public class operations {
             List<object_id<asset_object>> listAssetId = new ArrayList<>();
             return listAssetId;
         }
+
+        @Override
+        public String toString() {
+            return "limit_order_cancel_operation{" +
+                    "fee=" + fee +
+                    ", order=" + order +
+                    ", fee_paying_account=" + fee_paying_account +
+                    ", extensions=" + extensions +
+                    '}';
+        }
     }
 
     public static class call_order_update_operation implements base_operation {
@@ -466,6 +508,17 @@ public class operations {
             listAssetId.add(delta_collateral.asset_id);
             listAssetId.add(delta_debt.asset_id);
             return listAssetId;
+        }
+
+        @Override
+        public String toString() {
+            return "call_order_update_operation{" +
+                    "fee=" + fee +
+                    ", funding_account=" + funding_account +
+                    ", delta_collateral=" + delta_collateral +
+                    ", delta_debt=" + delta_debt +
+                    ", extensions=" + extensions +
+                    '}';
         }
     }
 
@@ -531,6 +584,16 @@ public class operations {
             return listAssetId;
         }
 
+        @Override
+        public String toString() {
+            return "fill_order_operation{" +
+                    "order_id=" + order_id +
+                    ", account_id=" + account_id +
+                    ", pays=" + pays +
+                    ", receives=" + receives +
+                    ", fee=" + fee +
+                    '}';
+        }
     }
 
     public static class account_create_operation implements base_operation {
@@ -611,5 +674,18 @@ public class operations {
             return listAssetId;
         }
 
+        @Override
+        public String toString() {
+            return "account_create_operation{" +
+                    "fee=" + fee +
+                    ", registrar=" + registrar +
+                    ", referrer=" + referrer +
+                    ", referrer_percent=" + referrer_percent +
+                    ", name='" + name + '\'' +
+                    ", owner=" + owner +
+                    ", active=" + active +
+                    ", options=" + options +
+                    '}';
+        }
     }
 }

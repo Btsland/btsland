@@ -1,15 +1,21 @@
 package info.btsland.app.ui.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.object_id;
+import info.btsland.app.api.operation_history_object;
+import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
+
 
 public class DetailedHaveInHandFragment extends Fragment {
     private static String MARKET="market";
@@ -36,8 +42,13 @@ public class DetailedHaveInHandFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_detailed_have_in_hand, container, false);
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
 }

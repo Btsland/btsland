@@ -308,8 +308,11 @@ public class Websocket_api extends WebSocketListener {
         ReplyObjectProcess<Reply<List<asset_object>>> replyObjectProcess =
                 new ReplyObjectProcess<>(new TypeToken<Reply<List<asset_object>>>(){}.getType());
         Reply<List<asset_object>> replyObject = sendForReply(callObject, replyObjectProcess);
-
-        return replyObject.result;
+        List<asset_object> assetObjects=replyObject.result;
+        for(int i=0;i<assetObjects.size();i++){
+            BtslandApplication.assetObjectMap.put(assetObjects.get(i).id,assetObjects.get(i));
+        }
+        return assetObjects;
     }
     public account_object get_account_by_name(String name) throws NetworkStatusException {
         Call callObject = new Call();
@@ -404,8 +407,9 @@ public class Websocket_api extends WebSocketListener {
         ReplyObjectProcess<Reply<List<asset_object>>> replyObjectProcess =
                 new ReplyObjectProcess<>(new TypeToken<Reply<List<asset_object>>>(){}.getType());
         Reply<List<asset_object>> replyObject = sendForReply(callObject, replyObjectProcess);
-
-        return replyObject.result.get(0);
+        asset_object assetObject = replyObject.result.get(0);
+        BtslandApplication.assetObjectMap.put(assetObject.id,assetObject);
+        return assetObject;
     }
     public int broadcast_transaction(signed_transaction tx) throws NetworkStatusException {
         Call callObject = new Call();

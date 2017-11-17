@@ -18,6 +18,8 @@ import info.btsland.app.api.Wallet_api;
 import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.api.asset;
+import info.btsland.app.api.asset_object;
+import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.activity.WelcomeActivity;
@@ -53,6 +55,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static String[] bases={"CNY", "BTS", "USD", "BTC"};
     public static String[] quotes1={"BTC", "ETH", "BTS", "LTC", "OMG", "STEEM", "VEN", "HPB", "OCT", "YOYOW", "DOGE", "HASH"};
     public static String[] quotes2={"CNY","BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
+    public static Map<object_id<asset_object>, asset_object> assetObjectMap=new HashMap<object_id<info.btsland.app.api.asset_object>, info.btsland.app.api.asset_object>();
 
 
     public static Wallet_api getWalletApi() {
@@ -164,7 +167,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static class AccetThread extends Thread{
         @Override
         public void run() {
-            super.run();
             try {
                 List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
@@ -221,11 +223,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
 
         }
-
-
-
-
-
 
 
 }

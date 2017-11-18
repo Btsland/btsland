@@ -39,6 +39,8 @@
     <string name="tradingrecord">交易记录</string>
     <string name="wholeguadan">全部挂单</string>
     <string name="walletbackup">钱包备份</string>
+    <string name="transfer_accounts">转账操作</string>
+    
 
     <string name="set">设置</string>
     <string name="language">语言</string>

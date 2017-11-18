@@ -546,6 +546,8 @@ public class Wallet_api {
     public asset calculate_buy_fee(asset_object assetToReceive, asset_object assetToSell,
                                    double rate, double amount,
                                    global_property_object globalPropertyObject) {
+        Log.e(TAG, "calculate_buy_fee: rate:"+rate );
+        Log.e(TAG, "calculate_buy_fee: amount:"+amount+"Double.toString(rate * amount):"+Double.toString(rate * amount) );
         return calculate_sell_asset_fee(Double.toString(rate * amount), assetToSell,
                 Double.toString(amount), assetToReceive, globalPropertyObject);
     }

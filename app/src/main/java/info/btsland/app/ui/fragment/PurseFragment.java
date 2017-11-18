@@ -28,6 +28,7 @@ import info.btsland.app.ui.activity.PurseAccessRecordActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.PurseWalletBackupActivity;
+import info.btsland.app.ui.view.AppDialog;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -239,14 +240,31 @@ public class PurseFragment extends Fragment {
                     getActivity().startActivity(backup);
                     break;
                 case R.id.tv_user_logoff:
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.clear();
-                    editor.commit();
+                    AppDialog appDialog=new AppDialog(getActivity());
 
-                    BtslandApplication.isLogin=false;
-                    BtslandApplication.accountObject=null;
-                    fillIn();
-                    yesOrNoLogin();
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            SharedPreferences.Editor editor=sharedPreferences.edit();
+                            editor.clear();
+                            editor.commit();
+
+                            BtslandApplication.isLogin=false;
+                            BtslandApplication.accountObject=null;
+                            fillIn();
+                            yesOrNoLogin();
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
+
+
+                    //appDialog.setTitle("");
+                    appDialog.setMsg("你确定要退出吗？");
+                    appDialog.show();
                     break;
                 case R.id.tv_go_login:
                     purseHander handler=new purseHander();

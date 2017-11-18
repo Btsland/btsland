@@ -75,72 +75,28 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         }
         Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
         Message message=Message.obtain();
+        Bundle bundle=new Bundle();
+        bundle.putSerializable("MarketTicker",stat.MarketTicker);
         switch (stat.MarketTicker.base){
             case "CNY":
-                synchronized (this) {
-                    if (cnyMarket != null && cnyMarket.size() > quotes.length) {
-                        cnyMarket.clear();
-                    }
-                    if (!replaceMarket(cnyMarket, stat.MarketTicker)) {
-                        return;
-                    }
-                    message.what = NOTIFY_CNY;
-                    mHandler.sendMessage(message);
-                }
+                message.what = NOTIFY_CNY;
                 break;
             case "BTS":
-                synchronized (this) {
-                    if(stat.MarketTicker.quote.equals("CNY")){
-                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:"+stat.MarketTicker);
-                    }
-                    if (btsMarket != null && btsMarket.size() > quotes.length) {
-                        btsMarket.clear();
-                    }
-                    if (!replaceMarket(btsMarket, stat.MarketTicker)) {
-                        return;
-                    }
-                    message.what = NOTIFY_BTS;
-                    mHandler.sendMessage(message);
-                }
+                message.what = NOTIFY_BTS;
                 break;
             case "USD":
-                synchronized (this) {
-                    if (usdMarket != null && usdMarket.size() > quotes.length) {
-                        usdMarket.clear();
-                    }
-
-                    if (!replaceMarket(usdMarket, stat.MarketTicker)) {
-                        return;
-                    }
-                    message.what = NOTIFY_USD;
-                    mHandler.sendMessage(message);
-                }
+                message.what = NOTIFY_USD;
                 break;
             case "BTC":
-                synchronized (this) {
-                    if (btcMarket != null && btcMarket.size() > quotes.length) {
-                        btcMarket.clear();
-                    }
-                    if (!replaceMarket(btcMarket, stat.MarketTicker)) {
-                        return;
-                    }
-                    message.what = NOTIFY_BTC;
-                    mHandler.sendMessage(message);
-                }
+                message.what = NOTIFY_BTC;
                 break;
-//            case "ETH":
-//                synchronized (this) {
-//                    if (ethMarket != null && ethMarket.size() > quotes.length) {
-//                        ethMarket.clear();
-//                    }
-//                    if (!replaceMarket(ethMarket, stat.MarketTicker)) {
-//                        return;
-//                    }
-//                    message.what = NOTIFY_ETH;
-//                    mHandler.sendMessage(message);
-//                }
-//                break;
         }
+
+
+        message.setData(bundle);
+
+
+        mHandler.sendMessage(message);
     }
     public boolean replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
         String key=newMarket.quote;
@@ -165,21 +121,60 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     }
     private Handler mHandler=new Handler(){
         @Override
-        public synchronized void handleMessage(Message msg) {
-
-            Log.i(TAG, "handleMessage: msg.what:"+msg.what);
-            if(msg.what==NOTIFY_CNY){
-                cnyRowAdapter.notifyDataSetChanged();
-            }else if(msg.what==NOTIFY_BTS){
-                btsRowAdapter.notifyDataSetChanged();
-            }else if(msg.what==NOTIFY_USD){
-                usdRowAdapter.notifyDataSetChanged();
-            }else if(msg.what==NOTIFY_BTC){
-                btcRowAdapter.notifyDataSetChanged();
-            }
+        public void handleMessage(Message msg) {
+            Log.i(TAG, "handleMessage: msg.what:" + msg.what);
+            Bundle bundle = msg.getData();
+            MarketTicker marketTicker = (MarketTicker) bundle.getSerializable("MarketTicker");
+            if (marketTicker != null) {
+                if (msg.what == NOTIFY_CNY) {
+                    if (marketTicker.quote.equals("CNY")) {
+                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
+                    }
+                    if (cnyMarket != null && cnyMarket.size() > quotes.length) {
+                        cnyMarket.clear();
+                    }
+                    if (!replaceMarket(cnyMarket, marketTicker)) {
+                        return;
+                    }
+                    cnyRowAdapter.notifyDataSetChanged();
+                } else if (msg.what == NOTIFY_BTS) {
+                    if (marketTicker.quote.equals("CNY")) {
+                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
+                    }
+                    if (btsMarket != null && btsMarket.size() > quotes.length) {
+                        btsMarket.clear();
+                    }
+                    if (!replaceMarket(btsMarket, marketTicker)) {
+                        return;
+                    }
+                    btsRowAdapter.notifyDataSetChanged();
+                } else if (msg.what == NOTIFY_USD) {
+                    if (marketTicker.quote.equals("CNY")) {
+                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
+                    }
+                    if (usdMarket != null && usdMarket.size() > quotes.length) {
+                        usdMarket.clear();
+                    }
+                    if (!replaceMarket(usdMarket, marketTicker)) {
+                        return;
+                    }
+                    usdRowAdapter.notifyDataSetChanged();
+                } else if (msg.what == NOTIFY_BTC) {
+                    if (marketTicker.quote.equals("CNY")) {
+                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
+                    }
+                    if (btcMarket != null && btcMarket.size() > quotes.length) {
+                        btcMarket.clear();
+                    }
+                    if (!replaceMarket(btcMarket, marketTicker)) {
+                        return;
+                    }
+                    btcRowAdapter.notifyDataSetChanged();
+                }
 //            else if(msg.what==NOTIFY_ETH){
 //                ethRowAdapter.notifyDataSetChanged();
 //            }
+            }
         }
     };
 

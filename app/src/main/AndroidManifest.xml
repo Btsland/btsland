@@ -23,13 +23,13 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".ui.activity.MainActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.UserActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SettingActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -42,23 +42,23 @@
         </activity>
         <activity
             android:name=".ui.activity.PurseAssetActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PurseAccessRecordActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PurseTradingRecordActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PurseWholeGuadanActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.PurseWalletBackupActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.MarketDetailedActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize"></activity>
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".ui.activity.NewsContentActivity"
             android:screenOrientation="portrait">
@@ -66,13 +66,13 @@
         </activity>
         <activity
             android:name=".ui.activity.AboutUsActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.UsersGuidanceActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.VersionInformationActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.TransactionActivity"
             android:screenOrientation="portrait" />
@@ -95,6 +95,7 @@
             android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/welcomeTheme.TranslucentStatus" />
+        <activity android:name=".ui.activity.TransferActivity"></activity>
     </application>
 
 </manifest>

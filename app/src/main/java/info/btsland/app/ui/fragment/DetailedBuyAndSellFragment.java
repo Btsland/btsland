@@ -1,6 +1,5 @@
 package info.btsland.app.ui.fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -33,10 +32,10 @@ import info.btsland.app.api.utils;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.Order;
-import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
 import info.btsland.app.ui.view.PasswordDialog;
+import info.btsland.app.util.NumericUtil;
 
 public class DetailedBuyAndSellFragment extends Fragment
         implements MarketStat.OnMarketStatUpdateListener {
@@ -189,11 +188,11 @@ public class DetailedBuyAndSellFragment extends Fragment
                     if(strPrice.substring(0,1).equals(".")){
                         editable.insert(0,"0");
                     }
-                    price= Double.valueOf(editable.toString());
+                    price= NumericUtil.parseDouble(strPrice, 0.0D);
                 }
                 String strVol = edVol.getText().toString();
                 if(strVol!=null&&strVol.length()!=0){
-                    vol= Double.valueOf(edVol.getText().toString());
+                    vol = NumericUtil.parseDouble(strVol, 0.0D);
                 }
                 total=price*vol;
                 tvTotalNum.setText(String.valueOf(total));
@@ -221,11 +220,11 @@ public class DetailedBuyAndSellFragment extends Fragment
                     if(strVol.substring(0,1).equals(".")){
                         editable.insert(0,"0");
                     }
-                    vol= Double.valueOf(editable.toString());
+                    vol=  NumericUtil.parseDouble(strVol, 0.0D);
                 }
                 String strPrice = edPrice.getText().toString();
                 if(strPrice!=null&&strPrice.length()!=0){
-                    price= Double.valueOf(edPrice.getText().toString());
+                    price= NumericUtil.parseDouble(strPrice, 0.0D);
                 }
                 total=price*vol;
                 tvTotalNum.setText(String.valueOf(total));

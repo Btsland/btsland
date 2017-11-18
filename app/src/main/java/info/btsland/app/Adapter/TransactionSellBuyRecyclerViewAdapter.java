@@ -31,7 +31,7 @@ public class TransactionSellBuyRecyclerViewAdapter extends RecyclerView.Adapter<
            notifyItemRangeRemoved(0,getItemCount());
         }
         this.list = list;
-        notifyItemRangeInserted(0,getItemCount());
+//        notifyItemRangeInserted(0,getItemCount());
     }
 
     @Override

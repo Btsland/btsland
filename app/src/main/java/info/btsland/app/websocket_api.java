@@ -152,9 +152,11 @@ public class websocket_api extends WebSocketListener {
         String wallet = "{\"id\":8,\"method\":\"call\",\"params\":[1,\"wallet\",[]]}";
         mWebsocket.send(wallet);
 
-        String query9="{\"id\":111111,\"method\":\"call\",\"params\":[1,\"get_account_balances\",[\"li-88888\"]]}";
-        mWebsocket.send(query9);
+//        String query9="{\"id\":111111,\"method\":\"call\",\"params\":[1,\"get_account_balances\",[\"li-88888\"]]}";
+//        mWebsocket.send(query9);
 
+        String query20="{\"id\":666,\"method\":\"call\",\"params\":[2,\"get_proposed_transactions\",\"1.2.461356\"]}";
+        mWebsocket.send(query20);
 
 //        String query6 = "{\"id\":10,\"method\":\"call\",\"params\":[2,\"get_account_by_name\",[\"li-8888\"]]}";
 //        mWebsocket.send(query6);

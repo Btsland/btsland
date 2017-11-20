@@ -2,6 +2,7 @@ package info.btsland.app;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
 import android.widget.Toast;
 
@@ -142,7 +143,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
-                queryAsset();
+                queryAsset(null);
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
@@ -156,8 +157,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     /**
      * 查询用余额线程外部调用方法
      */
-    public static void queryAsset(){
-        new AccetThread().start();
+    public static void queryAsset(Handler handler){
+        new AccetThread(handler).start();
     }
 
     /**
@@ -165,6 +166,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
      *
      */
     private static class AccetThread extends Thread{
+
+        private Handler handler;
+
+        public AccetThread(Handler handler) {
+            this.handler=handler;
+        }
+
         @Override
         public void run() {
             try {
@@ -179,6 +187,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         iAssets.add(new IAsset(assets.get(i)));
                     }
                 }
+                if (handler!=null){
+                    handler.sendEmptyMessage(1);
+                }
+
                 CuntTotalCNY();
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
@@ -215,7 +227,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                             accountObject.totalCNY=iAssets.get(i).total * price;
                         }
-
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
                     }

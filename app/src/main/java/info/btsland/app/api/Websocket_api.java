@@ -289,6 +289,9 @@ public class Websocket_api extends WebSocketListener {
         return replyAccountHistory.result;
     }
 
+
+
+
     public List<asset_object> get_assets(List<object_id<asset_object>> listAssetObjectId) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
@@ -483,6 +486,26 @@ public class Websocket_api extends WebSocketListener {
         Reply<List<asset>> replyLookupAccountNames = sendForReply(callObject, replyObject);
 
         return replyLookupAccountNames.result;
+    }
+    public void list(object_id<account_object> accountId) throws NetworkStatusException {
+        Log.e(TAG, "list: 22222222222222222222222222222" );
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_proposed_transactions");
+
+        List<Object> listAccountBalancesParam = new ArrayList<>();
+        listAccountBalancesParam.add(accountId);
+        listAccountBalancesParam.add(new ArrayList<Object>());
+        callObject.params.add(listAccountBalancesParam);
+
+
+        ReplyObjectProcess<Reply<List<asset>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset>>>(){}.getType());
+        Reply<List<asset>> replyLookupAccountNames = sendForReply(callObject, replyObject);
+
     }
     public List<asset> list_account_balances_by_name(String accountName) throws NetworkStatusException {
         Call callObject = new Call();

@@ -1,6 +1,8 @@
 package info.btsland.app.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -34,25 +36,30 @@ public class PurseAssetActivity extends AppCompatActivity {
         Log.i("PurseAssetActivity", "onCreate: ");
         fillInHead();
         init();
-       
+
 
     }
+
+    public void queryAllAsset(){
+
+        BtslandApplication.queryAsset(handler);
+
+
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        if(BtslandApplication.accountObject.assetlist==null||BtslandApplication.accountObject.assetlist.size()==0){
-            Log.e("PurseAssetActivity", "BtslandApplication.accountObject.assetlist: "+BtslandApplication.accountObject.assetlist );
-            BtslandApplication.queryAsset();
-        }
+        BtslandApplication.queryAsset(handler);
         setLvAsset();
 
         
     }
 
     private void setLvAsset(){
-        assets =BtslandApplication.accountObject.assetlist;
-        Log.e(TAG, "setLvAsset: "+assets.size() );
+//        assets =BtslandApplication.accountObject.assetlist;
+//        Log.e(TAG, "setLvAsset: "+assets.size() );
         adapter=new AssetSimpleCursorAdapter(this,BtslandApplication.iAssets);
         lvAsset.setAdapter(adapter);
 
@@ -80,6 +87,22 @@ public class PurseAssetActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
+
+
+
+
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==1){
+                adapter.notifyDataSetChanged();
+
+            }
+
+
+        }
+    };
+
 
 
 }

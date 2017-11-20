@@ -630,6 +630,7 @@ public class Websocket_api extends WebSocketListener {
 //        ReplyObjectProcess<Reply<MarketTicker>> replyObject =
 //                new ReplyObjectProcess<>();
         Reply<MarketTicker> reply = sendForReply(callObject, replyObject);
+        Log.i(TAG, "get_ticker: "+reply.result);
         return reply.result;
     }
     private <T> Reply<T> sendForReply(Call callObject,

@@ -23,6 +23,7 @@ import info.btsland.app.api.asset_object;
 import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
+import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
 import okhttp3.WebSocket;
@@ -219,8 +220,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         @Override
         public void run() {
                 for (int i=0; i < iAssets.size(); i++) {
+                    if(iAssets.get(i).coinName.equals("CNY")){
+                        continue;
+                    }
                     try {
-                        Double price=Double.parseDouble(getMarketStat().mWebsocketApi.get_ticker("CNY", iAssets.get(i).coinName).latest);
+                        MarketTicker ticker =getMarketStat().mWebsocketApi.get_ticker("CNY", iAssets.get(i).coinName);
+                        Double price=Double.parseDouble(ticker.latest);
                         if(price==null){
                             accountObject.totalCNY=0.0;
                         }else if (price!=null){

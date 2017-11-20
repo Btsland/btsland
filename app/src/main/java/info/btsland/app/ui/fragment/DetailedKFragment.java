@@ -1,5 +1,6 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -340,8 +341,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setShadowWidth(0.7f);
         set.setDecreasingPaintStyle(Paint.Style.FILL);
-        int nColorGreen = ContextCompat.getColor(getActivity(), R.color.color_font_red);
-        int nColorRed = ContextCompat.getColor(getActivity(), R.color.color_green);
+        int nColorGreen = BtslandApplication.getInstance().getResources().getColor(R.color.color_font_red);
+        int nColorRed = BtslandApplication.getInstance().getResources().getColor(R.color.color_green);
 
         //设置绿涨红跌
         set.setDecreasingColor(nColorRed);
@@ -467,7 +468,9 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         @Override
         public void handleMessage(Message msg) {
             if( msg.what==SUCCESS){
-                updateChartData();
+                if(isAdded()){
+                    updateChartData();
+                }
             }
         }
     };

@@ -1,5 +1,6 @@
 package info.btsland.app.api;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.common.primitives.UnsignedInteger;
@@ -575,5 +576,68 @@ public class Wallet_api {
                                                               object_id<operation_history_object> startId,
                                                               int nLimit) throws NetworkStatusException {
         return mWebsocketApi.get_account_history(accountId, startId, nLimit);
+    }
+    public signed_transaction transfer(String strFrom,
+                                       String strTo,
+                                       String strAmount,
+                                       String strAssetSymbol,
+                                       String strMemo) throws NetworkStatusException {
+
+        object_id<asset_object> assetObjectId = object_id.create_from_string(strAssetSymbol);
+        asset_object assetObject = null;
+        if (assetObjectId == null) {
+            assetObject = mWebsocketApi.lookup_asset_symbols(strAssetSymbol);
+        } else {
+            List<object_id<asset_object>> listAssetObjectId = new ArrayList<>();
+            listAssetObjectId.add(assetObjectId);
+            assetObject = mWebsocketApi.get_assets(listAssetObjectId).get(0);
+        }
+
+        account_object accountObjectFrom = get_account(strFrom);
+        account_object accountObjectTo = get_account(strTo);
+        if (accountObjectTo == null) {
+            throw new NetworkStatusException("failed to get account object");
+        }
+
+        operations.transfer_operation transferOperation = new operations.transfer_operation();
+        transferOperation.from = accountObjectFrom.id;
+        transferOperation.to = accountObjectTo.id;
+        transferOperation.amount = assetObject.amount_from_string(strAmount);
+        transferOperation.extensions = new HashSet<>();
+        if (TextUtils.isEmpty(strMemo) == false) {
+            transferOperation.memo = new memo_data();
+            transferOperation.memo.from = accountObjectFrom.options.memo_key;
+            transferOperation.memo.to = accountObjectTo.options.memo_key;
+
+            types.private_key_type privateKeyType = mHashMapPub2Priv.get(accountObjectFrom.options.memo_key);
+            if (privateKeyType == null) {
+                // // TODO: 07/09/2017 获取失败的问题
+                throw new NetworkStatusException("failed to get private key");
+            }
+            transferOperation.memo.set_message(
+                    privateKeyType.getPrivateKey(),
+                    accountObjectTo.options.memo_key.getPublicKey(),
+                    strMemo,
+                    0
+            );
+            transferOperation.memo.get_message(
+                    privateKeyType.getPrivateKey(),
+                    accountObjectTo.options.memo_key.getPublicKey()
+            );
+        }
+
+        operations.operation_type operationType = new operations.operation_type();
+        operationType.nOperationType = operations.ID_TRANSER_OPERATION;
+        operationType.operationContent = transferOperation;
+
+        signed_transaction tx = new signed_transaction();
+        tx.operations = new ArrayList<>();
+        tx.operations.add(operationType);
+        tx.extensions = new HashSet<>();
+        set_operation_fees(tx, mWebsocketApi.get_global_properties().parameters.current_fees);
+
+
+        //// TODO: 07/09/2017 tx.validate();
+        return sign_transaction(tx);
     }
 }

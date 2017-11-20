@@ -1,12 +1,17 @@
 package info.btsland.app.ui.activity;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.List;
 
@@ -27,6 +32,9 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
     private HeadFragment headFragment;
     private RecyclerView rlvOperation;
     private OperationRecyclerViewAdapter rlvOperationAdapter;
+    private List<operation_history_object> listHistoryObject;
+
+    private KProgressHUD hud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,29 +48,40 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
      */
     private void init() {
         rlvOperation=findViewById(R.id.rlv_operation);
+        rlvOperation.setLayoutManager(new LinearLayoutManager(this));
+        rlvOperationAdapter = new OperationRecyclerViewAdapter();
+        rlvOperation.setAdapter(rlvOperationAdapter);
+        rlvOperation.setItemAnimator(null);
         fillIn();
 
     }
 
     private void fillIn() {
-        List<operation_history_object> listHistoryObject = null;
-        try {
-            listHistoryObject = BtslandApplication.getWalletApi().get_account_history(
-                    BtslandApplication.accountObject.id,
-                    new object_id<operation_history_object>(0, operation_history_object.class),
-                    100
-            );
-            for (int i=0;i<listHistoryObject.size();i++){
-                Log.i("purse", "fillIn: "+listHistoryObject.get(i).toString());
+        hud=KProgressHUD.create(PurseTradingRecordActivity.this);
+        hud.setLabel(getResources().getString(R.string.please_wait));
+        hud.show();
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    listHistoryObject = BtslandApplication.getWalletApi().get_account_history(
+                            BtslandApplication.accountObject.id,
+                            new object_id<operation_history_object>(0, operation_history_object.class),
+                            100
+                    );
+                    if(listHistoryObject!=null){
+                        handler.sendEmptyMessage(1);
+                    }else {
+                        handler.sendEmptyMessage(-1);
+                    }
+                } catch (NetworkStatusException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (NetworkStatusException e) {
-            e.printStackTrace();
-        }
-        rlvOperation.setLayoutManager(new LinearLayoutManager(this));
-        rlvOperationAdapter = new OperationRecyclerViewAdapter();
-        rlvOperationAdapter.setList(listHistoryObject);
-        rlvOperation.setAdapter(rlvOperationAdapter);
-        rlvOperation.setItemAnimator(null);
+        });
+        thread.start();
+
+
     }
 
     /**
@@ -77,5 +96,16 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            hud.dismiss();
+            if(msg.what==1){
+                rlvOperationAdapter.setList(listHistoryObject);
+            }else {
+                Toast.makeText(PurseTradingRecordActivity.this,"您的帐号目前没有记录",Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
 }

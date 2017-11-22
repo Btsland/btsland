@@ -341,8 +341,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setShadowWidth(0.7f);
         set.setDecreasingPaintStyle(Paint.Style.FILL);
-        int nColorGreen = BtslandApplication.getInstance().getResources().getColor(R.color.color_font_red);
-        int nColorRed = BtslandApplication.getInstance().getResources().getColor(R.color.color_green);
+        int nColorGreen = BtslandApplication.getInstance().getResources().getColor(R.color.color_green);
+        int nColorRed = BtslandApplication.getInstance().getResources().getColor(R.color.color_font_red);
 
         //设置绿涨红跌
         set.setDecreasingColor(nColorRed);

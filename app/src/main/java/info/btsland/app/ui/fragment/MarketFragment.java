@@ -127,6 +127,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
             MarketTicker marketTicker = (MarketTicker) bundle.getSerializable("MarketTicker");
             if (marketTicker != null) {
                 if (msg.what == NOTIFY_CNY) {
+                    if(!isAdded()){
+                        return;
+                    }
                     if (marketTicker.quote.equals("CNY")) {
                         Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
                     }
@@ -138,6 +141,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     }
                     cnyRowAdapter.notifyDataSetChanged();
                 } else if (msg.what == NOTIFY_BTS) {
+                    if(!isAdded()){
+                        return;
+                    }
                     if (marketTicker.quote.equals("CNY")) {
                         Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
                     }
@@ -149,6 +155,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     }
                     btsRowAdapter.notifyDataSetChanged();
                 } else if (msg.what == NOTIFY_USD) {
+                    if(!isAdded()){
+                        return;
+                    }
                     if (marketTicker.quote.equals("CNY")) {
                         Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
                     }
@@ -158,8 +167,12 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     if (!replaceMarket(usdMarket, marketTicker)) {
                         return;
                     }
+
                     usdRowAdapter.notifyDataSetChanged();
                 } else if (msg.what == NOTIFY_BTC) {
+                    if(!isAdded()){
+                        return;
+                    }
                     if (marketTicker.quote.equals("CNY")) {
                         Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
                     }

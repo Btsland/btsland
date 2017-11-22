@@ -2,10 +2,13 @@ package info.btsland.app.ui.view;
 
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 
 public class PasswordDialog {
@@ -19,6 +22,7 @@ public class PasswordDialog {
     private TextView tvPoint;
     private TextView tvConfirm;
     private TextView txtCancel;
+    private TextView tvHoint;
 
 
     public PasswordDialog(Activity mActivity) {
@@ -29,7 +33,22 @@ public class PasswordDialog {
         view = mActivity.getLayoutInflater().inflate(R.layout.dialog_password, null);
 
         editTextPwd =view.findViewById(R.id.editTextPassword);
+        editTextPwd.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                tvHoint.setVisibility(View.INVISIBLE);
+            }
+        });
         tvConfirm =view.findViewById(R.id.tv_dialog_confirm);
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,7 +68,20 @@ public class PasswordDialog {
                 }
             }
         });
+        tvHoint=view.findViewById(R.id.tv_dialog_point);
         mDialogBuilder.setView(view);
+    }
+
+    public void setTvPoint(Boolean hoint) {
+        tvHoint.setVisibility(View.VISIBLE);
+        if(hoint){
+            tvHoint.setText("密码正确！");
+            tvHoint.setTextColor(BtslandApplication.getInstance().getResources().getColor(R.color.color_green));
+        }else {
+            tvHoint.setText("密码正确！");
+            tvHoint.setTextColor(BtslandApplication.getInstance().getResources().getColor(R.color.color_font_red));
+        }
+
     }
 
     public void show(){

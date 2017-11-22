@@ -17,4 +17,16 @@ public class limit_order_object {
     public asset amount_to_receive() {
         return amount_for_sale().multipy(sell_price);
     }
+
+    @Override
+    public String toString() {
+        return "limit_order_object{" +
+                "id=" + id +
+                ", expiration=" + expiration +
+                ", seller=" + seller +
+                ", for_sale=" + for_sale +
+                ", sell_price=" + sell_price +
+                ", deferred_fee=" + deferred_fee +
+                '}';
+    }
 }

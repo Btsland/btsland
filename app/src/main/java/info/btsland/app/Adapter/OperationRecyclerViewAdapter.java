@@ -1,5 +1,6 @@
 package info.btsland.app.Adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -27,17 +28,14 @@ import info.btsland.app.model.Order;
 
 public class OperationRecyclerViewAdapter extends RecyclerView.Adapter<OperationRecyclerViewAdapter.ViewHolder>  {
 
+    private Context context;
     private List<operation_history_object> list;
 
     public OperationRecyclerViewAdapter() {
     }
 
     public void setList(List<operation_history_object> listHistoryObject){
-        if(getItemCount()>0){
-            notifyItemRangeRemoved(0,getItemCount());
-        }
         this.list = listHistoryObject;
-        notifyItemRangeInserted(0,getItemCount());
     }
 
     @Override

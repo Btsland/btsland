@@ -123,7 +123,13 @@ public class PurseFragment extends Fragment {
             createPortrait();//设置头像
             tvUserName.setText(BtslandApplication.accountObject.name);
 
-            tvPurseConvert.setText("折合总金额约为：" + BtslandApplication.accountObject.totalCNY + "CNY");
+            if(String.valueOf(BtslandApplication.accountObject.totalCNY)==null){
+                tvPurseConvert.setText("折合总金额约为：正在计算中。。");
+            }else if(String.valueOf(BtslandApplication.accountObject.totalCNY).length()>8){
+                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + "CNY");
+            }else {
+                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY) + "CNY");
+            }
             tvUserAnotherName.setText("#" + BtslandApplication.accountObject.id.get_instance());
         } else {
             portrait.stopLoading();

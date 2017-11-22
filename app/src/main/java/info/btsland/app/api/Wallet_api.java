@@ -186,7 +186,26 @@ public class Wallet_api {
         }
         return accountObject;
     }
+    public signed_transaction cancel_order(object_id<limit_order_object> id)
+            throws NetworkStatusException {
+        operations.limit_order_cancel_operation op = new operations.limit_order_cancel_operation();
+        op.fee_paying_account = mWebsocketApi.get_limit_order(id).seller;
+        op.order = id;
+        op.extensions = new HashSet<>();
 
+        operations.operation_type operationType = new operations.operation_type();
+        operationType.nOperationType = operations.ID_CANCEL_LMMIT_ORDER_OPERATION;
+        operationType.operationContent = op;
+
+        signed_transaction tx = new signed_transaction();
+        tx.operations = new ArrayList<>();
+        tx.operations.add(operationType);
+
+        tx.extensions = new HashSet<>();
+        set_operation_fees(tx, mWebsocketApi.get_global_properties().parameters.current_fees);
+
+        return sign_transaction(tx);
+    }
 
 
     private int create_account_with_password(String strServerUrl,

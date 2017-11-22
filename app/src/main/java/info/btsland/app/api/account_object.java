@@ -29,7 +29,7 @@ public class account_object implements Serializable {
 
     public List<asset> assetlist=new ArrayList <>();
 
-    public Double totalCNY;//总值
+    public Double totalCNY=0.0;//总值
     public Double totalUsable;//可用总额
     public Double totalOrders;//总挂单
 

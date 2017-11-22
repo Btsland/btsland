@@ -321,8 +321,14 @@ public class DetailedBuyAndSellFragment extends Fragment
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
+                if(!isAdded()){
+                    return;
+                }
                 rlvBuyAdapter.notifyDataSetChanged();
             }else if(msg.what==2){
+                if(!isAdded()){
+                    return;
+                }
                 rlvSellAdapter.notifyDataSetChanged();
             }else if(msg.what==-1){
 

@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
@@ -110,6 +111,12 @@ public class MarketStat {
         Subscription subscription =
                 new Subscription(base, quote, bucketSize, stats, l);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
+    }
+    public void getFullAccounts( int stats,
+                           OnMarketStatUpdateListener l) {
+        Subscription subscription =
+                new Subscription(stats, l);
+        subscriptionHashMap.put("get_full_accounts", subscription);
     }
 
     public void unsubscribe(String base, String quote,int stats) {
@@ -279,6 +286,16 @@ public class MarketStat {
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
+        private Subscription(int stats, OnMarketStatUpdateListener l) {
+            //Log.e(TAG, "Subscription: ");
+            this.stats = stats;
+            this.intervalMillis=intervalMillis;
+            this.listener = l;
+            this.statThread = new HandlerThread("get_full_accounts");
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+        }
         /*private Subscription(List<String> name, String pwd,int stats, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.accentName=name;
@@ -296,7 +313,8 @@ public class MarketStat {
         }
 
         public void updateImmediately() {
-            statHandler.post(this);
+            statHandler.postDelayed(this,10000);
+            //statHandler.post(this);
         }
 
         @Override
@@ -315,18 +333,20 @@ public class MarketStat {
             if (true) {
                 final Stat stat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
-                    try {
-                        for(int i=0;i<quotes.length;i++){
+                    for(int i=0;i<quotes.length;i++){
+                        try {
                             Log.e(TAG, "run: base:"+base+"quotes[i]:"+quotes[i] );
                             stat.MarketTicker = mWebsocketApi.get_ticker(base,quotes[i]);
                             //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
                             listener.onMarketStatUpdate(stat);
+                        } catch (NetworkStatusException e) {
+                            e.printStackTrace();
+                            continue;
                         }
-                        //this.updateImmediately();
-                        return;
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
+
                     }
+                    this.updateImmediately();
+                    return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
                     Log.i(TAG, "run: ago:"+ago);
@@ -374,12 +394,15 @@ public class MarketStat {
 
                     stat.orderBook = getOrderBook();
                 }
+                if ((stats & STAT_MARKET_OPEN_ORDER) != 0) {
+                    stat.openOrders = getOpenOrders();
+                }
                 if (isCancelled.get()) {
                     return;
                 }
                 //开启处理数据线程
                 new dataHandling(listener,stat).start();
-                //this.updateImmediately();
+                this.updateImmediately();
             } else if (!isCancelled.get()) {
 
             }
@@ -398,7 +421,74 @@ public class MarketStat {
                 listener.onMarketStatUpdate(stat);
             }
         }
+        private List<OpenOrder> getOpenOrders() {
+            try {
+                account_object accounts = BtslandApplication.accountObject;
+                if (accounts == null) {
+                    return null;
+                }
+                List<String> names = new ArrayList<>();
+                names.add(accounts.name);
 
+                List<full_account_object> fullAccounts;
+                try {
+                    fullAccounts = mWebsocketApi.get_full_accounts(names, false);
+                    if (fullAccounts == null || fullAccounts.isEmpty()) {
+                        return null;
+                    }
+                } catch (Exception e) {
+                    return null;
+                }
+                List<OpenOrder> openOrders = new ArrayList<>();
+                for (int i = 0; i < fullAccounts.size(); i++) {
+                    full_account_object a = fullAccounts.get(i);
+                    for (int j = 0; j < a.limit_orders.size(); j++) {
+                        limit_order_object o = a.limit_orders.get(j);
+//                        if (!o.sell_price.base.asset_id.equals(baseAsset.id) &&
+//                                !o.sell_price.base.asset_id.equals(quoteAsset.id)) {
+//                            continue;
+//                        }
+//                        if (!o.sell_price.quote.asset_id.equals(baseAsset.id) &&
+//                                !o.sell_price.quote.asset_id.equals(quoteAsset.id)) {
+//                            continue;
+//                        }
+                        OpenOrder order = new OpenOrder();
+                        order.limitOrder = o;
+                        order.base = o.sell_price.base;
+                        order.quote =o.sell_price.quote;
+
+                        asset_object base=null;
+                        if(BtslandApplication.assetObjectMap.get(o.sell_price.base.asset_id)!=null){
+                            base = BtslandApplication.assetObjectMap.get(o.sell_price.base.asset_id);
+                        }else {
+                            List<object_id<asset_object>> ids=new ArrayList<>();
+                            ids.add(o.sell_price.base.asset_id);
+                            List<asset_object> bases = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(ids);
+                            base=bases.get(0);
+                        }
+                        asset_object quote=null;
+                        if(BtslandApplication.assetObjectMap.get(o.sell_price.quote.asset_id)!=null){
+                            quote = BtslandApplication.assetObjectMap.get(o.sell_price.quote.asset_id);
+                        }else {
+                            List<object_id<asset_object>> ids=new ArrayList<>();
+                            ids.add(o.sell_price.quote.asset_id);
+                            List<asset_object> quotes = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(ids);
+                            quote=quotes.get(0);
+                        }
+                        order.baseName=base.symbol;
+                        order.quoteName=quote.symbol;
+                        order.baseNum=assetToReal(o.sell_price.base,base.precision);
+                        order.quoteNum=assetToReal(o.sell_price.quote,quote.precision);
+                        order.price = assetToReal(o.sell_price.quote,quote.precision)/assetToReal(o.sell_price.base,base.precision);
+                        openOrders.add(order);
+                    }
+                }
+                return openOrders;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
         private boolean getAssets() {
             if (baseAsset != null && quoteAsset != null) {
                 return true;

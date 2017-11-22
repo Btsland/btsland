@@ -102,6 +102,7 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
             hud.dismiss();
             if(msg.what==1){
                 rlvOperationAdapter.setList(listHistoryObject);
+                rlvOperationAdapter.notifyDataSetChanged();
             }else {
                 Toast.makeText(PurseTradingRecordActivity.this,"您的帐号目前没有记录",Toast.LENGTH_SHORT).show();
             }

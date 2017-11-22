@@ -13,4 +13,12 @@ public class price {
     public static price unit_price(object_id<asset_object> assetObjectobjectId) {
         return new price(new asset(1, assetObjectobjectId), new asset(1, assetObjectobjectId));
     }
+
+    @Override
+    public String toString() {
+        return "price{" +
+                "base=" + base +
+                ", quote=" + quote +
+                '}';
+    }
 }

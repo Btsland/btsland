@@ -16,6 +16,7 @@ import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -487,6 +488,31 @@ public class Websocket_api extends WebSocketListener {
 
         return replyLookupAccountNames.result;
     }
+    public List<full_account_object> get_full_accounts(List<String> names, boolean subscribe)
+            throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_full_accounts");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(names);
+        listParams.add(subscribe);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<full_account_object_reply>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<full_account_object_reply>>>(){}.getType());
+        Reply<List<full_account_object_reply>> reply = sendForReply(callObject, replyObject);
+
+        List<full_account_object> fullAccountObjectList = new ArrayList<>();
+        for (full_account_object_reply fullAccountObjectReply : reply.result) {
+            fullAccountObjectList.add(fullAccountObjectReply.fullAccountObject);
+        }
+
+        return fullAccountObjectList;
+    }
     public void list(object_id<account_object> accountId) throws NetworkStatusException {
         Log.e(TAG, "list: 22222222222222222222222222222" );
         Call callObject = new Call();
@@ -555,10 +581,32 @@ public class Websocket_api extends WebSocketListener {
         return replyObject.result;
 
     }
+    public limit_order_object get_limit_order(object_id<limit_order_object> id)
+            throws NetworkStatusException {
+        return get_limit_orders(Collections.singletonList(id)).get(0);
+    }
+    public List<limit_order_object> get_limit_orders(List<object_id<limit_order_object>> ids)
+            throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_objects");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(ids);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<limit_order_object>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<limit_order_object>>>(){}.getType());
+        Reply<List<limit_order_object>> reply = sendForReply(callObject, replyObject);
+
+        return reply.result;
+    }
 
 
 
-    
 
 
     public List<limit_order_object> get_limit_orders(object_id<asset_object> baseid,

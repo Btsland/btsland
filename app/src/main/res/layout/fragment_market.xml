@@ -9,7 +9,7 @@
     <!--K图部分-->
     <FrameLayout
         android:id="@+id/fra_market_simple"
-        android:layout_width="384dp"
+        android:layout_width="0dp"
         android:layout_height="200dp"
         android:background="@color/colorAccent"
         app:layout_constraintTop_toTopOf="parent"

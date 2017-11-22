@@ -133,7 +133,10 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         @Override
         public void handleMessage(Message msg) {
             if( msg.what==SUCCESS){
-                updateChartData();
+                if(isAdded()){
+                    updateChartData();
+                }
+
             }
         }
     };
@@ -142,7 +145,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         String newKey=market.quote+"/"+market.base;
 
         if(BtslandApplication.dataKMap.get(newKey)!=null) {
-
+            updateChartData();
         }else {
             startReceiveMarkets(market);
         }
@@ -230,9 +233,13 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         rightAxis.setAxisMinimum(0);
     }
     private void initializeData(List<MarketStat.HistoryPrice> listHistoryPrice) {
+        if(listHistoryPrice==null){
+            return;
+        }
         List<CandleEntry> candleEntryList = new ArrayList<>();
         List<BarEntry> barEntryList = new ArrayList<>();
         int i = 0;
+
         for (MarketStat.HistoryPrice price : listHistoryPrice) {
             int nPosition = i++;
             CandleEntry candleEntry = new CandleEntry(nPosition, (float)price.high, (float)price.low, (float)price.open, (float)price.close, price);
@@ -246,8 +253,8 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setShadowWidth(0.7f);
         set.setDecreasingPaintStyle(Paint.Style.FILL);
-        int nColorGreen = ContextCompat.getColor(getActivity(), R.color.color_font_red);
-        int nColorRed = ContextCompat.getColor(getActivity(), R.color.color_green);
+        int nColorGreen = ContextCompat.getColor(getActivity(), R.color.color_green);
+        int nColorRed = ContextCompat.getColor(getActivity(), R.color.color_font_red);
 
         //设置绿涨红跌
         set.setDecreasingColor(nColorRed);

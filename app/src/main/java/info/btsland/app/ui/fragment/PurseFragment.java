@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -70,12 +70,13 @@ public class PurseFragment extends Fragment {
     private SharedPreferences sharedPreferences;
 
 
-    private ConstraintLayout clPurse;
+    private FrameLayout clPurse;
 
-    private ConstraintLayout clPurseLoginPrompt;
+    private FrameLayout clPurseLoginPrompt;
 
     private TextView tvGoLogin;
 
+    private TextView tvGoRegister;
 
     public PurseFragment() {
         // Required empty public constructor
@@ -108,8 +109,10 @@ public class PurseFragment extends Fragment {
 
     private void yesOrNoLogin() {
         if (BtslandApplication.accountObject==null) {
-            clPurse.setVisibility(View.GONE);
             clPurseLoginPrompt.setVisibility(View.VISIBLE);
+           // clPurse.setEnabled(false);
+            clPurse.setClickable(false);
+
         } else {
             clPurse.setVisibility(View.VISIBLE);
             clPurseLoginPrompt.setVisibility(View.GONE);
@@ -168,6 +171,8 @@ public class PurseFragment extends Fragment {
 
         //去登陆按钮
         tvGoLogin=view.findViewById(R.id.tv_go_login);
+        //去注册
+        tvGoRegister=view.findViewById(R.id.tv_go_register);
         //已登陆钱包
         clPurse=view.findViewById(R.id.cl_purse);
         //未登录
@@ -198,6 +203,7 @@ public class PurseFragment extends Fragment {
         tvUserLogoff.setOnClickListener(onCLickListener);
         tvGoLogin.setOnClickListener(onCLickListener);
         tvPurseTransferAccounts.setOnClickListener(onCLickListener);
+        tvGoRegister.setOnClickListener(onCLickListener);
 
     }
 
@@ -274,7 +280,15 @@ public class PurseFragment extends Fragment {
                     purseHander handler=new purseHander();
                     Intent iGoLogin=new Intent(getActivity(), LoginActivity.class);
 //                    iGoLogin.putExtra("hander", handler);
+                    iGoLogin.putExtra("want",LoginActivity.GOLOGIN);
                     getActivity().startActivity(iGoLogin);
+
+                    break;
+                case R.id.tv_go_register:
+                    Intent iGoRegister=new Intent(getActivity(), LoginActivity.class);
+                    iGoRegister.putExtra("want",LoginActivity.GOREGISTER);
+                    getActivity().startActivity(iGoRegister);
+
 
                     break;
                 case R.id.tv_purse_transfer_accounts:

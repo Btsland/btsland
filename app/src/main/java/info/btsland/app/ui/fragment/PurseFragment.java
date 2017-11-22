@@ -4,9 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,10 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-
-import java.io.Serializable;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
@@ -70,10 +66,8 @@ public class PurseFragment extends Fragment {
 
     private SharedPreferences sharedPreferences;
 
-
-    private ConstraintLayout clPurse;
-
-    private ConstraintLayout clPurseLoginPrompt;
+    private FrameLayout flPurse;
+    private FrameLayout flPurseLoginPrompt;
 
     private TextView tvGoLogin;
 
@@ -112,14 +106,15 @@ public class PurseFragment extends Fragment {
 
     private void yesOrNoLogin() {
         if (BtslandApplication.accountObject==null) {
-            clPurseLoginPrompt.setVisibility(View.VISIBLE);
+          // flPurseLoginPrompt.setVisibility(View.VISIBLE);
+           flPurseLoginPrompt.setVisibility(View.VISIBLE);
            // clPurse.setEnabled(false);
            // clPurse.setClickable(false);
            // scrollView.setClickable(false);
-            clPurse.setVisibility(View.GONE);
+            flPurse.setVisibility(View.GONE);
         } else {
-            clPurse.setVisibility(View.VISIBLE);
-            clPurseLoginPrompt.setVisibility(View.GONE);
+            flPurse.setVisibility(View.VISIBLE);
+            flPurseLoginPrompt.setVisibility(View.GONE);
         }
 
 
@@ -184,15 +179,17 @@ public class PurseFragment extends Fragment {
         //去注册
         tvGoRegister=view.findViewById(R.id.tv_go_register);
         //已登陆钱包
-        clPurse=view.findViewById(R.id.cl_purse);
+        flPurse=view.findViewById(R.id.fl_purse);
         //未登录
-        clPurseLoginPrompt=view.findViewById(R.id.cl_purse_login_prompt);
+        flPurseLoginPrompt=view.findViewById(R.id.fl_purse_login_prompt);
 
         portrait=view.findViewById(R.id.iv_user_pho);
         tvUserName=view.findViewById(R.id.tv_user_name);
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
         tvUserLogoff=view.findViewById(R.id.tv_user_logoff);
         scrollView=view.findViewById(R.id.sv_purse);
+
+
 
 //        tvPurseConvert.setText();
 
@@ -287,7 +284,7 @@ public class PurseFragment extends Fragment {
                     appDialog.show();
                     break;
                 case R.id.tv_go_login:
-                    purseHander handler=new purseHander();
+                   // purseHander handler=new purseHander();
                     Intent iGoLogin=new Intent(getActivity(), LoginActivity.class);
 //                    iGoLogin.putExtra("hander", handler);
                     iGoLogin.putExtra("want",LoginActivity.GOLOGIN);
@@ -348,22 +345,22 @@ public class PurseFragment extends Fragment {
         super.onDetach();
     }
 
-    class purseHander extends Handler implements Serializable {
-        @Override
-        public void handleMessage(Message msg) {
-            try {
-
-                if (msg.what==1){
-                    clPurse.setVisibility(View.VISIBLE);
-                    clPurseLoginPrompt.setVisibility(View.GONE);
-                    fillIn();
-
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-
-        }
-    }
+//    class purseHander extends Handler implements Serializable {
+//        @Override
+//        public void handleMessage(Message msg) {
+//            try {
+//
+//                if (msg.what==1){
+//                    flPurse.setVisibility(View.VISIBLE);
+//                    flPurseLoginPrompt.setVisibility(View.GONE);
+//                    fillIn();
+//
+//                }
+//            }catch (Exception e){
+//                e.printStackTrace();
+//            }
+//
+//
+//        }
+//    }
 }

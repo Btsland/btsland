@@ -20,7 +20,6 @@
         android:id="@+id/cl_purse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible"
         >
         <View
             android:id="@+id/v_purse_back"
@@ -253,7 +252,6 @@
     android:layout_height="0dp"
     android:visibility="visible"
     app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintHorizontal_bias="1.0"
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintRight_toRightOf="parent"
     app:layout_constraintTop_toTopOf="parent"
@@ -264,7 +262,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/welcome_unlogin2"
-        android:visibility="visible">
+       >
 
         <TextView
             android:id="@+id/tv_purse_prompt"

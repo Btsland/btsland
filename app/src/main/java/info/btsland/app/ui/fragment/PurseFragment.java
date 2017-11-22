@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.widget.FrameLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import java.io.Serializable;
@@ -70,13 +71,15 @@ public class PurseFragment extends Fragment {
     private SharedPreferences sharedPreferences;
 
 
-    private FrameLayout clPurse;
+    private ConstraintLayout clPurse;
 
-    private FrameLayout clPurseLoginPrompt;
+    private ConstraintLayout clPurseLoginPrompt;
 
     private TextView tvGoLogin;
 
     private TextView tvGoRegister;
+
+    private ScrollView scrollView;
 
     public PurseFragment() {
         // Required empty public constructor
@@ -111,8 +114,9 @@ public class PurseFragment extends Fragment {
         if (BtslandApplication.accountObject==null) {
             clPurseLoginPrompt.setVisibility(View.VISIBLE);
            // clPurse.setEnabled(false);
-            clPurse.setClickable(false);
-
+           // clPurse.setClickable(false);
+           // scrollView.setClickable(false);
+            clPurse.setVisibility(View.GONE);
         } else {
             clPurse.setVisibility(View.VISIBLE);
             clPurseLoginPrompt.setVisibility(View.GONE);
@@ -188,7 +192,7 @@ public class PurseFragment extends Fragment {
         tvUserName=view.findViewById(R.id.tv_user_name);
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
         tvUserLogoff=view.findViewById(R.id.tv_user_logoff);
-
+        scrollView=view.findViewById(R.id.sv_purse);
 
 //        tvPurseConvert.setText();
 

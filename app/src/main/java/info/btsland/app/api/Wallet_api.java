@@ -7,7 +7,12 @@ import com.google.common.primitives.UnsignedInteger;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 
+import org.bitcoinj.core.ECKey;
+
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -21,6 +26,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+import de.bitsharesmunich.graphenej.BrainKey;
+import de.bitsharesmunich.graphenej.FileBin;
+import de.bitsharesmunich.graphenej.models.backup.LinkedAccount;
+import de.bitsharesmunich.graphenej.models.backup.WalletBackup;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.CreateAccountException;
 import info.btsland.app.exception.NetworkStatusException;
@@ -659,4 +668,118 @@ public class Wallet_api {
         //// TODO: 07/09/2017 tx.validate();
         return sign_transaction(tx);
     }
+
+    /**
+     * bin登录
+     * @param strPassword
+     * @param strFilePath
+     * @return
+     */
+    public int import_file_bin(String strPassword,
+                               String strFilePath) {
+        File file = new File(strFilePath);
+        if (file.exists() == false) {
+            return ErrorCode.ERROR_FILE_NOT_FOUND;
+        }
+
+        int nSize = (int)file.length();
+
+        final byte[] byteContent = new byte[nSize];
+
+        FileInputStream fileInputStream;
+        try {
+            fileInputStream = new FileInputStream(file);
+            fileInputStream.read(byteContent, 0, byteContent.length);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return ErrorCode.ERROR_FILE_NOT_FOUND;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ErrorCode.ERROR_FILE_READ_FAIL;
+        }
+
+        WalletBackup walletBackup = FileBin.deserializeWalletBackup(byteContent, strPassword);
+        if (walletBackup == null) {
+            return ErrorCode.ERROR_FILE_BIN_PASSWORD_INVALID;
+        }
+
+        String strBrainKey = walletBackup.getWallet(0).decryptBrainKey(strPassword);
+        //LinkedAccount linkedAccount = walletBackup.getLinkedAccounts()[0];
+
+        int nRet = ErrorCode.ERROR_IMPORT_NOT_MATCH_PRIVATE_KEY;
+        for (LinkedAccount linkedAccount : walletBackup.getLinkedAccounts()) {
+            nRet = import_brain_key(linkedAccount.getName(), strPassword, strBrainKey);
+            if (nRet == 0) {
+                break;
+            }
+        }
+
+        return nRet;
+    }
+
+    private int import_brain_key(String strAccountNameOrId,
+                                String strPassword,
+                                String strBrainKey) {
+        set_passwrod(strPassword);
+        try {
+            int nRet = import_brain_key(strAccountNameOrId, strBrainKey);
+            if (nRet != 0) {
+                return nRet;
+            }
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+            return ErrorCode.ERROR_NETWORK_FAIL;
+        }
+
+       // save_wallet_file();
+
+
+        return 0;
+    }
+
+
+
+
+    private int import_brain_key(String strAccountNameOrId, String strBrainKey) throws NetworkStatusException {
+        account_object accountObject = get_account(strAccountNameOrId);
+        if (accountObject == null) {
+            return ErrorCode.ERROR_NO_ACCOUNT_OBJECT;
+        }
+
+        Map<types.public_key_type, types.private_key_type> mapPublic2Private = new HashMap<>();
+        for (int i = 0; i < 10; ++i) {
+            BrainKey brainKey = new BrainKey(strBrainKey, i);
+            ECKey ecKey = brainKey.getPrivateKey();
+            private_key privateKey = new private_key(ecKey.getPrivKeyBytes());
+            types.private_key_type privateKeyType = new types.private_key_type(privateKey);
+            types.public_key_type publicKeyType = new types.public_key_type(privateKey.get_public_key());
+
+            if (accountObject.active.is_public_key_type_exist(publicKeyType) == false &&
+                    accountObject.owner.is_public_key_type_exist(publicKeyType) == false &&
+                    accountObject.options.memo_key.compare(publicKeyType) == false) {
+                continue;
+            }
+            mapPublic2Private.put(publicKeyType, privateKeyType);
+        }
+
+        if (mapPublic2Private.isEmpty() == true) {
+            return ErrorCode.ERROR_IMPORT_NOT_MATCH_PRIVATE_KEY;
+        }
+
+        mWalletObject.update_account(accountObject);
+
+        List<types.public_key_type> listPublicKeyType = new ArrayList<>();
+        listPublicKeyType.addAll(mapPublic2Private.keySet());
+
+        mWalletObject.extra_keys.put(accountObject.id, listPublicKeyType);
+        mHashMapPub2Priv.putAll(mapPublic2Private);
+
+        encrypt_keys();
+
+        return 0;
+    }
+
+
+
+
 }

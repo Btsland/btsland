@@ -36,6 +36,10 @@ import static info.btsland.app.BtslandApplication.getMarketStat;
  */
 public class LoginActivity extends AppCompatActivity {
 
+    public static final int GOLOGIN=0;
+    public static final int GOREGISTER=1;
+
+    private int want;
 
     private static final String TAG ="LoginActivity" ;
     //登录界面
@@ -79,6 +83,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         purseHander =(Handler) getIntent().getSerializableExtra("hander");
+        want=getIntent().getIntExtra("want",0);
         initView();
         //声明函数文件名与操作模式
 
@@ -207,6 +212,13 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+        if (want==GOLOGIN){
+            loginLayout.setVisibility(View.VISIBLE);
+            registerLayout.setVisibility(View.GONE);
+        }else if (want==GOREGISTER){
+            loginLayout.setVisibility(View.GONE);
+            registerLayout.setVisibility(View.VISIBLE);
+        }
 
     }
 

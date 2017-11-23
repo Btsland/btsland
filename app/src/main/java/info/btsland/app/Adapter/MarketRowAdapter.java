@@ -146,8 +146,6 @@ public class MarketRowAdapter extends BaseAdapter {
                 case 1:
                     Toast.makeText(context,"双击可以进入详细页面哦！",Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "handleMessage: market:"+market);
-                    String key=market.quote+"/"+market.base;
-                    simpleKFragment.key = key;
                     simpleKFragment.drawK(market);
                     break;
                 case 2:

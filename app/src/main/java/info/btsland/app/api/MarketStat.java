@@ -248,7 +248,6 @@ public class MarketStat {
         private asset_object quoteAsset;
         private HandlerThread statThread;
         private Handler statHandler;
-        private Handler handler=new Handler();
         private AtomicBoolean isCancelled = new AtomicBoolean(false);
         private Subscription(String base, String quote, long bucketSecs,long ago, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             this.base = base;
@@ -345,7 +344,7 @@ public class MarketStat {
                         }
 
                     }
-                    this.updateImmediately();
+                    //this.updateImmediately();
                     return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
@@ -402,7 +401,7 @@ public class MarketStat {
                 }
                 //开启处理数据线程
                 new dataHandling(listener,stat).start();
-                this.updateImmediately();
+                //this.updateImmediately();
             } else if (!isCancelled.get()) {
 
             }
@@ -534,12 +533,10 @@ public class MarketStat {
             price.base=base;
             price.quote=quote;
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
-            try {
-                //把国际时间转化为本地时间
-                price.date =IDateUitl.toLocalTime(df.parse(bucket.key.open));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+
+            //把国际时间转化为本地时间
+            price.date =IDateUitl.toLocalTime(bucket.key.open);
+
             if (bucket.key.quote.equals(quoteAsset.id)) {
 
                 price.high = utils.get_asset_price(bucket.high_base, baseAsset,

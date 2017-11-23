@@ -24,6 +24,7 @@ import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
@@ -51,6 +52,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static Wallet_api walletApi;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
+    public static Map<String,OrderBook> orderBookMap=new HashMap<>();
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;
@@ -92,11 +94,18 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
         instance=getApplicationContext();
         application=this;
-
-        if(InternetUtil.isConnected(this)){
+        while (true){
+            if(InternetUtil.isConnected(this)){
                 ConnectThread();
-        }else {
-            Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
+                break;
+            }else {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
+            }
         }
     }
 

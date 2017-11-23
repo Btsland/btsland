@@ -45,11 +45,11 @@ import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.util.KeyUtil;
 
 
 public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private static String TAG="MarketSimpleKFragment";
-    private static final long DEFAULT_BUCKET_SECS = TimeUnit.MINUTES.toMillis(5);
     public static String key;
     private static MarketSimpleKFragment listener;
     private static final int SUCCESS=1;
@@ -87,13 +87,16 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     public void onMarketStatUpdate(MarketStat.Stat stat) {
         if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
             MarketStat.HistoryPrice price=stat.prices.get(0);
-            key=constructingKey(price.base,price.quote,stat.bucket,stat.ago);
-            if(BtslandApplication.dataKMap.get(key)!=null){
-                BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(key));
-            }
-            BtslandApplication.dataKMap.put(key,stat.prices);
+            String newkey=KeyUtil.constructingDateKKey(price.base,price.quote,stat.bucket,stat.ago);
 
-            handler.sendEmptyMessage(SUCCESS);
+            if(BtslandApplication.dataKMap.get(newkey)!=null){
+                BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(newkey));
+            }
+            BtslandApplication.dataKMap.put(newkey,stat.prices);
+            if(newkey.equals(key)){
+                handler.sendEmptyMessage(SUCCESS);
+            }
+
         }
     }
 
@@ -116,7 +119,6 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             base=market.base;
             quote=market.quote;
         }
-        key=quote+"/"+base;
         //判断线程是否存在，存在则重启，不在则重开
             BtslandApplication.getMarketStat().subscribe(
                     base,
@@ -142,9 +144,12 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     };
 
     public void drawK(MarketTicker market) {
-        String newKey=market.quote+"/"+market.base;
-
-        if(BtslandApplication.dataKMap.get(newKey)!=null) {
+        if(market!=null){
+            base=market.base;
+            quote=market.quote;
+        }
+        key= KeyUtil.constructingDateKKey(base,quote,MarketStat.DEFAULT_BUCKET_SECS, MarketStat.DEFAULT_AGO_SECS);
+        if(BtslandApplication.dataKMap.get(key)!=null) {
             updateChartData();
         }else {
             startReceiveMarkets(market);
@@ -174,7 +179,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     @Override
     public void onStart() {
         super.onStart();
-        startReceiveMarkets(market);
+        drawK(market);
     }
 
     @Override
@@ -242,7 +247,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
         for (MarketStat.HistoryPrice price : listHistoryPrice) {
             int nPosition = i++;
-            CandleEntry candleEntry = new CandleEntry(nPosition, (float)price.high, (float)price.low, (float)price.open, (float)price.close, price);
+            CandleEntry candleEntry = new CandleEntry(nPosition, (float)price.high, (float)price.low, (float)price.open, (float)price.close, price.date);
             candleEntryList.add(candleEntry);
 
             BarEntry barEntry = new BarEntry((float)nPosition, (float)price.volume);
@@ -332,7 +337,5 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             }
         }
     }
-    public String constructingKey(String base,String quote,long bucket,long ago){
-        return ""+base+"/"+quote+":"+bucket+","+ago;
-    }
+
 }

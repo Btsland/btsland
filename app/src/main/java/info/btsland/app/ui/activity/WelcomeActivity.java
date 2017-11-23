@@ -11,11 +11,15 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.health.TimerStat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Toast;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
@@ -60,9 +64,16 @@ public class WelcomeActivity extends AppCompatActivity{
             if(intent!=null){
                 int nRet=intent.getIntExtra("nRet",Websocket_api.WEBSOCKET_CONNECT_INVALID);
                 if(nRet==Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
-                    Intent intent2=new Intent(WelcomeActivity.this,MainActivity.class);
-                    startActivity(intent2);
-                    finish();
+                    final Intent intent2=new Intent(WelcomeActivity.this,MainActivity.class);
+                    Timer timer=new Timer();
+                    timer.schedule(new TimerTask() {
+                        @Override
+                        public void run() {
+                            startActivity(intent2);
+                            finish();
+                        }
+                    }, 3000);
+
                 }
             }
         }

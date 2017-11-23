@@ -80,7 +80,7 @@ public class MainActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
             headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.USER_SET);
+            headFragment.setType(HeadFragment.HeadType.SHARE_SET);
             transaction.add(R.id.fra_main_head, headFragment);
         }
         transaction.commit();

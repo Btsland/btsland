@@ -1,7 +1,6 @@
 package info.btsland.app.ui.activity;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
@@ -22,6 +21,9 @@ public class PurseAccessRecordActivity extends AppCompatActivity{
         fillInHead();
         init();
     }
+
+
+
 
     /**
      * 初始化

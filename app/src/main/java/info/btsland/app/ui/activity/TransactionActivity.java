@@ -31,9 +31,7 @@ public class TransactionActivity extends AppCompatActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName("交易向导");
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"交易向导");
             transaction.add(R.id.fra_transaction_head, headFragment);
         }
         transaction.commit();

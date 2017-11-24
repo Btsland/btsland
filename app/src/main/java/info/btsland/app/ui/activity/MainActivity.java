@@ -33,7 +33,7 @@ public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
-
+    private int index=1;
 
 
     @Override
@@ -43,12 +43,16 @@ public class MainActivity extends BaseActivity {
         PreferenceUtil.init(this);
         // 依据上次的语言设置，又一次设置语言
         switchLanguage(PreferenceUtil.getString("language", "zh"));
-
-
+        if(savedInstanceState!=null){
+            index = savedInstanceState.getInt("index",1);
+        }else {
+            index = 1;
+        }
         setContentView(R.layout.activity_main);
         fillInHead();
         fillInBody();
         init();
+
     }
 
 
@@ -67,10 +71,20 @@ public class MainActivity extends BaseActivity {
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
+        if(index==0){
+            touchColor(tvNavHome, tvNavMarket, tvNavPurse);//选中行情控件
+            touchImage(tvNavHome);
+            showFragment(tvNavHome);//显示行情页面
+        }else if(index==1){
+            touchColor(tvNavMarket, tvNavHome, tvNavPurse);//选中行情控件
+            touchImage(tvNavMarket);
+            showFragment(tvNavMarket);//显示行情页面
+        }else if(index==2){
+            touchColor(tvNavPurse, tvNavHome, tvNavMarket);//选中行情控件
+            touchImage(tvNavPurse);
+            showFragment(tvNavPurse);//显示行情页面
+        }
 
-        touchColor(tvNavMarket, tvNavHome, tvNavPurse);//选中行情控件
-        touchImage(tvNavMarket);
-        showFragment(tvNavMarket);//显示行情页面
     }
 
     /**
@@ -79,8 +93,7 @@ public class MainActivity extends BaseActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.SHARE_SET);
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.SHARE_SET,"");
             transaction.add(R.id.fra_main_head, headFragment);
         }
         transaction.commit();
@@ -103,6 +116,16 @@ public class MainActivity extends BaseActivity {
 //        };
 //        timer.schedule(task, TimeUnit.MINUTES.toMillis(2),TimeUnit.MINUTES.toMillis(2));
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("index",index);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void finish() {
+        //super.finish();
+    }
 
     /**
      * 装载主体内容
@@ -110,10 +133,21 @@ public class MainActivity extends BaseActivity {
     private void fillInBody() {
         //初始化fra_main_body
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+            transaction.add(R.id.fra_main_body, homeFragment);
+        }
+
         if (marketFragment == null) {
             marketFragment =new MarketFragment();
             transaction.add(R.id.fra_main_body, marketFragment);
         }
+        if (purseFragment == null) {
+            purseFragment =new PurseFragment();
+            transaction.add(R.id.fra_main_body, purseFragment);
+        }
+
+
         transaction.commit();
     }
 
@@ -129,10 +163,10 @@ public class MainActivity extends BaseActivity {
                 if (homeFragment == null) {
                     homeFragment = new HomeFragment();
                     transaction.add(R.id.fra_main_body, homeFragment);
-
                 }
                 hideFragment(transaction);
                 transaction.show(homeFragment);
+
                 break;
             case R.id.tv_nav_market:
                 if (marketFragment == null) {
@@ -141,6 +175,7 @@ public class MainActivity extends BaseActivity {
                 }
                 hideFragment(transaction);
                 transaction.show(marketFragment);
+
                 break;
             case R.id.tv_nav_purse:
                 if (purseFragment == null) {
@@ -179,16 +214,19 @@ public class MainActivity extends BaseActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tv_nav_home:
+                    index=0;
                     touchColor(tvNavHome, tvNavMarket, tvNavPurse);//控件特效
                     touchImage(tvNavHome);
                     showFragment(tvNavHome);
                     break;
                 case R.id.tv_nav_market:
+                    index=1;
                     touchColor(tvNavMarket, tvNavHome, tvNavPurse);//控件特效
                     touchImage(tvNavMarket);
                     showFragment(tvNavMarket);
                     break;
                 case R.id.tv_nav_purse:
+                    index=2;
                     touchColor(tvNavPurse, tvNavHome, tvNavMarket);//控件特效
                     touchImage(tvNavPurse);
                     showFragment(tvNavPurse);
@@ -252,18 +290,6 @@ public class MainActivity extends BaseActivity {
         facingTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_dullRed1, null));
         textView1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
         textView2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
-    }
-
-
-    /**
-     * 头像单击事件功能实现
-     */
-    class ivNavUserOnClick implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Intent intent = new Intent(MainActivity.this, UserActivity.class);
-            MainActivity.this.startActivity(intent);
-        }
     }
 
     /**

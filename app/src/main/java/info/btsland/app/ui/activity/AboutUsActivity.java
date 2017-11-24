@@ -31,8 +31,7 @@ public class AboutUsActivity extends BaseActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"");
             headFragment.setTitleName(getString(R.string.we));
             transaction.add(R.id.fra_about_head, headFragment);
         }

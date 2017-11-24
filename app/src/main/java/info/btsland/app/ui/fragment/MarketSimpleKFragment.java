@@ -64,7 +64,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     private MarketTicker market;
 
     public MarketSimpleKFragment() {
-        // Required empty public constructor
+
     }
 
     public static MarketSimpleKFragment getListener() {

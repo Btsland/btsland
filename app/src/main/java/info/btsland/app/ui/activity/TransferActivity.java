@@ -243,8 +243,7 @@ public class TransferActivity extends AppCompatActivity {
     private void fillInHead(){
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
-            headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName(getString(R.string.set));
+            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,getString(R.string.set));
             transaction.add(R.id.fra_transfer_set_head,headFragment);
         }
         transaction.commit();

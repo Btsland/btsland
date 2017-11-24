@@ -115,9 +115,7 @@ public class NewsContentActivity extends AppCompatActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName("资讯详情");
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"资讯详情");
             transaction.add(R.id.fra_news_head, headFragment);
         }
         transaction.commit();

@@ -78,7 +78,7 @@ public class DetailedHaveInHandFragment extends Fragment implements MarketStat.O
     }
 
     private void refurbish(){
-        BtslandApplication.getMarketStat().getFullAccounts(MarketStat.STAT_MARKET_OPEN_ORDER,this);
+        BtslandApplication.getMarketStat().getFullAccounts(MarketStat.STAT_MARKET_OPEN_ORDER,MarketStat.DEFAULT_UPDATE_SECS,this);
     }
     @Override
     public void onStart() {

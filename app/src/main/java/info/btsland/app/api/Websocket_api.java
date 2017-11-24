@@ -494,7 +494,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(_nDatabaseId);
+        callObject.params.add(BtslandApplication._nDatabaseId);
         callObject.params.add("get_full_accounts");
 
         List<Object> listParams = new ArrayList<>();
@@ -708,6 +708,7 @@ public class Websocket_api extends WebSocketListener {
                 boolean bRet=false;
                 if(mWebsocket!=null){
                     bRet = mWebsocket.send(strMessage);
+                    Log.i(TAG, "sendForReplyImpl: "+bRet);
                 }else if(BtslandApplication.mWebsocket!=null) {
                     bRet = BtslandApplication.mWebsocket.send(strMessage);
                 }else {

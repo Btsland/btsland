@@ -59,10 +59,12 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private static final long INTERVAL5M=TimeUnit.MINUTES.toSeconds(5);
     private static final long INTERVAL1H=TimeUnit.HOURS.toSeconds(1);
     private static final long INTERVAL1D=TimeUnit.DAYS.toSeconds(1);
+    private static final long INTERVAL4H=TimeUnit.HOURS.toSeconds(4);
     private static final long SPAN1D=TimeUnit.DAYS.toMillis(1);
     private static final long SPAN1W=TimeUnit.DAYS.toMillis(7);
     private static final long SPAN1M=TimeUnit.DAYS.toMillis(30);
     private static final long SPAN3M=TimeUnit.DAYS.toMillis(90);
+
     public static long range= TimeUnit.MINUTES.toSeconds(5);//每条信息的间隔
 
     public static long ago=TimeUnit.DAYS.toMillis(1);//距离现在时间
@@ -79,6 +81,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private CombinedChart simpleK;//图表
     private TextView tvInterval5M;
     private TextView tvInterval1H;
+    private TextView tvInterval4H;
     private TextView tvInterval1D;
     private TextView tvSpan1D;
     private TextView tvSpan1W;
@@ -107,6 +110,9 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
     private static DetailedKFragment listener;
     private MarketTicker market;
+
+    private Double highPrice=0.0;
+    private Double lowPrice=0.0;
 
 
     public DetailedKFragment() {
@@ -154,8 +160,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
         tvInfoOpen.setText(String.valueOf(price.open));
         tvInfoClose.setText(String.valueOf(price.close));
-        tvInfoHighReach.setText(String.valueOf(price.high));
-        tvInfoLowReach.setText(String.valueOf(price.low));
+        tvInfoHighReach.setText(String.valueOf(highPrice));
+        tvInfoLowReach.setText(String.valueOf(lowPrice));
     }
 
     @Override
@@ -167,6 +173,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         tvInterval5M.setOnClickListener(listener);
         tvInterval1D.setOnClickListener(listener);
         tvInterval1H.setOnClickListener(listener);
+        tvInterval4H.setOnClickListener(listener);
         tvSpan1D.setOnClickListener(listener);
         tvSpan1M.setOnClickListener(listener);
         tvSpan1W.setOnClickListener(listener);
@@ -219,8 +226,6 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         });
 
     }
-    private TextView a;
-    private TextView b;
 
     @Override
     public void refurbish(MarketTicker market) {
@@ -234,55 +239,90 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         public void onClick(View view) {
             switch (view.getId()){
                 case R.id.tv_foot_interval_5M:
-                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
                     range=INTERVAL5M;
-                    a=tvInterval5M;
+                    ago=SPAN1D;
                     break;
                 case R.id.tv_foot_interval_1H:
-                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
                     range=INTERVAL1H;
-                    a=tvInterval1H;
+                    if(ago==SPAN3M||ago==SPAN1M){
+                        ago=SPAN1W;
+                    }
+                    break;
+                case R.id.tv_foot_interval_4H:
+                    range=INTERVAL4H;
                     break;
                 case R.id.tv_foot_interval_1D:
-                    a.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
                     range=INTERVAL1D;
-                    a=tvInterval1D;
                     break;
                 case R.id.tv_foot_span_1D:
-                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
                     ago=SPAN1D;
-                    b=tvSpan1D;
                     break;
                 case R.id.tv_foot_span_1W:
-                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
-                    ago=SPAN1W;
-                    b=tvSpan1W;
+                    ago = SPAN1W;
+                    if(range==INTERVAL5M) {
+                        range=INTERVAL1H;
+                    }
                     break;
                 case R.id.tv_foot_span_1M:
-                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
                     ago=SPAN1M;
-                    b=tvSpan1M;
+                    if(range==INTERVAL5M||range==INTERVAL1H) {
+                        range=INTERVAL4H;
+                    }
                     break;
                 case R.id.tv_foot_span_3M:
-                    b.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+                    if(range==INTERVAL5M||range==INTERVAL1H){
+                        range=INTERVAL4H;
+                    }
                     ago=SPAN3M;
-                    b=tvSpan3M;
                     break;
             }
             Log.i(TAG, "onClick: ago:"+TimeUnit.MILLISECONDS.toDays(ago));
             Log.i(TAG, "onClick: range:"+TimeUnit.SECONDS.toMinutes(range));
-            a.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
-            b.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
-            startReceiveMarkets();
-
+            drawK();
+            setBtnBack();
         }
     }
+
+    private void setBtnBack() {
+        if(range==INTERVAL1D){
+            setIntervalBack(tvInterval1D,tvInterval5M,tvInterval1H,tvInterval4H);
+        }else if(range==INTERVAL1H){
+            setIntervalBack(tvInterval1H,tvInterval1D,tvInterval5M,tvInterval4H);
+        }else if(range==INTERVAL5M){
+            setIntervalBack(tvInterval5M,tvInterval1H,tvInterval1D,tvInterval4H);
+        }else if(range==INTERVAL4H){
+            setIntervalBack(tvInterval4H,tvInterval1H,tvInterval1D,tvInterval5M);
+        }
+        if(ago==SPAN1D){
+            setSpanlBack(tvSpan1D,tvSpan1M,tvSpan1W,tvSpan3M);
+        }else if(ago==SPAN1W){
+            setSpanlBack(tvSpan1W,tvSpan1M,tvSpan1D,tvSpan3M);
+        }else if(ago==SPAN1M){
+            setSpanlBack(tvSpan1M,tvSpan1D,tvSpan1W,tvSpan3M);
+        }else if(ago==SPAN3M){
+            setSpanlBack(tvSpan3M,tvSpan1M,tvSpan1W,tvSpan1D);
+        }
+    }
+    private void setIntervalBack(TextView textView1,TextView textView2,TextView textView3,TextView textView4){
+        textView1.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
+        textView2.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+        textView3.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+        textView4.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+    }
+    private void setSpanlBack(TextView textView1,TextView textView2,TextView textView3,TextView textView4){
+        textView1.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
+        textView2.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+        textView3.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+        textView4.setBackground(getActivity().getDrawable(R.drawable.tv_detai));
+    }
+
     private void init(View view) {
         simpleK=view.findViewById(R.id.cbc_detailed_K);
         simpleK.setNoDataText("数据正在读取中。。。");
         tvInterval5M=view.findViewById(R.id.tv_foot_interval_5M);
         tvInterval1H=view.findViewById(R.id.tv_foot_interval_1H);
         tvInterval1D=view.findViewById(R.id.tv_foot_interval_1D);
+        tvInterval4H=view.findViewById(R.id.tv_foot_interval_4H);
         tvSpan1D=view.findViewById(R.id.tv_foot_span_1D);
         tvSpan1W=view.findViewById(R.id.tv_foot_span_1W);
         tvSpan1M=view.findViewById(R.id.tv_foot_span_1M);
@@ -309,8 +349,6 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
         tvInterval5M.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
         tvSpan1D.setBackground(getActivity().getDrawable(R.drawable.tv_detai_touch));
-        a=tvInterval5M;
-        b=tvSpan1D;
     }
 
     private void initChart() {
@@ -376,15 +414,23 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         fillIn();
     }
     private void initializeData(List<MarketStat.HistoryPrice> listHistoryPrice) {
+        Log.i(TAG, "initializeData: listHistoryPrice:"+listHistoryPrice.size());
         List<CandleEntry> candleEntryList = new ArrayList<>();
         List<BarEntry> barEntryList = new ArrayList<>();
-        int i = 0;
-        for (MarketStat.HistoryPrice price : listHistoryPrice) {
-            int nPosition = i++;
-            CandleEntry candleEntry = new CandleEntry(nPosition, (float)price.high, (float)price.low, (float)price.open, (float)price.close, price);
+        highPrice=listHistoryPrice.get(0).high;
+        lowPrice=listHistoryPrice.get(0).low;
+        for (int i=0;i<listHistoryPrice.size(); i++) {
+            MarketStat.HistoryPrice pri=listHistoryPrice.get(i);
+            if (pri.high>highPrice){
+                highPrice=pri.high;
+            }
+            if (pri.low<lowPrice){
+                lowPrice=pri.low;
+            }
+            CandleEntry candleEntry = new CandleEntry(i+1, (float)pri.high, (float)pri.low, (float)pri.open, (float)pri.close, pri);
             candleEntryList.add(candleEntry);
 
-            BarEntry barEntry = new BarEntry((float)nPosition, (float)price.volume);
+            BarEntry barEntry = new BarEntry((float)i+1, (float)pri.volume);
             barEntryList.add(barEntry);
         }
 
@@ -449,7 +495,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         simpleK.setData(combinedData);
         simpleK.notifyDataSetChanged();
         simpleK.fitScreen();
-        simpleK.setVisibleXRangeMaximum(48);
+        //simpleK.setVisibleXRangeMaximum(100);
         simpleK.moveViewToX(simpleK.getXChartMax() - 48);
     }
     class xAxisValueFormater implements IAxisValueFormatter {
@@ -491,14 +537,16 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     public void onMarketStatUpdate(MarketStat.Stat stat) {
         Log.e(TAG, "onMarketStatUpdate: Thread:"+Thread.currentThread().getName());
         Log.i(TAG, String.valueOf("onMarketStatUpdate: stat:"+stat==null));
+        Log.i(TAG, "onMarketStatUpdate: "+stat.prices.size());
         if(stat!=null&&stat.prices!=null&&stat.prices.size()>0){
             MarketStat.HistoryPrice price=stat.prices.get(0);
             String newkey= KeyUtil.constructingDateKKey(price.base,price.quote,stat.bucket,stat.ago);
             if(BtslandApplication.dataKMap.get(newkey)!=null){
-                BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(newkey));
+                BtslandApplication.dataKMap.remove(newkey);
             }
             BtslandApplication.dataKMap.put(newkey,stat.prices);
             if(newkey.equals(MarketDetailedActivity.dataKey)){
+                Log.i(TAG, "onMarketStatUpdate: success");
                 handler.sendEmptyMessage(SUCCESS);
             }
 

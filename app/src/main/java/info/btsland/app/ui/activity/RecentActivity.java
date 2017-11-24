@@ -51,10 +51,8 @@ public class RecentActivity extends AppCompatActivity{
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (headFragment==null){
-            headFragment=new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
+            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"近期交易");
             transaction.add(R.id.fra_user_recent_head,headFragment);
-            headFragment.setTitleName("近期交易");
         }
 
         transaction.commit();

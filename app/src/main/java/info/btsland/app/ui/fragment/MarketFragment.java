@@ -57,12 +57,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private String[] bases;
     private String[] quotes;
     public MarketFragment() {
-        this.marketStat= BtslandApplication.getMarketStat();
-        bases=BtslandApplication.bases;
-        quotes=BtslandApplication.quotes2;
-        if(InternetUtil.isConnected(BtslandApplication.getInstance())){
-            marketStat.subscribe(bases,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_SECS,this);
-        }
+
+
     }
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
@@ -194,20 +190,28 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.e(TAG, "onCreate: ");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market, container, false);
+        this.marketStat= BtslandApplication.getMarketStat();
+        bases=BtslandApplication.bases;
+        quotes=BtslandApplication.quotes2;
+        if(InternetUtil.isConnected(BtslandApplication.getInstance())){
+            marketStat.subscribe(bases,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_SECS,this);
+        }
+        Log.e(TAG, "onCreateView: ");
+        fillInSimpleK(null);
+        init(view);
         return view;
     }
     //startGetTickerThread
     @Override
     public void onStart() {
         super.onStart();
-        fillInSimpleK(null);
-        init();
         touchColor(tvMarketLeftCoin_1);//交互特效
         setMarket(tvMarketLeftCoin_1);//设置数据
 //        websocket_api websocketApi=new websocket_api();
@@ -232,23 +236,23 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
     }
 
-    private void init() {
-        tvMarketLeftCoin_1 = getActivity().findViewById(R.id.tv_market_left_coin1);
-        tvMarketLeftCoin_2 = getActivity().findViewById(R.id.tv_market_left_coin2);
-        tvMarketLeftCoin_3 = getActivity().findViewById(R.id.tv_market_left_coin3);
-        tvMarketLeftCoin_4 = getActivity().findViewById(R.id.tv_market_left_coin4);
+    private void init(View view) {
+        tvMarketLeftCoin_1 = view.findViewById(R.id.tv_market_left_coin1);
+        tvMarketLeftCoin_2 = view.findViewById(R.id.tv_market_left_coin2);
+        tvMarketLeftCoin_3 = view.findViewById(R.id.tv_market_left_coin3);
+        tvMarketLeftCoin_4 = view.findViewById(R.id.tv_market_left_coin4);
         //tvMarketLeftCoin_5 = getActivity().findViewById(R.id.tv_market_left_coin5);
-        lvMarketInfo = getActivity().findViewById(R.id.lv_market_info);
+        lvMarketInfo = view.findViewById(R.id.lv_market_info);
         LeftCoinOnClickListener onClickListener = new LeftCoinOnClickListener();
         tvMarketLeftCoin_1.setOnClickListener(onClickListener);
         tvMarketLeftCoin_2.setOnClickListener(onClickListener);
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
         //tvMarketLeftCoin_5.setOnClickListener(onClickListener);
-        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"CNY"), cnyMarket);
-        btsRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTS"), btsMarket);
-        btcRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"BTC"), btcMarket);
-        usdRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"USD"), usdMarket);
+        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"CNY"), cnyMarket);
+        btsRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"BTS"), btsMarket);
+        btcRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"BTC"), btcMarket);
+        usdRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"USD"), usdMarket);
         //ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"ETH"), ethMarket);
 
     }

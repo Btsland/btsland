@@ -148,7 +148,7 @@
                 android:id="@+id/tv_detailed_info_open"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="开盘价："
+                android:text="最新开盘价："
                 android:textSize="12sp"
                 android:gravity="center|right"
                 android:textColor="@color/color_frenchGrey"
@@ -169,7 +169,7 @@
                 android:id="@+id/tv_detailed_info_close"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="收盘价："
+                android:text="最新收盘价："
                 android:textSize="12sp"
                 android:gravity="center|right"
                 android:textColor="@color/color_frenchGrey"
@@ -380,6 +380,14 @@
             android:layout_height="40dp"
             android:layout_width="40dp"
             android:text="1H"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:background="@drawable/tv_detai" />
+        <TextView
+            android:id="@+id/tv_foot_interval_4H"
+            android:layout_height="40dp"
+            android:layout_width="40dp"
+            android:text="4H"
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/tv_detai" />

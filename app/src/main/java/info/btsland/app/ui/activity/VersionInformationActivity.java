@@ -31,9 +31,7 @@ public class VersionInformationActivity extends BaseActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName(getString(R.string.edition));
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,getString(R.string.edition));
             transaction.add(R.id.fra_version_head, headFragment);
         }
         transaction.commit();

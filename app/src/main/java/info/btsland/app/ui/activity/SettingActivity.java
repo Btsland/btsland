@@ -96,10 +96,6 @@ public class SettingActivity extends BaseActivity{
                 case R.id.tv_set_theme:
                     showthemeDialog();
                     break;
-                case R.id.tv_set_guide:
-                    Intent iii = new Intent(SettingActivity.this , UsersGuidanceActivity.class);
-                    startActivity(iii);
-                    break;
                 case R.id.tv_set_we:
                     Log.i("dddddd", "onClick: ");
                     Intent i = new Intent(SettingActivity.this , AboutUsActivity.class);
@@ -120,8 +116,7 @@ public class SettingActivity extends BaseActivity{
     private void fillInHead(){
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
-            headFragment=new HeadFragment(HeadFragment.HeadType.BACK_NULL);
-            headFragment.setTitleName(getString(R.string.set));
+            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,getString(R.string.set));
             transaction.add(R.id.fra_set_head,headFragment);
         }
         transaction.commit();

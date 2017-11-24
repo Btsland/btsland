@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import info.btsland.app.ui.view.IViewPager;
 import info.btsland.app.util.KeyUtil;
 
 public class MarketDetailedActivity extends AppCompatActivity{
+    private static String TAG="MarketDetailedActivity";
     private HeadFragment headFragment;
     public static MarketTicker market=new MarketTicker("CNY","BTS");
 
@@ -57,11 +59,18 @@ public class MarketDetailedActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_market_detailed);
-        if(getIntent().getSerializableExtra("MarketTicker")!=null){
-            this.market= (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+        if(getIntent()!=null) {
+            if (getIntent().getSerializableExtra("MarketTicker") != null) {
+                this.market = (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
+            }
+            this.title = market.quote + ":" + market.base;
+            this.index = getIntent().getIntExtra("index", index);
+        }else {
+            if(savedInstanceState!=null){
+                this.index = savedInstanceState.getInt("index", 1);
+            }
+
         }
-        this.title=market.quote+":"+market.base;
-        this.index=getIntent().getIntExtra("index",index);
         dataKey= KeyUtil.constructingDateKKey(market.base,market.quote,DetailedKFragment.range,DetailedKFragment.ago);
         orderKey=KeyUtil.constructingOrderBooksKey(market.base,market.quote);
         this.tickers=new ArrayList<>();
@@ -82,6 +91,12 @@ public class MarketDetailedActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putInt("index",index);
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -112,8 +127,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
     private void fillInHead(){
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
-            headFragment=new HeadFragment();
-            headFragment.setType(HeadFragment.HeadType.BACK_SELECT_NULL);
+            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_SELECT_NULL,"");
             transaction.add(R.id.fra_detailed_head,headFragment);
         }
         transaction.commit();
@@ -169,16 +183,17 @@ public class MarketDetailedActivity extends AppCompatActivity{
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+            Log.i(TAG, "onPageScrolled: "+position);
         }
 
         @Override
         public void onPageSelected(int position) {
-
+            Log.i(TAG, "onPageSelected: "+position);
         }
 
         @Override
         public void onPageScrollStateChanged(int state) {
+            Log.i(TAG, "onPageScrollStateChanged: "+state);
 
         }
     }

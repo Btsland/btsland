@@ -48,14 +48,6 @@ public class HeadFragment extends Fragment {
         this.listener = listener;
     }
 
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
-    }
-
     private TextView leftTextView;
     private TextView rightTextView;
     private TextView titleTextView;
@@ -67,30 +59,25 @@ public class HeadFragment extends Fragment {
     public HeadFragment() {
         super();
     }
-
-    public HeadFragment(int type, String titleName) {
-        this.type = type;
-        this.titleName = titleName;
-    }
-
-    public HeadFragment(int type) {
-        this.type = type;
-    }
-
-    public HeadFragment(String titleName) {
-        this.titleName = titleName;
+    public static HeadFragment newInstance(int type, String titleName){
+        HeadFragment headFragment=new HeadFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt("type",type);
+        bundle.putString("titleName",titleName);
+        headFragment.setArguments(bundle);
+        return headFragment;
     }
 
     /**
      * 初始化
      */
-    private void init() {
+    private void init(View view) {
         Log.i("HeadFragment", "init: ");
-        leftTextView = getActivity().findViewById(R.id.tv_head_left);
-        rightTextView = getActivity().findViewById(R.id.tv_head_right);
-        titleTextView = getActivity().findViewById(R.id.tv_head_title);
-        selectTextView=getActivity().findViewById(R.id.tv_head_select);
-        drawable = getResources().getDrawable(R.drawable.image_share,null);
+        leftTextView = view.findViewById(R.id.tv_head_left);
+        rightTextView = view.findViewById(R.id.tv_head_right);
+        titleTextView = view.findViewById(R.id.tv_head_title);
+        selectTextView=view.findViewById(R.id.tv_head_select);
+        drawable = view.getResources().getDrawable(R.drawable.image_share,null);
         //设置图片大小
         drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());
     }
@@ -98,7 +85,7 @@ public class HeadFragment extends Fragment {
     /**
      * 填充内容
      */
-    private void fillIn(int type) {
+    private void fillIn() {
         Log.i("HeadFragment", "fillIn: type=" + type);
         BackOnClickListener back = new BackOnClickListener();
         ToShareOnClickListener toShare = new ToShareOnClickListener();
@@ -188,14 +175,20 @@ public class HeadFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_head, container, false);
+        type=getArguments().getInt("type");
+        String titleName=getArguments().getString("titleName");
+        if(titleName!=null&&!titleName.equals("")){
+            this.titleName=titleName;
+        }
+        init(view);
+        fillIn();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        init();
-        fillIn(type);
+
     }
 
     @Override
@@ -209,11 +202,13 @@ public class HeadFragment extends Fragment {
     }
 
     public abstract static class HeadType {
+
         public static final int BACK_SET = 1;
         public static final int SHARE_SET = 2;
         public static final int BACK_NULL = 3;
         public static final int NULL_NULL = 4;
         public static final int BACK_SELECT_NULL = 5;
+        public static final int DEFAULT = 1;
     }
     public interface OnSelectOnClickListener{
         void onClick(View view);

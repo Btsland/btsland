@@ -22,6 +22,10 @@ public class HomeFragment extends Fragment {
     public HomeFragment() {
         // Required empty public constructor
     }
+    public HomeFragment newInstance() {
+        HomeFragment homeFragment=new HomeFragment();
+        return homeFragment;
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,22 +36,24 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        View view=inflater.inflate(R.layout.fragment_home, container, false);
+        init(view);
+        return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Log.e(TAG, "onStart: ");
-        init();
+
     }
 
     /**
      * 初始化
      */
-    private void init(){
+    private void init(View view){
         Log.e(TAG, "init: ");
-        ViewPager viewPager1= (ViewPager) getActivity().findViewById(R.id.vp_detailed);
+        ViewPager viewPager1= view.findViewById(R.id.vp_detailed);
         String[] titles={"最新资讯","热点资讯","国内资讯","国外资讯"};
         List<Fragment> fragments=new ArrayList<Fragment>();
         LatestNewsFragment latestNewsFragment=new LatestNewsFragment();
@@ -59,7 +65,7 @@ public class HomeFragment extends Fragment {
         fragments.add(domesticInformationFragment);
         fragments.add(foreignInformationFragment);
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments,titles);
-        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) getActivity().findViewById(R.id.psts_detailed_title1);
+        PagerSlidingTabStrip tabStrip = view.findViewById(R.id.psts_detailed_title1);
         viewPager1.setAdapter(adapter);
         viewPager1.setCurrentItem(0);
         tabStrip.setViewPager(viewPager1);

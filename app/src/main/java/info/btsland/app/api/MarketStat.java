@@ -25,6 +25,7 @@ import info.btsland.app.model.MarketTrade;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.util.IDateUitl;
 
 
@@ -32,7 +33,7 @@ public class MarketStat {
     private static final String TAG = "MarketStat";
     public static final long DEFAULT_BUCKET_SECS = TimeUnit.DAYS.toSeconds(1);//每条信息的间隔
 
-    public static final long DEFAULT_UPDATE_SECS = TimeUnit.MINUTES.toMillis(1);//信息刷新的间隔
+    public static final long DEFAULT_UPDATE_SECS = TimeUnit.SECONDS.toMillis(10);//信息刷新的间隔
     public static final long DEFAULT_AGO_SECS=TimeUnit.DAYS.toMillis(90);//距离现在时间
     public static final int STAT_MARKET_HISTORY = 0x01;
     public static final int STAT_MARKET_TICKER = 0x02;
@@ -99,23 +100,18 @@ public class MarketStat {
                 new Subscription(name,pwd,stats,l);
         subscriptionHashMap.put("get_accounts", subscription);
     }*/
-    public void subscribe(String base, String quote, int stats,
-                          OnMarketStatUpdateListener l) {
-
-        subscribe(base, quote, DEFAULT_BUCKET_SECS, stats, l);
-    }
 
     private void subscribe(String base, String quote, long bucketSize, int stats,
-                          OnMarketStatUpdateListener l) {
+                           long intervalMillis,OnMarketStatUpdateListener l) {
         unsubscribe(base, quote,stats);
         Subscription subscription =
-                new Subscription(base, quote, bucketSize, stats, l);
+                new Subscription(base, quote, bucketSize, stats,intervalMillis, l);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
     public void getFullAccounts( int stats,
-                           OnMarketStatUpdateListener l) {
+                                 long intervalMillis,OnMarketStatUpdateListener l) {
         Subscription subscription =
-                new Subscription(stats, l);
+                new Subscription(stats,intervalMillis, l);
         subscriptionHashMap.put("get_full_accounts", subscription);
     }
 
@@ -128,13 +124,13 @@ public class MarketStat {
         }
     }
 
-    public void updateImmediately(String base, String quote,int stats) {
-        String market = makeMarketName(base, quote,stats);
-        Subscription subscription = subscriptionHashMap.get(market);
-        if (subscription != null) {
-            subscription.updateImmediately();
-        }
-    }
+//    public void updateImmediately(String base, String quote,int stats) {
+//        String market = makeMarketName(base, quote,stats);
+//        Subscription subscription = subscriptionHashMap.get(market);
+//        if (subscription != null) {
+//            subscription.updateImmediately();
+//        }
+//    }
 //    public void updateConnect(String name) {
 //        Connect connect = connectHashMap.get(name);
 //        if (connect != null) {
@@ -263,11 +259,12 @@ public class MarketStat {
             this.statHandler.post(this);
             Log.i(TAG, "Subscription: ago:"+ago);
         }
-        private Subscription(String base, String quote, long bucketSecs, int stats, OnMarketStatUpdateListener l) {
+        private Subscription(String base, String quote, long bucketSecs, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             this.base = base;
             this.quote = quote;
             this.bucketSecs = bucketSecs;
             this.stats = stats;
+            this.intervalMillis=intervalMillis;
             this.listener = l;
             this.statThread = new HandlerThread(makeMarketName(base, quote,stats));
             this.statThread.start();
@@ -285,7 +282,7 @@ public class MarketStat {
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
-        private Subscription(int stats, OnMarketStatUpdateListener l) {
+        private Subscription(int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.stats = stats;
             this.intervalMillis=intervalMillis;
@@ -312,7 +309,7 @@ public class MarketStat {
         }
 
         public void updateImmediately() {
-            statHandler.postDelayed(this,10000);
+            statHandler.postDelayed(this,intervalMillis);
             //statHandler.post(this);
         }
 
@@ -344,17 +341,27 @@ public class MarketStat {
                         }
 
                     }
-                    this.updateImmediately();
+                    //this.updateImmediately();
                     return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
                     Log.i(TAG, "run: ago:"+ago);
                     Log.i(TAG, "run: ago:"+TimeUnit.DAYS.toMillis(90));
                     //设置初始时间和结束时间转化为国际时间
-                    Date startDate = IDateUitl.toUniversalTime(new Date(System.currentTimeMillis() -ago));
-                    Date endDate=IDateUitl.toUniversalTime(new Date());
-                    stat.prices = getMarketHistory(base,quote,(int)bucketSecs,startDate,endDate);//1
-                    //打印总条数
+                    stat.prices=new ArrayList<>();
+                    long time=ago;
+                    while (time>0){
+                        Date startDate = IDateUitl.toUniversalTime(new Date(System.currentTimeMillis() -time));
+                        time = time-(bucketSecs*1000*200);
+                        Date endDate=null;
+                        if(time>0){
+                            endDate=IDateUitl.toUniversalTime(new Date(System.currentTimeMillis()-time));
+                        }else {
+                            endDate=IDateUitl.toUniversalTime(new Date());
+                        }
+                        List<HistoryPrice> prices=getMarketHistory(base,quote,(int)bucketSecs,startDate,endDate);
+                        stat.prices.addAll(prices);
+                    }
                     stat.bucket=bucketSecs;
                     stat.ago=ago;
                 }
@@ -535,7 +542,7 @@ public class MarketStat {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 
             //把国际时间转化为本地时间
-            price.date =IDateUitl.toLocalTime(bucket.key.open);
+            price.date =bucket.key.open;
 
             if (bucket.key.quote.equals(quoteAsset.id)) {
 

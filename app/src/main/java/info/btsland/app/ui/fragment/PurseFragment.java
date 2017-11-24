@@ -104,6 +104,8 @@ public class PurseFragment extends Fragment {
 
     }
 
+
+
     private void yesOrNoLogin() {
         if (BtslandApplication.accountObject==null) {
           // flPurseLoginPrompt.setVisibility(View.VISIBLE);

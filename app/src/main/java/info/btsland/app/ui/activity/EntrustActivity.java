@@ -61,9 +61,8 @@ public class EntrustActivity extends AppCompatActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = new HeadFragment();
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.DEFAULT,"用户中心");
             transaction.add(R.id.fra_entrust_head, headFragment);
-            headFragment.setTitleName("用户中心");
         }
         transaction.commit();
     }

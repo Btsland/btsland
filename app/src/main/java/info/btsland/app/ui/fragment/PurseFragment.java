@@ -20,7 +20,6 @@ import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
-import info.btsland.app.ui.activity.PurseAccessRecordActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.PurseWalletBackupActivity;
@@ -241,11 +240,11 @@ public class PurseFragment extends Fragment {
                     Intent intent=new Intent(getActivity(), PurseAssetActivity.class);
                     getActivity().startActivity(intent);
                     break;
-                case R.id.tv_purse_rw:
-                    //充值记录
-                    Intent rw=new Intent(getActivity(), PurseAccessRecordActivity.class);
-                    getActivity().startActivity(rw);
-                    break;
+//                case R.id.tv_purse_rw:
+//                    //充值记录
+//                    Intent rw=new Intent(getActivity(), PurseAccessRecordActivity.class);
+//                    getActivity().startActivity(rw);
+//                    break;
                 case R.id.tv_purse_deal:
                     //交易记录
                     Intent deal=new Intent(getActivity(), PurseTradingRecordActivity.class);

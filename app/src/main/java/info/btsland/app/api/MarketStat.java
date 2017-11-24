@@ -344,7 +344,7 @@ public class MarketStat {
                         }
 
                     }
-                    //this.updateImmediately();
+                    this.updateImmediately();
                     return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
@@ -401,7 +401,7 @@ public class MarketStat {
                 }
                 //开启处理数据线程
                 new dataHandling(listener,stat).start();
-                //this.updateImmediately();
+                this.updateImmediately();
             } else if (!isCancelled.get()) {
 
             }

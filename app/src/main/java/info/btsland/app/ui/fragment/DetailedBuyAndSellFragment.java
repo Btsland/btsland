@@ -157,7 +157,7 @@ public class DetailedBuyAndSellFragment extends Fragment
         tvTotalNum.setText("0.00");
     }
     private void fillIn(){
-        MarketTicker market=MarketDetailedActivity.market;
+        final MarketTicker market=MarketDetailedActivity.market;
         tvNewPrice.setText(market.latest);
         if (MarketDetailedActivity.market.percent_change > 0) {
             tvNewPrice.setTextColor(getActivity().getResources().getColor(R.color.color_green));
@@ -245,12 +245,12 @@ public class DetailedBuyAndSellFragment extends Fragment
                         new ConfirmOrderDialog.ConfirmOrderData(
                                 ConfirmOrderDialog.ConfirmOrderData.BUY,
                                 edPrice.getText().toString(),
-                                tvPriceCoin.getText().toString(),
+                                market.base,
                                 tvTotalNum.getText().toString(),
                                 edVol.getText().toString(),
                                 tvChargeNum.getText().toString(),
-                                tvVolCoin.getText().toString(),
-                                tvTotalCoin.getText().toString(),
+                                market.quote,
+                                market.base,
                                 tvChageCoin.getText().toString()
                         ),
                         new DialogListener());
@@ -264,12 +264,12 @@ public class DetailedBuyAndSellFragment extends Fragment
                         new ConfirmOrderDialog.ConfirmOrderData(
                                 ConfirmOrderDialog.ConfirmOrderData.SELL,
                                 edPrice.getText().toString(),
-                                tvPriceCoin.getText().toString(),
+                                market.base,
                                 tvTotalNum.getText().toString(),
                                 edVol.getText().toString(),
                                 tvChargeNum.getText().toString(),
-                                tvVolCoin.getText().toString(),
-                                tvTotalCoin.getText().toString(),
+                                market.quote,
+                                market.base,
                                 tvChageCoin.getText().toString()
                         ),
                         new DialogListener());

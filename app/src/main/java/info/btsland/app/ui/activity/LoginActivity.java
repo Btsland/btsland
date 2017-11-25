@@ -401,7 +401,7 @@ public class LoginActivity extends AppCompatActivity {
                 Log.i(TAG, "handleMessage: 登录成功");
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
                 hud.dismiss();
-                saveUser();
+                BtslandApplication.saveUser();
 //                Intent iLogin=new Intent(LoginActivity.this,MainActivity.class);
 //                startActivity(iLogin);
                 finish();
@@ -424,26 +424,16 @@ public class LoginActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what==0){
                 tvRegisterUserPoint.setText(R.string.User_name_available);
-                tvRegisterUserPoint.setTextColor(getResources().getColor(R.color.color_green));
+                tvRegisterUserPoint.setTextColor(BtslandApplication.goUp);
                 userIsPual=true;//设置用户名可用
             }else {
                 tvRegisterUserPoint.setText(R.string.User_name_already_exists);
-                tvRegisterUserPoint.setTextColor(getResources().getColor(R.color.color_font_red));
+                tvRegisterUserPoint.setTextColor(BtslandApplication.goUp);
             }
         }
     };
 
 
-    /**
-     * 保存用户
-     */
-    public static void saveUser(){
-        //借助Editor实现共享参数储存
-        SharedPreferences  sps=BtslandApplication.getInstance().getSharedPreferences("Login",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor=sps.edit();
-        editor.putString("username",BtslandApplication.accountObject.name);
-        editor.commit();
-    }
 
 
 

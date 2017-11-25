@@ -24,7 +24,6 @@ import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.MarketService;
-import info.btsland.app.ui.activity.BaseActivity;
 import info.btsland.app.util.ArrayUtils;
 import info.btsland.app.util.InternetUtil;
 
@@ -273,7 +272,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
 
 
-    class LeftCoinOnClickListener extends BaseActivity implements View.OnClickListener {
+    class LeftCoinOnClickListener implements View.OnClickListener {
 //        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         @Override
         public void onClick(View view) {

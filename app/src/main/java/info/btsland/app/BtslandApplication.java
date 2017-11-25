@@ -10,6 +10,7 @@ import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.security.Security;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,7 +64,41 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static String[] quotes1={"BTC", "ETH", "BTS", "LTC", "OMG", "STEEM", "VEN", "HPB", "OCT", "YOYOW", "DOGE", "HASH"};
     public static String[] quotes2={"CNY","BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
     public static Map<object_id<asset_object>, asset_object> assetObjectMap=new HashMap<object_id<info.btsland.app.api.asset_object>, info.btsland.app.api.asset_object>();
+    public static boolean isRefurbish=true;//是否自动刷新
+    public static int fluctuationType=1;//涨跌颜色类型
+    public static String strServer="wss://bitshares.dacplay.org/ws";//节点
+    public static String chargeUnit="CNY";//计价单位
+    public static String Language="zh";//语言
+    public static int goUp=0;
+    public static int goDown=0;
+    public static int suspend=0;
 
+    public static List<String> mListNode = Arrays.asList(
+            "wss://bitshares.openledger.info/ws",
+            "wss://eu.openledger.info/ws",
+            "wss://bit.btsabc.org/ws",
+            "wss://bts.transwiser.com/ws",
+            "wss://bitshares.dacplay.org/ws",
+            "wss://bitshares-api.wancloud.io/ws",
+            "wss://openledger.hk/ws",
+            "wss://secure.freedomledger.com/ws",
+            "wss://dexnode.net/ws",
+            "wss://altcap.io/ws",
+            "wss://bitshares.crypto.fans/ws"
+
+    );
+
+    public static void setFluctuationType(int fluctuationType){
+        if(BtslandApplication.fluctuationType==1){
+            goUp=getInstance().getResources().getColor(R.color.color_green);
+            goDown=getInstance().getResources().getColor(R.color.color_font_red);
+            suspend=getInstance().getResources().getColor(R.color.color_font_blue);
+        }else if(BtslandApplication.fluctuationType==2){
+            goUp=getInstance().getResources().getColor(R.color.color_font_red);
+            goDown=getInstance().getResources().getColor(R.color.color_green);
+            suspend=getInstance().getResources().getColor(R.color.color_font_blue);
+        }
+    }
 
     public static Wallet_api getWalletApi() {
         if(walletApi==null){
@@ -96,6 +131,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
         instance=getApplicationContext();
         application=this;
+        sharedPreferences=getInstance().getSharedPreferences("appConfigure", Context.MODE_PRIVATE);
+        chargeUnit = readChargeUnit();
+        fluctuationType = readFluctuationType();
+        isRefurbish = readIsRefurbish();
+        strServer = readStrServer();
+        Language = readLanguage();
         while (true){
             if(InternetUtil.isConnected(this)){
                 ConnectThread();
@@ -109,6 +150,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
             }
         }
+        setFluctuationType(fluctuationType);
     }
 
     @Override
@@ -138,6 +180,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
 
 
+
+
     /**
      * 查询账户线程
      *
@@ -145,7 +189,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static class QueryAccountThread extends Thread{
         @Override
         public void run() {
-            sharedPreferences=getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
+
             String username=sharedPreferences.getString("username","");
             if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
                 return;
@@ -188,7 +232,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 accountObject.assetlist=assets;
                 iAssets=new ArrayList <>();
                 if(assets==null||assets.size()==0){
-                    iAssets.add(new IAsset("CNY"));
+                    iAssets.add(new IAsset(chargeUnit));
                 }else {
                     for(int i=0;i<assets.size();i++) {
                         iAssets.add(new IAsset(assets.get(i)));
@@ -210,7 +254,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     /**
      * 外部调用查询总资产线程的方法
      */
-    private static void CuntTotalCNY(){
+    public static void CuntTotalCNY(){
 
         new CuntTotalCNYThread().start();
 
@@ -225,15 +269,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static class CuntTotalCNYThread extends Thread{
 
         @Override
-        public void run() {
+        public synchronized void run() {
             accountObject.totalCNY=0.0;
             for (int i=0; i < iAssets.size(); i++) {
-                if(iAssets.get(i).coinName.equals("CNY")){
+                if(iAssets.get(i).coinName.equals(chargeUnit)){
                     accountObject.totalCNY+=iAssets.get(i).total;
                     continue;
                 }
                 try {
-                    MarketTicker ticker =getMarketStat().mWebsocketApi.get_ticker("CNY", iAssets.get(i).coinName);
+                    MarketTicker ticker =getMarketStat().mWebsocketApi.get_ticker(chargeUnit, iAssets.get(i).coinName);
                     if(ticker==null){
                         continue;
                     }
@@ -254,5 +298,64 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     }
 
+    public static boolean saveIsRefurbish(){
 
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putBoolean("IsRefurbish",isRefurbish);
+        return editor.commit();
+    }
+    public static boolean saveFluctuationType(){
+
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putInt("fluctuationType",fluctuationType);
+        return editor.commit();
+    }
+    public static boolean saveStrServer(){
+
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("strServer",strServer);
+        return editor.commit();
+    }
+    public static boolean saveChargeUnit(){
+
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("chargeUnit",chargeUnit);
+        return editor.commit();
+    }
+    public static boolean saveLanguage(){
+
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("Language",Language);
+        return editor.commit();
+    }
+    public static String readLanguage(){
+        return sharedPreferences.getString("Language",Language);
+    }
+    public static boolean readIsRefurbish(){
+
+        return sharedPreferences.getBoolean("IsRefurbish",true);
+    }
+    public static int readFluctuationType(){
+        return sharedPreferences.getInt("fluctuationType",1);
+    }
+    public static String readStrServer(){
+        return sharedPreferences.getString("strServer",strServer);
+    }
+    public static String readChargeUnit(){
+        return sharedPreferences.getString("chargeUnit",chargeUnit);
+    }
+    /**
+     * 保存用户
+     */
+    public static boolean saveUser(){
+        //借助Editor实现共享参数储存
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.putString("username",BtslandApplication.accountObject.name);
+        return editor.commit();
+    }
+    public static boolean clearUser() {
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        editor.remove("username");
+        return editor.commit();
+    }
 }

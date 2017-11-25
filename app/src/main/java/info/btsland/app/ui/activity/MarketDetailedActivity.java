@@ -166,6 +166,11 @@ public class MarketDetailedActivity extends AppCompatActivity{
                     }
 
                     @Override
+                    public void onConfirm(String market) {
+
+                    }
+
+                    @Override
                     public void onReject() {
 
                     }

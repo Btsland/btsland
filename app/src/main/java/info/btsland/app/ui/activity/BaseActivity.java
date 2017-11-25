@@ -9,6 +9,7 @@ import android.view.Window;
 
 import java.util.Locale;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.util.PreferenceUtil;
 
@@ -27,7 +28,7 @@ public class BaseActivity extends AppCompatActivity {
         int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         //设定主题
         setTheme(theme);
-
+        //switchLanguage(BtslandApplication.Language);
         super.onCreate(savedInstanceState);
     }
 
@@ -50,6 +51,6 @@ public class BaseActivity extends AppCompatActivity {
         resources.updateConfiguration(config, dm);
 
         // 保存设置语言的类型
-        PreferenceUtil.commitString("language", language);
+        PreferenceUtil.commitString("Language", language);
     }
 }

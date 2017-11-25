@@ -39,22 +39,6 @@ import static info.btsland.app.BtslandApplication._nHistoryId;
 public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
     private String TAG="websocket_api";
-
-    private String strServer="wss://bitshares.dacplay.org/ws";
-    private List<String> mListNode = Arrays.asList(
-            "wss://bitshares.openledger.info/ws",
-            "wss://eu.openledger.info/ws",
-            "wss://bit.btsabc.org/ws",
-            "wss://bts.transwiser.com/ws",
-            "wss://bitshares.dacplay.org/ws",
-            "wss://bitshares-api.wancloud.io/ws",
-            "wss://openledger.hk/ws",
-            "wss://secure.freedomledger.com/ws",
-            "wss://dexnode.net/ws",
-            "wss://altcap.io/ws",
-            "wss://bitshares.crypto.fans/ws"
-
-    );
     private OkHttpClient mOkHttpClient;
     private WebSocket mWebsocket;
 
@@ -210,11 +194,11 @@ public class Websocket_api extends WebSocketListener {
             return 0;
         }
 
-        if (StringUtils.isEmpty(strServer)) {
+        if (StringUtils.isEmpty(BtslandApplication.strServer)) {
             return -9;
         }
 
-        Request request = new Request.Builder().url(strServer).build();
+        Request request = new Request.Builder().url(BtslandApplication.strServer).build();
         mOkHttpClient = new OkHttpClient();
         mWebsocket = mOkHttpClient.newWebSocket(request, this);
         synchronized (mWebsocket) {

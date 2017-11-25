@@ -63,8 +63,6 @@ public class PurseFragment extends Fragment {
 
     private TextView tvUserLogoff;
 
-    private SharedPreferences sharedPreferences;
-
     private FrameLayout flPurse;
     private FrameLayout flPurseLoginPrompt;
 
@@ -129,9 +127,9 @@ public class PurseFragment extends Fragment {
             if(String.valueOf(BtslandApplication.accountObject.totalCNY)==null){
                 tvPurseConvert.setText("折合总金额约为：正在计算中。。");
             }else if(String.valueOf(BtslandApplication.accountObject.totalCNY).length()>8){
-                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + "CNY");
+                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + BtslandApplication.chargeUnit);
             }else {
-                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY) + "CNY");
+                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY) + BtslandApplication.chargeUnit);
             }
             tvUserAnotherName.setText("#" + BtslandApplication.accountObject.id.get_instance());
         } else {
@@ -141,7 +139,6 @@ public class PurseFragment extends Fragment {
             tvPurseConvert.setText("");
             tvUserAnotherName.setText("");
         }
-        sharedPreferences=BtslandApplication.getInstance().getSharedPreferences("Login", Context.MODE_PRIVATE);
 
     }
 
@@ -265,12 +262,10 @@ public class PurseFragment extends Fragment {
                     appDialog.setListener(new AppDialog.OnDialogInterationListener() {
                         @Override
                         public void onConfirm() {
-                            SharedPreferences.Editor editor=sharedPreferences.edit();
-                            editor.clear();
-                            editor.commit();
 
                             BtslandApplication.isLogin=false;
                             BtslandApplication.accountObject=null;
+                            BtslandApplication.clearUser();
                             fillIn();
                             yesOrNoLogin();
                         }

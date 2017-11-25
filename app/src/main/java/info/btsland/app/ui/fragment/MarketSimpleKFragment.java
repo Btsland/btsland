@@ -258,13 +258,11 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         set.setAxisDependency(YAxis.AxisDependency.LEFT);
         set.setShadowWidth(0.7f);
         set.setDecreasingPaintStyle(Paint.Style.FILL);
-        int nColorGreen = ContextCompat.getColor(getActivity(), R.color.color_green);
-        int nColorRed = ContextCompat.getColor(getActivity(), R.color.color_font_red);
 
-        //设置绿涨红跌
-        set.setDecreasingColor(nColorRed);
-        set.setIncreasingColor(nColorGreen);
-        set.setNeutralColor(nColorGreen);
+
+        set.setDecreasingColor(BtslandApplication.goDown);
+        set.setIncreasingColor(BtslandApplication.goUp);
+        set.setNeutralColor(BtslandApplication.suspend);
 
 
         set.setIncreasingPaintStyle(Paint.Style.FILL);

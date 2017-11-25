@@ -7,11 +7,13 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
@@ -42,7 +44,8 @@ public class MainActivity extends BaseActivity {
         // 初始化PreferenceUtil
         PreferenceUtil.init(this);
         // 依据上次的语言设置，又一次设置语言
-        switchLanguage(PreferenceUtil.getString("language", "zh"));
+        Log.e(TAG, "onCreate: "+BtslandApplication.Language);
+        switchLanguage(BtslandApplication.Language);
         if(savedInstanceState!=null){
             index = savedInstanceState.getInt("index",1);
         }else {

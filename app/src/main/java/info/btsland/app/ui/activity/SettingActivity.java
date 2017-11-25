@@ -10,19 +10,25 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import info.btsland.app.Adapter.RowAdapter;
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.view.AppListDialog;
 import info.btsland.app.util.PreferenceUtil;
 
 
@@ -48,10 +54,12 @@ public class SettingActivity extends BaseActivity{
         listView=findViewById(R.id.lv_set_body);
     }
     private void fillIn(){
+
         List<RowAdapter.RowItemData> rowItemDataList=new ArrayList<>();
         RowAdapter.RowItemData refurbishItemData=new RowAdapter.RowItemData("",
                 "自动刷新",
                 "开启后将会自动刷新数据",
+                BtslandApplication.isRefurbish,
                 false,
                 true,
                 false,
@@ -60,7 +68,13 @@ public class SettingActivity extends BaseActivity{
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+                        if (b){
+                            BtslandApplication.isRefurbish=true;
+                            BtslandApplication.saveIsRefurbish();
+                        }else {
+                            BtslandApplication.isRefurbish=false;
+                            BtslandApplication.saveIsRefurbish();
+                        }
                     }
                 },
                 new View.OnClickListener() {
@@ -74,6 +88,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData languageItemData=new RowAdapter.RowItemData("",
                 "语言",
                 "选择您的语言",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -94,8 +109,9 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(languageItemData);
         RowAdapter.RowItemData changeItemData=new RowAdapter.RowItemData("",
-                "涨跌幅",
+                "涨跌幅样式",
                 "设置您偏好的涨跌幅颜色",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -109,7 +125,7 @@ public class SettingActivity extends BaseActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        showchangeDialog();
+                        showluctuationTyFpeDialog();
                     }
                 },
                 null
@@ -118,6 +134,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData nodeItemData=new RowAdapter.RowItemData("",
                 "节点选择",
                 "选择您需要连接的服务器节点",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -131,6 +148,7 @@ public class SettingActivity extends BaseActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        showStrServerDialog();
                     }
                 },
                 null
@@ -139,6 +157,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData chargeUnitItemData=new RowAdapter.RowItemData("",
                 "计价单位",
                 "设置您偏好的计价单位",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -152,6 +171,7 @@ public class SettingActivity extends BaseActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        showChargeUnitDialog();
                     }
                 },
                 null
@@ -160,6 +180,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData helpItemData=new RowAdapter.RowItemData("",
                 "使用指南",
                 "",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -181,6 +202,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData versionItemData=new RowAdapter.RowItemData("",
                 "版本信息",
                 "",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -194,6 +216,8 @@ public class SettingActivity extends BaseActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Intent intent=new Intent(SettingActivity.this,VersionInformationActivity.class);
+                        startActivity(intent);
                     }
                 },
                 null
@@ -202,6 +226,7 @@ public class SettingActivity extends BaseActivity{
         RowAdapter.RowItemData weItemData=new RowAdapter.RowItemData("",
                 "关于我们",
                 "",
+                BtslandApplication.isRefurbish,
                 false,
                 false,
                 true,
@@ -273,49 +298,156 @@ public class SettingActivity extends BaseActivity{
 
     private void showlanguageDialog() {
 
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
-        listDialog.setTitle(getString(R.string.selectlanguage));
 
-        final String[] items={"中文","英文"};
-        items[0]=getString(R.string.stringzh);
-        items[1]=getString(R.string.stringen);
+        final List<String> string1= Arrays.asList("zh","en");
+        final List<String> string2= Arrays.asList("中文","English");
+        int checkNum=0;
+        for(int i=0;i<string1.size();i++){
+            if(string1.get(i).equals(BtslandApplication.Language)){
+                checkNum=i;
+                break;
+            }
+        }
+        AppListDialog dialog=new AppListDialog(SettingActivity.this,string2,checkNum);
+        dialog.setTitle("请选择语言");
+        dialog.setListener(new AppListDialog.OnDialogInterationListener() {
+            @Override
+            public void onConfirm(MarketTicker market) {
 
-        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
+            }
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if(items[which]==getString(R.string.stringzh)){
-                    switchLanguage("zh");
-                }else if(items[which]==getString(R.string.stringen)){
-                    switchLanguage("en");
+            public void onConfirm(String server) {
+                for(int i=0;i<string2.size();i++){
+                    if(string2.get(i).equals(server)){
+                        BtslandApplication.Language = string1.get(i);
+                        BtslandApplication.saveLanguage();
+                        restart();
+                        break;
+                    }
                 }
-                dialog.dismiss();
-                finish();
-
-                Intent intent=new Intent(SettingActivity.this,MainActivity.class);
-                //开始新的activity同时移除之前所有的activity
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
+                BtslandApplication.saveLanguage();
             }
-        });
-        listDialog.show();
-    }
-    private void showchangeDialog() {
-        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
-        listDialog.setTitle(getString(R.string.selectlanguage));
-
-        final String[] items={"红涨绿跌","绿涨红跌"};
-
-        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
 
             @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onReject() {
 
             }
         });
-        listDialog.show();
+        dialog.show();
     }
-//
+    private void showChargeUnitDialog() {
+
+        List<String> strings= Arrays.asList("CNY","BTS");
+        int checkNum=0;
+        for(int i=0;i<strings.size();i++){
+            if(strings.get(i).equals(BtslandApplication.chargeUnit)){
+                checkNum=i;
+                break;
+            }
+        }
+        AppListDialog dialog=new AppListDialog(SettingActivity.this,strings,checkNum);
+        dialog.setTitle("请选择币种");
+        dialog.setListener(new AppListDialog.OnDialogInterationListener() {
+            @Override
+            public void onConfirm(MarketTicker market) {
+
+            }
+
+            @Override
+            public void onConfirm(String server) {
+                BtslandApplication.chargeUnit=server;
+                BtslandApplication.saveChargeUnit();
+                BtslandApplication.CuntTotalCNY();
+                restart();
+            }
+
+            @Override
+            public void onReject() {
+
+            }
+        });
+        dialog.show();
+    }
+    private void showStrServerDialog() {
+
+        List<String> mListNode=BtslandApplication.mListNode;
+        int checkNum=0;
+        for(int i=0;i<mListNode.size();i++){
+            if(mListNode.get(i).equals(BtslandApplication.strServer)){
+                checkNum=i;
+                break;
+            }
+        }
+        AppListDialog dialog=new AppListDialog(SettingActivity.this,mListNode,checkNum);
+
+        dialog.setTitle("请选择节点");
+        dialog.setListener(new AppListDialog.OnDialogInterationListener() {
+            @Override
+            public void onConfirm(MarketTicker market) {
+
+            }
+
+            @Override
+            public void onConfirm(String server) {
+                BtslandApplication.strServer=server;
+                BtslandApplication.saveStrServer();
+                restart();
+            }
+
+            @Override
+            public void onReject() {
+
+            }
+        });
+        dialog.show();
+    }
+    private void showluctuationTyFpeDialog() {
+
+        final List<String> string1=Arrays.asList("绿涨红跌","红涨绿跌");
+        final List<Integer> ints=Arrays.asList(1,2);
+        int checkNum=0;
+        for(int i=0;i<ints.size();i++){
+            if(ints.get(i)==BtslandApplication.fluctuationType){
+                checkNum=i;
+                break;
+            }
+        }
+        AppListDialog dialog=new AppListDialog(SettingActivity.this,string1,checkNum);
+        dialog.setTitle("请选择类型");
+        dialog.setListener(new AppListDialog.OnDialogInterationListener() {
+            @Override
+            public void onConfirm(MarketTicker market) {
+
+            }
+
+            @Override
+            public void onConfirm(String server) {
+                for(int i=0;i<string1.size();i++){
+                    if(string1.get(i).equals(server)){
+                        BtslandApplication.fluctuationType=ints.get(i);
+                        BtslandApplication.saveFluctuationType();
+                        restart();
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onReject() {
+
+            }
+        });
+
+        dialog.show();
+
+    }
+    public void restart() {
+        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+        //开始新的activity同时移除之前所有的activity
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+    }
 //    int index2 = 0 ;//设置默认选项，作为checkedItem参数传入。
 //
 //    private void showthemeDialog(){

@@ -75,6 +75,7 @@ public class RowAdapter extends BaseAdapter {
         tvTitle.setText(data.title);
         tvLabel.setText(data.label);
         tvDescribe.setText(data.describe);
+        aSwitch.setChecked(data.switchStat);
         if(data.showSwitch){
             aSwitch.setVisibility(View.VISIBLE);
         }else {
@@ -110,6 +111,7 @@ public class RowAdapter extends BaseAdapter {
         public String title;
         public String label;
         public String describe;
+        public boolean switchStat;
         public boolean showTitle;
         public boolean showSwitch;
         public boolean showRight;
@@ -124,6 +126,7 @@ public class RowAdapter extends BaseAdapter {
          * @param title 标题
          * @param label 内容
          * @param describe 描述
+         * @param switchStat 开关状态
          * @param showTitle 是否显示标题
          * @param showSwitch 是否显示开关
          * @param showRight 是否显示右侧
@@ -133,10 +136,11 @@ public class RowAdapter extends BaseAdapter {
          * @param clListener 行单击事件监听器
          * @param labelDrawable 内容左侧图标
          */
-        public RowItemData(String title, String label, String describe,boolean showTitle, boolean showSwitch, boolean showRight,boolean showDescribe,boolean showDrawable, CompoundButton.OnCheckedChangeListener switchListener, View.OnClickListener clListener,Drawable labelDrawable) {
+        public RowItemData(String title, String label, String describe,boolean switchStat,boolean showTitle, boolean showSwitch, boolean showRight,boolean showDescribe,boolean showDrawable, CompoundButton.OnCheckedChangeListener switchListener, View.OnClickListener clListener,Drawable labelDrawable) {
             this.title = title;
             this.label = label;
             this.describe = describe;
+            this.switchStat=switchStat;
             this.showTitle = showTitle;
             this.showSwitch = showSwitch;
             this.showRight = showRight;

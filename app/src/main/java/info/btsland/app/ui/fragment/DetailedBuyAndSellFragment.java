@@ -162,13 +162,13 @@ public class DetailedBuyAndSellFragment extends Fragment
         market=MarketDetailedActivity.market;
         tvNewPrice.setText(market.latest);
         if (MarketDetailedActivity.market.percent_change > 0) {
-            tvNewPrice.setTextColor(getActivity().getResources().getColor(R.color.color_green));
+            tvNewPrice.setTextColor(BtslandApplication.goUp);
             tvNewPrice.setCompoundDrawables(null,null,getActivity().getDrawable(R.drawable.ic_up),null);
         } else if(market.percent_change < 0) {
             tvNewPrice.setCompoundDrawables(null,null,getActivity().getDrawable(R.drawable.ic_down),null);
-            tvNewPrice.setTextColor(getActivity().getResources().getColor(R.color.color_font_red));
+            tvNewPrice.setTextColor(BtslandApplication.goDown);
         }else {
-            tvNewPrice.setTextColor(getActivity().getResources().getColor(R.color.color_font_blue));
+            tvNewPrice.setTextColor(BtslandApplication.suspend);
         }
         tvNewPriceCoin.setText(market.base+"/"+market.quote);
         tvPriceCoin.setText(market.base+"/"+market.quote);

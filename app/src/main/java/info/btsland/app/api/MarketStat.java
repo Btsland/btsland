@@ -309,8 +309,9 @@ public class MarketStat {
         }
 
         public void updateImmediately() {
-            statHandler.postDelayed(this,intervalMillis);
-            //statHandler.post(this);
+            if(BtslandApplication.isRefurbish){
+                statHandler.postDelayed(this,intervalMillis);
+            }
         }
 
         @Override

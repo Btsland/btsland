@@ -16,6 +16,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
@@ -86,16 +87,28 @@ public class MarketRowAdapter extends BaseAdapter {
         tvNewPrice.setText(market.latest.substring(0,8));
         tvBestAskNum.setText(market.lowest_ask.substring(0,8));
         tvBestBidNum.setText(market.highest_bid.substring(0,8));
+        int goUp=0;
+        int goDown=0;
+        int suspend=0;
+        if(BtslandApplication.fluctuationType==1){
+            goUp=context.getResources().getColor(R.color.color_green);
+            goDown=context.getResources().getColor(R.color.color_font_red);
+            suspend=context.getResources().getColor(R.color.color_font_blue);
+        }else if(BtslandApplication.fluctuationType==2){
+            goUp=context.getResources().getColor(R.color.color_font_red);
+            goDown=context.getResources().getColor(R.color.color_green);
+            suspend=context.getResources().getColor(R.color.color_font_blue);
+        }
         if (market.percent_change > 0) {
 
-            tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_green));
-            tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_green));
+            tvFluctuation.setTextColor(goUp);
+            tvNewPrice.setTextColor(goUp);
         } else if(market.percent_change < 0) {
-            tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_font_red));
-            tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_font_red));
+            tvFluctuation.setTextColor(goDown);
+            tvNewPrice.setTextColor(goDown);
         }else {
-            tvFluctuation.setTextColor(context.getResources().getColor(R.color.color_font_blue));
-            tvNewPrice.setTextColor(context.getResources().getColor(R.color.color_font_blue));
+            tvFluctuation.setTextColor(suspend);
+            tvNewPrice.setTextColor(suspend);
         }
         rowOnClickListener clickListener=new rowOnClickListener(market);
         convertView.setOnClickListener(clickListener);

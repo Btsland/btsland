@@ -124,13 +124,13 @@ public class MarketStat {
         }
     }
 
-//    public void updateImmediately(String base, String quote,int stats) {
-//        String market = makeMarketName(base, quote,stats);
-//        Subscription subscription = subscriptionHashMap.get(market);
-//        if (subscription != null) {
-//            subscription.updateImmediately();
-//        }
-//    }
+    public void updateImmediately(String base, String quote,int stats) {
+        String market = makeMarketName(base, quote,stats);
+        Subscription subscription = subscriptionHashMap.get(market);
+        if (subscription != null) {
+            subscription.updateImmediately();
+        }
+    }
 //    public void updateConnect(String name) {
 //        Connect connect = connectHashMap.get(name);
 //        if (connect != null) {
@@ -341,7 +341,7 @@ public class MarketStat {
                         }
 
                     }
-                    //this.updateImmediately();
+                    this.updateImmediately();
                     return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {

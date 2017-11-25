@@ -75,6 +75,8 @@ public class DetailedBuyAndSellFragment extends Fragment
     private double lowSellPrice = -1;
     private double highBuyPrice = -1;
 
+    private  MarketTicker market;
+
     private static DetailedBuyAndSellFragment listener;
 
     TransactionSellBuyRecyclerViewAdapter rlvBuyAdapter;
@@ -157,7 +159,7 @@ public class DetailedBuyAndSellFragment extends Fragment
         tvTotalNum.setText("0.00");
     }
     private void fillIn(){
-        final MarketTicker market=MarketDetailedActivity.market;
+        market=MarketDetailedActivity.market;
         tvNewPrice.setText(market.latest);
         if (MarketDetailedActivity.market.percent_change > 0) {
             tvNewPrice.setTextColor(getActivity().getResources().getColor(R.color.color_green));
@@ -301,7 +303,9 @@ public class DetailedBuyAndSellFragment extends Fragment
             BtslandApplication.orderBookMap.remove(orderBookKey);
         }
         BtslandApplication.orderBookMap.put(orderBookKey,stat.orderBook);
-        handler.sendEmptyMessage(1);
+        if(orderBookKey.equals(MarketDetailedActivity.orderKey)){
+            handler.sendEmptyMessage(1);
+        }
     }
     private Handler handler=new Handler(){
         @Override
@@ -349,8 +353,8 @@ public class DetailedBuyAndSellFragment extends Fragment
             mwant=want;
             String strPrice = edPrice.getText().toString();
             String strVol = edVol.getText().toString();
-            strVolCoin = tvVolCoin.getText().toString();
-            strPriceCoin= tvPriceCoin.getText().toString();
+            strVolCoin = market.quote;
+            strPriceCoin= market.base;
             if (strPrice.equals("") || strVol.equals("")) {
                 return;
             }

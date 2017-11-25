@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -91,6 +92,8 @@ public class DetailedHaveInHandFragment extends Fragment implements MarketStat.O
         if(stat.openOrders!=null&&stat.openOrders.size()>0){
             orders=stat.openOrders;
             handler.sendEmptyMessage(1);
+        }else {
+            handler.sendEmptyMessage(-1);
         }
 
     }
@@ -106,6 +109,9 @@ public class DetailedHaveInHandFragment extends Fragment implements MarketStat.O
             if(msg.what==1){
                 adapter.setList(orders);
                 adapter.notifyDataSetChanged();
+            }else {
+                AppDialog appDialog=new AppDialog(getActivity(),"提示","数据更新失败！");
+                appDialog.show();
             }
         }
     };
@@ -113,19 +119,11 @@ public class DetailedHaveInHandFragment extends Fragment implements MarketStat.O
     private Handler handler2=new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            if(hud.isShowing()){
+                hud.dismiss();
+            }
             if (msg.what==1){
                 AppDialog appDialog=new AppDialog(getActivity(),"提示","取消成功！");
-                appDialog.setListener(new AppDialog.OnDialogInterationListener() {
-                    @Override
-                    public void onConfirm() {
-
-                    }
-
-                    @Override
-                    public void onReject() {
-
-                    }
-                });
                 appDialog.show();
                 hud.show();
                 refurbish();

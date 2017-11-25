@@ -76,10 +76,10 @@ public class PasswordDialog {
         tvHoint.setVisibility(View.VISIBLE);
         if(hoint){
             tvHoint.setText("密码正确！");
-            tvHoint.setTextColor(BtslandApplication.goUp);
+            tvHoint.setTextColor(BtslandApplication.getInstance().getResources().getColor(R.color.color_green));
         }else {
-            tvHoint.setText("密码正确！");
-            tvHoint.setTextColor(BtslandApplication.goDown);
+            tvHoint.setText("密码错误！");
+            tvHoint.setTextColor(BtslandApplication.getInstance().getResources().getColor(R.color.color_font_red));
         }
 
     }

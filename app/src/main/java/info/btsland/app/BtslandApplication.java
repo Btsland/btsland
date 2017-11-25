@@ -273,7 +273,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             accountObject.totalCNY=0.0;
             for (int i=0; i < iAssets.size(); i++) {
                 if(iAssets.get(i).coinName.equals(chargeUnit)){
-                    accountObject.totalCNY+=iAssets.get(i).total;
+                    if(iAssets.get(i)!=null){
+                        accountObject.totalCNY+=iAssets.get(i).total;
+                    }else {
+                        accountObject.totalCNY+=0.0;
+                    }
                     continue;
                 }
                 try {

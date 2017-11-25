@@ -17,9 +17,9 @@ import info.btsland.app.exception.NetworkStatusException;
 
 public class IAsset {
     public asset mAsset;
-    public Double total;
-    public Double usable;
-    public Double orders;
+    public Double total=0.0;
+    public Double usable=0.0;
+    public Double orders=0.0;
     public String coinName;
     public IAsset( String coinName){
         this.coinName=coinName;

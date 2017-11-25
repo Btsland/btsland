@@ -1,5 +1,6 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +35,9 @@ import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.KeyUtil;
@@ -161,6 +165,13 @@ public class DetailedBuyAndSellFragment extends Fragment
     private void fillIn(){
         market=MarketDetailedActivity.market;
         tvNewPrice.setText(market.latest);
+        tvNewPrice.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                edPrice.getEditableText().clear();
+                edPrice.getEditableText().insert(0,tvNewPrice.getText());
+            }
+        });
         if (MarketDetailedActivity.market.percent_change > 0) {
             tvNewPrice.setTextColor(BtslandApplication.goUp);
             tvNewPrice.setCompoundDrawables(null,null,getActivity().getDrawable(R.drawable.ic_up),null);
@@ -171,6 +182,7 @@ public class DetailedBuyAndSellFragment extends Fragment
             tvNewPrice.setTextColor(BtslandApplication.suspend);
         }
         tvNewPriceCoin.setText(market.base+"/"+market.quote);
+
         tvPriceCoin.setText(market.base+"/"+market.quote);
         tvVolCoin.setText(market.quote);
         edPrice.addTextChangedListener(new TextWatcher() {
@@ -243,39 +255,75 @@ public class DetailedBuyAndSellFragment extends Fragment
         tvBuy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConfirmOrderDialog dialog=new ConfirmOrderDialog(getActivity(),
-                        new ConfirmOrderDialog.ConfirmOrderData(
-                                ConfirmOrderDialog.ConfirmOrderData.BUY,
-                                edPrice.getText().toString(),
-                                market.base,
-                                tvTotalNum.getText().toString(),
-                                edVol.getText().toString(),
-                                tvChargeNum.getText().toString(),
-                                market.quote,
-                                market.base,
-                                tvChageCoin.getText().toString()
-                        ),
-                        new DialogListener());
-                dialog.show();
+                if(BtslandApplication.accountObject==null){
+                    AppDialog appDialog=new AppDialog(getActivity(),"提示","您没有登录，是否要去登录？");
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent=new Intent(getActivity(), LoginActivity.class);
+                            intent.putExtra("want",LoginActivity.GOLOGIN);
+                            getActivity().startActivity(intent);
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
+                    appDialog.show();
+                }else {
+                    ConfirmOrderDialog dialog = new ConfirmOrderDialog(getActivity(),
+                            new ConfirmOrderDialog.ConfirmOrderData(
+                                    ConfirmOrderDialog.ConfirmOrderData.BUY,
+                                    edPrice.getText().toString(),
+                                    market.base,
+                                    tvTotalNum.getText().toString(),
+                                    edVol.getText().toString(),
+                                    tvChargeNum.getText().toString(),
+                                    market.quote,
+                                    market.base,
+                                    tvChageCoin.getText().toString()
+                            ),
+                            new DialogListener());
+                    dialog.show();
+                }
             }
         });
         tvSell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ConfirmOrderDialog dialog=new ConfirmOrderDialog(getActivity(),
-                        new ConfirmOrderDialog.ConfirmOrderData(
-                                ConfirmOrderDialog.ConfirmOrderData.SELL,
-                                edPrice.getText().toString(),
-                                market.base,
-                                tvTotalNum.getText().toString(),
-                                edVol.getText().toString(),
-                                tvChargeNum.getText().toString(),
-                                market.quote,
-                                market.base,
-                                tvChageCoin.getText().toString()
-                        ),
-                        new DialogListener());
-                dialog.show();
+                if(BtslandApplication.accountObject==null) {
+                    AppDialog appDialog = new AppDialog(getActivity(), "提示", "你没有登录，是否要去登录？");
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent = new Intent(getActivity(), LoginActivity.class);
+                            intent.putExtra("want", LoginActivity.GOLOGIN);
+                            getActivity().startActivity(intent);
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
+                    appDialog.show();
+                }else {
+                    ConfirmOrderDialog dialog = new ConfirmOrderDialog(getActivity(),
+                            new ConfirmOrderDialog.ConfirmOrderData(
+                                    ConfirmOrderDialog.ConfirmOrderData.SELL,
+                                    edPrice.getText().toString(),
+                                    market.base,
+                                    tvTotalNum.getText().toString(),
+                                    edVol.getText().toString(),
+                                    tvChargeNum.getText().toString(),
+                                    market.quote,
+                                    market.base,
+                                    tvChageCoin.getText().toString()
+                            ),
+                            new DialogListener());
+                    dialog.show();
+                }
             }
         });
     }
@@ -378,10 +426,14 @@ public class DetailedBuyAndSellFragment extends Fragment
                         hud.setLabel(getResources().getString(R.string.please_wait));
                         hud.show();
                         try {
+
                             account_object accountObject= BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
                             if(accountObject!=null){
+                                hud.dismiss();
                                 dialog.dismiss();
                                 goTrading();
+                            }else {
+                                builder.setTvPoint(false);
                             }
                         } catch (NetworkStatusException e) {
                             e.printStackTrace();
@@ -429,7 +481,8 @@ public class DetailedBuyAndSellFragment extends Fragment
                                 sell();
                             }
                         } else {
-                            Toast.makeText(getContext(), getContext().getString(R.string.password_invalid), Toast.LENGTH_LONG).show();
+                            builder.setTvPoint(false);
+                            //Toast.makeText(getContext(), getContext().getString(R.string.password_invalid), Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -527,11 +580,12 @@ public class DetailedBuyAndSellFragment extends Fragment
     private Handler handler2=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==1){
+            if(hud.isShowing()){
                 hud.dismiss();
+            }
+            if(msg.what==1){
                 Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
             }else if(msg.what==-1){
-                hud.dismiss();
                 Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
             }
         }

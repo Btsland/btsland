@@ -25,6 +25,7 @@ import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.exception.CreateAccountException;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.ui.view.AppDialog;
 
 import static info.btsland.app.BtslandApplication.getMarketStat;
 
@@ -389,30 +390,32 @@ public class LoginActivity extends AppCompatActivity {
     public Handler mHander=new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            if(hud.isShowing()){
+                hud.dismiss();
+            }
             Bundle bundle=msg.getData();
             if(bundle.getString("register")!=null&&bundle.getString("register").equals("success")){
                 Toast.makeText(LoginActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                 AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD,this,purseHander);
                 accountThread.start();
             }else if(bundle.getString("register")!=null&&bundle.getString("register").equals("fail")){
-                Toast.makeText(LoginActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                AppDialog appDialog=new AppDialog(LoginActivity.this,"提示","注册失败！");
+                appDialog.show();
             }
             if(bundle.getString("login")!=null&&bundle.getString("login").equals("success")){
                 Log.i(TAG, "handleMessage: 登录成功");
                 Toast.makeText(LoginActivity.this, "登录成功", Toast.LENGTH_SHORT).show();
-                hud.dismiss();
                 BtslandApplication.saveUser();
 //                Intent iLogin=new Intent(LoginActivity.this,MainActivity.class);
 //                startActivity(iLogin);
                 finish();
-
-
-
             }else if(bundle.getString("login")!=null&&bundle.getString("login").equals("failure")){
                 Log.i(TAG, "handleMessage: 登录失败");
-                hud.dismiss();
-                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+
+                AppDialog appDialog=new AppDialog(LoginActivity.this,"提示","登录失败！");
+                appDialog.show();
             }
+
         }
     };
 

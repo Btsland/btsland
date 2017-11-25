@@ -146,8 +146,7 @@ public class HeadFragment extends Fragment {
         public void onClick(View view) {
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "欢迎使用Btsland去中心化交易所，我们的官网地址是：https://www.btsland.info/。" +
-                    "Btsland手机app请点击http://btsland.oss-cn-hangzhou.aliyuncs.com/Btsland.apk，欢迎您的使用。");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "欢迎使用Btsland去中心化交易所，我们的官网地址是：https://www.btsland.info/。");
             shareIntent.setType("text/plain");
             //设置分享列表的标题，并且每次都显示分享列表
             startActivity(Intent.createChooser(shareIntent, "分享到"));

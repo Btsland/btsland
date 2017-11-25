@@ -45,8 +45,8 @@ public class AppDialog {
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.dismiss();
                 if(mListener != null){
-                    mDialog.dismiss();
                     mListener.onConfirm();
                 }
             }
@@ -56,8 +56,8 @@ public class AppDialog {
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.dismiss();
                 if(mListener != null){
-                    mDialog.dismiss();
                     mListener.onReject();
                 }
             }

@@ -35,6 +35,7 @@ import info.btsland.app.api.sha256_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.ConfirmOrderDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.NumericUtil;
@@ -126,7 +127,8 @@ public class TransferActivity extends AppCompatActivity {
                 IAsset iasset=iAssetMap.get(coin);
                 Double d=NumericUtil.parseDouble(s);
                 if(d>iasset.total){
-                    Toast.makeText(TransferActivity.this,"余额不足",Toast.LENGTH_SHORT).show();
+                    AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","余额不足！");
+                    appDialog.show();
                     return;
                 }
             }
@@ -251,13 +253,17 @@ public class TransferActivity extends AppCompatActivity {
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            hud.dismiss();
+            if(hud.isShowing()){
+                hud.dismiss();
+            }
             if(msg.what==1){
                 Toast.makeText(TransferActivity.this,"转账成功",Toast.LENGTH_SHORT).show();
             }else if(msg.what==-1) {
-                Toast.makeText(TransferActivity.this,"转账失败",Toast.LENGTH_SHORT).show();
+                AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","转账失败！");
+                appDialog.show();
             }else {
-                Toast.makeText(TransferActivity.this,"密码错误",Toast.LENGTH_SHORT).show();
+                AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","密码错误！");
+                appDialog.show();
             }
         }
     };

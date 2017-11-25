@@ -96,7 +96,9 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            hud.dismiss();
+            if(hud.isShowing()){
+                hud.dismiss();
+            }
             if(msg.what==1){
                 rlvOperationAdapter.setList(listHistoryObject);
                 rlvOperationAdapter.notifyDataSetChanged();

@@ -186,7 +186,7 @@ public class HaveInHandRecyclerViewAdapter extends RecyclerView.Adapter<HaveInHa
     private Handler hudHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==1){
+            if(hud.isShowing()){
                 hud.dismiss();
             }
         }

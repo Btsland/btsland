@@ -403,6 +403,9 @@ public class MarketStat {
                 }
                 if ((stats & STAT_MARKET_OPEN_ORDER) != 0) {
                     stat.openOrders = getOpenOrders();
+                    if(stat.openOrders==null){
+                        return;
+                    }
                 }
                 if (isCancelled.get()) {
                     return;

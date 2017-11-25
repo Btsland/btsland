@@ -36,22 +36,21 @@ public class PurseAssetActivity extends AppCompatActivity {
         Log.i("PurseAssetActivity", "onCreate: ");
         fillInHead();
         init();
-
-
+        BtslandApplication.purseHandler=handler;
     }
 
-    public void queryAllAsset(){
-
-        BtslandApplication.queryAsset(handler);
-
-
-    }
+//    public void queryAllAsset(){
+//
+//        BtslandApplication.queryAsset(handler);
+//
+//
+//    }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-        BtslandApplication.queryAsset(handler);
+
         setLvAsset();
 
         
@@ -94,6 +93,7 @@ public class PurseAssetActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if(msg.what==1){
+
                 adapter.notifyDataSetChanged();
 
             }

@@ -42,7 +42,7 @@ public class PurseFragment extends Fragment {
     //全部资产
     private TextView tvPurseAllAsset;
     //充提记录
-    private TextView tvPurseRW;
+//    private TextView tvPurseRW;
     //交易记录
     private TextView tvPurseDeal;
     //全部挂单
@@ -163,7 +163,7 @@ public class PurseFragment extends Fragment {
         //全部资产
         tvPurseAllAsset=view.findViewById(R.id.tv_purse_allAsset);
         //充提记录
-        tvPurseRW=view.findViewById(R.id.tv_purse_rw);
+//        tvPurseRW=view.findViewById(R.id.tv_purse_rw);
         //交易记录
         tvPurseDeal=view.findViewById(R.id.tv_purse_deal);
         //全部挂单
@@ -204,7 +204,7 @@ public class PurseFragment extends Fragment {
 
         TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
-        tvPurseRW.setOnClickListener(onCLickListener);
+//        tvPurseRW.setOnClickListener(onCLickListener);
         tvPurseDeal.setOnClickListener(onCLickListener);
         tvPurseAllRemain.setOnClickListener(onCLickListener);
         tvPurseBackup.setOnClickListener(onCLickListener);
@@ -317,9 +317,9 @@ public class PurseFragment extends Fragment {
                 case R.id.tv_purse_allAsset:
                     touchColor(tvPurseAllAsset, motionEvent);
                     break;
-                case R.id.tv_purse_rw:
-                    touchColor(tvPurseRW, motionEvent);
-                    break;
+//                case R.id.tv_purse_rw:
+//                    touchColor(tvPurseRW, motionEvent);
+//                    break;
                 case R.id.tv_purse_deal:
                     touchColor(tvPurseDeal, motionEvent);
                     break;

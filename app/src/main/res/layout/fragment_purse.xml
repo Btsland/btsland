@@ -129,22 +129,22 @@
                     android:drawablePadding="10dp"
                     />
 
-                <TextView
-                    android:id="@+id/tv_purse_rw"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:text="@string/accessrecord"
-                    android:paddingLeft="8dp"
-                    android:gravity="center_vertical"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/select_row_white"
-                    android:textColor="@color/color_black"
-                    android:drawableRight="@drawable/image_arrow_right"
-                    android:drawableLeft="@drawable/image_purse_recharge"
-                    android:drawablePadding="10dp"
-                    />
+                <!--<TextView-->
+                    <!--android:id="@+id/tv_purse_rw"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="40dp"-->
+                    <!--android:text="@string/accessrecord"-->
+                    <!--android:paddingLeft="8dp"-->
+                    <!--android:gravity="center_vertical"-->
+                    <!--android:layout_marginLeft="5dp"-->
+                    <!--android:layout_marginRight="5dp"-->
+                    <!--android:layout_marginTop="5dp"-->
+                    <!--android:background="@drawable/select_row_white"-->
+                    <!--android:textColor="@color/color_black"-->
+                    <!--android:drawableRight="@drawable/image_arrow_right"-->
+                    <!--android:drawableLeft="@drawable/image_purse_recharge"-->
+                    <!--android:drawablePadding="10dp"-->
+                    <!--/>-->
                 <TextView
                     android:id="@+id/tv_purse_deal"
                     android:layout_width="match_parent"

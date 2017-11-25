@@ -42,6 +42,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static boolean isLogin=false;
 
+    public static Handler purseHandler;
+
     public static account_object accountObject;
     public static List<IAsset> iAssets;
     public static boolean isWel=false;
@@ -154,7 +156,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
-                queryAsset(null);
+                queryAsset();
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
@@ -168,8 +170,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     /**
      * 查询用余额线程外部调用方法
      */
-    public static void queryAsset(Handler handler){
-        new AccetThread(handler).start();
+    public static void queryAsset(){
+        new AccetThread().start();
     }
 
     /**
@@ -177,12 +179,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
      *
      */
     private static class AccetThread extends Thread{
-
-        private Handler handler;
-
-        public AccetThread(Handler handler) {
-            this.handler=handler;
-        }
 
         @Override
         public void run() {
@@ -198,8 +194,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         iAssets.add(new IAsset(assets.get(i)));
                     }
                 }
-                if (handler!=null){
-                    handler.sendEmptyMessage(1);
+                if (purseHandler!=null){
+                    purseHandler.sendEmptyMessage(1);
                 }
 
                 CuntTotalCNY();
@@ -214,11 +210,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     /**
      * 外部调用查询总资产线程的方法
      */
-    public static void CuntTotalCNY(){
+    private static void CuntTotalCNY(){
 
         new CuntTotalCNYThread().start();
 
     }
+
 
 
 
@@ -229,6 +226,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         @Override
         public void run() {
+            accountObject.totalCNY=0.0;
             for (int i=0; i < iAssets.size(); i++) {
                 if(iAssets.get(i).coinName.equals("CNY")){
                     accountObject.totalCNY+=iAssets.get(i).total;
@@ -248,7 +246,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                 }
             }
-        }
+
+       }
+
+
+
 
     }
 

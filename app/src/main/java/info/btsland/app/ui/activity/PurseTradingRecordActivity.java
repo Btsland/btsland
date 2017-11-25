@@ -3,12 +3,10 @@ package info.btsland.app.ui.activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
@@ -16,7 +14,6 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 import java.util.List;
 
 import info.btsland.app.Adapter.OperationRecyclerViewAdapter;
-import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.object_id;
@@ -25,6 +22,7 @@ import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.ui.fragment.HeadFragment;
 
 /**
+ * 交易记录
  * Created by Administrator on 2017/10/30 0030.
  */
 

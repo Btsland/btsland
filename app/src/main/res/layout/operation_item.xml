@@ -5,7 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:orientation="horizontal"
-    tools:layout_editor_absoluteY="25dp">
+    android:background="@drawable/txt_white"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:layout_marginBottom="5dp"
+    >
 
     <TextView
         android:id="@+id/tv_operation_type"
@@ -13,7 +17,7 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:text="类型"
-
+        android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"/>
@@ -24,6 +28,7 @@
         android:layout_height="25dp"
         android:gravity="center|left"
         android:text="内容"
+        android:textColor="@color/black"
         app:layout_constraintLeft_toRightOf="@+id/tv_operation_type"
         app:layout_constraintRight_toLeftOf="@+id/tv_operation_time"
         app:layout_constraintTop_toTopOf="parent"
@@ -35,6 +40,7 @@
         android:layout_height="25dp"
         android:gravity="center|left"
         android:text="价格"
+        android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/tv_operation_content"
         app:layout_constraintLeft_toRightOf="@+id/tv_operation_type"
         app:layout_constraintRight_toLeftOf="@+id/tv_operation_time"
@@ -46,6 +52,7 @@
         android:layout_height="40dp"
         android:gravity="center"
         android:text="时间"
+        android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

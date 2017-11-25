@@ -10,12 +10,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
+import info.btsland.app.Adapter.RowAdapter;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.util.PreferenceUtil;
@@ -24,11 +29,7 @@ import info.btsland.app.util.PreferenceUtil;
 public class SettingActivity extends BaseActivity{
     private HeadFragment headFragment;
 
-    private TextView tvSetLanguage;
-    private TextView tvSetTheme;
-    private TextView tvSetGuide;
-    private TextView tvSetWe;
-    private TextView tvSetEdition;
+    private ListView listView;
 
 
     @Override
@@ -37,79 +38,221 @@ public class SettingActivity extends BaseActivity{
         setContentView(info.btsland.app.R.layout.activity_setting);
         fillInHead();
         init();
-}
+        fillIn();
+    }
 
     /**
      * 初始化
      */
     private void init(){
-        tvSetLanguage= (TextView) findViewById(R.id.tv_set_language);
-        tvSetTheme= (TextView) findViewById(R.id.tv_set_theme);
-        tvSetGuide= (TextView) findViewById(R.id.tv_set_guide);
-        tvSetWe= (TextView) findViewById(R.id.tv_set_we);
-        tvSetEdition= (TextView) findViewById(R.id.tv_set_edition);
+        listView=findViewById(R.id.lv_set_body);
+    }
+    private void fillIn(){
+        List<RowAdapter.RowItemData> rowItemDataList=new ArrayList<>();
+        RowAdapter.RowItemData refurbishItemData=new RowAdapter.RowItemData("",
+                "自动刷新",
+                "开启后将会自动刷新数据",
+                false,
+                true,
+                false,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-//        //绑定特效事件
-//        TextViewOnTouchListener OnTouchListener=new TextViewOnTouchListener();
-//        tvSetLanguage.setOnTouchListener(OnTouchListener);
-//        tvSetTheme.setOnTouchListener(OnTouchListener);
-//        tvSetGuide.setOnTouchListener(OnTouchListener);
-//        tvSetWe.setOnTouchListener(OnTouchListener);
-//        tvSetEdition.setOnTouchListener(OnTouchListener);
-
-        //绑定点击事件
-        TextViewOnClickListener OnClickListener=new TextViewOnClickListener();
-        tvSetLanguage.setOnClickListener(OnClickListener);
-        tvSetTheme.setOnClickListener(OnClickListener);
-        tvSetGuide.setOnClickListener(OnClickListener);
-        tvSetWe.setOnClickListener(OnClickListener);
-        tvSetEdition.setOnClickListener(OnClickListener);
-
-        //判断checkedItem的值
-        String lo = PreferenceUtil.getString("language", "zh");
-        Log.i("init", "init: "+lo);
-        if (lo.equals("zh")){
-            index=0;
-        }else if (lo.equals("en")){
-            index=1;
-        }
-        Log.i("init", "init: "+index);
-
-        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
-        if (theme==(R.style.SwitchTheme1)){
-            index2=0;
-        }else if (theme==(R.style.SwitchTheme2)){
-            index2=1;
-        }
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(refurbishItemData);
+        RowAdapter.RowItemData languageItemData=new RowAdapter.RowItemData("",
+                "语言",
+                "选择您的语言",
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showlanguageDialog();
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(languageItemData);
+        RowAdapter.RowItemData changeItemData=new RowAdapter.RowItemData("",
+                "涨跌幅",
+                "设置您偏好的涨跌幅颜色",
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        showchangeDialog();
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(changeItemData);
+        RowAdapter.RowItemData nodeItemData=new RowAdapter.RowItemData("",
+                "节点选择",
+                "选择您需要连接的服务器节点",
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(nodeItemData);
+        RowAdapter.RowItemData chargeUnitItemData=new RowAdapter.RowItemData("",
+                "计价单位",
+                "设置您偏好的计价单位",
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(chargeUnitItemData);
+        RowAdapter.RowItemData helpItemData=new RowAdapter.RowItemData("",
+                "使用指南",
+                "",
+                false,
+                false,
+                true,
+                false,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(helpItemData);
+        RowAdapter.RowItemData versionItemData=new RowAdapter.RowItemData("",
+                "版本信息",
+                "",
+                false,
+                false,
+                true,
+                false,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(versionItemData);
+        RowAdapter.RowItemData weItemData=new RowAdapter.RowItemData("",
+                "关于我们",
+                "",
+                false,
+                false,
+                true,
+                false,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(weItemData);
+        RowAdapter adapter=new RowAdapter(rowItemDataList,SettingActivity.this);
+        listView.setAdapter(adapter);
     }
 
-    /*
-     *点击事件
-     */
-    class TextViewOnClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View view) {
-            switch (view.getId()){
-                case R.id.tv_set_language:
-                    showListDialog();
-                    break;
-                case R.id.tv_set_theme:
-                    showthemeDialog();
-                    break;
-                case R.id.tv_set_we:
-                    Log.i("dddddd", "onClick: ");
-                    Intent i = new Intent(SettingActivity.this , AboutUsActivity.class);
-                    startActivity(i);
-                    break;
-                case R.id.tv_set_edition:
-                    Intent ii = new Intent(SettingActivity.this , VersionInformationActivity.class);
-                    startActivity(ii);
-                    break;
-            }
-        }
-    }
 
-
+//
+//    /*
+//     *点击事件
+//     */
+//    class TextViewOnClickListener implements View.OnClickListener{
+//        @Override
+//        public void onClick(View view) {
+//            switch (view.getId()){
+//                case R.id.tv_set_language_title:
+//                    showListDialog();
+//                    break;
+//                case R.id.tv_set_theme:
+//                    showthemeDialog();
+//                    break;
+//                case R.id.tv_set_we:
+//                    Log.i("dddddd", "onClick: ");
+//                    Intent i = new Intent(SettingActivity.this , AboutUsActivity.class);
+//                    startActivity(i);
+//                    break;
+//                case R.id.tv_set_edition:
+//                    Intent ii = new Intent(SettingActivity.this , VersionInformationActivity.class);
+//                    startActivity(ii);
+//                    break;
+//            }
+//        }
+//    }
+//
+//
     /**
      * 装载顶部导航
      */
@@ -128,12 +271,10 @@ public class SettingActivity extends BaseActivity{
 
     int index = 0 ;//设置默认选项，作为checkedItem参数传入。
 
-    private void showListDialog() {
+    private void showlanguageDialog() {
 
         AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
         listDialog.setTitle(getString(R.string.selectlanguage));
-
-        listDialog.setIcon(android.R.drawable.ic_dialog_info);
 
         final String[] items={"中文","英文"};
         items[0]=getString(R.string.stringzh);
@@ -159,76 +300,91 @@ public class SettingActivity extends BaseActivity{
         });
         listDialog.show();
     }
+    private void showchangeDialog() {
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(SettingActivity.this);
+        listDialog.setTitle(getString(R.string.selectlanguage));
 
-    int index2 = 0 ;//设置默认选项，作为checkedItem参数传入。
+        final String[] items={"红涨绿跌","绿涨红跌"};
 
-    private void showthemeDialog(){
+        listDialog.setSingleChoiceItems(items, index, new DialogInterface.OnClickListener() {
 
-        final String[] theme={"白昼模式","黑夜模式"};
-        theme[0]=getString(R.string.daytime);
-        theme[1]=getString(R.string.night);
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
 
-        AlertDialog.Builder themeDialog = new AlertDialog.Builder(SettingActivity.this);
-        themeDialog.setTitle("主题选择").setIcon(android.R.drawable.ic_dialog_info)
-                .setSingleChoiceItems(theme,index2, new DialogInterface.OnClickListener() {
-                    @Override
-                            public void onClick(DialogInterface dialog, int i) {
-                                if (theme[i]==getString(R.string.daytime)){
-                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
-                                            .putInt("theme", R.style.SwitchTheme1).commit();
-                                } else if (theme[i]==getString(R.string.night)){
-                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
-                                            .putInt("theme", R.style.SwitchTheme2).commit();
-                                }
-                                dialog.dismiss();
-                                finish();
-
-                        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
-                        //开始新的activity同时移除之前所有的activity
-                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                        startActivity(intent);
-                            }
-                    });
-            themeDialog.show();
-        }
-
-
-
-//    /**
-//     * 单击特效
-//     * @param textView 被单击的tv
-//     * @param motionEvent 当前状态
-//     */
-//    protected void touchColor(TextView textView,MotionEvent motionEvent){
-//        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-//            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
-//        }
-//        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-//            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
-//        }
-//    }
-//    class TextViewOnTouchListener implements View.OnTouchListener{
-//        @Override
-//        public boolean onTouch(View view, MotionEvent motionEvent) {
-//            switch (view.getId()) {
-//                case R.id.tv_set_language:
-//                    touchColor(tvSetLanguage,motionEvent);
-//                    break;
-//                case R.id.tv_set_theme:
-//                    touchColor(tvSetTheme,motionEvent);
-//                    break;
-//                case R.id.tv_set_guide:
-//                    touchColor(tvSetGuide,motionEvent);
-//                    break;
-//                case R.id.tv_set_we:
-//                    touchColor(tvSetWe,motionEvent);
-//                    break;
+            }
+        });
+        listDialog.show();
+    }
 //
-//                case R.id.tv_set_edition:
-//                    touchColor(tvSetEdition,motionEvent);
-//                    break;
-//            }
-//            return false;
+//    int index2 = 0 ;//设置默认选项，作为checkedItem参数传入。
+//
+//    private void showthemeDialog(){
+//
+//        final String[] theme={"白昼模式","黑夜模式"};
+//        theme[0]=getString(R.string.daytime);
+//        theme[1]=getString(R.string.night);
+//
+//        AlertDialog.Builder themeDialog = new AlertDialog.Builder(SettingActivity.this);
+//        themeDialog.setTitle("主题选择").setIcon(android.R.drawable.ic_dialog_info)
+//                .setSingleChoiceItems(theme,index2, new DialogInterface.OnClickListener() {
+//                    @Override
+//                            public void onClick(DialogInterface dialog, int i) {
+//                                if (theme[i]==getString(R.string.daytime)){
+//                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
+//                                            .putInt("theme", R.style.SwitchTheme1).commit();
+//                                } else if (theme[i]==getString(R.string.night)){
+//                                    boolean sf = getSharedPreferences("cons",MODE_PRIVATE).edit()
+//                                            .putInt("theme", R.style.SwitchTheme2).commit();
+//                                }
+//                                dialog.dismiss();
+//                                finish();
+//
+//                        Intent intent=new Intent(SettingActivity.this,MainActivity.class);
+//                        //开始新的activity同时移除之前所有的activity
+//                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                        startActivity(intent);
+//                            }
+//                    });
+//            themeDialog.show();
 //        }
-//    }
+//
+//
+//
+////    /**
+////     * 单击特效
+////     * @param textView 被单击的tv
+////     * @param motionEvent 当前状态
+////     */
+////    protected void touchColor(TextView textView,MotionEvent motionEvent){
+////        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+////            textView.setBackground(getResources().getDrawable(R.drawable.tv_row_touch,null));
+////        }
+////        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+////            textView.setBackground(getResources().getDrawable(R.drawable.tv_row,null));
+////        }
+////    }
+////    class TextViewOnTouchListener implements View.OnTouchListener{
+////        @Override
+////        public boolean onTouch(View view, MotionEvent motionEvent) {
+////            switch (view.getId()) {
+////                case R.id.tv_set_language:
+////                    touchColor(tvSetLanguage,motionEvent);
+////                    break;
+////                case R.id.tv_set_theme:
+////                    touchColor(tvSetTheme,motionEvent);
+////                    break;
+////                case R.id.tv_set_guide:
+////                    touchColor(tvSetGuide,motionEvent);
+////                    break;
+////                case R.id.tv_set_we:
+////                    touchColor(tvSetWe,motionEvent);
+////                    break;
+////
+////                case R.id.tv_set_edition:
+////                    touchColor(tvSetEdition,motionEvent);
+////                    break;
+////            }
+////            return false;
+////        }
+////    }
 }

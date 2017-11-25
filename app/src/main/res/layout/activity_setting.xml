@@ -1,113 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:background="@color/color_white2"
-tools:context="info.btsland.app.ui.activity.UserActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/color_white2">
 
     <!--顶部导航栏-->
     <FrameLayout
         android:id="@+id/fra_set_head"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     </FrameLayout>
+    <ListView
+        android:id="@+id/lv_set_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"></ListView>
 
-    <ImageView
-        android:id="@+id/v_set_back"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
-        android:scaleType="fitXY"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fra_set_head"
-        app:layout_constraintHorizontal_bias="1.0"
-        android:layout_marginTop="-1dp" />
-
-
-    <TextView
-        android:id="@+id/tv_set_language"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/language"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/v_set_back"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="5dp" />
-    <TextView
-        android:id="@+id/tv_set_theme"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/theme"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_language"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_set_guide"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/guide"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_theme"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_set_transaction"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/trading_guide"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_guide"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_set_we"
-        android:clickable="true"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/we"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_transaction"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_set_edition"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:text="@string/edition"
-        android:gravity="center"
-        android:layout_margin="5dp"
-        android:background="@drawable/select_row_white"
-        android:textColor="@color/color_black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_set_we"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
-
-
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

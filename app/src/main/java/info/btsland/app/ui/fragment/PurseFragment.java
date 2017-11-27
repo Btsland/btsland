@@ -24,6 +24,7 @@ import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.PurseWalletBackupActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.view.AppDialog;
+import info.btsland.app.ui.view.MyConstraintLayout;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,6 +71,7 @@ public class PurseFragment extends Fragment {
     private TextView tvGoRegister;
 
     private ScrollView scrollView;
+    private MyConstraintLayout clPurse;
 
     public PurseFragment() {
         // Required empty public constructor
@@ -110,9 +112,11 @@ public class PurseFragment extends Fragment {
            // clPurse.setClickable(false);
            // scrollView.setClickable(false);
             flPurse.setVisibility(View.GONE);
+            clPurse.isForbidden=true;
         } else {
             flPurse.setVisibility(View.VISIBLE);
             flPurseLoginPrompt.setVisibility(View.GONE);
+            clPurse.isForbidden=false;
         }
 
 
@@ -156,6 +160,7 @@ public class PurseFragment extends Fragment {
 
 
     private void init(View view) {
+        clPurse=view.findViewById(R.id.cl_purse);
         //全部资产
         tvPurseAllAsset=view.findViewById(R.id.tv_purse_allAsset);
         //充提记录

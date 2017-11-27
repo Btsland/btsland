@@ -15,7 +15,7 @@
     app:layout_constraintBottom_toBottomOf="parent"
     android:visibility="gone">
 
-    <android.support.constraint.ConstraintLayout
+    <info.btsland.app.ui.view.MyConstraintLayout
         android:id="@+id/cl_purse"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -243,7 +243,7 @@
             />
 
 
-    </android.support.constraint.ConstraintLayout>
+    </info.btsland.app.ui.view.MyConstraintLayout>
 </FrameLayout>
 <FrameLayout
     android:id="@+id/fl_purse_login_prompt"
@@ -256,7 +256,7 @@
     app:layout_constraintTop_toTopOf="parent"
   >
 
-    <android.support.constraint.ConstraintLayout
+    <info.btsland.app.ui.view.MyConstraintLayout
         android:id="@+id/cl_purse_login_prompt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -317,7 +317,7 @@
 
 
 
-    </android.support.constraint.ConstraintLayout>
+    </info.btsland.app.ui.view.MyConstraintLayout>
 </FrameLayout>
 
 

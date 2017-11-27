@@ -9,5 +9,7 @@
         android:layout_width="80dp"
         android:layout_height="50dp"
         android:text="14sp"
+        android:textColor="@color/color_Grey"
+        android:background="@color/color_white2"
         android:gravity="center"/>
 </LinearLayout>

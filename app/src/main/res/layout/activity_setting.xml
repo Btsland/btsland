@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/color_white2">
+    android:background="@color/color_white">
 
     <!--顶部导航栏-->
     <FrameLayout
@@ -15,8 +15,6 @@
     <ListView
         android:id="@+id/lv_set_body"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"></ListView>
+        android:layout_height="match_parent"></ListView>
 
 </LinearLayout>

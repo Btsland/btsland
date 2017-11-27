@@ -219,7 +219,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
 
     /**
-     * 查询用余额线程
+     * 查询分类资产线程
      *
      */
     private static class AccetThread extends Thread{

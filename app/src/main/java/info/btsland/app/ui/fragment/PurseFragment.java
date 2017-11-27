@@ -2,7 +2,6 @@ package info.btsland.app.ui.fragment;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -169,7 +168,7 @@ public class PurseFragment extends Fragment {
         tvPurseBackup=view.findViewById(R.id.tv_purse_backup);
         //折合总金额
         tvPurseConvert=view.findViewById(R.id.tv_purse_convert);
-        //
+        //转账操作
         tvPurseTransferAccounts=view.findViewById(R.id.tv_purse_transfer_accounts);
 
         //去登陆按钮
@@ -192,16 +191,10 @@ public class PurseFragment extends Fragment {
 //        tvPurseConvert.setText();
 
 
-//        TextViewOnTouchListener onTouchlistener = new TextViewOnTouchListener();
-//        tvPurseAllAsset.setOnTouchListener(onTouchlistener);
-//        tvPurseRW.setOnTouchListener(onTouchlistener);
-//        tvPurseDeal.setOnTouchListener(onTouchlistener);
-//        tvPurseAllRemain.setOnTouchListener(onTouchlistener);
-//        tvPurseBackup.setOnTouchListener(onTouchlistener);
+
 
         TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
-//        tvPurseRW.setOnClickListener(onCLickListener);
         tvPurseDeal.setOnClickListener(onCLickListener);
         tvPurseAllRemain.setOnClickListener(onCLickListener);
         tvPurseBackup.setOnClickListener(onCLickListener);
@@ -279,6 +272,12 @@ public class PurseFragment extends Fragment {
                     appDialog.setMsg("你确定要退出吗？");
                     appDialog.show();
                     break;
+
+                case R.id.tv_purse_transfer_accounts:
+                    Intent intentTransfer=new Intent(getActivity(), TransferActivity.class);
+                    getActivity().startActivity(intentTransfer);
+
+                    break;
                 case R.id.tv_go_login:
                    // purseHander handler=new purseHander();
                     Intent iGoLogin=new Intent(getActivity(), LoginActivity.class);
@@ -291,15 +290,7 @@ public class PurseFragment extends Fragment {
                     Intent iGoRegister=new Intent(getActivity(), LoginActivity.class);
                     iGoRegister.putExtra("want",LoginActivity.GOREGISTER);
                     getActivity().startActivity(iGoRegister);
-
-
                     break;
-                case R.id.tv_purse_transfer_accounts:
-                    Intent intentTransfer=new Intent(getActivity(), TransferActivity.class);
-                    getActivity().startActivity(intentTransfer);
-
-                    break;
-
             }
         }
     }

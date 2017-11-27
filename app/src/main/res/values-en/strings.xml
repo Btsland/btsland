@@ -10,33 +10,38 @@
 
     <string name="wallet">Wallet</string>
     <string name="asset">Asset</string>
-    <string name="accessrecord">AccessRecord</string>
-    <string name="tradingrecord">TradingRecord</string>
-    <string name="wholeguadan">EntryOrders</string>
-    <string name="walletbackup">WalletBackup</string>
+    <string name="accessrecord">Access record</string>
+    <string name="tradingrecord">Trading record</string>
+    <string name="wholeguadan">Entry orders</string>
+    <string name="walletbackup">Wallet backup</string>
+    <string name="transfer_accounts">Transfer accounts</string>
+    <string name="logoff">Logoff</string>
 
     <string name="set">Set</string>
-    <string name="language">LanguAge</string>
+    <string name="language">Language</string>
     <string name="theme">Theme</string>
-    <string name="daytime">DaylightMode</string>
-    <string name="night">DarkMode </string>
-    <string name="guide">UseGuide</string>
-    <string name="trading_guide">TradingGuide</string>
-    <string name="we">AboutUs</string>
+    <string name="daytime">Daylight mode</string>
+    <string name="night">Dark mode </string>
+    <string name="guide">Use guide</string>
+    <string name="trading_guide">Trading guide</string>
+    <string name="we">About us</string>
     <string name="edition">Edition</string>
 
-    <string name="username">UserName:btsland</string>
+    <string name="username">Username:btsland</string>
     <string name="alias">Alias:#404801</string>
     <string name="personage">Personage</string>
-    <string name="whitelist">WhiteList</string>
+    <string name="whitelist">White list</string>
     <string name="privilege">Privilege</string>
     <string name="activity">Activity</string>
     <string name="entrust">Entrust</string>
 
-    <string name="accountset">AccountSet</string>
+    <string name="accountset">Account set</string>
     
-    <string name="selectlanguage">SelectSystemLanguage </string>
+    <string name="selectlanguage">Select system language </string>
     <string name="stringzh">中文</string>
     <string name="stringen">English</string>
+    <string name="not_logged">Hello, you are not logged in yet</string>
+    <string name="go_login">Go login</string>
+    <string name="go_register">Go register</string>
 
 </resources>

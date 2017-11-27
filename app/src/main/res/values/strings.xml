@@ -121,4 +121,7 @@
     <string name="pwd_point">请输入您的密码</string>
     <string name="password_invalid">密码错误</string>
     <string name="please_enter_password">请输入密码</string>
+    <string name="not_logged">您好，您还没有登录</string>
+    <string name="go_login">去登录</string>
+    <string name="go_register">去注册</string>
 </resources>

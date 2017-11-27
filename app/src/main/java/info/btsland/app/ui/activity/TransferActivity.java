@@ -1,13 +1,12 @@
 package info.btsland.app.ui.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -36,9 +35,12 @@ import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.view.AppDialog;
-import info.btsland.app.ui.view.ConfirmOrderDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.NumericUtil;
+
+/**
+ * 转账操作
+ */
 
 public class TransferActivity extends AppCompatActivity {
     private final String TAG="TransferActivity";

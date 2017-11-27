@@ -3,9 +3,14 @@ package info.btsland.app.ui.view;
 import android.app.Activity;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.util.NumericUtil;
 
 public class ConfirmOrderDialog {
     private Activity mActivity;
@@ -26,11 +31,15 @@ public class ConfirmOrderDialog {
     private TextView tvVolCoin;
     private TextView tvChargeCoin;
     private TextView tvTotalCoin;
+    private TextView tvPoint;
     private String want;
+    private boolean isShow=false;
+    private boolean isOK=false;
 
     public static class ConfirmOrderData {
         public static final String BUY="buy";
         public static final String SELL="sell";
+        private String point;
         private String want;
         private String priceNum;
         private String priceCoin;
@@ -64,86 +73,6 @@ public class ConfirmOrderDialog {
             this.chargeCoin = chargeCoin;
         }
 
-        public String getWant() {
-            return want;
-        }
-
-        public ConfirmOrderData setWant(String want) {
-            this.want = want;
-            return this;
-        }
-
-        public String getPriceNum() {
-            return priceNum;
-        }
-
-        public ConfirmOrderData setPriceNum(String priceNum) {
-            this.priceNum = priceNum;
-            return this;
-        }
-
-        public String getPriceCoin() {
-            return priceCoin;
-        }
-
-        public ConfirmOrderData setPriceCoin(String priceCoin) {
-            this.priceCoin = priceCoin;
-            return this;
-        }
-
-        public String getTotalNum() {
-            return totalNum;
-        }
-
-        public ConfirmOrderData setTotalNum(String totalNum) {
-            this.totalNum = totalNum;
-            return this;
-        }
-
-        public String getVolNum() {
-            return volNum;
-        }
-
-        public ConfirmOrderData setVolNum(String volNum) {
-            this.volNum = volNum;
-            return this;
-        }
-
-        public String getChatgeNum() {
-            return chargeNum;
-        }
-
-        public ConfirmOrderData setChatgeNum(String chargeNum) {
-            this.chargeNum = chargeNum;
-            return this;
-        }
-
-        public String getQuoteCoin() {
-            return quoteCoin;
-        }
-
-        public ConfirmOrderData setQuoteCoin(String quoteCoin) {
-            this.quoteCoin = quoteCoin;
-            return this;
-        }
-
-        public String getTotalCoin() {
-            return totalCoin;
-        }
-
-        public ConfirmOrderData setTotalCoin(String totalCoin) {
-            this.totalCoin = totalCoin;
-            return this;
-        }
-
-        public String getChargeCoin() {
-            return chargeCoin;
-        }
-
-        public ConfirmOrderData setChargeCoin(String chargeCoin) {
-            this.chargeCoin = chargeCoin;
-            return this;
-        }
     }
 
     public ConfirmOrderDialog(Activity mActivity, ConfirmOrderData confirmOrderData, OnDialogInterationListener listener) {
@@ -153,8 +82,17 @@ public class ConfirmOrderDialog {
         init();
         fillin();
     }
-
-
+    public void setPoint(String text,boolean b){
+        tvPoint.setText(text);
+        if(b){
+            tvPoint.setTextColor(mActivity.getResources().getColor(R.color.color_green));
+        }else {
+            tvPoint.setTextColor(mActivity.getResources().getColor(R.color.color_font_red));
+        }
+    }
+    public boolean isShow(){
+        return isShow;
+    }
     public void init(){
         mDialogBuilder = new AlertDialog.Builder(mActivity);
 //        mDialogBuilder.setTitle(R.string.label_please_confirm);
@@ -171,29 +109,51 @@ public class ConfirmOrderDialog {
         tvChargeCoin=view.findViewById(R.id.tv_dialog_chargeCoin);
         txtConfirm =view.findViewById(R.id.tv_dialog_confirm);
         txtCancel =view.findViewById(R.id.tv_dialog_cancel);
+        tvPoint=view.findViewById(R.id.tv_dialog_point);
     }
     public void fillin(){
         tvTitle.setText("请确认订单");
-        if(confirmOrderData.getWant().equals(ConfirmOrderData.BUY)){
+        if(confirmOrderData.want.equals(ConfirmOrderData.BUY)){
             tvWant.setText("买入");
             want=ConfirmOrderData.BUY;
-        }else if(confirmOrderData.getWant().equals(ConfirmOrderData.SELL)){
+            if(NumericUtil.parseDouble(confirmOrderData.totalNum)<BtslandApplication.getAssetTotalByName(confirmOrderData.totalCoin)){
+                setPoint("余额充足！",true);
+                isOK=true;
+            }else {
+                setPoint("余额不足！",false);
+                isOK=false;
+            }
+        }else if(confirmOrderData.want.equals(ConfirmOrderData.SELL)){
             want=ConfirmOrderData.SELL;
             tvWant.setText("卖出");
+            if(NumericUtil.parseDouble(confirmOrderData.volNum)<BtslandApplication.getAssetTotalByName(confirmOrderData.quoteCoin)){
+                setPoint("余额充足！",true);
+                isOK=true;
+            }else {
+                setPoint("余额不足！",false);
+                isOK=false;
+            }
         }
-        tvPriceNum.setText(confirmOrderData.getPriceNum());
-        tvPriceCoin.setText(confirmOrderData.getPriceCoin());
-        tvVolNum.setText(confirmOrderData.getVolNum());
-        tvVolCoin.setText(confirmOrderData.getQuoteCoin());
-        tvTotalNum.setText(confirmOrderData.getTotalNum());
-        tvTotalCoin.setText(confirmOrderData.getTotalCoin());
-        tvChargeNum.setText(confirmOrderData.getChatgeNum());
-        tvChargeCoin.setText(confirmOrderData.getChargeCoin());
+        tvPriceNum.setText(confirmOrderData.priceNum);
+        tvPriceCoin.setText(confirmOrderData.priceCoin);
+        tvVolNum.setText(confirmOrderData.volNum);
+        tvVolCoin.setText(confirmOrderData.quoteCoin);
+        tvTotalNum.setText(confirmOrderData.totalNum);
+        tvTotalCoin.setText(confirmOrderData.totalCoin);
+        tvChargeNum.setText(confirmOrderData.chargeNum);
+        tvChargeCoin.setText(confirmOrderData.chargeCoin);
+
 
         txtConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                isShow=false;
                 mDialog.dismiss();
+                if(!isOK){
+                    Toast.makeText(mActivity,"余额不足",Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if(mListener != null){
                     mListener.onConfirm(want);
                 }
@@ -202,6 +162,7 @@ public class ConfirmOrderDialog {
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isShow=false;
                 mDialog.dismiss();
                 if(mListener != null){
                     mListener.onReject();
@@ -213,6 +174,7 @@ public class ConfirmOrderDialog {
 
     public void show(){
         mDialog = mDialogBuilder.create();
+        isShow=true;
         mDialog.show();
     }
 

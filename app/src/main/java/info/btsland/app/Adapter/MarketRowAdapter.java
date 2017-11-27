@@ -87,28 +87,17 @@ public class MarketRowAdapter extends BaseAdapter {
         tvNewPrice.setText(market.latest.substring(0,8));
         tvBestAskNum.setText(market.lowest_ask.substring(0,8));
         tvBestBidNum.setText(market.highest_bid.substring(0,8));
-        int goUp=0;
-        int goDown=0;
-        int suspend=0;
-        if(BtslandApplication.fluctuationType==1){
-            goUp=context.getResources().getColor(R.color.color_green);
-            goDown=context.getResources().getColor(R.color.color_font_red);
-            suspend=context.getResources().getColor(R.color.color_font_blue);
-        }else if(BtslandApplication.fluctuationType==2){
-            goUp=context.getResources().getColor(R.color.color_font_red);
-            goDown=context.getResources().getColor(R.color.color_green);
-            suspend=context.getResources().getColor(R.color.color_font_blue);
-        }
+
         if (market.percent_change > 0) {
 
-            tvFluctuation.setTextColor(goUp);
-            tvNewPrice.setTextColor(goUp);
+            tvFluctuation.setTextColor(BtslandApplication.goUp);
+            tvNewPrice.setTextColor(BtslandApplication.goUp);
         } else if(market.percent_change < 0) {
-            tvFluctuation.setTextColor(goDown);
-            tvNewPrice.setTextColor(goDown);
+            tvFluctuation.setTextColor(BtslandApplication.goDown);
+            tvNewPrice.setTextColor(BtslandApplication.goDown);
         }else {
-            tvFluctuation.setTextColor(suspend);
-            tvNewPrice.setTextColor(suspend);
+            tvFluctuation.setTextColor(BtslandApplication.suspend);
+            tvNewPrice.setTextColor(BtslandApplication.suspend);
         }
         rowOnClickListener clickListener=new rowOnClickListener(market);
         convertView.setOnClickListener(clickListener);

@@ -37,15 +37,13 @@ import info.btsland.app.ui.view.PasswordDialog;
 
 public class HaveInHandRecyclerViewAdapter extends RecyclerView.Adapter<HaveInHandRecyclerViewAdapter.ViewHolder>  {
 
-    private Handler handler;
-    private Activity activity;
+    private CancelOnClickListener cancelOnClickListener;
     private List<OpenOrder>  list;
 
     private KProgressHUD hud;
 
-    public HaveInHandRecyclerViewAdapter(Activity activity, Handler handler) {
-        this.handler=handler;
-        this.activity=activity;
+    public HaveInHandRecyclerViewAdapter(CancelOnClickListener cancelOnClickListener) {
+        this.cancelOnClickListener=cancelOnClickListener;
     }
 
     public void setList(List<OpenOrder> openOrders){
@@ -108,87 +106,12 @@ public class HaveInHandRecyclerViewAdapter extends RecyclerView.Adapter<HaveInHa
             tvCancel.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    hud=KProgressHUD.create(activity);
-                    hud.setLabel(activity.getResources().getString(R.string.please_wait));
-                    if(BtslandApplication.getWalletApi().is_locked()){
-                        hud.show();
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    if(BtslandApplication.getWalletApi().cancel_order(order.limitOrder.id)!=null){
-                                        handler.sendEmptyMessage(1);
-                                    }else {
-                                        handler.sendEmptyMessage(-1);
-                                    }
-                                    hudHandler.sendEmptyMessage(1);
-                                } catch (NetworkStatusException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }).start();
-
-                    }else {
-                        final PasswordDialog pwdDialog=new PasswordDialog(activity);
-                        pwdDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                            @Override
-                            public void onConfirm(AlertDialog dialog, final String passwordString) {
-                                if(passwordString!=null&&passwordString.length()>0){
-                                    account_object accountObject = null;
-                                    try {
-                                        accountObject = BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name, passwordString);
-                                    } catch (NetworkStatusException e) {
-                                        e.printStackTrace();
-                                    }
-                                    if(accountObject==null){
-                                        pwdDialog.setTvPoint(false);
-                                        return;
-                                    }
-                                    dialog.dismiss();
-                                    hud.show();
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-
-                                            if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
-                                                try {
-                                                    if (BtslandApplication.getWalletApi().cancel_order(order.limitOrder.id) != null) {
-                                                        handler.sendEmptyMessage(1);
-                                                    } else {
-                                                        handler.sendEmptyMessage(-1);
-                                                    }
-                                                    hudHandler.sendEmptyMessage(1);
-                                                } catch (NetworkStatusException e) {
-                                                    e.printStackTrace();
-                                                }
-                                            }
-                                        }
-                                    }).start();
-                                }else {
-                                    pwdDialog.setTvPoint(false);
-                                }
-
-                            }
-
-                            @Override
-                            public void onReject(AlertDialog dialog) {
-                                dialog.dismiss();
-                            }
-                        });
-
-                        pwdDialog.show();
-
-                    }
+                    cancelOnClickListener.onClick(order);
                 }
             });
         }
     }
-    private Handler hudHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            if(hud.isShowing()){
-                hud.dismiss();
-            }
-        }
-    };
+   public interface CancelOnClickListener {
+        void onClick(OpenOrder order);
+   }
 }

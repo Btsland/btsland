@@ -151,8 +151,11 @@ public class Wallet_api {
                     mCheckSum.equals(new sha512_object())) {
                 return true;
             }
+            return false;
+        }else {
+            return true;
         }
-        return false;
+
     }
     public int unlock(String strPassword) {
         assert(strPassword.length() > 0);

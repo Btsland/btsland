@@ -88,7 +88,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     );
 
-    public static void setFluctuationType(int fluctuationType){
+    public static void setFluctuationType(){
         if(BtslandApplication.fluctuationType==1){
             goUp=getInstance().getResources().getColor(R.color.color_green);
             goDown=getInstance().getResources().getColor(R.color.color_font_red);
@@ -150,7 +150,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
             }
         }
-        setFluctuationType(fluctuationType);
+        setFluctuationType();
     }
 
     @Override
@@ -164,6 +164,17 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         queryAccount();
 
     }
+    public static Double getAssetTotalByName(String name){
+        for(int i=0;i<BtslandApplication.iAssets.size();i++){
+            if(BtslandApplication.iAssets.get(i).coinName.equals(name)){
+                return BtslandApplication.iAssets.get(i).total;
+            }
+
+        }
+        return 0.0;
+    }
+
+
     public static void ConnectThread(){
         MarketStat marketStat = getMarketStat();
         MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
@@ -190,7 +201,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         @Override
         public void run() {
 
-            String username=sharedPreferences.getString("username","");
+            String username=readUser();
             if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
                 return;
             }
@@ -200,7 +211,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
-                queryAsset();
+                queryAsset(null);
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
@@ -214,8 +225,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     /**
      * 查询用余额线程外部调用方法
      */
-    public static void queryAsset(){
-        new AccetThread().start();
+    public static void queryAsset(Handler handler){
+        new AccetThread(handler).start();
     }
 
     /**
@@ -223,10 +234,18 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
      *
      */
     private static class AccetThread extends Thread{
+        private Handler handler;
+
+        public AccetThread(Handler handler) {
+            this.handler=handler;
+        }
 
         @Override
         public void run() {
             try {
+                if(accountObject==null||accountObject.name.equals("")){
+                    return;
+                }
                 List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
                 accountObject.assetlist=assets;
@@ -238,8 +257,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         iAssets.add(new IAsset(assets.get(i)));
                     }
                 }
-                if (purseHandler!=null){
-                    purseHandler.sendEmptyMessage(1);
+                if (this.handler!=null){
+                    this.handler.sendEmptyMessage(1);
                 }
 
                 CuntTotalCNY();
@@ -270,6 +289,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         @Override
         public synchronized void run() {
+            if (accountObject==null||accountObject.name.equals("")){
+                return;
+            }
             accountObject.totalCNY=0.0;
             for (int i=0; i < iAssets.size(); i++) {
                 if(iAssets.get(i).coinName.equals(chargeUnit)){
@@ -347,6 +369,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
     public static String readChargeUnit(){
         return sharedPreferences.getString("chargeUnit",chargeUnit);
+    }
+    public static String readUser(){
+        return sharedPreferences.getString("username","");
     }
     /**
      * 保存用户

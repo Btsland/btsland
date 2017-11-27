@@ -154,10 +154,10 @@ public class MarketDetailedActivity extends AppCompatActivity{
                                         DetailedKFragment.range,DetailedKFragment.ago);
                                 orderKey=KeyUtil.constructingOrderBooksKey(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote);
                                 if(refurbishK!=null){
-                                    refurbishK.refurbish(market);
+                                    handler.sendEmptyMessage(1);
                                 }
                                 if(refurbishBuyAndSell!=null){
-                                    refurbishBuyAndSell.refurbish(market);
+                                    handler.sendEmptyMessage(1);
                                 }
                             }
                         }).start();
@@ -203,10 +203,10 @@ public class MarketDetailedActivity extends AppCompatActivity{
         }
     }
     public interface RefurbishK{
-        void refurbish(MarketTicker market);
+        void refurbish();
     }
     public interface RefurbishBuyAndSell{
-        void refurbish(MarketTicker market);
+        void refurbish();
     }
     private Handler handler=new Handler(){
         @Override

@@ -228,7 +228,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     }
 
     @Override
-    public void refurbish(MarketTicker market) {
+    public void refurbish() {
+        this.market=MarketDetailedActivity.market;
         base=market.base;
         quote=market.quote;
         drawK();
@@ -528,7 +529,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
                 range,
                 ago,
                 MarketStat.STAT_MARKET_HISTORY,
-                MarketStat.DEFAULT_UPDATE_SECS,
+                MarketStat.DEFAULT_UPDATE_K_SECS,
                 getListener());
     }
 

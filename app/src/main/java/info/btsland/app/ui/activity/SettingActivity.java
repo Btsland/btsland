@@ -1,24 +1,12 @@
 package info.btsland.app.ui.activity;
 
-import android.app.ActivityManager;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
-import android.widget.TextView;
 
-import java.lang.reflect.Array;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +17,6 @@ import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.view.AppListDialog;
-import info.btsland.app.util.PreferenceUtil;
 
 
 public class SettingActivity extends BaseActivity{
@@ -57,8 +44,8 @@ public class SettingActivity extends BaseActivity{
 
         List<RowAdapter.RowItemData> rowItemDataList=new ArrayList<>();
         RowAdapter.RowItemData refurbishItemData=new RowAdapter.RowItemData("",
-                "自动刷新",
-                "开启后将会自动刷新数据",
+                getString(R.string.auto_refresh),
+                getString(R.string.will_be_refreshed),
                 BtslandApplication.isRefurbish,
                 false,
                 true,
@@ -87,8 +74,8 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(refurbishItemData);
         RowAdapter.RowItemData languageItemData=new RowAdapter.RowItemData("",
-                "语言",
-                "选择您的语言",
+                getString(R.string.language),
+                getString(R.string.select_your_language),
                 BtslandApplication.isRefurbish,
                 false,
                 false,
@@ -110,8 +97,8 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(languageItemData);
         RowAdapter.RowItemData changeItemData=new RowAdapter.RowItemData("",
-                "涨跌幅样式",
-                "设置您偏好的涨跌幅颜色",
+                getString(R.string.price_limit),
+                getString(R.string.set_preference_color),
                 BtslandApplication.isRefurbish,
                 false,
                 false,
@@ -133,8 +120,8 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(changeItemData);
         RowAdapter.RowItemData nodeItemData=new RowAdapter.RowItemData("",
-                "节点选择",
-                "选择您需要连接的服务器节点",
+                getString(R.string.node_selection),
+                getString(R.string.set_server_node),
                 BtslandApplication.isRefurbish,
                 false,
                 false,
@@ -156,8 +143,8 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(nodeItemData);
         RowAdapter.RowItemData chargeUnitItemData=new RowAdapter.RowItemData("",
-                "计价单位",
-                "设置您偏好的计价单位",
+                getString(R.string.charge_unit),
+                getString(R.string.set_pricing_unit),
                 BtslandApplication.isRefurbish,
                 false,
                 false,
@@ -179,7 +166,7 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(chargeUnitItemData);
         RowAdapter.RowItemData helpItemData=new RowAdapter.RowItemData("",
-                "使用指南",
+                getString(R.string.operating_guide),
                 "",
                 BtslandApplication.isRefurbish,
                 false,
@@ -201,7 +188,7 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(helpItemData);
         RowAdapter.RowItemData versionItemData=new RowAdapter.RowItemData("",
-                "版本信息",
+                getString(R.string.version_information),
                 "",
                 BtslandApplication.isRefurbish,
                 false,
@@ -225,7 +212,7 @@ public class SettingActivity extends BaseActivity{
         );
         rowItemDataList.add(versionItemData);
         RowAdapter.RowItemData weItemData=new RowAdapter.RowItemData("",
-                "关于我们",
+                getString(R.string.about),
                 "",
                 BtslandApplication.isRefurbish,
                 false,

@@ -41,16 +41,30 @@
             />
 
         <TextView
+            android:id="@+id/tv_txt_purse_convert"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="折合总金额约为："
+            android:textColor="@color/color_frenchGrey"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
+            app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
+            app:layout_constraintRight_toLeftOf="@+id/tv_purse_convert"
+            />
+
+        <TextView
             android:id="@+id/tv_purse_convert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="折合总金额约为：0.0000CNY"
+            android:text="0.0000CNY"
             android:textColor="@color/color_frenchGrey"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             android:maxLines="1"
-            app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
-            app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"/>
+            app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
+            app:layout_constraintLeft_toRightOf="@+id/tv_txt_purse_convert"
+            />
 
         <TextView
             android:id="@+id/tv_purse_hang"
@@ -270,8 +284,8 @@
             android:gravity="center"
             android:text="@string/not_logged"
             android:textColor="@color/color_white2"
-            android:textSize="30sp"
-            android:textStyle="italic"
+            android:textSize="26sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@+id/tv_go_login"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"

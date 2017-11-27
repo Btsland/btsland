@@ -128,11 +128,11 @@ public class PurseFragment extends Fragment {
             tvUserName.setText(BtslandApplication.accountObject.name);
 
             if(String.valueOf(BtslandApplication.accountObject.totalCNY)==null){
-                tvPurseConvert.setText("折合总金额约为：正在计算中。。");
+                tvPurseConvert.setText(" 正在计算中。。");
             }else if(String.valueOf(BtslandApplication.accountObject.totalCNY).length()>8){
-                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + BtslandApplication.chargeUnit);
+                tvPurseConvert.setText(String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + BtslandApplication.chargeUnit);
             }else {
-                tvPurseConvert.setText("折合总金额约为：" + String.valueOf(BtslandApplication.accountObject.totalCNY) + BtslandApplication.chargeUnit);
+                tvPurseConvert.setText(String.valueOf(BtslandApplication.accountObject.totalCNY) + BtslandApplication.chargeUnit);
             }
             tvUserAnotherName.setText("#" + BtslandApplication.accountObject.id.get_instance());
         } else {

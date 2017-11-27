@@ -17,6 +17,12 @@
     <string name="transfer_accounts">Transfer accounts</string>
     <string name="logoff">Logoff</string>
 
+
+    <string name="not_logged">Hello, you are not logged in yet</string>
+    <string name="go_login">Go login</string>
+    <string name="go_register">Go register</string>
+
+
     <string name="set">Set</string>
     <string name="language">Language</string>
     <string name="theme">Theme</string>
@@ -26,6 +32,24 @@
     <string name="trading_guide">Trading guide</string>
     <string name="we">About us</string>
     <string name="edition">Edition</string>
+
+    <string name="auto_refresh">Auto refresh</string>
+    <string name="will_be_refreshed">The data will be refreshed automatically after opening</string>
+    <string name="select_your_language">Select your language</string>
+    <string name="price_limit">Price rise and fall pattern</string>
+    <string name="set_preference_color">Set up your preference color</string>
+    <string name="node_selection">Node selection</string>
+    <string name="set_server_node">Select the server node that you need to connect to</string>
+    <string name="charge_unit">Charge unit </string>
+    <string name="set_pricing_unit">Set your preferred pricing unit</string>
+    <string name="operating_guide">Operating guide</string>
+    <string name="version_information">Version Information</string>
+    <string name="about">About us</string>
+
+
+
+
+
 
     <string name="username">Username:btsland</string>
     <string name="alias">Alias:#404801</string>
@@ -40,8 +64,14 @@
     <string name="selectlanguage">Select system language </string>
     <string name="stringzh">中文</string>
     <string name="stringen">English</string>
-    <string name="not_logged">Hello, you are not logged in yet</string>
-    <string name="go_login">Go login</string>
-    <string name="go_register">Go register</string>
+    <string name="Username">name：</string>
+    <string name="password_login">password：</string>
+    <string name="login_btn">login</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register_txt">I have confirmed that I have backed up my password (your password is the only login credential, once lost, your account will not be retrieved, your assets will be lost, too.)
+</string>
+    <string name="register">register</string>
+    <string name="to_login_btn">Have an account to log on</string>
+
 
 </resources>

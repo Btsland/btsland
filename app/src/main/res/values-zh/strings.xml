@@ -27,6 +27,19 @@
     <string name="we">关于我们</string>
     <string name="edition">版本信息</string>
 
+    <string name="auto_refresh">自动刷新</string>
+    <string name="will_be_refreshed">开启后将会自动刷新数据</string>
+    <string name="select_your_language">选择您的语言</string>
+    <string name="price_limit">涨跌幅样式</string>
+    <string name="set_preference_color">设置您偏好的涨跌幅颜色</string>
+    <string name="set_server_node">选择您需要连接的服务器节点</string>
+    <string name="charge_unit">计价单位</string>
+    <string name="set_pricing_unit">设置您偏好的计价单位</string>
+    <string name="operating_guide">使用指南</string>
+    <string name="version_information">版本信息</string>
+    <string name="about">关于我们</string>
+
+
     <string name="username">用户名:btsland</string>
     <string name="alias">别名:#404801</string>
     <string name="personage">个人信息</string>
@@ -43,5 +56,14 @@
     <string name="not_logged">您好，您还没有登录</string>
     <string name="go_login">去登录</string>
     <string name="go_register">去注册</string>
+    <string name="node_selection">节点选择</string>
+    <string name="Username">用户名：</string>
+    <string name="password_login">密码：</string>
+    <string name="login_btn">登录</string>
+    <string name="confirm_password">确认密码</string>
+    <string name="register_txt">我已确认我已经备份好我的密码（您的密码是登录的唯一凭证，一旦丢失，您的帐号将无法找回，您的资产也会丢失。）</string>
+    <string name="register">注册</string>
+    <string name="to_login_btn">已有帐号，去登录</string>
+
 
 </resources>

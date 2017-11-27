@@ -28,12 +28,14 @@ import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.util.IDateUitl;
 
+import static info.btsland.app.ui.activity.MarketDetailedActivity.market;
+
 
 public class MarketStat {
     private static final String TAG = "MarketStat";
     public static final long DEFAULT_BUCKET_SECS = TimeUnit.DAYS.toSeconds(1);//每条信息的间隔
-
-    public static final long DEFAULT_UPDATE_SECS = TimeUnit.SECONDS.toMillis(10);//信息刷新的间隔
+    public static final long DEFAULT_UPDATE_K_SECS = TimeUnit.MINUTES.toMillis(3);//K图信息刷新的间隔
+    public static final long DEFAULT_UPDATE_MARKE_SECS = TimeUnit.SECONDS.toMillis(10);//行情信息刷新的间隔
     public static final long DEFAULT_AGO_SECS=TimeUnit.DAYS.toMillis(90);//距离现在时间
     public static final int STAT_MARKET_HISTORY = 0x01;
     public static final int STAT_MARKET_TICKER = 0x02;
@@ -123,7 +125,14 @@ public class MarketStat {
             subscription.cancel();
         }
     }
+    public void restartSubscription() {
+        for (Subscription subscription : subscriptionHashMap.values()){
+            if (subscription != null) {
+                subscription.updateImmediately();
+            }
+        }
 
+    }
     public void updateImmediately(String base, String quote,int stats) {
         String market = makeMarketName(base, quote,stats);
         Subscription subscription = subscriptionHashMap.get(market);
@@ -238,7 +247,7 @@ public class MarketStat {
         private String quote;
         private long bucketSecs = DEFAULT_BUCKET_SECS;
         private int stats;
-        private long intervalMillis=DEFAULT_UPDATE_SECS;
+        private long intervalMillis=DEFAULT_UPDATE_MARKE_SECS;
         private OnMarketStatUpdateListener listener;
         private asset_object baseAsset;
         private asset_object quoteAsset;
@@ -403,9 +412,6 @@ public class MarketStat {
                 }
                 if ((stats & STAT_MARKET_OPEN_ORDER) != 0) {
                     stat.openOrders = getOpenOrders();
-                    if(stat.openOrders==null){
-                        return;
-                    }
                 }
                 if (isCancelled.get()) {
                     return;

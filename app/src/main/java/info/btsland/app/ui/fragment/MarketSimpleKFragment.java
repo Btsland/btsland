@@ -124,7 +124,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
                     base,
                     quote,
                     MarketStat.STAT_MARKET_HISTORY,
-                    MarketStat.DEFAULT_UPDATE_SECS,
+                    MarketStat.DEFAULT_UPDATE_K_SECS,
                     getListener());
 
     }

@@ -53,6 +53,7 @@ public class PasswordDialog {
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.dismiss();
                 if(mListener != null){
                     mListener.onConfirm(mDialog, editTextPwd.getText().toString());
                 }
@@ -63,6 +64,7 @@ public class PasswordDialog {
         txtCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mDialog.dismiss();
                 if(mListener != null){
                     mListener.onReject(mDialog);
                 }

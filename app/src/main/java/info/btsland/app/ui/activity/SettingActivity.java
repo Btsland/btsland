@@ -71,6 +71,7 @@ public class SettingActivity extends BaseActivity{
                         if (b){
                             BtslandApplication.isRefurbish=true;
                             BtslandApplication.saveIsRefurbish();
+                            BtslandApplication.getMarketStat().restartSubscription();
                         }else {
                             BtslandApplication.isRefurbish=false;
                             BtslandApplication.saveIsRefurbish();
@@ -358,8 +359,7 @@ public class SettingActivity extends BaseActivity{
             public void onConfirm(String server) {
                 BtslandApplication.chargeUnit=server;
                 BtslandApplication.saveChargeUnit();
-                BtslandApplication.CuntTotalCNY();
-                restart();
+                BtslandApplication.queryAsset(null);
             }
 
             @Override
@@ -392,7 +392,7 @@ public class SettingActivity extends BaseActivity{
             public void onConfirm(String server) {
                 BtslandApplication.strServer=server;
                 BtslandApplication.saveStrServer();
-                restart();
+                BtslandApplication.getMarketStat().restartSubscription();
             }
 
             @Override
@@ -427,7 +427,8 @@ public class SettingActivity extends BaseActivity{
                     if(string1.get(i).equals(server)){
                         BtslandApplication.fluctuationType=ints.get(i);
                         BtslandApplication.saveFluctuationType();
-                        restart();
+                        BtslandApplication.setFluctuationType();
+                        BtslandApplication.getMarketStat().restartSubscription();
                         break;
                     }
                 }

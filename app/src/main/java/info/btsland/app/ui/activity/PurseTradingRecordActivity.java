@@ -78,8 +78,6 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
             }
         });
         thread.start();
-
-
     }
 
     /**

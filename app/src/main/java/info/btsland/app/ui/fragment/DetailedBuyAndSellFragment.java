@@ -81,6 +81,8 @@ public class DetailedBuyAndSellFragment extends Fragment
 
     private  MarketTicker market;
 
+    private ConfirmOrderDialog dialog;
+
     private static DetailedBuyAndSellFragment listener;
 
     TransactionSellBuyRecyclerViewAdapter rlvBuyAdapter;
@@ -272,7 +274,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                     });
                     appDialog.show();
                 }else {
-                    ConfirmOrderDialog dialog = new ConfirmOrderDialog(getActivity(),
+                    dialog = new ConfirmOrderDialog(getActivity(),
                             new ConfirmOrderDialog.ConfirmOrderData(
                                     ConfirmOrderDialog.ConfirmOrderData.BUY,
                                     edPrice.getText().toString(),
@@ -309,7 +311,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                     });
                     appDialog.show();
                 }else {
-                    ConfirmOrderDialog dialog = new ConfirmOrderDialog(getActivity(),
+                    dialog = new ConfirmOrderDialog(getActivity(),
                             new ConfirmOrderDialog.ConfirmOrderData(
                                     ConfirmOrderDialog.ConfirmOrderData.SELL,
                                     edPrice.getText().toString(),
@@ -338,7 +340,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                 MarketDetailedActivity.market.base,
                 MarketDetailedActivity.market.quote,
                 MarketStat.STAT_MARKET_ORDER_BOOK,
-                MarketStat.DEFAULT_UPDATE_SECS,
+                MarketStat.DEFAULT_UPDATE_MARKE_SECS,
                 getListener());
     }
     @Override
@@ -365,19 +367,24 @@ public class DetailedBuyAndSellFragment extends Fragment
                 if (BtslandApplication.orderBookMap.get(MarketDetailedActivity.orderKey) != null ) {
                     OrderBook orderBook=BtslandApplication.orderBookMap.get(MarketDetailedActivity.orderKey);
                     int maxBids=15;
-                    if(orderBook.bids.size()<15){
-                        maxBids=orderBook.bids.size();
+                    if(orderBook.bids!=null&&orderBook.bids.size()!=0){
+                        if(orderBook.bids.size()<15){
+                            maxBids=orderBook.bids.size();
+                        }
+
+                        rlvBuyAdapter.setList(orderBook.bids.subList(0, maxBids));
+                        highBuyPrice = orderBook.bids.get(0).price;
+                        rlvBuyAdapter.notifyDataSetChanged();
                     }
-                    rlvBuyAdapter.setList(orderBook.bids.subList(0, maxBids));
-                    highBuyPrice = orderBook.bids.get(0).price;
-                    rlvBuyAdapter.notifyDataSetChanged();
-                    int maxAsks=15;
-                    if(orderBook.asks.size()<15){
-                        maxAsks=orderBook.asks.size();
+                    if(orderBook.bids!=null&&orderBook.bids.size()!=0){
+                        int maxAsks=15;
+                        if(orderBook.asks.size()<15){
+                            maxAsks=orderBook.asks.size();
+                        }
+                        rlvSellAdapter.setList(orderBook.asks.subList(0, maxAsks));
+                        lowSellPrice = orderBook.asks.get(0).price;
+                        rlvSellAdapter.notifyDataSetChanged();
                     }
-                    rlvSellAdapter.setList(orderBook.asks.subList(0, maxAsks));
-                    lowSellPrice = orderBook.asks.get(0).price;
-                    rlvSellAdapter.notifyDataSetChanged();
                     fillIn();
                 }
 
@@ -391,7 +398,7 @@ public class DetailedBuyAndSellFragment extends Fragment
     private String mwant;
 
     @Override
-    public void refurbish(MarketTicker market) {
+    public void refurbish() {
         startReceiveMarkets();
     }
 
@@ -590,4 +597,5 @@ public class DetailedBuyAndSellFragment extends Fragment
             }
         }
     };
+
  }

@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity {
         if(index==0){
             touchColor(tvNavHome, tvNavMarket, tvNavPurse);//选中行情控件
             touchImage(tvNavHome);
-            showFragment(tvNavHome);//显示行情页面
+            showFragment(tvNavHome);
         }else if(index==1){
             touchColor(tvNavMarket, tvNavHome, tvNavPurse);//选中行情控件
             touchImage(tvNavMarket);
@@ -85,7 +85,7 @@ public class MainActivity extends BaseActivity {
         }else if(index==2){
             touchColor(tvNavPurse, tvNavHome, tvNavMarket);//选中行情控件
             touchImage(tvNavPurse);
-            showFragment(tvNavPurse);//显示行情页面
+            showFragment(tvNavPurse);
         }
 
     }
@@ -288,8 +288,11 @@ public class MainActivity extends BaseActivity {
      */
     protected void touchColor(TextView facingTextView, TextView textView1, TextView textView2) {
         facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
+        facingTextView.getPaint().setFakeBoldText(true);
         textView1.setBackground(getDrawable(R.drawable.tv_border));
         textView2.setBackground(getDrawable(R.drawable.tv_border));
+        textView1.getPaint().setFakeBoldText(false);
+        textView2.getPaint().setFakeBoldText(false);
         facingTextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_dullRed1, null));
         textView1.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));
         textView2.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_black, null));

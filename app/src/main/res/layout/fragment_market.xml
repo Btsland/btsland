@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_Grey"
     tools:layout_editor_absoluteY="25dp">
     <!--K图部分-->
     <FrameLayout
@@ -31,8 +30,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="CNY"
-            android:textColor="@color/color_black"
-            android:textSize="14sp" />
+            android:textSize="14sp"/>
 
         <TextView
             android:id="@+id/tv_market_left_coin2"

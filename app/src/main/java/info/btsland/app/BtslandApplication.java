@@ -56,6 +56,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
     public static Map<String,OrderBook> orderBookMap=new HashMap<>();
+    public static Map<String,List<MarketTicker>> marketMap=new HashMap<>();
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;
@@ -151,6 +152,21 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
         }
         setFluctuationType();
+        fiiiInMarketMap();
+
+    }
+
+    private static void fiiiInMarketMap() {
+        for(int i=0;i<bases.length;i++){
+            List<MarketTicker> tickers=new ArrayList<>();
+            for(int j=0;j<quotes2.length;j++){
+                if(bases[i].equals(quotes2[j])){
+                    continue;
+                }
+                tickers.add(new MarketTicker(bases[i],quotes2[j]));
+            }
+            marketMap.put(bases[i],tickers);
+        }
     }
 
     @Override

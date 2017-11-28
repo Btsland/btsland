@@ -214,7 +214,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
                 title=MarketDetailedActivity.market.quote+":"+MarketDetailedActivity.market.base;
                 headFragment.setTitleName(title);
             }
-
         }
     };
 }

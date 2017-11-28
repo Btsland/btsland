@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="标题"
+        android:background="@drawable/select_dialog_btn"
         android:textSize="20sp"
         android:gravity="center"
         android:textColor="@color/color_frenchGrey"/>
@@ -22,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:text="取消"
+        android:background="@drawable/select_dialog_btn"
         android:textSize="20sp"
         android:gravity="center"
         android:textColor="@color/color_frenchGrey"

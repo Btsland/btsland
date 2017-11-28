@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,15 +38,12 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private TextView tvMarketLeftCoin_4;
 //    private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
-    private Map<String,MarketTicker> cnyMarket=new HashMap<>();
-    private Map<String,MarketTicker> btsMarket=new HashMap<>();
-    private Map<String,MarketTicker> usdMarket=new HashMap<>();
-    private Map<String,MarketTicker> btcMarket=new HashMap<>();
+
 //    private Map<String,MarketTicker> ethMarket=new HashMap<>();
-    private MarketRowAdapter cnyRowAdapter ;
-    private MarketRowAdapter btsRowAdapter ;
-    private MarketRowAdapter btcRowAdapter ;
-    private MarketRowAdapter usdRowAdapter ;
+    private MarketRowAdapter cnyAdapter ;
+    private MarketRowAdapter btsAdapter ;
+    private MarketRowAdapter usdAdapter ;
+    private MarketRowAdapter btcAdapter ;
 //    private MarketRowAdapter ethRowAdapter ;
     private MarketStat marketStat;
     public static int NOTIFY_CNY=1;
@@ -65,124 +63,112 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         if(stat.MarketTicker==null){
             return;
         }
-        if(stat.MarketTicker.base==null){
+        if(stat.MarketTicker.base==null||stat.MarketTicker.quote==null){
             return;
         }
         Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
         Message message=Message.obtain();
-        Bundle bundle=new Bundle();
-        bundle.putSerializable("MarketTicker",stat.MarketTicker);
         switch (stat.MarketTicker.base){
             case "CNY":
+                if (stat.MarketTicker.quote.equals("CNY")) {
+                    return;
+                }
+                if (BtslandApplication.marketMap.get("CNY") != null && BtslandApplication.marketMap.get("CNY").size() > quotes.length) {
+                    BtslandApplication.marketMap.get("CNY").clear();
+                }
+                if (!replaceMarket(BtslandApplication.marketMap.get("CNY"), stat.MarketTicker)) {
+                    Log.i(TAG, "handleMessage: ");
+                    return;
+                }
+                if(!isAdded()){
+                    return;
+                }
                 message.what = NOTIFY_CNY;
                 break;
             case "BTS":
+                if (stat.MarketTicker.quote.equals("BTS")) {
+                    return;
+                }
+                if (BtslandApplication.marketMap.get("BTS") != null && BtslandApplication.marketMap.get("BTS").size() > quotes.length) {
+                    BtslandApplication.marketMap.get("BTS").clear();
+                }
+                if (!replaceMarket(BtslandApplication.marketMap.get("BTS"), stat.MarketTicker)) {
+                    Log.i(TAG, "handleMessage: ");
+                    return;
+                }
+                if(!isAdded()){
+                    return;
+                }
                 message.what = NOTIFY_BTS;
                 break;
             case "USD":
+                if (stat.MarketTicker.quote.equals("USD")) {
+                    return;
+                }
+                if (BtslandApplication.marketMap.get("USD") != null && BtslandApplication.marketMap.get("USD").size() > quotes.length) {
+                    BtslandApplication.marketMap.get("USD").clear();
+                }
+                if (!replaceMarket(BtslandApplication.marketMap.get("USD"), stat.MarketTicker)) {
+                    Log.i(TAG, "handleMessage: ");
+                    return;
+                }
+                if(!isAdded()){
+                    return;
+                }
                 message.what = NOTIFY_USD;
                 break;
             case "BTC":
+                if (stat.MarketTicker.quote.equals("BTC")) {
+                    return;
+                }
+                if (BtslandApplication.marketMap.get("BTC") != null && BtslandApplication.marketMap.get("BTC").size() > quotes.length) {
+                    BtslandApplication.marketMap.get("BTC").clear();
+                }
+                if (!replaceMarket(BtslandApplication.marketMap.get("BTC"), stat.MarketTicker)) {
+                    Log.i(TAG, "handleMessage: ");
+                    return;
+                }
+                if(!isAdded()){
+                    return;
+                }
                 message.what = NOTIFY_BTC;
                 break;
         }
-
-
-        message.setData(bundle);
-
-
         mHandler.sendMessage(message);
     }
-    public boolean replaceMarket(Map<String,MarketTicker> oldMarkets,MarketTicker newMarket){
-        String key=newMarket.quote;
-        if(oldMarkets.get(key)!=null){
-            if(oldMarkets.get(key).equals(newMarket)){
-                return false;
+    public boolean replaceMarket(List<MarketTicker> oldMarkets,MarketTicker newMarket){
+        for(int i=0;i<oldMarkets.size();i++) {
+            if(oldMarkets.get(i)!=null){
+                if(oldMarkets.get(i).quote.equals(newMarket.quote)){
+                    oldMarkets.remove(i);
+                    oldMarkets.add(i,newMarket);
+                    return true;
+                }
+            }else {
+                oldMarkets.add(newMarket);
+                if(oldMarkets.size()>quotes.length){
+                    oldMarkets.clear();
+                }
+                return true;
             }
-            oldMarkets.get(key).latest=newMarket.latest;
-            oldMarkets.get(key).lowest_ask=newMarket.lowest_ask;
-            oldMarkets.get(key).highest_bid=newMarket.highest_bid;
-            oldMarkets.get(key).percent_change=newMarket.percent_change;
-            oldMarkets.get(key).base_volume=newMarket.base_volume;
-            oldMarkets.get(key).quote_volume=newMarket.quote_volume;
-            return true;
-        }else {
-            oldMarkets.put(key,newMarket);
-            if(oldMarkets.size()>quotes.length){
-                oldMarkets.clear();
-            }
-            return true;
         }
+        return true;
+
     }
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             Log.i(TAG, "handleMessage: msg.what:" + msg.what);
-            Bundle bundle = msg.getData();
-            MarketTicker marketTicker = (MarketTicker) bundle.getSerializable("MarketTicker");
-            if (marketTicker != null) {
-                if (msg.what == NOTIFY_CNY) {
-                    if(!isAdded()){
-                        return;
-                    }
-                    if (marketTicker.quote.equals("CNY")) {
-                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
-                    }
-                    if (cnyMarket != null && cnyMarket.size() > quotes.length) {
-                        cnyMarket.clear();
-                    }
-                    if (!replaceMarket(cnyMarket, marketTicker)) {
-                        return;
-                    }
-                    cnyRowAdapter.notifyDataSetChanged();
-                } else if (msg.what == NOTIFY_BTS) {
-                    if(!isAdded()){
-                        return;
-                    }
-                    if (marketTicker.quote.equals("CNY")) {
-                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
-                    }
-                    if (btsMarket != null && btsMarket.size() > quotes.length) {
-                        btsMarket.clear();
-                    }
-                    if (!replaceMarket(btsMarket, marketTicker)) {
-                        return;
-                    }
-                    btsRowAdapter.notifyDataSetChanged();
-                } else if (msg.what == NOTIFY_USD) {
-                    if(!isAdded()){
-                        return;
-                    }
-                    if (marketTicker.quote.equals("CNY")) {
-                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
-                    }
-                    if (usdMarket != null && usdMarket.size() > quotes.length) {
-                        usdMarket.clear();
-                    }
-                    if (!replaceMarket(usdMarket, marketTicker)) {
-                        return;
-                    }
-
-                    usdRowAdapter.notifyDataSetChanged();
-                } else if (msg.what == NOTIFY_BTC) {
-                    if(!isAdded()){
-                        return;
-                    }
-                    if (marketTicker.quote.equals("CNY")) {
-                        Log.e(TAG, "onMarketStatUpdate: stat.MarketTicker:" + marketTicker);
-                    }
-                    if (btcMarket != null && btcMarket.size() > quotes.length) {
-                        btcMarket.clear();
-                    }
-                    if (!replaceMarket(btcMarket, marketTicker)) {
-                        return;
-                    }
-                    btcRowAdapter.notifyDataSetChanged();
-                }
-//            else if(msg.what==NOTIFY_ETH){
-//                ethRowAdapter.notifyDataSetChanged();
-//            }
+            if (msg.what == NOTIFY_CNY) {
+                cnyAdapter.setMarkets(BtslandApplication.marketMap.get("CNY"));
+            } else if (msg.what == NOTIFY_BTS) {
+                btsAdapter.setMarkets(BtslandApplication.marketMap.get("BTS"));
+            } else if (msg.what == NOTIFY_USD) {
+                usdAdapter.setMarkets(BtslandApplication.marketMap.get("USD"));
+            } else if (msg.what == NOTIFY_BTC) {
+                btcAdapter.setMarkets(BtslandApplication.marketMap.get("BTC"));
             }
+
         }
     };
 
@@ -205,14 +191,14 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         Log.e(TAG, "onCreateView: ");
         fillInSimpleK(null);
         init(view);
+        touchColor(tvMarketLeftCoin_1);//交互特效
+        lvMarketInfo.setAdapter(cnyAdapter);
         return view;
     }
     //startGetTickerThread
     @Override
     public void onStart() {
         super.onStart();
-        touchColor(tvMarketLeftCoin_1);//交互特效
-        setMarket(tvMarketLeftCoin_1);//设置数据
 //        websocket_api websocketApi=new websocket_api();
 //        websocketApi.connect();
 //        marketStat.subscribe("BTS",MarketStat.STAT_TICKERS_BASE,this);
@@ -247,11 +233,15 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         tvMarketLeftCoin_2.setOnClickListener(onClickListener);
         tvMarketLeftCoin_3.setOnClickListener(onClickListener);
         tvMarketLeftCoin_4.setOnClickListener(onClickListener);
-        //tvMarketLeftCoin_5.setOnClickListener(onClickListener);
-        cnyRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"CNY"), cnyMarket);
-        btsRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"BTS"), btsMarket);
-        btcRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"BTC"), btcMarket);
-        usdRowAdapter = new MarketRowAdapter(simpleKFragment, view.getContext(), ArrayUtils.remove(quotes,"USD"), usdMarket);
+
+        cnyAdapter = new MarketRowAdapter(simpleKFragment, view.getContext());
+        cnyAdapter.setMarkets(BtslandApplication.marketMap.get("CNY"));
+        btsAdapter = new MarketRowAdapter(simpleKFragment, view.getContext());
+        btsAdapter.setMarkets(BtslandApplication.marketMap.get("BTS"));
+        usdAdapter = new MarketRowAdapter(simpleKFragment, view.getContext());
+        usdAdapter.setMarkets(BtslandApplication.marketMap.get("USD"));
+        btcAdapter = new MarketRowAdapter(simpleKFragment, view.getContext());
+        btcAdapter.setMarkets(BtslandApplication.marketMap.get("BTC"));
         //ethRowAdapter = new MarketRowAdapter(simpleKFragment, getActivity(), ArrayUtils.remove(quotes,"ETH"), ethMarket);
 
     }
@@ -277,7 +267,24 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         @Override
         public void onClick(View view) {
             touchColor((TextView) view);//交互特效
-            setMarket(view);//设置数据
+            switch (view.getId()) {
+                case R.id.tv_market_left_coin1:
+                    lvMarketInfo.setAdapter(cnyAdapter);
+                    cnyAdapter.setMarkets(BtslandApplication.marketMap.get("CNY"));
+                    break;
+                case R.id.tv_market_left_coin2:
+                    lvMarketInfo.setAdapter(btsAdapter);
+                    btsAdapter.setMarkets(BtslandApplication.marketMap.get("BTS"));
+                    break;
+                case R.id.tv_market_left_coin3:
+                    lvMarketInfo.setAdapter(usdAdapter);
+                    usdAdapter.setMarkets(BtslandApplication.marketMap.get("USD"));
+                    break;
+                case R.id.tv_market_left_coin4:
+                    lvMarketInfo.setAdapter(btcAdapter);
+                    btcAdapter.setMarkets(BtslandApplication.marketMap.get("BTC"));
+                    break;
+            }
         }
 
     }
@@ -335,8 +342,8 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      */
     private void  setDownBack(TextView TextView) {
 
-        TextView.setBackground(getView().getResources().getDrawable(R.drawable.tv_market_left_coin_touch, null));
-        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_yellow, null));
+        TextView.setBackground(getContext().getResources().getDrawable(R.drawable.tv_market_left_coin_touch, null));
+        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_font_red, null));
     }
 
     /**
@@ -345,141 +352,11 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      * @param TextView
      */
     private void setUpBack(TextView TextView) {
-        TextView.setBackground(getView().getResources().getDrawable(R.color.color_darkGrey, null));
-        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_white, null));
+        TextView.setBackground(getContext().getResources().getDrawable(R.color.color_white, null));
+        TextView.setTextColor(ResourcesCompat.getColor(getResources(), R.color.color_darkGrey, null));
     }
 
-    private void setMarket(View baseView) {
-        switch (baseView.getId()) {
-            case R.id.tv_market_left_coin1:
-                lvMarketInfo.setAdapter(cnyRowAdapter);
-                break;
-            case R.id.tv_market_left_coin2:
-                lvMarketInfo.setAdapter(btsRowAdapter);
-                break;
-            case R.id.tv_market_left_coin3:
-                lvMarketInfo.setAdapter(usdRowAdapter);
-                break;
-            case R.id.tv_market_left_coin4:
-                lvMarketInfo.setAdapter(btcRowAdapter);
-                break;
-//            case R.id.tv_market_left_coin5:
-//                lvMarketInfo.setAdapter(ethRowAdapter);
-//                break;
-        }
-    }
 
-//        private void createCol(View leftCoin,LinearLayout Linear,List<Market> markets){
-//            for (int i = 0; i < markets.size(); i++) {
-//                market=markets.get(i);
-//                //生成一行
-//                RowLinearLayout row = new RowLinearLayout(getActivity());
-//                LinearLayout.LayoutParams rowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(getActivity(),70f));
-//                rowParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f),DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),2f));
-//                row.setOrientation(LinearLayout.HORIZONTAL);
-//                row.setLayoutParams(rowParams);
-//                row.setBackground(getActivity().getDrawable(R.drawable.ll_market_info_row));
-//                //生成左侧linear
-//                LinearLayout left = new LinearLayout(getActivity());
-//                left.setOrientation(LinearLayout.VERTICAL);
-//                LinearLayout.LayoutParams leftParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.5f);
-//                left.setLayoutParams(leftParams);
-//                TextView fluct = new TextView(getActivity());
-//                LinearLayout.LayoutParams fluctParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-//                fluct.setLayoutParams(fluctParams);
-//                //货币名称
-//                TextView coinName = new TextView(getActivity());
-//                LinearLayout.LayoutParams coinNameParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 2f);
-//                coinName.setLayoutParams(coinNameParams);
-//                coinName.setGravity(Gravity.CENTER);
-//                coinName.setTextSize(18);
-//                coinName.setLines(1);
-//
-//
-//
-//                //涨跌幅
-//                TextView fluctuation = new TextView(getActivity());
-//                LinearLayout.LayoutParams fluctuationParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-//                fluctuation.setLayoutParams(fluctuationParams);
-//                fluctuation.setGravity(Gravity.CENTER);
-//                fluctuation.setTextSize(14);
-//                fluctuation.setLines(1);
-//
-//
-//                //生成中间textView
-//                TextView price = new TextView(getActivity());
-//                LinearLayout.LayoutParams priceParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 2.3f);
-//                price.setLayoutParams(priceParams);
-//                price.setGravity(Gravity.CENTER);
-//                price.setTextSize(26);
-//                price.setLines(1);
-//                price.setFilters(new InputFilter[]{new InputFilter.LengthFilter(8)});
-//                price.setSingleLine(true);
-//
-//                //生成右侧linear
-//                LinearLayout right = new LinearLayout(getActivity());
-//                right.setOrientation(LinearLayout.VERTICAL);
-//                LinearLayout.LayoutParams rightParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.8f);
-//                right.setLayoutParams(rightParams);
-//                //最低卖价
-//                TextView bestAsk = new TextView(getActivity());
-//                LinearLayout.LayoutParams bestBidParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-//                bestBidParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
-//                bestAsk.setLayoutParams(bestBidParams);
-//                bestAsk.setGravity(Gravity.LEFT);
-//                bestAsk.setTextSize(12);
-//                bestAsk.setLines(1);
-//                bestAsk.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-//                bestAsk.setSingleLine(true);
-//
-//
-//                //最高买价
-//                TextView bestBid = new TextView(getActivity());
-//                LinearLayout.LayoutParams bestAskParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f);
-//                bestAskParams.setMargins(DensityUtil.dip2px(getActivity(),6f),DensityUtil.dip2px(getActivity(),10f),0,0);
-//                bestBid.setLayoutParams(bestAskParams);
-//                bestBid.setGravity(Gravity.LEFT);
-//                bestBid.setTextSize(12);
-//                bestBid.setLines(1);;
-//                bestBid.setFilters(new InputFilter[]{new InputFilter.LengthFilter(13)});
-//                bestBid.setSingleLine(true);
-//
-//                //设定值
-//                coinName.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_white)+"'>"+market.getLeftCoin()+"</font>"));
-//                float fluctuat=market.getFluctuation();
-//                if (fluctuat>0){
-//                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getNewPrice()+"</font>"));
-//                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_green)+"'>"+market.getFluctuation()+"%</font>"));
-//                }else {
-//                    price.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getNewPrice()+"</font>"));
-//                    fluctuation.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_red)+"'>"+market.getFluctuation()+"%</font>"));
-//                }
-//
-//                String buy=getResources().getString(R.string.buy);
-//                String sell=getResources().getString(R.string.sell);
-//                bestAsk.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+sell+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestAsk()+"</font>"));
-//                bestBid.setText(Html.fromHtml("<font color='"+getResources().getString(R.string.font_color_gray)+"'>"+buy+":&nbsp;&nbsp;</font>"+ "<font color='"+getResources().getString(R.string.font_color_lightGrey)+"'>"+market.getBestBid()+"</font>"));
-//                left.addView(fluct);
-//                left.addView(coinName);
-//                left.addView(fluctuation);
-//                right.addView(bestAsk);
-//                right.addView(bestBid);
-//
-//                row.addView(left);
-//                row.addView(price);
-//                row.addView(right);
-//                row.setOnClickListener(new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//                        RowLinearLayout layout= (RowLinearLayout) view;
-//                        String leftCoin = layout.getLeftCoin();
-//                        String rightCoin = layout.getRightCoin();
-//                    }
-//                });
-//                Linear.addView(row);
-//            }
-
-//        }
 
 
     @Override

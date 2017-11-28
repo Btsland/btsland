@@ -108,10 +108,18 @@ public class PurseFragment extends Fragment {
         if (BtslandApplication.accountObject==null) {
           // flPurseLoginPrompt.setVisibility(View.VISIBLE);
            flPurseLoginPrompt.setVisibility(View.VISIBLE);
+           flPurseLoginPrompt.setOnTouchListener(new View.OnTouchListener(){
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    // TODO Auto-generated method stub
+                    return true;
+                }
+
+           });
            // clPurse.setEnabled(false);
            // clPurse.setClickable(false);
            // scrollView.setClickable(false);
-            flPurse.setVisibility(View.GONE);
+            flPurse.setVisibility(View.VISIBLE);
             clPurse.isForbidden=true;
         } else {
             flPurse.setVisibility(View.VISIBLE);

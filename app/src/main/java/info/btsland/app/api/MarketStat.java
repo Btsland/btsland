@@ -52,7 +52,8 @@ public class MarketStat {
     private static boolean isDeserializerRegistered = false;
     
     private String[] quotes;
-    
+    private String[] bases;
+
     public MarketStat() {
 
     }
@@ -60,18 +61,25 @@ public class MarketStat {
     /**
      *
      * @param base
-     * @param quotes
+     * @param quote
      * @param stats
      * @param l
      */
-    public void subscribe(String[] base,String[] quotes,int stats,long intervalMillis,
+    public void subscribe(String[] base,String[] quote,int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
-        this.quotes=quotes;
+        this.quotes=quote;
+        this.bases=base;
         //Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
-        for(int i=0;i<base.length;i++){
-            unsubscribe(base[i], "",stats);
-            Subscription subscription =new Subscription(base[i], stats, intervalMillis,l);
-            subscriptionHashMap.put(makeMarketName(base[i], "",stats), subscription);
+        for(int i=0;i<bases.length;i++){
+            for (int j=0;j<quotes.length;j++){
+                if(bases[i].equals(quotes[j])){
+                    continue;
+                }
+                unsubscribe(bases[i], quotes[j],stats);
+                Subscription subscription =new Subscription(bases[i],quotes[j], stats, intervalMillis,l);
+                subscriptionHashMap.put(makeMarketName(bases[i], quotes[j],stats), subscription);
+            }
+
         }
 
 
@@ -280,6 +288,18 @@ public class MarketStat {
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
         }
+        private Subscription(String base, String quote, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
+            this.base = base;
+            this.quote = quote;
+            this.bucketSecs = bucketSecs;
+            this.stats = stats;
+            this.intervalMillis=intervalMillis;
+            this.listener = l;
+            this.statThread = new HandlerThread(makeMarketName(base, quote,stats));
+            this.statThread.start();
+            this.statHandler = new Handler(this.statThread.getLooper());
+            this.statHandler.post(this);
+        }
         private Subscription(String base, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             //Log.e(TAG, "Subscription: ");
             this.base = base;
@@ -339,17 +359,14 @@ public class MarketStat {
             if (true) {
                 final Stat stat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
-                    for(int i=0;i<quotes.length;i++){
-                        try {
-                            Log.e(TAG, "run: base:"+base+"quotes[i]:"+quotes[i] );
-                            stat.MarketTicker = mWebsocketApi.get_ticker(base,quotes[i]);
-                            //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
-                            listener.onMarketStatUpdate(stat);
-                        } catch (NetworkStatusException e) {
-                            e.printStackTrace();
-                            continue;
-                        }
-
+                    try {
+                        Log.e(TAG, "run: base:"+base+"quotes[i]:"+quote );
+                        stat.MarketTicker = mWebsocketApi.get_ticker(base,quote);
+                        //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
+                        listener.onMarketStatUpdate(stat);
+                    } catch (NetworkStatusException e) {
+                        this.updateImmediately();//定时刷新
+                        e.printStackTrace();
                     }
                     this.updateImmediately();
                     return;

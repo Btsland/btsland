@@ -19,7 +19,7 @@
             android:id="@+id/tv_sell_buy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="买入"
+            android:text="@string/str_buy"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
@@ -27,7 +27,7 @@
             app:layout_constraintRight_toRightOf="parent"/>
         <TextView
             android:id="@+id/tv_buy_price"
-            android:text="价格"
+            android:text="@string/str_price2"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             android:textSize="14sp"
@@ -38,7 +38,7 @@
             app:layout_constraintRight_toLeftOf="@+id/tv_buy_vol" />
         <TextView
             android:id="@+id/tv_buy_vol"
-            android:text="量"
+            android:text="@string/str_num2"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             android:textSize="14sp"
@@ -80,7 +80,7 @@
             android:id="@+id/tv_sell_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="卖出"
+            android:text="@string/str_off_take"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             app:layout_constraintTop_toTopOf="parent"
@@ -88,7 +88,7 @@
             app:layout_constraintRight_toRightOf="parent"/>
         <TextView
             android:id="@+id/tv_sell_price"
-            android:text="价格"
+            android:text="@string/str_price2"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             android:textSize="14sp"
@@ -99,7 +99,7 @@
             app:layout_constraintRight_toLeftOf="@+id/tv_sell_vol" />
         <TextView
             android:id="@+id/tv_sell_vol"
-            android:text="量"
+            android:text="@string/str_num2"
             android:textColor="@color/color_Grey"
             android:gravity="center"
             android:textSize="14sp"
@@ -169,7 +169,7 @@
                 android:id="@+id/et_priceNum"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:hint="@string/price"
+                android:hint="@string/str_price"
                 android:inputType="numberDecimal"
                 android:paddingLeft="20dp"
                 android:background="@drawable/edit_text"
@@ -191,7 +191,7 @@
                 android:id="@+id/et_volNum"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
-                android:hint="@string/vol"
+                android:hint="@string/str_num"
                 android:inputType="numberDecimal"
                 android:paddingLeft="20dp"
                 android:layout_marginTop="10dp"
@@ -271,7 +271,7 @@
             android:id="@+id/tv_detailed_buy"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:text="买入"
+            android:text="@string/str_buy"
             android:textColor="@color/color_white"
             android:gravity="center"
             android:background="@drawable/btn_red"
@@ -283,7 +283,7 @@
             android:id="@+id/tv_detailed_sell"
             android:layout_width="0dp"
             android:layout_height="40dp"
-            android:text="卖出"
+            android:text="@string/str_off_take"
             android:textColor="@color/color_white"
             android:gravity="center"
             android:background="@drawable/btn_red"

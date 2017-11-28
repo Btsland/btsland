@@ -33,29 +33,26 @@
     />
 
 
-
-
-
-
-  <TextView
-      android:id="@+id/tv_all_asset"
-      android:layout_width="0dp"
-      android:layout_height="20dp"
-      android:text="资产"
-      android:textSize="16sp"
-      android:textColor="@color/black"
-      app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
-      app:layout_constraintLeft_toLeftOf="@+id/view"
-      app:layout_constraintRight_toLeftOf="@+id/tv_asset_num"
-      android:layout_marginLeft="10dp"
-      />
+    <TextView
+        android:id="@+id/tv_all_asset"
+        android:layout_width="0dp"
+        android:layout_height="23dp"
+        android:layout_marginLeft="10dp"
+        android:gravity="center"
+        android:text="@string/str_asset"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="@+id/view"
+        app:layout_constraintRight_toLeftOf="@+id/tv_asset_num"
+        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
+        />
 
   <TextView
       android:id="@+id/tv_asset_num"
       android:layout_width="0dp"
       android:layout_height="20dp"
-      android:gravity="left"
-      android:text="0.00000"
+      android:gravity="right"
+      android:text="0.0000"
       android:textColor="@color/black"
       android:textSize="16sp"
       app:layout_constraintLeft_toRightOf="@+id/tv_all_asset"
@@ -66,15 +63,15 @@
 
     <TextView
         android:id="@+id/tv_borrow"
-        android:layout_width="100dp"
-        android:layout_height="20dp"
-        android:text="借入"
-        android:gravity="center"
-        android:textSize="16sp"
+        android:layout_width="82dp"
+        android:layout_height="21dp"
+        android:gravity="right"
+        android:text=""
         android:textColor="@color/color_table_blue"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
+        android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@+id/tv_asset_num"
         app:layout_constraintRight_toRightOf="@+id/view"
+        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
         />
 
 
@@ -83,8 +80,9 @@
         android:id="@+id/tv_orders"
         android:layout_width="0dp"
         android:layout_height="20dp"
-        android:text="挂单"
+        android:text="@string/str_order"
         android:textSize="16sp"
+        android:gravity="center"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/tv_all_asset"
         app:layout_constraintLeft_toLeftOf="@+id/view"
@@ -95,24 +93,24 @@
     <TextView
         android:id="@+id/tv_orders_num"
         android:layout_width="0dp"
-        android:layout_height="20dp"
+        android:layout_height="24dp"
+        android:gravity="right"
         android:text="0.0000"
-        android:textSize="16sp"
         android:textColor="@color/black"
-        android:gravity="left"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_num"
+        android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@+id/tv_orders"
         app:layout_constraintRight_toLeftOf="@+id/tv_orders_handle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_asset_num"
         />
 
     <TextView
         android:id="@+id/tv_orders_handle"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="20dp"
-        android:text="操作"
+        android:text=""
         android:textSize="16sp"
         android:textColor="@color/color_table_blue"
-        android:gravity="center"
+        android:gravity="right"
         app:layout_constraintTop_toBottomOf="@+id/tv_all_asset"
         app:layout_constraintLeft_toRightOf="@+id/tv_orders_num"
         app:layout_constraintRight_toRightOf="@+id/view"
@@ -125,8 +123,9 @@
         android:layout_width="0dp"
         android:layout_height="20dp"
         android:layout_marginLeft="10dp"
-        android:text="可用"
+        android:text="@string/str_usable"
         android:textSize="16sp"
+        android:gravity="center"
         android:textColor="@color/black"
         app:layout_constraintLeft_toLeftOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/tv_orders"
@@ -137,7 +136,7 @@
         android:id="@+id/tv_usable_asset_num"
         android:layout_width="0dp"
         android:layout_height="20dp"
-        android:gravity="left"
+        android:gravity="right"
         android:text="0.0000"
         android:textSize="16sp"
         android:textColor="@color/black"
@@ -148,9 +147,9 @@
 
     <TextView
         android:id="@+id/tv_recharge_withdrawals"
-        android:layout_width="100dp"
+        android:layout_width="80dp"
         android:layout_height="20dp"
-        android:text="充提"
+        android:text=""
         android:textSize="16sp"
         android:gravity="center"
         android:textColor="@color/color_table_blue"
@@ -170,9 +169,9 @@
         android:id="@+id/tv_transfer"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:text="转账"
+        android:text="@string/str_transfer"
         android:gravity="center"
-        android:textColor="@color/color_Grey"
+        android:textColor="@color/color_table_blue"
         android:textSize="16dp"
         app:layout_constraintTop_toBottomOf="@+id/tv_usable_asset"
         app:layout_constraintLeft_toLeftOf="@+id/view"
@@ -184,10 +183,10 @@
         android:id="@+id/tv_transaction"
         android:layout_width="0dp"
         android:layout_height="35dp"
-        android:text="交易"
+        android:text="@string/str_transaction"
         android:gravity="center"
         android:textSize="16dp"
-        android:textColor="@color/color_Grey"
+        android:textColor="@color/color_table_blue"
         app:layout_constraintTop_toBottomOf="@+id/tv_usable_asset"
         app:layout_constraintLeft_toRightOf="@+id/tv_transfer"
         app:layout_constraintRight_toRightOf="@+id/view"

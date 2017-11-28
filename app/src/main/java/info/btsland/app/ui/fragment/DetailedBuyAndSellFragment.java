@@ -11,14 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
@@ -118,7 +116,7 @@ public class DetailedBuyAndSellFragment extends Fragment
         listener=this;
         hud = KProgressHUD.create(getActivity())
                 .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel("正在发布广播。。。")
+                .setLabel(BtslandApplication.getInstance().getString(R.string.str_broadcast))
                 .setCancellable(false)
                 .setAnimationSpeed(2)
                 .setDimAmount(0.5f);

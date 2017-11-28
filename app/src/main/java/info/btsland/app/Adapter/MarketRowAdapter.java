@@ -146,7 +146,7 @@ public class MarketRowAdapter extends BaseAdapter {
             MarketTicker market = (MarketTicker) bundle.getSerializable("MarketTicker");
             switch (bundle.getInt("result")) {
                 case 1:
-                    Toast.makeText(context,"双击可以进入详细页面哦！",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,BtslandApplication.getInstance().getString(R.string.str_double_click),Toast.LENGTH_SHORT).show();
                     Log.i(TAG, "handleMessage: market:"+market);
                     simpleKFragment.drawK(market);
                     break;

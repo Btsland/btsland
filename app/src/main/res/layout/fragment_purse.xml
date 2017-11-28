@@ -44,7 +44,7 @@
             android:id="@+id/tv_txt_purse_convert"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="折合总金额约为："
+            android:text="@string/total_amount"
             android:textColor="@color/color_frenchGrey"
             android:layout_marginTop="10dp"
             android:textSize="16sp"

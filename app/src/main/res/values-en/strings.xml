@@ -64,6 +64,7 @@
     <string name="selectlanguage">Select system language </string>
     <string name="stringzh">中文</string>
     <string name="stringen">English</string>
+
     <string name="Username">name：</string>
     <string name="password_login">password：</string>
     <string name="login_btn">login</string>
@@ -72,6 +73,58 @@
 </string>
     <string name="register">register</string>
     <string name="to_login_btn">Have an account to log on</string>
+    <string name="total_amount">Total amount:</string>
 
+    <string name="str_asset">asset</string>
+    <string name="str_order">order</string>
+    <string name="str_usable">usable</string>
+    <string name="str_transfer">transfer</string>
+    <string name="str_transaction">transaction</string>
+
+
+    <string name="str_type">type</string>
+    <string name="str_content"> content</string>
+    <string name="str_price">price </string>
+    <string name="str_time">time </string>
+
+    <string name="str_num">num: </string>
+    <string name="str_cancel">Cancel </string>
+    <string name="str_cancel_the_order">Cancel the order</string>
+    <string name="str_order_number">Order_number：#</string>
+    <string name="str_update">Update </string>
+    <string name="str_strike_a_bargain"> trike a bargain </string>
+    <string name="str_successful_use"> Successful use </string>
+    <string name="str_byte_shop"> Byte Shop </string>
+    <string name="str_ge"></string>
+    <string name="str_found"> Found </string>
+    <string name="str_registered"> Registered </string>
+    <string name="str_recommender"> Recommender: </string>
+    <string name="str_pay"> pay </string>
+    <string name="str_transfers"> Transfers </string>
+    <string name="str_publish">publish </string>
+
+
+    <string name="str_double_click">Double click can enter the detailed page!</string>
+    <string name="total">total：</string>
+    <string name="charge">charge：</string>
+    <string name="str_buy">buy</string>
+    <string name="str_off_take">off take</string>
+    <string name="str_price2">price</string>
+    <string name="str_num2">num</string>
+    <string name="str_broadcast">The broadcast is being broadcast...</string>
+    <string name="str_detailed_information">detailed</string>
+    <string name="str_buy_sell">Buy/Sell</string>
+    <string name="have_in_hand">Have in hand</string>
+    <string name="str_base_coin">Base coin：</string>
+    <string name="str_quote_coin">Quote coin：</string>
+    <string name="str_new_price">New price：</string>
+    <string name="str_change">Change：</string>
+    <string name="str_best_bid">Best bid：</string>
+    <string name="str_best_ask">Best ask:</string>
+    <string name="str_open">open：</string>
+    <string name="str_finish">finish：</string>
+    <string name="str_maximum_transaction_price">max transaction price：</string>
+    <string name="str_lowest_bid_price">Lowest bid price：</string>
+    <string name="str_expiration_time">expiration_time：</string>
 
 </resources>

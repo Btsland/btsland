@@ -2,15 +2,14 @@ package info.btsland.app.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -106,7 +105,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
 
         IViewPager viewPager= (IViewPager) findViewById(R.id.vp_detailed_page);
         viewPager.setOffscreenPageLimit(2);
-        String[] titles={"详情","买/卖","进行中"};
+        String[] titles={getString(R.string.str_detailed_information),getString(R.string.str_buy_sell),getString(R.string.have_in_hand)};
         List<Fragment> fragments=new ArrayList<Fragment>();
         DetailedKFragment detailedKFragment=DetailedKFragment.newInstance(market);
         DetailedBuyAndSellFragment detailedBuyAndSellFragment=DetailedBuyAndSellFragment.newInstance(market);

@@ -32,6 +32,7 @@
     <string name="select_your_language">选择您的语言</string>
     <string name="price_limit">涨跌幅样式</string>
     <string name="set_preference_color">设置您偏好的涨跌幅颜色</string>
+    <string name="node_selection">节点选择</string>
     <string name="set_server_node">选择您需要连接的服务器节点</string>
     <string name="charge_unit">计价单位</string>
     <string name="set_pricing_unit">设置您偏好的计价单位</string>
@@ -56,7 +57,7 @@
     <string name="not_logged">您好，您还没有登录</string>
     <string name="go_login">去登录</string>
     <string name="go_register">去注册</string>
-    <string name="node_selection">节点选择</string>
+
     <string name="Username">用户名：</string>
     <string name="password_login">密码：</string>
     <string name="login_btn">登录</string>
@@ -64,6 +65,52 @@
     <string name="register_txt">我已确认我已经备份好我的密码（您的密码是登录的唯一凭证，一旦丢失，您的帐号将无法找回，您的资产也会丢失。）</string>
     <string name="register">注册</string>
     <string name="to_login_btn">已有帐号，去登录</string>
-
+    <string name="total_amount">折合总金额约:</string>
+    <string name="str_asset">资  产</string>
+    <string name="str_order">挂单</string>
+    <string name="str_usable">可用</string>
+    <string name="str_transfer">转账</string>
+    <string name="str_transaction">交易</string>
+    <string name="str_type">类型</string>
+    <string name="str_content">内容</string>
+    <string name="str_price">价格:</string>
+    <string name="str_time">时间</string>
+    <string name="str_num">数量:</string>
+    <string name="str_cancel">取消</string>
+    <string name="str_cancel_the_order">取消了订单</string>
+    <string name="str_order_number">订单号：#</string>
+    <string name="str_update">更新</string>
+    <string name="str_strike_a_bargain">成交</string>
+    <string name="str_successful_use">成功用</string>
+    <string name="str_byte_shop">购买了</string>
+    <string name="str_ge">个</string>
+    <string name="str_found">创建</string>
+    <string name="str_registered">注册了</string>
+    <string name="str_recommender">推荐人：</string>
+    <string name="str_pay">向</string>
+    <string name="str_transfers">转了</string>
+    <string name="str_publish">发布</string>
+    <string name="str_double_click">双击可以进入详细页面哦！</string>
+    <string name="total">总价：</string>
+    <string name="charge">手续费：</string>
+    <string name="str_buy">买入</string>
+    <string name="str_off_take">卖出</string>
+    <string name="str_price2">价格</string>
+    <string name="str_num2">数量</string>
+    <string name="str_broadcast">正在发布广播。。。</string>
+    <string name="str_detailed_information">详情</string>
+    <string name="str_buy_sell">买/卖</string>
+    <string name="have_in_hand">进行中</string>
+    <string name="str_base_coin">基础资产：</string>
+    <string name="str_quote_coin">目标资产：</string>
+    <string name="str_new_price">最新成交价：</string>
+    <string name="str_change">涨跌幅：</string>
+    <string name="str_best_bid">最高买价：</string>
+    <string name="str_best_ask">最低卖价:</string>
+    <string name="str_open">最新开盘价：</string>
+    <string name="str_finish">最新收盘价：</string>
+    <string name="str_maximum_transaction_price">最高成交价：</string>
+    <string name="str_lowest_bid_price">最低成交价：</string>
+    <string name="str_expiration_time">到期时间：</string>
 
 </resources>

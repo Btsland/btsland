@@ -32,7 +32,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/cancel"
-            android:textColor="@color/color_darkGrey"
+            android:textColor="@color/color_frenchGrey"
+            android:background="@drawable/select_dialog_btn"
             android:textSize="16sp" />
         <TextView
             android:layout_width="1px"
@@ -46,7 +47,8 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/confirm"
-            android:textColor="@color/color_darkGrey"
+            android:textColor="@color/color_frenchGrey"
+            android:background="@drawable/select_dialog_btn"
             android:textSize="16sp" />
     </LinearLayout>
 </LinearLayout>

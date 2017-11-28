@@ -63,6 +63,17 @@ public class TransferActivity extends AppCompatActivity {
     private HeadFragment headFragment;
     private TextView tvPoint;
     private TextView tvCancel;
+    private int time=10;
+    private Timer timer;
+
+    private String password;
+
+    String from;
+    String to;
+    String vol;
+    String symbol;
+    String memo;
+    Double volNum;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -180,84 +191,110 @@ public class TransferActivity extends AppCompatActivity {
 
             }
         });
-        final Timer timer=new Timer();
+
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String from=edFrom.getText().toString();
-                final String to=edTo.getText().toString();
-                final String vol=edCoinNum.getText().toString();
-                final String symbol=spCoin.getSelectedItem().toString();
-                final String memo=edRemarkText.getText().toString();
-                Double volNum = NumericUtil.parseDouble(vol);
-                passwordDialog=new PasswordDialog(TransferActivity.this);
-                passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                    @Override
-                    public void onConfirm(final AlertDialog dialog, final String passwordString) {
-                        dialog.dismiss();
-                        account_object accountObject= null;
-                        try {
-                            accountObject = BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
-                        } catch (NetworkStatusException e) {
-                            e.printStackTrace();
-                        }
-                        if(accountObject!=null) {
-                            TimerTask mTimerTask= new TimerTask() {
-                                int time=10;
-                                @Override
-                                public void run() {
-                                    time--;
-                                    timehandler.sendEmptyMessage(time);
-                                    if(time<=0){
-                                        Thread thread=new Thread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
-                                                    try {
-                                                        if (BtslandApplication.getWalletApi().transfer(from, to, vol, symbol, memo) != null) {
-                                                            handler.sendEmptyMessage(1);
-                                                        } else {
-                                                            handler.sendEmptyMessage(-1);
-                                                        }
-                                                    } catch (NetworkStatusException e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                }
+                if(time!=10){
+                    time=10;
+                    if(timer!=null){
+                        timer.cancel();
+                        timer=null;
+                    }
+                    transfer();
+                }else {
+                    from=edFrom.getText().toString();
+                    to=edTo.getText().toString();
+                    vol=edCoinNum.getText().toString();
+                    symbol=spCoin.getSelectedItem().toString();
+                    memo=edRemarkText.getText().toString();
+                    volNum = NumericUtil.parseDouble(vol);
+                    passwordDialog=new PasswordDialog(TransferActivity.this);
+                    passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm(final AlertDialog dialog, final String passwordString) {
+                            dialog.dismiss();
+                            account_object accountObject= null;
+                            try {
+                                accountObject = BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
+                            } catch (NetworkStatusException e) {
+                                e.printStackTrace();
+                            }
+                            if(accountObject!=null) {
+                                password=passwordString;
+                                TimerTask mTimerTask= new TimerTask() {
+                                    @Override
+                                    public void run() {
+                                        if(time>0){
+                                            time--;
+                                            timehandler.sendEmptyMessage(time);
+                                        }
+                                        if(time<=0){
+                                            time=10;
+                                            if(timer!=null){
+                                                timer.cancel();
+                                                timer=null;
                                             }
-                                        });
-                                        thread.start();
-                                        timer.cancel();
+                                            transfer();
+                                        }
                                     }
-                                }
-                            };
-                            timer.schedule(mTimerTask, 0, 1000);
-                        }else {
-                            handler.sendEmptyMessage(-2);
+                                };
+                                timer.schedule(mTimerTask, 0, 1000);
+                            }else {
+                                handler.sendEmptyMessage(-2);
+                            }
                         }
+                        @Override
+                        public void onReject(AlertDialog dialog) {
 
-                    }
-
-                    @Override
-                    public void onReject(AlertDialog dialog) {
-
-                    }
-                });
-                passwordDialog.show();
-
-
+                        }
+                    });
+                    passwordDialog.show();
+                }
             }
         });
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                timer.cancel();
                 tvSend.setText("确定");
-                AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","取消成功！");
-                appDialog.show();
+                if(timer!=null){
+                    timer.cancel();
+                    timer=null;
+                    AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","取消成功！");
+                    appDialog.show();
+                }else {
+                    AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","当前未发起转账！");
+                    appDialog.show();
+                }
+
+
             }
         });
 
     }
+    public void transfer(){
+        Thread thread=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (BtslandApplication.getWalletApi().unlock(password) == 0) {
+                    try {
+                        if (BtslandApplication.getWalletApi().transfer(from, to, vol, symbol, memo) != null) {
+                            handler.sendEmptyMessage(1);
+
+                        } else {
+                            handler.sendEmptyMessage(-1);
+                        }
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    handler.sendEmptyMessage(-1);
+                }
+            }
+        });
+        thread.start();
+    }
+
     /**
      * 设置头像
      */
@@ -285,10 +322,11 @@ public class TransferActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             if(msg.what==1){
                 Toast.makeText(BtslandApplication.getInstance(),"转账成功",Toast.LENGTH_SHORT).show();
+                tvSend.setText("确定");
             }else if(msg.what==-1) {
                 AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","转账失败！");
                 appDialog.show();
-            }else {
+            }else if(msg.what==-2) {
                 AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","密码错误！");
                 appDialog.show();
             }
@@ -297,7 +335,7 @@ public class TransferActivity extends AppCompatActivity {
     private Handler timehandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            tvSend.setText(msg.what+"秒后发起转账！");
+            tvSend.setText("确定("+msg.what+")");
         }
     };
 }

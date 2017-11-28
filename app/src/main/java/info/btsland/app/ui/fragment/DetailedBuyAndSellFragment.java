@@ -587,15 +587,15 @@ public class DetailedBuyAndSellFragment extends Fragment
     private Handler handler2=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(hud.isShowing()){
-                hud.dismiss();
-            }
-            if(msg.what==1){
-                Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
-            }else if(msg.what==-1){
-                Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
-            }
+        if(hud.isShowing()){
+            hud.dismiss();
+        }
+        if(msg.what==1){
+            Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
+        }else if(msg.what==-1){
+            Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
+        }
         }
     };
 
- }
+}

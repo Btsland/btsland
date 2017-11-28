@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -31,19 +32,17 @@ public class MarketRowAdapter extends BaseAdapter {
     private static final String TAG = "MarketRowAdapter";
 
     private MarketSimpleKFragment simpleKFragment;
-    private Map<String,MarketTicker> markets;
+    private List<MarketTicker> markets=new ArrayList<>();
     private LayoutInflater inflater;
     private Context context;
-    private List<String> quotes;
 
-    public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context,List<String> quotes, Map<String,MarketTicker> markets) {
-        for (int i=0;i<quotes.size();i++){
-            Log.e(TAG, "MarketRowAdapter: "+quotes.get(i) );
-        }
-        this.simpleKFragment = simpleKFragment;
-        this.quotes=quotes;
+    public void setMarkets(List<MarketTicker> markets) {
         this.markets = markets;
-        Log.e("marketAdaper", "MarketRowAdapter:  "+markets.size());
+        this.notifyDataSetChanged();
+    }
+
+    public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context) {
+        this.simpleKFragment = simpleKFragment;
         this.context = context;
         this.inflater = LayoutInflater.from(context);
     }
@@ -65,28 +64,52 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
-        Log.i(TAG, "getView: i:"+i+",marketIsNull:"+String.valueOf(markets.get(quotes.get(i))==null)+",markets.size():"+markets.size()+",markets.keySet():"+markets.keySet().toArray()[i]);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.market_item, null);
         }
-        if(markets.get(quotes.get(i))==null){
+        if(markets==null){
+            return null;
+        }
+        if(markets.get(i)==null){
             return convertView;
         }
-        MarketTicker market = markets.get(quotes.get(i));
+        MarketTicker market = markets.get(i);
+        Log.i(TAG, "getView: "+market+"i:"+i);
         TextView tvCoin = convertView.findViewById(R.id.tv_coin);
         TextView tvFluctuation = convertView.findViewById(R.id.tv_fluctuation);
         TextView tvNewPrice = convertView.findViewById(R.id.tv_newPrice);
         TextView tvBestAskNum = convertView.findViewById(R.id.tv_bestAskNum);
         TextView tvBestBidNum = convertView.findViewById(R.id.tv_bestBidNum);
+        if(market.quote==null){
+            tvCoin.setText("");
+        }
         tvCoin.setText(market.quote);
         DecimalFormat dfFluc = new DecimalFormat();
         dfFluc.applyPattern("0.00");
         String fluctuation= String.valueOf(dfFluc.format(market.percent_change))+"%";
         Log.e("getView", "fluctuation: "+ fluctuation);
         tvFluctuation.setText(fluctuation);
-        tvNewPrice.setText(market.latest.substring(0,8));
-        tvBestAskNum.setText(market.lowest_ask.substring(0,8));
-        tvBestBidNum.setText(market.highest_bid.substring(0,8));
+        if(market.latest==null){
+            tvNewPrice.setText("");
+        }else if(market.latest.length()<9){
+            tvNewPrice.setText(market.latest);
+        }else {
+            tvNewPrice.setText(market.latest.substring(0, 8));
+        }
+        if(market.lowest_ask==null){
+            tvBestAskNum.setText("");
+        }else if(market.lowest_ask.length()<9){
+            tvBestAskNum.setText(market.lowest_ask);
+        }else {
+            tvBestAskNum.setText(market.lowest_ask.substring(0, 8));
+        }
+        if(market.highest_bid==null){
+            tvBestBidNum.setText("");
+        }else if(market.highest_bid.length()<9){
+            tvBestBidNum.setText(market.highest_bid);
+        }else {
+            tvBestBidNum.setText(market.highest_bid.substring(0, 8));
+        }
 
         if (market.percent_change > 0) {
 

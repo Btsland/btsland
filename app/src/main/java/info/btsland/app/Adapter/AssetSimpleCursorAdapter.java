@@ -1,6 +1,7 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import java.util.List;
 
 import info.btsland.app.R;
 import info.btsland.app.model.IAsset;
+import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.ui.activity.TransferActivity;
 
 /**
  * author：lw1000
@@ -57,6 +60,27 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         }
         TextView tvAssetCoin=convertView.findViewById(R.id.tv_asset_coin);
         TextView tvAssetNum=convertView.findViewById(R.id.tv_asset_num);
+        TextView tvTransfer=convertView.findViewById(R.id.tv_transfer);
+        TextView tvTransaction=convertView.findViewById(R.id.tv_transaction);
+
+        tvTransfer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent transactionIntent=new Intent(context,TransferActivity.class);
+                context.startActivity(transactionIntent);
+
+            }
+        });
+
+        tvTransaction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent transactionIntent=new Intent(context,MarketDetailedActivity.class);
+                context.startActivity(transactionIntent);
+            }
+        });
+
+
         if(assets.get(position).coinName!=null&&!assets.get(position).coinName.equals("")){
             tvAssetCoin.setText(String.valueOf(assets.get(position).coinName));
         }else{

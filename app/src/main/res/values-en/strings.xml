@@ -108,7 +108,7 @@
     <string name="total">total：</string>
     <string name="charge">charge：</string>
     <string name="str_buy">buy</string>
-    <string name="str_off_take">off take</string>
+    <string name="str_off_take">sell</string>
     <string name="str_price2">price</string>
     <string name="str_num2">num</string>
     <string name="str_broadcast">The broadcast is being broadcast...</string>

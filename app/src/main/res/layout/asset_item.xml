@@ -51,15 +51,16 @@
       android:id="@+id/tv_asset_num"
       android:layout_width="0dp"
       android:layout_height="20dp"
-      android:gravity="right"
+      android:gravity="center"
       android:text="0.0000"
       android:textColor="@color/black"
       android:textSize="16sp"
       app:layout_constraintLeft_toRightOf="@+id/tv_all_asset"
-      app:layout_constraintRight_toLeftOf="@+id/tv_borrow"
+      app:layout_constraintRight_toRightOf="parent"
       app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
 
       />
+<!--
 
     <TextView
         android:id="@+id/tv_borrow"
@@ -73,6 +74,7 @@
         app:layout_constraintRight_toRightOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
         />
+-->
 
 
 
@@ -94,16 +96,16 @@
         android:id="@+id/tv_orders_num"
         android:layout_width="0dp"
         android:layout_height="24dp"
-        android:gravity="right"
+        android:gravity="center"
         android:text="0.0000"
         android:textColor="@color/black"
         android:textSize="16sp"
         app:layout_constraintLeft_toRightOf="@+id/tv_orders"
-        app:layout_constraintRight_toLeftOf="@+id/tv_orders_handle"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_asset_num"
         />
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tv_orders_handle"
         android:layout_width="80dp"
         android:layout_height="20dp"
@@ -115,10 +117,10 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_orders_num"
         app:layout_constraintRight_toRightOf="@+id/view"
 
-        />
+        />-->
 
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_usable_asset"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -130,9 +132,9 @@
         app:layout_constraintLeft_toLeftOf="@+id/view"
         app:layout_constraintTop_toBottomOf="@+id/tv_orders"
         app:layout_constraintRight_toLeftOf="@+id/tv_usable_asset_num"
-        />
+        />-->
 
-    <TextView
+   <!-- <TextView
         android:id="@+id/tv_usable_asset_num"
         android:layout_width="0dp"
         android:layout_height="20dp"
@@ -144,8 +146,8 @@
         app:layout_constraintRight_toLeftOf="@+id/tv_recharge_withdrawals"
         app:layout_constraintTop_toBottomOf="@+id/tv_orders_num"
         />
-
-    <TextView
+-->
+    <!--<TextView
         android:id="@+id/tv_recharge_withdrawals"
         android:layout_width="80dp"
         android:layout_height="20dp"
@@ -157,7 +159,7 @@
         app:layout_constraintLeft_toRightOf="@+id/tv_usable_asset_num"
         app:layout_constraintRight_toRightOf="@+id/view"
         />
-
+-->
 
 
 
@@ -173,7 +175,7 @@
         android:gravity="center"
         android:textColor="@color/color_table_blue"
         android:textSize="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_usable_asset"
+        app:layout_constraintTop_toBottomOf="@+id/tv_orders"
         app:layout_constraintLeft_toLeftOf="@+id/view"
         app:layout_constraintRight_toLeftOf="@+id/tv_transaction"
         android:layout_marginLeft="10dp"
@@ -187,10 +189,10 @@
         android:gravity="center"
         android:textSize="16dp"
         android:textColor="@color/color_table_blue"
-        app:layout_constraintTop_toBottomOf="@+id/tv_usable_asset"
+        app:layout_constraintTop_toBottomOf="@+id/tv_orders_num"
         app:layout_constraintLeft_toRightOf="@+id/tv_transfer"
         app:layout_constraintRight_toRightOf="@+id/view"
-        android:layout_marginRight="10dp"
+
         />
 
 

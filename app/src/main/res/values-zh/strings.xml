@@ -66,7 +66,7 @@
     <string name="register">注册</string>
     <string name="to_login_btn">已有帐号，去登录</string>
     <string name="total_amount">折合总金额约:</string>
-    <string name="str_asset">资  产</string>
+    <string name="str_asset">资产</string>
     <string name="str_order">挂单</string>
     <string name="str_usable">可用</string>
     <string name="str_transfer">转账</string>

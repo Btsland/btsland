@@ -101,7 +101,7 @@ public class HaveInHandRecyclerViewAdapter extends RecyclerView.Adapter<HaveInHa
             tvBaseCoin.setText(order.baseName);
             tvQuoteCoin.setText(order.quoteName);
             tvPriceNum.setText(String.valueOf(order.price));
-            tvPriceCoin.setText(order.baseName+"/"+order.quoteName);
+            tvPriceCoin.setText(order.quoteName+"/"+order.baseName);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             tvTime.setText(df.format(order.limitOrder.expiration));
             tvCancel.setOnClickListener(new View.OnClickListener() {

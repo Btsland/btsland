@@ -19,6 +19,9 @@ import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.Websocket_api;
@@ -150,6 +153,8 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if (b == false) {
                         tvRegisterUserPoint.setText(R.string.User_name_must_not_contain_only_letters);
+                    }else if(!compileExChar(strAccountName)){
+                        tvRegisterUserPoint.setText(R.string.The_username_does_not_contain_special_characters );
                     }else {
                         tvRegisterUserPoint.setText(R.string.User_name_is_valid_Query_is_already_available);
                         //判断该用户名是否可用
@@ -221,6 +226,20 @@ public class LoginActivity extends AppCompatActivity {
             registerLayout.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    /**
+     * 校验用户名是否含特殊字符
+     * @param str
+     */
+    private boolean compileExChar(String str){
+        String limitEx="[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]";
+        Pattern pattern = Pattern.compile(limitEx);
+        Matcher m = pattern.matcher(str);
+        if( m.find()){
+            return false;
+        }
+        return true;
     }
 
     /**

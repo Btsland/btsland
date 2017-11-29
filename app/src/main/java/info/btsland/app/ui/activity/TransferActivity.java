@@ -191,7 +191,7 @@ public class TransferActivity extends AppCompatActivity {
 
             }
         });
-
+        timer=new Timer();
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -222,6 +222,9 @@ public class TransferActivity extends AppCompatActivity {
                             }
                             if(accountObject!=null) {
                                 password=passwordString;
+                                if(timer==null){
+                                    timer=new Timer();
+                                }
                                 TimerTask mTimerTask= new TimerTask() {
                                     @Override
                                     public void run() {
@@ -283,6 +286,10 @@ public class TransferActivity extends AppCompatActivity {
 
                         } else {
                             handler.sendEmptyMessage(-1);
+                        }
+                        if(timer!=null){
+                            timer.cancel();
+                            timer=null;
                         }
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();

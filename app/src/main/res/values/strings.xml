@@ -28,8 +28,8 @@
     <string name="homepage">资讯</string>
 
     <string name="themarket">交易</string>
-    <string name="bid">买入:</string>
-    <string name="ask">卖出:</string>
+    <string name="bid">买入：</string>
+    <string name="ask">卖出：</string>
     <string name="buy">买入</string>
     <string name="sell">卖出</string>
 
@@ -151,9 +151,9 @@
     <string name="str_transaction">交  易</string>
     <string name="str_type">类型</string>
     <string name="str_content">内容</string>
-    <string name="str_price">价格:</string>
+    <string name="str_price">价格：</string>
     <string name="str_time">时间</string>
-    <string name="str_num">数量:</string>
+    <string name="str_num">数量：</string>
     <string name="str_cancel">取消</string>
     <string name="str_cancel_the_order">取消了订单</string>
     <string name="str_order_number">订单号：#</string>
@@ -182,10 +182,11 @@
     <string name="str_new_price">最新成交价：</string>
     <string name="str_change">涨跌幅：</string>
     <string name="str_best_bid">最高买价：</string>
-    <string name="str_best_ask">最低卖价:</string>
+    <string name="str_best_ask">最低卖价：</string>
     <string name="str_open">最新开盘价：</string>
     <string name="str_finish">最新收盘价：</string>
     <string name="str_maximum_transaction_price">最高成交价：</string>
     <string name="str_lowest_bid_price">最低成交价：</string>
     <string name="str_expiration_time">到期时间：</string>
+    <string name="The_username_does_not_contain_special_characters">用户名不能包含特殊字符</string>
 </resources>

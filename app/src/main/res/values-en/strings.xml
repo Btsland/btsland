@@ -3,8 +3,8 @@
     <string name="homepage">News</string>
 
     <string name="themarket">Exchange</string>
-    <string name="bid">bid:</string>
-    <string name="ask">ask:</string>
+    <string name="bid">bid：</string>
+    <string name="ask">ask：</string>
     <string name="buy">Buy</string>
     <string name="sell">Sell</string>
 
@@ -51,8 +51,8 @@
 
 
 
-    <string name="username">Username:btsland</string>
-    <string name="alias">Alias:#404801</string>
+    <string name="username">Username：btsland</string>
+    <string name="alias">Alias：#404801</string>
     <string name="personage">Personage</string>
     <string name="whitelist">White list</string>
     <string name="privilege">Privilege</string>
@@ -73,7 +73,7 @@
 </string>
     <string name="register">register</string>
     <string name="to_login_btn">Have an account to log on</string>
-    <string name="total_amount">Total amount:</string>
+    <string name="total_amount">Total amount：</string>
 
     <string name="str_asset">asset</string>
     <string name="str_order">order</string>
@@ -87,7 +87,7 @@
     <string name="str_price">price </string>
     <string name="str_time">time </string>
 
-    <string name="str_num">num: </string>
+    <string name="str_num">num： </string>
     <string name="str_cancel">Cancel </string>
     <string name="str_cancel_the_order">Cancel the order</string>
     <string name="str_order_number">Order_number：#</string>
@@ -98,7 +98,7 @@
     <string name="str_ge"></string>
     <string name="str_found"> Found </string>
     <string name="str_registered"> Registered </string>
-    <string name="str_recommender"> Recommender: </string>
+    <string name="str_recommender"> Recommender： </string>
     <string name="str_pay"> pay </string>
     <string name="str_transfers"> Transfers </string>
     <string name="str_publish">publish </string>
@@ -120,11 +120,12 @@
     <string name="str_new_price">New price：</string>
     <string name="str_change">Change：</string>
     <string name="str_best_bid">Best bid：</string>
-    <string name="str_best_ask">Best ask:</string>
-    <string name="str_open">open：</string>
-    <string name="str_finish">finish：</string>
-    <string name="str_maximum_transaction_price">max transaction price：</string>
-    <string name="str_lowest_bid_price">Lowest bid price：</string>
+    <string name="str_best_ask">Best ask：</string>
+    <string name="str_open">Open：</string>
+    <string name="str_finish">Finish：</string>
+    <string name="str_maximum_transaction_price">Highest price：</string>
+    <string name="str_lowest_bid_price">Floor price：</string>
     <string name="str_expiration_time">expiration_time：</string>
+    <string name="The_username_does_not_contain_special_characters">The username does not contain special characters</string>
 
 </resources>

@@ -343,6 +343,7 @@ public class DetailedBuyAndSellFragment extends Fragment
     }
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
+
         if (getView() == null || stat.orderBook == null) {
             return;
         }
@@ -350,6 +351,8 @@ public class DetailedBuyAndSellFragment extends Fragment
         if(BtslandApplication.orderBookMap.get(orderBookKey)!=null){
             BtslandApplication.orderBookMap.remove(orderBookKey);
         }
+        Log.i(TAG, "onMarketStatUpdate: orderBookKey:"+orderBookKey);
+        Log.i(TAG, "onMarketStatUpdate: orderKey:"+MarketDetailedActivity.orderKey);
         BtslandApplication.orderBookMap.put(orderBookKey,stat.orderBook);
         if(orderBookKey.equals(MarketDetailedActivity.orderKey)){
             handler.sendEmptyMessage(1);
@@ -369,12 +372,11 @@ public class DetailedBuyAndSellFragment extends Fragment
                         if(orderBook.bids.size()<15){
                             maxBids=orderBook.bids.size();
                         }
-
                         rlvBuyAdapter.setList(orderBook.bids.subList(0, maxBids));
                         highBuyPrice = orderBook.bids.get(0).price;
                         rlvBuyAdapter.notifyDataSetChanged();
                     }
-                    if(orderBook.bids!=null&&orderBook.bids.size()!=0){
+                    if(orderBook.asks!=null&&orderBook.asks.size()!=0){
                         int maxAsks=15;
                         if(orderBook.asks.size()<15){
                             maxAsks=orderBook.asks.size();

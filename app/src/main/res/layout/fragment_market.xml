@@ -30,7 +30,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="CNY"
-            android:textSize="14sp"/>
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tv_market_left_coin2"
@@ -39,7 +39,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="BTS"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_market_left_coin3"
@@ -48,7 +48,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="USD"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/tv_market_left_coin4"
@@ -57,7 +57,7 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="BTC"
-            android:textSize="14sp" />
+            android:textSize="16sp" />
     </LinearLayout>
 
 

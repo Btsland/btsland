@@ -69,7 +69,7 @@ public class MarketStat {
                           OnMarketStatUpdateListener l) {
         this.quotes=quote;
         this.bases=base;
-        //Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
+        ////Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
         for(int i=0;i<bases.length;i++){
             for (int j=0;j<quotes.length;j++){
                 if(bases[i].equals(quotes[j])){
@@ -91,13 +91,13 @@ public class MarketStat {
     }
     public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
-        Log.i(TAG, "subscribe() called with: base = [" + base + "], quote = [" + quote + "], stats = [" + stats + "], intervalMillis = [" + intervalMillis + "], l = [" + l + "]");
+        //Log.e(TAG, "subscribe() called with: base = [" + base + "], quote = [" + quote + "], stats = [" + stats + "], intervalMillis = [" + intervalMillis + "], l = [" + l + "]");
         subscribe(base, quote, DEFAULT_BUCKET_SECS,DEFAULT_AGO_SECS, stats,intervalMillis, l);
     }
 
     public void subscribe(String base, String quote, long bucketSize,long ago, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
-        Log.i(TAG, "subscribe: ago:"+ago);
+        //Log.e(TAG, "subscribe: ago:"+ago);
         unsubscribe(base, quote,stats);
         Subscription subscription =
                 new Subscription(base, quote, bucketSize, ago,stats ,intervalMillis, l);
@@ -105,7 +105,7 @@ public class MarketStat {
     }
     /*public void subscribe(List<String> name,String pwd, int stats,
                            OnMarketStatUpdateListener l) {
-        Log.e(TAG, "subscribe: name:"+name.get(0) );
+        //Log.e(TAG, "subscribe: name:"+name.get(0) );
         Subscription subscription =
                 new Subscription(name,pwd,stats,l);
         subscriptionHashMap.put("get_accounts", subscription);
@@ -237,7 +237,7 @@ public class MarketStat {
 
         @Override
         public synchronized void run() {
-            Log.i(TAG, "run: "+Thread.currentThread().getName());
+            //Log.e(TAG, "run: "+Thread.currentThread().getName());
             //登录
             final Stat stat = new Stat();
             if ((stats & STAT_COUNECT) != 0) {
@@ -274,7 +274,7 @@ public class MarketStat {
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
             this.statHandler.post(this);
-            Log.i(TAG, "Subscription: ago:"+ago);
+            //Log.e(TAG, "Subscription: ago:"+ago);
         }
         private Subscription(String base, String quote, long bucketSecs, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
             this.base = base;
@@ -301,7 +301,7 @@ public class MarketStat {
             this.statHandler.post(this);
         }
         private Subscription(String base, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
-            //Log.e(TAG, "Subscription: ");
+            ////Log.e(TAG, "Subscription: ");
             this.base = base;
             this.stats = stats;
             this.intervalMillis=intervalMillis;
@@ -312,7 +312,7 @@ public class MarketStat {
             this.statHandler.post(this);
         }
         private Subscription(int stats,long intervalMillis, OnMarketStatUpdateListener l) {
-            //Log.e(TAG, "Subscription: ");
+            ////Log.e(TAG, "Subscription: ");
             this.stats = stats;
             this.intervalMillis=intervalMillis;
             this.listener = l;
@@ -322,7 +322,7 @@ public class MarketStat {
             this.statHandler.post(this);
         }
         /*private Subscription(List<String> name, String pwd,int stats, OnMarketStatUpdateListener l) {
-            //Log.e(TAG, "Subscription: ");
+            ////Log.e(TAG, "Subscription: ");
             this.accentName=name;
             this.password=pwd;
             this.stats = stats;
@@ -335,6 +335,7 @@ public class MarketStat {
 
         private void cancel() {
             isCancelled.set(true);
+            statHandler.getLooper().quit();
         }
 
         public void updateImmediately() {
@@ -346,9 +347,9 @@ public class MarketStat {
         @Override
         public  void run() {
             //mWebsocketApi.connect();
-            Log.e(TAG, "run: "+Thread.currentThread().getName());
-            Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
-            //Log.e(TAG, "run: " );
+            //Log.e(TAG, "run: "+Thread.currentThread().getName());
+            //Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
+            ////Log.e(TAG, "run: " );
             if(base==null||base==""){
                 base="CNY";
             }
@@ -360,7 +361,7 @@ public class MarketStat {
                 final Stat stat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
-                        Log.e(TAG, "run: base:"+base+"quotes[i]:"+quote );
+                        //Log.e(TAG, "run: base:"+base+"quotes[i]:"+quote );
                         stat.MarketTicker = mWebsocketApi.get_ticker(base,quote);
                         //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
                         listener.onMarketStatUpdate(stat);
@@ -372,8 +373,8 @@ public class MarketStat {
                     return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
-                    Log.i(TAG, "run: ago:"+ago);
-                    Log.i(TAG, "run: ago:"+TimeUnit.DAYS.toMillis(90));
+                    //Log.e(TAG, "run: ago:"+ago);
+                    //Log.e(TAG, "run: ago:"+TimeUnit.DAYS.toMillis(90));
                     //设置初始时间和结束时间转化为国际时间
                     stat.prices=new ArrayList<>();
                     long time=ago;
@@ -392,11 +393,11 @@ public class MarketStat {
                     stat.bucket=bucketSecs;
                     stat.ago=ago;
                 }
-                Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
+                //Log.e(TAG, "run: stats==STAT_ACCENTS:"+String.valueOf(stats==STAT_ACCENTS) );
 
                 /*//登录
                 if (stats== STAT_ACCENTS) {
-                    Log.e(TAG, "run: STAT_ACCENTS  accentName:"+accentName);
+                    //Log.e(TAG, "run: STAT_ACCENTS  accentName:"+accentName);
                     try {
                         stat.account_object= mWebsocketApi.get_account_by_name(accentName);//1
                     } catch (NetworkStatusException e) {
@@ -406,7 +407,7 @@ public class MarketStat {
                 if ((stats & STAT_MARKET_TICKER) != 0) {
                     try {
                         stat.ticker = mWebsocketApi.get_ticker(base, quote);//2
-                        //Log.e(TAG, "run: "+"base"+base+"quote"+ quote);
+                        ////Log.e(TAG, "run: "+"base"+base+"quote"+ quote);
                         Date start = new Date(System.currentTimeMillis());
                         Date end = new Date(
                                 System.currentTimeMillis() - DateUtils.DAY_IN_MILLIS);
@@ -540,9 +541,9 @@ public class MarketStat {
         private List<HistoryPrice> getMarketHistory(String base,String quote,int bucketSecs, Date start, Date end) {
             try {
                 baseAsset = mWebsocketApi.lookup_asset_symbols(base);
-                Log.e(TAG, "getMarketHistory: base_object.id:"+baseAsset.id );
+                //Log.e(TAG, "getMarketHistory: base_object.id:"+baseAsset.id );
                 quoteAsset = mWebsocketApi.lookup_asset_symbols(quote);
-                Log.e(TAG, "getMarketHistory: quote_object.id:"+quoteAsset.id );
+                //Log.e(TAG, "getMarketHistory: quote_object.id:"+quoteAsset.id );
                 List<bucket_object> buckets=mWebsocketApi.get_market_history(
                         baseAsset.id, quoteAsset.id,bucketSecs, start, end);
                 List<HistoryPrice> prices=new ArrayList<>();

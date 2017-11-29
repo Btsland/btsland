@@ -412,7 +412,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
             IAxisValueFormatter xValue = new xAxisValueFormater(historyPriceList);
             simpleK.getXAxis().setValueFormatter(xValue);
         }
-        fillIn();
+        fillInHandler.sendEmptyMessage(1);
     }
     private void initializeData(List<MarketStat.HistoryPrice> listHistoryPrice) {
         Log.i(TAG, "initializeData: listHistoryPrice:"+listHistoryPrice.size());
@@ -557,13 +557,18 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
 
         @Override
         public void handleMessage(Message msg) {
-            if( msg.what==SUCCESS){
-                if(isAdded()){
-                    updateChartData();
-                }
+        if( msg.what==SUCCESS){
+            if(isAdded()){
+                updateChartData();
             }
         }
+        }
     };
-
+    public Handler fillInHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            fillIn();
+        }
+    };
 
 }

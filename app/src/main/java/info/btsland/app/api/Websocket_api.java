@@ -69,7 +69,7 @@ public class Websocket_api extends WebSocketListener {
     public void onOpen(WebSocket webSocket, Response response) {
         synchronized (mWebsocket) {
             mnConnectStatus = WEBSOCKET_CONNECT_SUCCESS;
-            Log.i(TAG, "onOpen: ");
+            //Log.i(TAG, "onOpen: ");
             mWebsocket.notify();
         }
     }
@@ -80,9 +80,9 @@ public class Websocket_api extends WebSocketListener {
         try {
             Gson gson = global_config_object.getInstance().getGsonBuilder().create();
             int id = Integer.parseInt(new JSONObject(text).getString("id"));
-            Log.i(TAG, "onMessage: id:"+id);
+            //Log.i(TAG, "onMessage: id:"+id);
 //            ReplyBase replyObjectBase = gson.fromJson(text, ReplyBase.class);
-//            Log.i(TAG, "onMessage: replyObjectBase:" +replyObjectBase);
+//            //Log.i(TAG, "onMessage: replyObjectBase:" +replyObjectBase);
             IReplyObjectProcess iReplyObjectProcess = null;
             synchronized (mHashMapIdToProcess) {
                 if (mHashMapIdToProcess.containsKey(id)) {
@@ -112,7 +112,7 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onClosing(WebSocket webSocket, int code, String reason) {
         mnConnectStatus = WEBSOCKET_CONNECT_CLOSING;
-        Log.i(TAG, "onClosing: ");
+        //Log.i(TAG, "onClosing: ");
     }
 
     /**
@@ -122,7 +122,7 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onClosed(WebSocket webSocket, int code, String reason) {
         mnConnectStatus = WEBSOCKET_CONNECT_CLOSED;
-        Log.i(TAG, "onClosed: ");
+        //Log.i(TAG, "onClosed: ");
     }
 
     /**
@@ -132,7 +132,7 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
-        Log.i(TAG, "onFailure: ");
+        //Log.i(TAG, "onFailure: ");
         mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
         MarketStat marketStat = BtslandApplication.getMarketStat();
         MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
@@ -141,7 +141,7 @@ public class Websocket_api extends WebSocketListener {
     }
 
     private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
-        Log.i(TAG, "login: ");
+        //Log.i(TAG, "login: ");
         Call callObject = new Call();
 
         callObject.id = mnCallId.getAndIncrement();
@@ -165,7 +165,7 @@ public class Websocket_api extends WebSocketListener {
 
     public synchronized int connect() {
 
-        Log.e(TAG, "connect: "+Thread.currentThread().getName());
+        //Log.e(TAG, "connect: "+Thread.currentThread().getName());
 //        Request request = new Request.Builder().url("wss://bitshares.openledger.info/ws").build();
 //        mOkHttpClient = new OkHttpClient();
 //        mWebsocket = mOkHttpClient.newWebSocket(request, this);
@@ -225,11 +225,11 @@ public class Websocket_api extends WebSocketListener {
                 _nDatabaseId = get_websocket_bitshares_api_id("database");
                 _nHistoryId = get_websocket_bitshares_api_id("history");
                 BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
-                Log.i(TAG, "connect: _nDatabaseId:"+ _nDatabaseId);
-                Log.i(TAG, "connect: _nHistoryId:"+ _nHistoryId);
-                Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
+                //Log.i(TAG, "connect: _nDatabaseId:"+ _nDatabaseId);
+                //Log.i(TAG, "connect: _nHistoryId:"+ _nHistoryId);
+                //Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
 //                String query9="{\"id\":111111,\"method\":\"call\",\"params\":[2,\"list_account_balances\",[\"li-88888\",[]]]}";
-//                Log.e(TAG, "connect: 99999999999999999999999999999999999999999" );
+//                //Log.e(TAG, "connect: 99999999999999999999999999999999999999999" );
 //                mWebsocket.send(query9);
             } else {
                 nRet = -9;
@@ -358,7 +358,7 @@ public class Websocket_api extends WebSocketListener {
         return replyDatabase.result;
     }
     private int get_websocket_bitshares_api_id(String strApiName) throws NetworkStatusException {
-        Log.i(TAG, "get_websocket_bitshares_api_id: ");
+        //Log.i(TAG, "get_websocket_bitshares_api_id: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -376,7 +376,7 @@ public class Websocket_api extends WebSocketListener {
         return replyApiId.result;
     }
     public asset_object lookup_asset_symbols(String strAssetSymbol) throws NetworkStatusException {
-        Log.i(TAG, "lookup_asset_symbols: ");
+        //Log.i(TAG, "lookup_asset_symbols: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -498,7 +498,7 @@ public class Websocket_api extends WebSocketListener {
         return fullAccountObjectList;
     }
     public void list(object_id<account_object> accountId) throws NetworkStatusException {
-        Log.e(TAG, "list: 22222222222222222222222222222" );
+        //Log.e(TAG, "list: 22222222222222222222222222222" );
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -542,7 +542,7 @@ public class Websocket_api extends WebSocketListener {
                                                    int nBucket,
                                                    Date dateStart,
                                                    Date dateEnd) throws NetworkStatusException {
-        Log.i(TAG, "get_market_history: ");
+        //Log.i(TAG, "get_market_history: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -596,7 +596,7 @@ public class Websocket_api extends WebSocketListener {
     public List<limit_order_object> get_limit_orders(object_id<asset_object> baseid,
                                                      object_id<asset_object> quoteid,
                                                      int limit) throws NetworkStatusException {
-        Log.i(TAG, "get_limit_orders: ");
+        //Log.i(TAG, "get_limit_orders: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -618,7 +618,7 @@ public class Websocket_api extends WebSocketListener {
     }
     public List<MarketTrade> get_trade_history(String base, String quote, Date start, Date end, int limit)
             throws NetworkStatusException {
-        Log.i(TAG, "get_trade_history: ");
+        //Log.i(TAG, "get_trade_history: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -644,7 +644,7 @@ public class Websocket_api extends WebSocketListener {
         if(base.equals(quote)){
             return null;
         }
-        Log.i(TAG, "get_ticker: ");
+        //Log.i(TAG, "get_ticker: ");
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
@@ -662,12 +662,12 @@ public class Websocket_api extends WebSocketListener {
 //        ReplyObjectProcess<Reply<MarketTicker>> replyObject =
 //                new ReplyObjectProcess<>();
         Reply<MarketTicker> reply = sendForReply(callObject, replyObject);
-        Log.i(TAG, "get_ticker: "+reply.result);
+        //Log.i(TAG, "get_ticker: "+reply.result);
         return reply.result;
     }
     private <T> Reply<T> sendForReply(Call callObject,
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
-        Log.i(TAG, "sendForReply: ");
+        //Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
             MarketStat marketStat = BtslandApplication.getMarketStat();
             MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
@@ -679,10 +679,10 @@ public class Websocket_api extends WebSocketListener {
 
     private <T> Reply<T> sendForReplyImpl(Call callObject,
                                           ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
-        Log.i(TAG, "sendForReplyImpl: ");
+        //Log.i(TAG, "sendForReplyImpl: ");
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
         String strMessage = gson.toJson(callObject);
-        Log.i(TAG, "sendForReplyImpl: strMessage:"+strMessage );
+        //Log.i(TAG, "sendForReplyImpl: strMessage:"+strMessage );
         synchronized (mHashMapIdToProcess) {
             mHashMapIdToProcess.put(callObject.id, replyObjectProcess);
         }
@@ -692,7 +692,7 @@ public class Websocket_api extends WebSocketListener {
                 boolean bRet=false;
                 if(mWebsocket!=null){
                     bRet = mWebsocket.send(strMessage);
-                    Log.i(TAG, "sendForReplyImpl: "+bRet);
+                    //Log.i(TAG, "sendForReplyImpl: "+bRet);
                 }else if(BtslandApplication.mWebsocket!=null) {
                     bRet = BtslandApplication.mWebsocket.send(strMessage);
                 }else {
@@ -709,9 +709,9 @@ public class Websocket_api extends WebSocketListener {
             }
             try {
                 replyObjectProcess.wait();
-                Log.i(TAG, "sendForReplyImpl: wait");
+                //Log.i(TAG, "sendForReplyImpl: wait");
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
-                //Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
+                ////Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
                 String strError = replyObjectProcess.getError();
                 if (TextUtils.isEmpty(strError) == false) {
                     throw new NetworkStatusException(strError);
@@ -731,7 +731,7 @@ public class Websocket_api extends WebSocketListener {
         }
     }
     public void get_ticker() {
-        Log.i(TAG, "get_ticker: ");
+        //Log.i(TAG, "get_ticker: ");
         String db = "{\"id\":2,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
         mWebsocket.send(db);
 
@@ -760,17 +760,17 @@ public class Websocket_api extends WebSocketListener {
         private String strResponse;
         public ReplyObjectProcess(Type type) {
             mType = type;
-            Log.i(TAG, "ReplyObjectProcess: mType:"+mType);
+            //Log.i(TAG, "ReplyObjectProcess: mType:"+mType);
         }
         public ReplyObjectProcess() {
 
         }
 //
         public void processTextToObject(String strText) {
-            Log.i(TAG, "processTextToObject: strText:"+strText);
-            Log.i(TAG, "processTextToObject: mType:"+mType);
+            //Log.i(TAG, "processTextToObject: strText:"+strText);
+            //Log.i(TAG, "processTextToObject: mType:"+mType);
             try {
-                Log.i(TAG, "processTextToObject: ");
+                //Log.i(TAG, "processTextToObject: ");
                 Gson gson = global_config_object.getInstance().getGsonBuilder().create();
                 mT = gson.fromJson(strText, mType);
             } catch (JsonSyntaxException e) {
@@ -785,7 +785,7 @@ public class Websocket_api extends WebSocketListener {
                 return;
             }
             synchronized (this) {
-                Log.i(TAG, "processTextToObject: synchronized");
+                //Log.i(TAG, "processTextToObject: synchronized");
                 notify();
             }
         }

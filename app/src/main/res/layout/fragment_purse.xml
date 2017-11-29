@@ -28,7 +28,7 @@
             android:id="@+id/iv_user_pho"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:layout_margin="20dp"
+            android:layout_margin="30dp"
             android:background="@color/transparent"
             app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
             app:layout_constraintTop_toTopOf="@+id/v_purse_back"
@@ -39,10 +39,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/total_amount"
-            android:textColor="@color/color_frenchGrey"
+            android:textColor="@color/color_Grey"
             android:layout_marginTop="10dp"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
+            app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
             app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
             />
 
@@ -51,11 +52,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0.0000CNY"
-            android:textColor="@color/color_frenchGrey"
-            android:layout_marginTop="10dp"
+            android:textColor="@color/color_Grey"
             android:textSize="16sp"
             android:maxLines="1"
-            app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
+            app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
             app:layout_constraintLeft_toRightOf="@+id/tv_txt_purse_convert"
             />
 
@@ -79,7 +80,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:textColor="@color/color_frenchGrey"
+            android:textColor="@color/color_Grey"
             app:layout_constraintLeft_toRightOf="@+id/iv_user_pho"
             app:layout_constraintTop_toTopOf="@+id/iv_user_pho"
             app:layout_constraintRight_toRightOf="@+id/v_purse_back"
@@ -93,7 +94,7 @@
             android:text="@string/alias"
             android:textSize="20dp"
             android:gravity="center|left"
-            android:textColor="@color/color_frenchGrey"
+            android:textColor="@color/color_Grey"
             app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
             app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
             app:layout_constraintBottom_toBottomOf="@+id/iv_user_pho"
@@ -256,6 +257,7 @@
     android:id="@+id/fl_purse_login_prompt"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:visibility="gone"
     android:clickable="true">
     <info.btsland.app.ui.view.MyConstraintLayout
         android:id="@+id/cl_purse_login_prompt"

@@ -19,6 +19,7 @@ import java.util.List;
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.MarketStat;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
@@ -147,16 +148,19 @@ public class MarketDetailedActivity extends AppCompatActivity{
                                 } catch (NetworkStatusException e) {
                                     e.printStackTrace();
                                 }
-                                MarketDetailedActivity.market=newMarket;
-                                handler.sendEmptyMessage(1);
+                                BtslandApplication.getMarketStat().unsubscribe(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote,MarketStat.STAT_MARKET_OPEN_ORDER);
+                                MarketDetailedActivity.market=newMarket;//设置当前的交易对
+                                handler.sendEmptyMessage(1);//通知主线程设置标题
+                                //设置取K图数据的键
                                 dataKey=KeyUtil.constructingDateKKey(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote,
                                         DetailedKFragment.range,DetailedKFragment.ago);
+                                //设置取广播数据的键
                                 orderKey=KeyUtil.constructingOrderBooksKey(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote);
                                 if(refurbishK!=null){
-                                    handler.sendEmptyMessage(1);
+                                    refurbishK.refurbish();
                                 }
                                 if(refurbishBuyAndSell!=null){
-                                    handler.sendEmptyMessage(1);
+                                    refurbishBuyAndSell.refurbish();
                                 }
                             }
                         }).start();

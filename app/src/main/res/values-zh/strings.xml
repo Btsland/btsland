@@ -5,8 +5,8 @@
     <string name="themarket">交易</string>
     <string name="buy">买入</string>
     <string name="sell">卖出</string>
-    <string name="bid">买入:</string>
-    <string name="ask">卖出:</string>
+    <string name="bid">买入：</string>
+    <string name="ask">卖出：</string>
 
     <string name="wallet">钱包</string>
     <string name="asset">全部资产</string>
@@ -41,8 +41,8 @@
     <string name="about">关于我们</string>
 
 
-    <string name="username">用户名:btsland</string>
-    <string name="alias">别名:#404801</string>
+    <string name="username">用户名：btsland</string>
+    <string name="alias">别名：#404801</string>
     <string name="personage">个人信息</string>
     <string name="whitelist">白名单</string>
     <string name="privilege">权限</string>
@@ -65,7 +65,7 @@
     <string name="register_txt">我已确认我已经备份好我的密码（您的密码是登录的唯一凭证，一旦丢失，您的帐号将无法找回，您的资产也会丢失。）</string>
     <string name="register">注册</string>
     <string name="to_login_btn">已有帐号，去登录</string>
-    <string name="total_amount">折合总金额约:</string>
+    <string name="total_amount">折合总金额约：</string>
     <string name="str_asset">资  产</string>
     <string name="str_order">挂单</string>
     <string name="str_usable">可用</string>
@@ -73,9 +73,9 @@
     <string name="str_transaction">交易</string>
     <string name="str_type">类型</string>
     <string name="str_content">内容</string>
-    <string name="str_price">价格:</string>
+    <string name="str_price">价格：</string>
     <string name="str_time">时间</string>
-    <string name="str_num">数量:</string>
+    <string name="str_num">数量：</string>
     <string name="str_cancel">取消</string>
     <string name="str_cancel_the_order">取消了订单</string>
     <string name="str_order_number">订单号：#</string>
@@ -106,11 +106,12 @@
     <string name="str_new_price">最新成交价：</string>
     <string name="str_change">涨跌幅：</string>
     <string name="str_best_bid">最高买价：</string>
-    <string name="str_best_ask">最低卖价:</string>
+    <string name="str_best_ask">最低卖价：</string>
     <string name="str_open">最新开盘价：</string>
     <string name="str_finish">最新收盘价：</string>
     <string name="str_maximum_transaction_price">最高成交价：</string>
     <string name="str_lowest_bid_price">最低成交价：</string>
     <string name="str_expiration_time">到期时间：</string>
+    <string name="The_username_does_not_contain_special_characters">用户名不能包含特殊字符</string>
 
 </resources>

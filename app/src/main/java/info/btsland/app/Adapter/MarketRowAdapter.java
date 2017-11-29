@@ -74,7 +74,7 @@ public class MarketRowAdapter extends BaseAdapter {
             return convertView;
         }
         MarketTicker market = markets.get(i);
-        Log.i(TAG, "getView: "+market+"i:"+i);
+        //Log.i(TAG, "getView: "+market+"i:"+i);
         TextView tvCoin = convertView.findViewById(R.id.tv_coin);
         TextView tvFluctuation = convertView.findViewById(R.id.tv_fluctuation);
         TextView tvNewPrice = convertView.findViewById(R.id.tv_newPrice);
@@ -87,7 +87,7 @@ public class MarketRowAdapter extends BaseAdapter {
         DecimalFormat dfFluc = new DecimalFormat();
         dfFluc.applyPattern("0.00");
         String fluctuation= String.valueOf(dfFluc.format(market.percent_change))+"%";
-        Log.e("getView", "fluctuation: "+ fluctuation);
+        //Log.e("getView", "fluctuation: "+ fluctuation);
         tvFluctuation.setText(fluctuation);
         if(market.latest==null){
             tvNewPrice.setText("");
@@ -147,14 +147,14 @@ public class MarketRowAdapter extends BaseAdapter {
                 Bundle bundle=new Bundle();
                 bundle.putInt("result",2);
                 bundle.putSerializable("MarketTicker",market);
-                Log.i(TAG, "onClick: market:"+market);
+                //Log.i(TAG, "onClick: market:"+market);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }else{//单击事件
                 Bundle bundle=new Bundle();
                 bundle.putInt("result",1);
                 bundle.putSerializable("MarketTicker",market);
-                Log.i(TAG, "onClick: market:"+market);
+                //Log.i(TAG, "onClick: market:"+market);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
@@ -170,11 +170,11 @@ public class MarketRowAdapter extends BaseAdapter {
             switch (bundle.getInt("result")) {
                 case 1:
                     Toast.makeText(context,BtslandApplication.getInstance().getString(R.string.str_double_click),Toast.LENGTH_SHORT).show();
-                    Log.i(TAG, "handleMessage: market:"+market);
+                    //Log.i(TAG, "handleMessage: market:"+market);
                     simpleKFragment.drawK(market);
                     break;
                 case 2:
-                    Log.i(TAG, "handleMessage: market:"+market);
+                    //Log.i(TAG, "handleMessage: market:"+market);
                     MarketDetailedActivity.startAction(context,market,1);
                     break;
             }

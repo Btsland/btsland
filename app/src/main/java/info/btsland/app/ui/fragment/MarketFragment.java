@@ -66,7 +66,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         if(stat.MarketTicker.base==null||stat.MarketTicker.quote==null){
             return;
         }
-        Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
+        //Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
         Message message=Message.obtain();
         switch (stat.MarketTicker.base){
             case "CNY":
@@ -77,7 +77,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     BtslandApplication.marketMap.get("CNY").clear();
                 }
                 if (!replaceMarket(BtslandApplication.marketMap.get("CNY"), stat.MarketTicker)) {
-                    Log.i(TAG, "handleMessage: ");
+                    //Log.i(TAG, "handleMessage: ");
                     return;
                 }
                 if(!isAdded()){
@@ -93,7 +93,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     BtslandApplication.marketMap.get("BTS").clear();
                 }
                 if (!replaceMarket(BtslandApplication.marketMap.get("BTS"), stat.MarketTicker)) {
-                    Log.i(TAG, "handleMessage: ");
+                    //Log.i(TAG, "handleMessage: ");
                     return;
                 }
                 if(!isAdded()){
@@ -109,7 +109,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     BtslandApplication.marketMap.get("USD").clear();
                 }
                 if (!replaceMarket(BtslandApplication.marketMap.get("USD"), stat.MarketTicker)) {
-                    Log.i(TAG, "handleMessage: ");
+                    //Log.i(TAG, "handleMessage: ");
                     return;
                 }
                 if(!isAdded()){
@@ -125,7 +125,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                     BtslandApplication.marketMap.get("BTC").clear();
                 }
                 if (!replaceMarket(BtslandApplication.marketMap.get("BTC"), stat.MarketTicker)) {
-                    Log.i(TAG, "handleMessage: ");
+                    //Log.i(TAG, "handleMessage: ");
                     return;
                 }
                 if(!isAdded()){
@@ -158,7 +158,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            Log.i(TAG, "handleMessage: msg.what:" + msg.what);
+            //Log.i(TAG, "handleMessage: msg.what:" + msg.what);
             if (msg.what == NOTIFY_CNY) {
                 cnyAdapter.setMarkets(BtslandApplication.marketMap.get("CNY"));
             } else if (msg.what == NOTIFY_BTS) {
@@ -175,7 +175,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e(TAG, "onCreate: ");
+        //Log.e(TAG, "onCreate: ");
     }
 
     @Override
@@ -188,7 +188,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         if(InternetUtil.isConnected(BtslandApplication.getInstance())){
             marketStat.subscribe(bases,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_MARKE_SECS,this);
         }
-        Log.e(TAG, "onCreateView: ");
+        //Log.e(TAG, "onCreateView: ");
         fillInSimpleK(null);
         init(view);
         touchColor(tvMarketLeftCoin_1);//交互特效
@@ -251,7 +251,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
      * 装载简易K图
      */
     private void fillInSimpleK(MarketTicker market) {
-        Log.i(TAG, "fillInSimpleK: ");
+        //Log.i(TAG, "fillInSimpleK: ");
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         if (simpleKFragment == null) {
             simpleKFragment = MarketSimpleKFragment.newInstance(market);
@@ -265,7 +265,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     class LeftCoinOnClickListener implements View.OnClickListener {
 //        int theme = getSharedPreferences("cons", MODE_PRIVATE).getInt("theme",R.style.SwitchTheme1);
         @Override
-        public void onClick(View view) {
+        public synchronized void onClick(View view) {
             touchColor((TextView) view);//交互特效
             switch (view.getId()) {
                 case R.id.tv_market_left_coin1:

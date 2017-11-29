@@ -9,6 +9,6 @@ public class  KeyUtil {
         return ""+base+"/"+quote+":"+bucket+","+ago;
     }
     public static String constructingOrderBooksKey(String base,String quote){
-        return "";
+        return ""+base+"/"+quote;
     }
 }

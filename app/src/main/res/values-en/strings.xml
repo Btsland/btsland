@@ -126,5 +126,11 @@
     <string name="str_maximum_transaction_price">max transaction price：</string>
     <string name="str_lowest_bid_price">Lowest bid price：</string>
     <string name="str_expiration_time">expiration_time：</string>
+    <string name="str_from">from</string>
+    <string name="str_to">to</string>
+    <string name="str_balance">balance：</string>
+    <string name="str_remarks">remarks</string>
+    <string name="str_confirm">confirm</string>
+    <string name="str_classified_assets">Classified assets:</string>
 
 </resources>

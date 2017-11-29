@@ -184,8 +184,14 @@
     <string name="str_best_bid">最高买价：</string>
     <string name="str_best_ask">最低卖价:</string>
     <string name="str_open">最新开盘价：</string>
-    <string name="str_finish">最新收盘价：</string>
+
     <string name="str_maximum_transaction_price">最高成交价：</string>
     <string name="str_lowest_bid_price">最低成交价：</string>
     <string name="str_expiration_time">到期时间：</string>
+    <string name="str_from">从</string>
+    <string name="str_to">发往</string>
+    <string name="str_balance">余额：</string>
+    <string name="str_remarks">备注</string>
+    <string name="str_confirm">确定</string>
+    <string name="str_classified_assets">分类资产:</string>
 </resources>

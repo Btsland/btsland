@@ -80,7 +80,7 @@ public class PurseAssetActivity extends AppCompatActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"");
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,getString(R.string.asset));
             transaction.add(R.id.fra_asset_head, headFragment);
         }
         transaction.commit();

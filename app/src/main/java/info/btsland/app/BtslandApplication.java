@@ -162,8 +162,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             for(int j=0;j<quotes2.length;j++){
                 if(bases[i].equals(quotes2[j])){
                     continue;
+                }else {
+                    tickers.add(new MarketTicker(bases[i], quotes2[j]));
                 }
-                tickers.add(new MarketTicker(bases[i],quotes2[j]));
             }
             marketMap.put(bases[i],tickers);
         }

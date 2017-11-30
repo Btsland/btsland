@@ -388,7 +388,10 @@ public class MarketStat {
                             endDate=IDateUitl.toUniversalTime(new Date());
                         }
                         List<HistoryPrice> prices=getMarketHistory(base,quote,(int)bucketSecs,startDate,endDate);
-                        stat.prices.addAll(prices);
+                        if(prices!=null&&prices.size()>0){
+                            stat.prices.addAll(prices);
+                        }
+
                     }
                     stat.bucket=bucketSecs;
                     stat.ago=ago;

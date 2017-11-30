@@ -35,6 +35,8 @@ public class MainActivity extends BaseActivity {
     private HomeFragment homeFragment;
     private PurseFragment purseFragment;
     private HeadFragment headFragment;
+    public static String dataKKey;
+
     private int index=1;
 
 
@@ -89,7 +91,9 @@ public class MainActivity extends BaseActivity {
         }
 
     }
-
+    public HeadFragment getHeadFragment(){
+        return headFragment;
+    }
     /**
      * 装载顶部导航
      */

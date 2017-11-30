@@ -108,7 +108,7 @@
     <string name="total">total：</string>
     <string name="charge">charge：</string>
     <string name="str_buy">buy</string>
-    <string name="str_off_take">off take</string>
+    <string name="str_off_take">sell</string>
     <string name="str_price2">price</string>
     <string name="str_num2">num</string>
     <string name="str_broadcast">The broadcast is being broadcast...</string>
@@ -127,5 +127,10 @@
     <string name="str_lowest_bid_price">Floor price：</string>
     <string name="str_expiration_time">expiration_time：</string>
     <string name="The_username_does_not_contain_special_characters">The username does not contain special characters</string>
+    <string name="str_from">from</string>
+    <string name="str_to">to</string>
+    <string name="str_balance">balance：</string>
+    <string name="str_remarks">remarks：</string>
+    <string name="str_confirm">confirm</string>
 
 </resources>

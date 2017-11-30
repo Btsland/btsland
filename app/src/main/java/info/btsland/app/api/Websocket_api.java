@@ -78,6 +78,7 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         try {
+            Log.i(TAG, "onMessage: text:"+text);
             Gson gson = global_config_object.getInstance().getGsonBuilder().create();
             int id = Integer.parseInt(new JSONObject(text).getString("id"));
             //Log.i(TAG, "onMessage: id:"+id);
@@ -682,7 +683,7 @@ public class Websocket_api extends WebSocketListener {
         //Log.i(TAG, "sendForReplyImpl: ");
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
         String strMessage = gson.toJson(callObject);
-        //Log.i(TAG, "sendForReplyImpl: strMessage:"+strMessage );
+        Log.i(TAG, "sendForReplyImpl: strMessage:"+strMessage );
         synchronized (mHashMapIdToProcess) {
             mHashMapIdToProcess.put(callObject.id, replyObjectProcess);
         }

@@ -138,18 +138,18 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     }
     public boolean replaceMarket(List<MarketTicker> oldMarkets,MarketTicker newMarket){
         for(int i=0;i<oldMarkets.size();i++) {
-            if(oldMarkets.get(i)!=null){
-                if(oldMarkets.get(i).quote.equals(newMarket.quote)){
-                    oldMarkets.remove(i);
-                    oldMarkets.add(i,newMarket);
+           synchronized (oldMarkets.get(i)){
+                if (oldMarkets.get(i) != null) {
+                    if (oldMarkets.get(i).quote.equals(newMarket.quote)) {
+                        oldMarkets.remove(i);
+
+                        oldMarkets.add(i, newMarket);
+                        return true;
+                    }
+                } else {
+                    oldMarkets.add(newMarket);
                     return true;
                 }
-            }else {
-                oldMarkets.add(newMarket);
-                if(oldMarkets.size()>quotes.length){
-                    oldMarkets.clear();
-                }
-                return true;
             }
         }
         return true;

@@ -26,6 +26,16 @@
         app:layout_constraintBottom_toBottomOf="@+id/v_head_back"
         app:layout_constraintLeft_toLeftOf="@+id/v_head_back"
         app:layout_constraintTop_toTopOf="@+id/v_head_back" />
+    <ProgressBar
+        android:id="@+id/pBar_head_wait"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginRight="5dp"
+        android:visibility="invisible"
+        android:indeterminateDrawable="@drawable/progressbar"
+        app:layout_constraintTop_toTopOf="@+id/v_head_back"
+        app:layout_constraintBottom_toBottomOf="@+id/v_head_back"
+        app:layout_constraintRight_toLeftOf="@+id/tv_head_title"/>
     <TextView
         android:id="@+id/tv_head_title"
         android:layout_width="wrap_content"

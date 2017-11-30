@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.io.InputStream;
@@ -42,8 +43,12 @@ public class HeadFragment extends Fragment {
         }
 
     }
-
-
+    public void showPBar(){
+        pBarWait.setVisibility(View.VISIBLE);
+    }
+    public void hidePBar(){
+        pBarWait.setVisibility(View.INVISIBLE);
+    }
     public void setSelectListener(OnSelectOnClickListener listener) {
         this.listener = listener;
     }
@@ -52,6 +57,7 @@ public class HeadFragment extends Fragment {
     private TextView rightTextView;
     private TextView titleTextView;
     private TextView selectTextView;
+    private ProgressBar pBarWait;
 
     private Drawable drawable;
 
@@ -77,6 +83,7 @@ public class HeadFragment extends Fragment {
         rightTextView = view.findViewById(R.id.tv_head_right);
         titleTextView = view.findViewById(R.id.tv_head_title);
         selectTextView=view.findViewById(R.id.tv_head_select);
+        pBarWait=view.findViewById(R.id.pBar_head_wait);
         drawable = view.getResources().getDrawable(R.drawable.image_share,null);
         //设置图片大小
         drawable.setBounds(0,0,drawable.getMinimumWidth(),drawable.getMinimumHeight());

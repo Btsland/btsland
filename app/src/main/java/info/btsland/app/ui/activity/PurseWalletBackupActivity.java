@@ -3,6 +3,7 @@ package info.btsland.app.ui.activity;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebView;
 
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
@@ -13,6 +14,8 @@ import info.btsland.app.ui.fragment.HeadFragment;
 
 public class PurseWalletBackupActivity extends AppCompatActivity{
     private HeadFragment headFragment;
+
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +28,8 @@ public class PurseWalletBackupActivity extends AppCompatActivity{
      * 初始化
      */
     private void init() {
-
+        webView=findViewById(R.id.webView);
+        webView.loadUrl("http://www.fastchain.info/");
     }
 
 

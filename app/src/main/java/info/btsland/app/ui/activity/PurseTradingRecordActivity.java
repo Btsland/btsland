@@ -86,7 +86,7 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,"");
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.BACK_NULL,getString(R.string.tradingrecord));
             transaction.add(R.id.fra_trading_head, headFragment);
         }
         transaction.commit();

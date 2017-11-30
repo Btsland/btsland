@@ -63,6 +63,15 @@ public class MarketDetailedActivity extends AppCompatActivity{
             if (getIntent().getSerializableExtra("MarketTicker") != null) {
                 this.market = (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
             }
+            try {
+                MarketTicker marketTicker=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
+                if(marketTicker!=null){
+                    this.market=marketTicker;
+                }
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+            }
+
             this.title = market.quote + ":" + market.base;
             this.index = getIntent().getIntExtra("index", index);
         }else {

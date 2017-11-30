@@ -44,13 +44,13 @@ import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.Impl.MarketServiceImpl;
 import info.btsland.app.service.MarketService;
+import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.util.KeyUtil;
 
 
 public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private static String TAG="MarketSimpleKFragment";
-    public static String key;
     private static MarketSimpleKFragment listener;
     private static final int SUCCESS=1;
     private static String quote ="BTS";
@@ -62,6 +62,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
 
     private CombinedChart simpleK;//图表
     private MarketTicker market;
+    private HeadFragment headFragment;
 
     public MarketSimpleKFragment() {
 
@@ -93,7 +94,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
                 BtslandApplication.dataKMap.remove(BtslandApplication.dataKMap.get(newkey));
             }
             BtslandApplication.dataKMap.put(newkey,stat.prices);
-            if(newkey.equals(key)){
+            if(newkey.equals(MainActivity.dataKKey)){
                 handler.sendEmptyMessage(SUCCESS);
             }
 
@@ -148,8 +149,10 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
             base=market.base;
             quote=market.quote;
         }
-        key= KeyUtil.constructingDateKKey(base,quote,MarketStat.DEFAULT_BUCKET_SECS, MarketStat.DEFAULT_AGO_SECS);
-        if(BtslandApplication.dataKMap.get(key)!=null) {
+        MainActivity.dataKKey= KeyUtil.constructingDateKKey(base,quote,MarketStat.DEFAULT_BUCKET_SECS, MarketStat.DEFAULT_AGO_SECS);
+        headFragment.showPBar();
+        headFragment.setTitleName(quote+":"+base);
+        if(BtslandApplication.dataKMap.get(MainActivity.dataKKey)!=null) {
             updateChartData();
         }else {
             startReceiveMarkets(market);
@@ -173,6 +176,8 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         init(view);
         initChart();
         listener=this;
+        MainActivity mainActivity = (MainActivity) getActivity();
+        headFragment = mainActivity.getHeadFragment();
         return view;
     }
 
@@ -193,7 +198,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
     }
 
     private void updateChartData() {
-        List<MarketStat.HistoryPrice> historyPriceList=BtslandApplication.dataKMap.get(key);
+        List<MarketStat.HistoryPrice> historyPriceList=BtslandApplication.dataKMap.get(MainActivity.dataKKey);
         initializeData(historyPriceList);
         IAxisValueFormatter xValue = new xAxisValueFormater(historyPriceList);
         simpleK.getXAxis().setValueFormatter(xValue);
@@ -315,6 +320,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         simpleK.fitScreen();
         simpleK.setVisibleXRangeMaximum(45);
         simpleK.moveViewToX(simpleK.getXChartMax() - 45);
+        headFragment.hidePBar();
     }
     class xAxisValueFormater implements IAxisValueFormatter {
         private List<MarketStat.HistoryPrice> mListPrices;

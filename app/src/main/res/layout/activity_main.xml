@@ -37,7 +37,7 @@
         android:drawableTop="@drawable/image_nav_home"
         android:paddingTop="5dp"
         android:textSize="12dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="3dp"
         android:gravity="center|bottom"
         android:background="@drawable/tv_border"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -52,7 +52,7 @@
         android:drawableTop="@drawable/image_nav_market"
         android:paddingTop="4dp"
         android:textSize="12dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="3dp"
         android:gravity="center|bottom"
         android:text="@string/themarket"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -65,14 +65,28 @@
         android:layout_height="60dp"
         android:text="@string/wallet"
         android:drawableTop="@drawable/image_nav_purse"
-        android:paddingTop="5dp"
+        android:paddingTop="8dp"
         android:textSize="12dp"
-        android:paddingBottom="10dp"
+        android:paddingBottom="3dp"
+        android:gravity="center|bottom"
+        android:background="@drawable/tv_border"
+        app:layout_constraintRight_toLeftOf="@+id/tv_nav_c2c"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_nav_market"/>
+    <TextView
+        android:id="@+id/tv_nav_c2c"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:text="@string/c2c"
+        android:drawableTop="@drawable/image_nav_c2c"
+        android:textSize="12dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="3dp"
         android:gravity="center|bottom"
         android:background="@drawable/tv_border"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/tv_nav_market"/>
+        app:layout_constraintLeft_toRightOf="@+id/tv_nav_purse"/>
 
 
 </android.support.constraint.ConstraintLayout>

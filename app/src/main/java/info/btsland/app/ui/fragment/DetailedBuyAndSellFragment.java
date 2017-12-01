@@ -326,6 +326,11 @@ public class DetailedBuyAndSellFragment extends Fragment
                 }
             }
         });
+
+        ((MarketDetailedActivity) getActivity()).isRefOrder=true;
+        if(((MarketDetailedActivity) getActivity()).isRefOrder&&((MarketDetailedActivity) getActivity()).isRefK){
+            ((MarketDetailedActivity) getActivity()).headFragment.hidePBar();
+        }
     }
 
     /**

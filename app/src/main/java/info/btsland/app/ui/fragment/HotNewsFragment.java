@@ -150,6 +150,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "区块链技术即将来临……\n" +
                 "\n" +
                 "以上就是你的公司可能采用区块链技术的几个区域，它可能来的比你预计的还要快，还有很多你意想不到的可能性。你还可以用下面几种思维模式来思考区块链技术。当谈到区块链技术在商业中的潜力，我倾向于把它当成是让陌生人一起工作的方法。不管是你的员工、你的商业伙伴、你的供应商或是别的什么人，区块链都会以不止一种方式迅速渗透你的组织。");
+        new7.setImage(R.drawable.new2);
         newsList.add(new7);
 
         News new3 = new News();
@@ -171,6 +172,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "Ledger公司成立于2015年，其总部设于法国巴黎。本月早些时候，该公司宣布与金雅拓（Gemalto）公司合作，为加密资产应用提供安全基础设施。今年八月份，Ledger宣布支持了比特币隔离见证（Segwit）方案。\n" +
                 "\n" +
                 "目前，Ledger的客户遍布165个国家，其雇员超过了60名，该公司售出的 Ledger 钱包已突破了30万个，截至目前，该公司筹集到超过1000万美元的资金，投资方包括MAIF Avenir以及XAnge公司。");
+        new3.setImage(R.drawable.new3);
         newsList.add(new3);
 
         News new8 = new News();
@@ -213,6 +215,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "目前，只有选中的货币才能参与原子互换。最近，莱特币和Decred实现原子互换的消息登上了新闻头条，莱特币创始人Charlie Lee完成了他与Decred开发团队之间的第一笔原子互换。比特币、莱特币、Decred、Viacoin和Vertcoin目前是唯一一批已经成功完成原子互换的加密货币。原子互换技术的代码如今已经开源，任何有兴趣的人都可以自己进行尝试。\n" +
                 "\n" +
                 "凭借这种新的技术进步，一旦完成更多严格的测试，去中心化交易所可能将会诞生。这具有重大的意义，尤其是如今交易所被黑客攻击而导致资金和用户信息丢失的消息层出不穷。凭借基于交易所的原子互换，用户将能够完全掌控自己的资金，并且能够保持与他们选择的加密货币一样的匿名性。");
+        new8.setImage(R.drawable.new4);
         newsList.add(new8);
 
         News new6 = new News();
@@ -321,6 +324,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "比特币生态系统发展中，用户是排第一位的，只有交易所等基础设施满足了用户的需求，社区才能快速发展，比特币的未来也会更加美好。\n" +
                 "\n" +
                 "在比特币这个去中心化的系统中，由于用户数量的庞大，共识是很难达成的。因此也需要社区内部频繁的沟通与交流。至于未来是否会再次出现争议性的硬分叉，我们无法肯定，但可以肯定的是，我们都应坚决维护比特币的统一，共同促进这个加密货币的发展。");
+        new6.setImage(R.drawable.new5);
         newsList.add(new6);
 
         News new5 = new News();
@@ -352,6 +356,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "央行行长周小川曾阐述央行发行数字货币的几个原则：“一是提供便利性和安全性；二是做到保护隐私与维护社会秩序、打击违法犯罪行为的平衡，尤其针对洗钱、恐怖主义等犯罪行为要保留必要的遏制手段；三是要有利于货币政策的有效运行和传导；四是要保留货币主权的控制力，数字货币是自由可兑换的，同时也是可控的可兑换。”\n" +
                 "\n" +
                 "总之，法定数字货币主要实现效率、可靠、流通，必须由央行发行，并且在其发行、流通和交易环节，一方面应建立强大的支付系统，另一方面配套的法律法规应及时出台，保障法定数字货币的落地应用。");
+        new5.setImage(R.drawable.new6);
         newsList.add(new5);
 
         News new2 = new News();
@@ -487,6 +492,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "在这危机蛰伏的全球大环境中，比特币像一棵小草萌芽初生，没有靠山没有背景，因此价值的认可对它十分重要，这也是催生比特币发展的重要元素。对比特币来讲，更多的应用场景才能真正提升它得价值，这将成为未来的关键。\n" +
                 "\n" +
                 "有说法认为，比特币只是一个社会实验。这个试验可能成功可能失败，会不会崩盘，当然有失败的可能。但是目前崩盘的可能性几乎不存在，因为跌到很低，总有人会买的，它的基础应用人群还是存在的，比特币作为全球高效率，低成本的流通手段价值还是存在的。而未来，随着区块链技术的蓬勃发展，比特币必将反哺再上一个新台阶。");
+        new2.setImage(R.drawable.new7);
         newsList.add(new2);
 
         News new1 = new News();
@@ -526,6 +532,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
                 "麻省理工表示，该应用允许学生能够免费且几乎即时地，将他们的学位证书分享给其所选择的任何对象，其不涉及到任何中介。此外，麻省理工还指出，正是由于区块链，第三方可以很容易地验证证书是否是真实合法的，而无需再去接触注册办公室。\n" +
                 "\n" +
                 "对于该项目迄今为止的表现，迪安.玛丽.卡拉汉(Dean Mary Callahan)表示满意，她还透露说，欧盟委员会以及诸多国际大学询问过该项目的事宜。“我们刚刚接触这个问题的表面，这是一个激动人心的时刻，” 卡拉汉说。");
+        new1.setImage(R.drawable.new1);
         newsList.add(new1);
         return newsList;
     }

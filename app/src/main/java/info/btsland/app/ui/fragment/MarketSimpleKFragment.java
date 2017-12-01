@@ -151,7 +151,8 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         }
         MainActivity.dataKKey= KeyUtil.constructingDateKKey(base,quote,MarketStat.DEFAULT_BUCKET_SECS, MarketStat.DEFAULT_AGO_SECS);
         headFragment.showPBar();
-        headFragment.setTitleName(quote+":"+base);
+        MainActivity.title=quote+":"+base;
+        headFragment.setTitleName(MainActivity.title);
         if(BtslandApplication.dataKMap.get(MainActivity.dataKKey)!=null) {
             updateChartData();
         }else {

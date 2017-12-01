@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -83,6 +84,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "与此同时，Yun Song-ah则很享受比特币在旧金山的高普及率。她很容易就找到了大量接受比特币的商户，同时还有很多比特币ATM机可以取出美元。她用画笔描绘了金门大桥，游览了渔人码头，感受了嬉皮士文化，还参观了科波拉酒庄。\n" +
                 "\n" +
                 "节目制作人表示，这场真人秀展示了两种不同的生存方式，旧金山是比特币应用范围最广的地区，而韩国却完全相反。");
+        new21.setImage(R.drawable.new1);
         newsList.add(new21);
 
         News new20 = new News();
@@ -115,6 +117,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "Robinson直言不讳地描述了他认为区块链将会对黄金交易带来的影响：\n" +
                 "\n" +
                 "“我们认为RMG是一场全球性革命的开始。我们认为它们是一个游戏变革者。”");
+        new20.setImage(R.drawable.new7);
         newsList.add(new20);
 
         News new18 = new News();
@@ -250,6 +253,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "二是加强国际监管协调，形成监管共识，采取国际监管一致行动，研发可行的技术方案，禁止虚拟货币匿名交易，防止资金在链上地下的跨国违法流动。加快法定数字货币研发。\n" +
                 "\n" +
                 "三是加快法定数字的研发，加快数字金融制度建设，抓紧研究制定法定数字货币的发行制度，研究制定虚拟货币的监管制度，导引数字金融健康发展的正确方向。制度建设工作应先易后难，先出台监管法规，再出台法律。");
+        new18.setImage(R.drawable.new3);
         newsList.add(new18);
 
         News new12 = new News();
@@ -280,6 +284,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "总的来说，日本和韩国等主要地区的强劲表现，以及美国领先金融机构提出的比特币整合计划，促成了近期比特币的价格飙升。\n" +
                 "\n" +
                 "有分析师预计，到2018年初，比特币的价格有望超过10000美元。但也有分析师警告投资者需要谨慎，因为仅在过去一个月，比特币的价格就从3300美元增长到了7400美元，接下来可能会迎来一次价格回调。");
+        new12.setImage(R.drawable.new4);
         newsList.add(new12);
 
         News new17 = new News();
@@ -310,6 +315,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "上周，芝加哥商品交易所集团宣布将在年底推出比特币期货，这令比特币迅速飙升，两天内冲上7000美元。\n" +
                 "\n" +
                 "今年以来，比特币价格已经翻了六番，市值一度超过1250亿美元。");
+        new17.setImage(R.drawable.new5);
         newsList.add(new17);
 
         News new16 = new News();
@@ -333,6 +339,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "Cunha帮助管理着美联储的12个分支机构之一，这12个分支机构构成了美国的中央银行系统，而波士顿联邦储备银行就是其中之一。他继续解释了该机构一直在测试各种技术在支付领域的应用。尽管新的技术，如数据分析、人工智能和机器学习，都正在颠覆金融生态系统的很多方面，不过重要的是找到“正确的商业案例”。\n" +
                 "\n" +
                 "本月初，Cunha在费城联邦储备银行举行的一场金融技术会议上表示，区块链技术将会“叫醒SWIFT和其他中间机构”。他进一步描述了美联储为货币政策制定者，支付专家和监管专家提供关于区块链技术风险与潜力的教育计划。\n");
+        new16.setImage(R.drawable.new6);
         newsList.add(new16);
 
 //        News new12 = new News();
@@ -383,6 +390,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "开发进展方面，去中心化的多链钱包已经开发完成，目前已经支持BTC、BCC、ETH、ACT、LET、SMC、EOS、DGD、OMG等几十种资产，后续还会支持更多币种。未来还将支持币币交易和人人发币功能。\n" +
                 "\n" +
                 "试想一下，在不久的将来，手机里只需要安装Kcash钱包，就可以在东南亚的某家餐厅，使用比特币或者任何你喜欢的数字货币付餐费，是不是很酷？");
+        new15.setImage(R.drawable.new7);
         newsList.add(new15);
 
         News new13 = new News();
@@ -416,6 +424,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "这一改变释放了想象的空间，区块链的影响扩展到全球范围的各个领域，或许我们能窥探的只是其冰山一角。“数字经济之父”唐.塔普斯科特（Don Tapscott）认为，未来几十年产生巨大影响的科技已经到来，它并不是社交媒体，不是大数据，不是机器人，甚至不是人工智能，而是区块链。\n" +
                 "\n" +
                 "时代的大幕已经拉开，好戏即将上演，各位看官慢慢欣赏！");
+        new13.setImage(R.drawable.new1);
         newsList.add(new13);
 
         News new10 = new News();
@@ -437,6 +446,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "欧盟研究、科学与创新委员会委员Carlos Moedas表示：\n" +
                 "\n" +
                 "“人工智能，遗传学，区块链：科学是当今最有希望的突破性创新的核心。欧洲是世界科技领先者，将在推动创新方面发挥重要作用。”");
+        new10.setImage(R.drawable.new4);
         newsList.add(new10);
 
         News new11 = new News();
@@ -458,6 +468,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "从谷歌趋势数据来看，“bitcoin” (比特币)及“bitcoin price”(比特币价格)关键字的搜索已接近历史高位，这意味着曝光可能会转化为对比特币协议的新认识及投资，根据 CoinMarketCap的数据显示，比特币的市值已突破了1000亿美元。\n" +
                 "\n" +
                 "“我们看到了市场对比特币稳步增长的信心，” 加密货币衍生品交易所交易员 Joseph Lee告诉记者，“这对于比特币的采用而言，无疑是极为有利的。”" );
+        new11.setImage(R.drawable.new2);
         newsList.add(new11);
 
         News new8 = new News();
@@ -478,6 +489,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "在这次立法会议期间， Lee也承认韩国央行可更多地围绕加密货币及区块链进行研究。\n" +
                 "\n" +
                 "“我们还提及很多其他国家进行当中的虚拟货币研究，例如瑞典。韩国央行也将更重视对虚拟货币的研究，” Lee总结说。");
+        new8.setImage(R.drawable.new5);
         newsList.add(new8);
 
         News new1 = new News();
@@ -503,6 +515,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "区块链技术部署之后，预计交易后流程就会面临改革。不过，在对区块链技术进行投资之前还需要克服一系列阻碍。其中就包括延展性和互通性等技术问题，行业标准以及合作方式也需要尽快实现统一。\n" +
                 "\n" +
                 "穆迪强调，金融服务领域的监管部门对区块链基本上是持支持态度的，但至于最终他们将针对这项技术出台怎样的政策就很难说了。");
+        new1.setImage(R.drawable.new7);
         newsList.add(new1);
 
         News new7 = new News();
@@ -589,6 +602,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "区块链技术即将来临……\n" +
                 "\n" +
                 "以上就是你的公司可能采用区块链技术的几个区域，它可能来的比你预计的还要快，还有很多你意想不到的可能性。你还可以用下面几种思维模式来思考区块链技术。当谈到区块链技术在商业中的潜力，我倾向于把它当成是让陌生人一起工作的方法。不管是你的员工、你的商业伙伴、你的供应商或是别的什么人，区块链都会以不止一种方式迅速渗透你的组织。");
+        new7.setImage(R.drawable.new6);
         newsList.add(new7);
 
         News new6 = new News();
@@ -610,6 +624,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "Chan表示HKMA的项目能够实现贸易文件数字化，流程自动化，并且允许在获得授权的参与者之间共享所需要的文件，减少人类错误以及欺诈风险。\n" +
                 "\n" +
                 "他还表示，HKMA和这些银行现在正在招聘一位开发者来创建并实现该平台的商业化。");
+        new6.setImage(R.drawable.new1);
         newsList.add(new6);
 
         News new5 = new News();
@@ -641,6 +656,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "今年5月，中国首个区块链标准《区块链参考架构》发布，统一了当前大家对区块链的认识，对于区块链产业生态发展意义重大。本次区块链应用标准化研制是继《区块链参考架构》后的又一区块链里程碑。应用标准化基于前期政策、研究、场景三方面的积累，对前面的工作进行了提炼，将宏观手段具象化，对下一步区块链工作具有聚焦性指引。“这个作用是不可替代的，因为政策是宏观上的平台手段，但要真正解决企业问题，我们需要的是一个标准告诉大家该做什么，怎么去做，如何衡量做得好不好。”李鸣告诉数据观记者。\n" +
                 "\n" +
                 "会上，来自全国30多家与会企业的专家，通过分组讨论的形式，发挥各家所长，有针对性地群策群力，将分别围绕《区块链应用指南》、《区块链系统测评和选型规范》、《基于区块链的数据共享开放要求》、《基于区块链的精准扶贫实施指南》、《基于区块链的数字资产交易实施指南》五个区块链应用领域的标准化开展为期四天的商榷和拟定，草案预计于27日下午完成;按照“急用先行，共性先上”的原则，计划于2018年前完成重点标准的征求意见稿，积极推动贵州省区块链政用、民用、商用发展，构建区块链应用标准体系。");
+        new5.setImage(R.drawable.new3);
         newsList.add(new5);
 
         News new3 = new News();
@@ -659,6 +675,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "这一监管部门表示，最终他们将从投资者保护的角度制定出全新的规则。\n" +
                 "\n" +
                 "制定这一系列新规则的目标是在涉及虚拟货币的环境下，保护投资者的利益以及金融市场的诚信。");
+        new3.setImage(R.drawable.new7);
         newsList.add(new3);
 
         News new2 = new News();
@@ -692,6 +709,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "FCA拒绝了这一观点，其还补充说：\n" +
                 "\n" +
                 "“FCA的工作，是确保英国的金融体系环境对洗钱者而言是不利的。”");
+        new2.setImage(R.drawable.new2);
         newsList.add(new2);
 
         News new9 = new News();
@@ -759,6 +777,7 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
                 "科技巨头们纷纷加入了这一行列，正在通过他们内部建立的平台和合作提供区块链即服务（BaaS）。\n" +
                 "\n" +
                 "区块链即服务预计将会进一步发展并成为金融技术行业最新的变革，如果你想要参与这场加密技术运动中的竞争和区块链即服务的大规模采用，那么BaaS就应该在你的雷达扫描范围内。");
+        new9.setImage(R.drawable.new5);
         newsList.add(new9);
 
         return newsList;

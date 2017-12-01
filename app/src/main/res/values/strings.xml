@@ -40,7 +40,7 @@
     <string name="wholeguadan">全部挂单</string>
     <string name="walletbackup">钱包备份</string>
     <string name="transfer_accounts">转账操作</string>
-    
+
 
     <string name="set">设置</string>
     <string name="language">语言</string>
@@ -194,4 +194,5 @@
     <string name="str_balance">余额：</string>
     <string name="str_remarks">备注：</string>
     <string name="str_confirm">确定</string>
+    <string name="c2c">C2C</string>
 </resources>

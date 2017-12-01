@@ -32,13 +32,17 @@ import info.btsland.app.util.KeyUtil;
 
 public class MarketDetailedActivity extends AppCompatActivity{
     private static String TAG="MarketDetailedActivity";
-    private HeadFragment headFragment;
+    public HeadFragment headFragment;
     public static MarketTicker market=new MarketTicker("CNY","BTS");
 
     public static String title;
     private int index = 1 ;
     public static String dataKey;
     public static String orderKey;
+    //K图是否刷新成功
+    public boolean isRefK=false;
+    //买卖是否刷新成功
+    public boolean isRefOrder=false;
 
     private List<MarketTicker> tickers;
 
@@ -63,16 +67,22 @@ public class MarketDetailedActivity extends AppCompatActivity{
             if (getIntent().getSerializableExtra("MarketTicker") != null) {
                 this.market = (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
             }
-            try {
-                MarketTicker marketTicker=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
-                if(marketTicker!=null){
-                    this.market=marketTicker;
-                }
-            } catch (NetworkStatusException e) {
-                e.printStackTrace();
-            }
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        MarketTicker marketTicker=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
+                        if(marketTicker!=null){
+                            market=marketTicker;
+                            handler.sendEmptyMessage(1);
+                        }
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
 
-            this.title = market.quote + ":" + market.base;
+                }
+            }).start();
+
             this.index = getIntent().getIntExtra("index", index);
         }else {
             if(savedInstanceState!=null){
@@ -152,6 +162,8 @@ public class MarketDetailedActivity extends AppCompatActivity{
                             @Override
                             public void run() {
                                 MarketTicker newMarket=null;
+                                MarketDetailedActivity.market=market;
+                                handler.sendEmptyMessage(1);//通知主线程设置标题
                                 try {
                                     newMarket=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
                                 } catch (NetworkStatusException e) {
@@ -159,7 +171,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
                                 }
                                 BtslandApplication.getMarketStat().unsubscribe(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote,MarketStat.STAT_MARKET_OPEN_ORDER);
                                 MarketDetailedActivity.market=newMarket;//设置当前的交易对
-                                handler.sendEmptyMessage(1);//通知主线程设置标题
                                 //设置取K图数据的键
                                 dataKey=KeyUtil.constructingDateKKey(MarketDetailedActivity.market.base,MarketDetailedActivity.market.quote,
                                         DetailedKFragment.range,DetailedKFragment.ago);
@@ -226,6 +237,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
             if(msg.what==1){
                 title=MarketDetailedActivity.market.quote+":"+MarketDetailedActivity.market.base;
                 headFragment.setTitleName(title);
+                headFragment.showPBar();
             }
         }
     };

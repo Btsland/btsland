@@ -29,7 +29,7 @@ public class PurseWalletBackupActivity extends AppCompatActivity{
      */
     private void init() {
         webView=findViewById(R.id.webView);
-        webView.loadUrl("http://www.fastchain.info/");
+        //webView.loadUrl("http://www.fastchain.info/");
     }
 
 

@@ -50,10 +50,10 @@
         app:layout_constraintBottom_toBottomOf="@+id/v_head_back"/>
     <TextView
         android:id="@+id/tv_head_select"
-        android:layout_width="80dp"
+        android:layout_width="50dp"
         android:layout_height="50dp"
         android:drawableLeft="@drawable/image_arrow_down"
-        android:paddingLeft="12dp"
+        android:paddingLeft="5dp"
         app:layout_constraintTop_toTopOf="@+id/v_head_back"
         app:layout_constraintBottom_toBottomOf="@+id/v_head_back"
         app:layout_constraintLeft_toRightOf="@+id/tv_head_title"/>

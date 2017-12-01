@@ -99,6 +99,7 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
                 "不过，尽管中国境内的比特币交易所被关停，人民币购买比特币的交易通道被封堵，但是我们注意到，一些交易所的主体开始在海外市场开设新的比特币交易所。\n" +
                 "\n" +
                 "比特币监管任重而道远。");
+        new9.setImage(R.drawable.new1);
         newsList.add(new9);
 
         News new8 = new News();
@@ -121,6 +122,7 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
                 "Chan表示HKMA的项目能够实现贸易文件数字化，流程自动化，并且允许在获得授权的参与者之间共享所需要的文件，减少人类错误以及欺诈风险。\n" +
                 "\n" +
                 "他还表示，HKMA和这些银行现在正在招聘一位开发者来创建并实现该平台的商业化。");
+        new8.setImage(R.drawable.new2);
         newsList.add(new8);
 
         News new5 = new News();
@@ -157,6 +159,7 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
                 "今年5月，中国首个区块链标准《区块链参考架构》发布，统一了当前大家对区块链的认识，对于区块链产业生态发展意义重大。本次区块链应用标准化研制是继《区块链参考架构》后的又一区块链里程碑。应用标准化基于前期政策、研究、场景三方面的积累，对前面的工作进行了提炼，将宏观手段具象化，对下一步区块链工作具有聚焦性指引。“这个作用是不可替代的，因为政策是宏观上的平台手段，但要真正解决企业问题，我们需要的是一个标准告诉大家该做什么，怎么去做，如何衡量做得好不好。”李鸣告诉数据观记者。\n" +
                 "\n" +
                 "会上，来自全国30多家与会企业的专家，通过分组讨论的形式，发挥各家所长，有针对性地群策群力，将分别围绕《区块链应用指南》、《区块链系统测评和选型规范》、《基于区块链的数据共享开放要求》、《基于区块链的精准扶贫实施指南》、《基于区块链的数字资产交易实施指南》五个区块链应用领域的标准化开展为期四天的商榷和拟定，草案预计于27日下午完成;按照“急用先行，共性先上”的原则，计划于2018年前完成重点标准的征求意见稿，积极推动贵州省区块链政用、民用、商用发展，构建区块链应用标准体系。");
+        new5.setImage(R.drawable.new3);
         newsList.add(new5);
 
         News new7 = new News();
@@ -217,6 +220,7 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
                 "与此同时，由京东Y事业部和京东云打造的区块链防伪追溯技术平台也正式对外开放，这将是京东资源面向社会开放的重要一环。9月，京东公益、京东Y事业部与美丽中国联合发起“守梦天使寻找之旅”公益项目，进行了国内首例区块链物资公益尝试。\n" +
                 "\n" +
                 "在去年年底国务院印发的《“十三五”国家信息化规划》中，明确将区块链列入到战略性前沿技术的范畴。今年十月，国务院就推进供应链创新与应用发布指导意见，再提区块链。毫无疑问，区块链这一前沿技术已经受到各方关注，而有了巨头企业的全面布局与深入参与，区块链的未来一定潜力巨大，前景更加广阔。");
+        new7.setImage(R.drawable.new4);
         newsList.add(new7);
 
         News new6 = new News();
@@ -228,6 +232,7 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
                 "《若干措施》共分五大项，33条。内容包括：坚持服务导向，优化金融政策环境；发展金融总部经济，鼓励金融总部企业做大做强；支持金融企业分支机构落户布局，鼓励精细化发展；规范发展新兴金融业态，丰富金融市场层级；培育引进创新型金融机构，完善配套金融支持体系。\n" +
                 "\n" +
                 "值得注意的是，《若干措施》提到，充分发挥“金融创新奖和金融科技专项奖”的创新激励作用。其中，金融创新奖每年对金融产品和服务创新活动成果显著的金融企业、金融监管机构及有关人员给予表彰和奖励，年度奖金总额控制在1950万元以内；设立金融科技（Fintech）专项奖，重点奖励在区块链、数字货币、金融大数据运用等领域的优秀项目，年度奖励额度控制在600万元以内。");
+        new6.setImage(R.drawable.new6);
         newsList.add(new6);
 
 //        News new3 = new News();
@@ -252,4 +257,5 @@ public class DomesticInformationFragment extends Fragment implements AdapterView
 //        newsList.add(new1);
         return newsList;
     }
+
 }

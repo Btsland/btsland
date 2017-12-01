@@ -1,5 +1,8 @@
 package info.btsland.app.model;
 
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
+
 import java.io.Serializable;
 
 /**
@@ -12,16 +15,15 @@ public class News implements Serializable {
     private String date;    //新闻日期
     private String titleContent;    //标题内容
     private String author;          //新闻作者
-//    private String image;
+    private int  image;
 
-//    public String getImage() {
-//        return image;
-//    }
-//
-//    public void setImage(String image) {
-//        this.image = image;
-//    }
+    public int getImage() {
+        return image;
+    }
 
+    public void setImage(int image) {
+        this.image = image;
+    }
     public String getTitleContent() {
         return titleContent;
     }

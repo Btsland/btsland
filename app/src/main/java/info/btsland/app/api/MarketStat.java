@@ -1,9 +1,11 @@
 package info.btsland.app.api;
 
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -27,6 +29,8 @@ import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.util.IDateUitl;
+import info.btsland.app.util.KeyUtil;
+import info.btsland.app.util.NumericUtil;
 
 import static info.btsland.app.ui.activity.MarketDetailedActivity.market;
 
@@ -92,15 +96,15 @@ public class MarketStat {
     public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
         //Log.e(TAG, "subscribe() called with: base = [" + base + "], quote = [" + quote + "], stats = [" + stats + "], intervalMillis = [" + intervalMillis + "], l = [" + l + "]");
-        subscribe(base, quote, DEFAULT_BUCKET_SECS,DEFAULT_AGO_SECS, stats,intervalMillis, l);
+        subscribe(base, quote, DEFAULT_BUCKET_SECS,DEFAULT_AGO_SECS, stats,intervalMillis, l,null);
     }
 
     public void subscribe(String base, String quote, long bucketSize,long ago, int stats,long intervalMillis,
-                          OnMarketStatUpdateListener l) {
+                          OnMarketStatUpdateListener l,Handler handler) {
         //Log.e(TAG, "subscribe: ago:"+ago);
         unsubscribe(base, quote,stats);
         Subscription subscription =
-                new Subscription(base, quote, bucketSize, ago,stats ,intervalMillis, l);
+                new Subscription(base, quote, bucketSize, ago,stats ,intervalMillis, l,handler);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
     /*public void subscribe(List<String> name,String pwd, int stats,
@@ -248,6 +252,7 @@ public class MarketStat {
     }
 
     public class Subscription implements Runnable {
+        private Handler handler;
         private  long ago;
         private String password;
         private List<String> accentName;
@@ -262,7 +267,7 @@ public class MarketStat {
         private HandlerThread statThread;
         private Handler statHandler;
         private AtomicBoolean isCancelled = new AtomicBoolean(false);
-        private Subscription(String base, String quote, long bucketSecs,long ago, int stats,long intervalMillis, OnMarketStatUpdateListener l) {
+        private Subscription(String base, String quote, long bucketSecs,long ago, int stats,long intervalMillis, OnMarketStatUpdateListener l,Handler handler) {
             this.base = base;
             this.quote = quote;
             this.bucketSecs = bucketSecs;
@@ -270,6 +275,7 @@ public class MarketStat {
             this.stats = stats;
             this.intervalMillis=intervalMillis;
             this.listener = l;
+            this.handler=handler;
             this.statThread = new HandlerThread(makeMarketName(base, quote,stats));
             this.statThread.start();
             this.statHandler = new Handler(this.statThread.getLooper());
@@ -380,7 +386,7 @@ public class MarketStat {
                     long time=ago;
                     while (time>0){
                         Date startDate = IDateUitl.toUniversalTime(new Date(System.currentTimeMillis() -time));
-                        time = time-(bucketSecs*1000*200);
+                        time = time-(bucketSecs*1000*100);
                         Date endDate=null;
                         if(time>0){
                             endDate=IDateUitl.toUniversalTime(new Date(System.currentTimeMillis()-time));
@@ -390,6 +396,25 @@ public class MarketStat {
                         List<HistoryPrice> prices=getMarketHistory(base,quote,(int)bucketSecs,startDate,endDate);
                         if(prices!=null&&prices.size()>0){
                             stat.prices.addAll(prices);
+                        }
+                        int a=100;
+                        if(time>0){
+                            Double timea= Double.valueOf(time);
+                            Double agoa= Double.valueOf(ago);
+                            Double aDouble= timea/agoa;
+                            a = (int) ((1-aDouble)*100);
+                            Log.e(TAG, "run: ago"+ ago+"time:"+time+"aDouble:"+aDouble+"a:"+a);
+                        }
+
+
+                        if(handler!=null){
+                            Message message=Message.obtain();
+                            Bundle bundle=new Bundle();
+                            bundle.putInt("bar",a);
+                            bundle.putString("name",KeyUtil.constructingDateKKey(base,quote,bucketSecs,ago));
+                            message.what=1;
+                            message.setData(bundle);
+                            handler.sendMessage(message);
                         }
 
                     }

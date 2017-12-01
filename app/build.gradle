@@ -8,8 +8,8 @@ android {
         applicationId "info.btsland.app"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 12
-        versionName "1.1.09"
+        versionCode 17
+        versionName "1.1.17"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -65,6 +65,7 @@ dependencies {
     compile 'com.madgag.spongycastle:pkix:1.51.0.0'
     compile 'com.madgag.spongycastle:pg:1.51.0.0'
     compile 'com.kaopiz:kprogresshud:1.0.2'
+    compile 'com.daimajia.numberprogressbar:library:1.4@aar'
     testCompile 'junit:junit:4.12'
     implementation 'org.bitcoinj:bitcoinj-core:0.14.5'
 }

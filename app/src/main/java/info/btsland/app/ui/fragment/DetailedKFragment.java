@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.github.mikephil.charting.charts.CombinedChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -79,6 +80,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private MarketStat.HistoryPrice price=new MarketStat.HistoryPrice();
 
     private CombinedChart simpleK;//图表
+    private NumberProgressBar progressBar;
     private TextView tvInterval5M;
     private TextView tvInterval1H;
     private TextView tvInterval4H;
@@ -162,6 +164,10 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         tvInfoClose.setText(String.valueOf(price.close));
         tvInfoHighReach.setText(String.valueOf(highPrice));
         tvInfoLowReach.setText(String.valueOf(lowPrice));
+        ((MarketDetailedActivity) getActivity()).isRefK=true;
+        if(((MarketDetailedActivity) getActivity()).isRefOrder&&((MarketDetailedActivity) getActivity()).isRefK){
+            ((MarketDetailedActivity) getActivity()).headFragment.hidePBar();
+        }
     }
 
     @Override
@@ -320,6 +326,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
     private void init(View view) {
         simpleK=view.findViewById(R.id.cbc_detailed_K);
         simpleK.setNoDataText("数据正在读取中。。。");
+        progressBar=view.findViewById(R.id.npb_detailed_K_ProgressBar);
+        progressBar.setMax(100);
         tvInterval5M=view.findViewById(R.id.tv_foot_interval_5M);
         tvInterval1H=view.findViewById(R.id.tv_foot_interval_1H);
         tvInterval1D=view.findViewById(R.id.tv_foot_interval_1D);
@@ -497,6 +505,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
         simpleK.fitScreen();
         //simpleK.setVisibleXRangeMaximum(100);
         simpleK.moveViewToX(simpleK.getXChartMax() - 48);
+        simpleK.setVisibility(View.VISIBLE);
+        progressBar.setVisibility(View.INVISIBLE);
     }
     class xAxisValueFormater implements IAxisValueFormatter {
         private List<MarketStat.HistoryPrice> mListPrices;
@@ -530,7 +540,8 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
                 ago,
                 MarketStat.STAT_MARKET_HISTORY,
                 MarketStat.DEFAULT_UPDATE_K_SECS,
-                getListener());
+                getListener(),barhandler);
+        barhandler.sendEmptyMessage(2);
     }
 
     @Override
@@ -570,5 +581,23 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
             fillIn();
         }
     };
-
+    public Handler barhandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            Log.e(TAG, "handleMessage: ");
+            if(msg.what==1){
+                Bundle bundle=msg.getData();
+                String key=bundle.getString("name");
+                int a=bundle.getInt("bar",0);
+                Log.e(TAG, "handleMessage: "+a );
+                if(MarketDetailedActivity.dataKey.equals(key)){
+                    progressBar.setProgress(a);
+                }
+            }else if(msg.what==2) {
+                simpleK.setVisibility(View.INVISIBLE);
+                progressBar.setProgress(0);
+                progressBar.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 }

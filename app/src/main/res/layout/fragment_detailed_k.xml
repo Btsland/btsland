@@ -343,11 +343,27 @@
         android:id="@+id/cbc_detailed_K"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:visibility="invisible"
         android:background="@color/color_white"
         app:layout_constraintTop_toBottomOf="@+id/v_detailed_head"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/ll_bottom"/>
+    <com.daimajia.numberprogressbar.NumberProgressBar
+        android:id="@+id/npb_detailed_K_ProgressBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/NumberProgressBar_Default"
+        app:progress_max="100"
+        app:progress_text_size="16sp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:progress_reached_color="@color/color_font_red"
+        app:progress_text_color="@color/color_font_red"
+        app:layout_constraintTop_toTopOf="@+id/cbc_detailed_K"
+        app:layout_constraintLeft_toLeftOf="@+id/cbc_detailed_K"
+        app:layout_constraintRight_toRightOf="@+id/cbc_detailed_K"
+        app:layout_constraintBottom_toBottomOf="@id/cbc_detailed_K"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

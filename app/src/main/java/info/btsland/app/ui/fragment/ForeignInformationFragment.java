@@ -78,6 +78,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "在这次立法会议期间， Lee也承认韩国央行可更多地围绕加密货币及区块链进行研究。\n" +
                 "\n" +
                 "“我们还提及很多其他国家进行当中的虚拟货币研究，例如瑞典。韩国央行也将更重视对虚拟货币的研究，” Lee总结说。");
+        new8.setImage(R.drawable.new2);
         newsList.add(new8);
 
         News new1 = new News();
@@ -104,6 +105,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "区块链技术部署之后，预计交易后流程就会面临改革。不过，在对区块链技术进行投资之前还需要克服一系列阻碍。其中就包括延展性和互通性等技术问题，行业标准以及合作方式也需要尽快实现统一。\n" +
                 "\n" +
                 "穆迪强调，金融服务领域的监管部门对区块链基本上是持支持态度的，但至于最终他们将针对这项技术出台怎样的政策就很难说了。");
+        new1.setImage(R.drawable.new5);
         newsList.add(new1);
 
         News new3 = new News();
@@ -122,6 +124,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "这一监管部门表示，最终他们将从投资者保护的角度制定出全新的规则。\n" +
                 "\n" +
                 "制定这一系列新规则的目标是在涉及虚拟货币的环境下，保护投资者的利益以及金融市场的诚信。");
+        new3.setImage(R.drawable.new7);
         newsList.add(new3);
 
         News new2 = new News();
@@ -155,6 +158,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "FCA拒绝了这一观点，其还补充说：\n" +
                 "\n" +
                 "“FCA的工作，是确保英国的金融体系环境对洗钱者而言是不利的。”");
+        new2.setImage(R.drawable.new1);
         newsList.add(new2);
 
         News new9 = new News();
@@ -224,6 +228,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "科技巨头们纷纷加入了这一行列，正在通过他们内部建立的平台和合作提供区块链即服务（BaaS）。\n" +
                 "\n" +
                 "区块链即服务预计将会进一步发展并成为金融技术行业最新的变革，如果你想要参与这场加密技术运动中的竞争和区块链即服务的大规模采用，那么BaaS就应该在你的雷达扫描范围内。");
+        new9.setImage(R.drawable.new2);
         newsList.add(new9);
 
         News new6 = new News();
@@ -249,6 +254,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "该报告继续指出一些银行担心洗钱和恐怖主义组织融资的出现以及潜在的贷款风险。\n" +
                 "\n" +
                 "不过，尽管面临着这些银行问题，该报告发现“这个沙箱的第一个年头满足了真正的需求”，这些结果使该机构感受到了“极大鼓舞”。");
+        new6.setImage(R.drawable.new4);
         newsList.add(new6);
 
         News new5 = new News();
@@ -280,6 +286,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "他补充说：\n" +
                 "\n" +
                 "“我认为天空才是区块链的极限。我们还处于非常非常早的阶段。”");
+        new5.setImage(R.drawable.new5);
         newsList.add(new5);
 
         News new10 = new News();
@@ -308,6 +315,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
                 "Kelimbetov说，该国领导已经授权AIFC作为新兴金融技术发展的专业中心。为了实现这一目标，AIFC不久将“加入由国际高新技术中心组成的联盟，其中就包括一些正在研究国家和地区加密货币以及区块链技术方案的大型国际银行”。\n" +
                 "\n" +
                 "本月早些时候，AIFC与微软签署谅解备忘录，旨在建立该国的区块链创新中心，促进DLT初创公司的创新发展。今年7月，AIFC宣布，其与德勤和Waves将为加密货币、区块链以及金融科技企业制定宽松的监管框架。");
+        new10.setImage(R.drawable.new6);
         newsList.add(new10);
 
         return newsList;

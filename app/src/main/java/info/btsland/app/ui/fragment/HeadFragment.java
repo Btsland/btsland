@@ -187,6 +187,9 @@ public class HeadFragment extends Fragment {
         if(titleName!=null&&!titleName.equals("")){
             this.titleName=titleName;
         }
+        if(savedInstanceState!=null){
+            this.titleName=savedInstanceState.getString("titleName");
+        }
         init(view);
         fillIn();
         return view;
@@ -219,5 +222,11 @@ public class HeadFragment extends Fragment {
     }
     public interface OnSelectOnClickListener{
         void onClick(View view);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString("titleName",titleName);
+        super.onSaveInstanceState(outState);
     }
 }

@@ -453,6 +453,25 @@ public class Websocket_api extends WebSocketListener {
         return replyObject.result;
 
     }
+    public List<asset_object> list_assets(String strLowerBound, int nLimit) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("list_assets");
+
+        List<Object> listAssetsParam = new ArrayList<>();
+        listAssetsParam.add(strLowerBound);
+        listAssetsParam.add(nLimit);
+        callObject.params.add(listAssetsParam);
+
+        ReplyObjectProcess<Reply<List<asset_object>>> replyObjectProcess =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<asset_object>>>(){}.getType());
+        Reply<List<asset_object>> replyObject = sendForReply(callObject, replyObjectProcess);
+
+        return replyObject.result;
+    }
     public List<asset> list_account_balances_by_id(object_id<account_object> accountId) throws NetworkStatusException {
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();

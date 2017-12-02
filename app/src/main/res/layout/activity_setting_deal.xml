@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_setDeal_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tv_setDeal_left"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:text="已设置"
+        android:gravity="center"
+        android:textColor="@color/color_black"
+        app:layout_constraintTop_toBottomOf="@+id/fra_setDeal_head"
+        app:layout_constraintLeft_toLeftOf="@+id/lv_setDeal_coins"
+        app:layout_constraintRight_toRightOf="@+id/lv_setDeal_coins"/>
+    <TextView
+        android:id="@+id/tv_setDeal_right"
+        android:layout_width="0dp"
+        android:layout_height="40dp" />
+    <ListView
+        android:id="@+id/lv_setDeal_coins"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_weight="4"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_setDeal_left"
+        app:layout_constraintBottom_toTopOf="@+id/ll_btn_bottom"
+        app:layout_constraintRight_toLeftOf="@+id/lv_setDeal_newCoins">
+
+    </ListView>
+    <EditText
+        android:id="@+id/ed_setDeal"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:paddingLeft="20dp"
+        android:background="@drawable/edit_text"
+        app:layout_constraintLeft_toLeftOf="@+id/lv_setDeal_newCoins"
+        app:layout_constraintTop_toBottomOf="@+id/fra_setDeal_head"
+        app:layout_constraintRight_toLeftOf="@+id/tv_setDeal_ok"
+        />
+    <TextView
+        android:id="@+id/tv_setDeal_ok"
+        android:layout_width="50dp"
+        android:layout_height="40dp"
+        android:text="搜索"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/fra_setDeal_head"
+        app:layout_constraintRight_toRightOf="@+id/lv_setDeal_newCoins"/>
+    <ListView
+        android:id="@+id/lv_setDeal_newCoins"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_weight="6"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ed_setDeal"
+        app:layout_constraintBottom_toTopOf="@+id/ll_btn_bottom"
+        app:layout_constraintLeft_toRightOf="@+id/lv_setDeal_coins">
+
+    </ListView>
+    <LinearLayout
+        android:id="@+id/ll_btn_bottom"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/tv_setDeal_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:layout_height="match_parent" />
+        <TextView
+            android:id="@+id/tv_setDeal_confirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/str_confirm"
+            android:layout_height="match_parent" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

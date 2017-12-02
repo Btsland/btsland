@@ -13,8 +13,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.api.asset_object;
+import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.ui.fragment.C2CFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;

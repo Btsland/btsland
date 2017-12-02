@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.constraint.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,12 +36,20 @@ public class MarketRowAdapter extends BaseAdapter {
     private List<MarketTicker> markets=new ArrayList<>();
     private LayoutInflater inflater;
     private Context context;
+    private MarketItemClickListener itemClickListener;
+    private int selectorItem=-1;
 
     public void setMarkets(List<MarketTicker> markets) {
         this.markets = markets;
         this.notifyDataSetChanged();
     }
-
+    public void setMarketItemClickListener(MarketItemClickListener itemClickListener){
+        this.itemClickListener=itemClickListener;
+    }
+    public void setSelectorItem(int selectorItem){
+        this.selectorItem=selectorItem;
+        this.notifyDataSetChanged();
+    }
     public MarketRowAdapter(MarketSimpleKFragment simpleKFragment, Context context) {
         this.simpleKFragment = simpleKFragment;
         this.context = context;
@@ -49,12 +58,16 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return markets.size();
+        return markets.size()+1;
     }
 
     @Override
     public Object getItem(int i) {
-        return markets.get(i);
+        if(i<markets.size()) {
+            return markets.get(i);
+        }else {
+            return null;
+        }
     }
 
     @Override
@@ -64,65 +77,78 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View convertView, ViewGroup viewGroup) {
+
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.market_item, null);
         }
+
         if(markets==null){
             return null;
         }
-        if(markets.get(i)==null){
-            return convertView;
-        }
-        MarketTicker market = markets.get(i);
         //Log.i(TAG, "getView: "+market+"i:"+i);
         TextView tvCoin = convertView.findViewById(R.id.tv_coin);
         TextView tvFluctuation = convertView.findViewById(R.id.tv_fluctuation);
         TextView tvNewPrice = convertView.findViewById(R.id.tv_newPrice);
         TextView tvBestAskNum = convertView.findViewById(R.id.tv_bestAskNum);
         TextView tvBestBidNum = convertView.findViewById(R.id.tv_bestBidNum);
-        if(market.quote==null){
-            tvCoin.setText("");
-        }
-        tvCoin.setText(market.quote);
-        DecimalFormat dfFluc = new DecimalFormat();
-        dfFluc.applyPattern("0.00");
-        String fluctuation= String.valueOf(dfFluc.format(market.percent_change))+"%";
-        //Log.e("getView", "fluctuation: "+ fluctuation);
-        tvFluctuation.setText(fluctuation);
-        if(market.latest==null){
-            tvNewPrice.setText("");
-        }else if(market.latest.length()<9){
-            tvNewPrice.setText(market.latest);
+        ConstraintLayout clBack=convertView.findViewById(R.id.cl_back);
+        TextView tvAdd=convertView.findViewById(R.id.tv_add);
+        if(i>=markets.size()){
+            tvAdd.setVisibility(View.VISIBLE);
+            clBack.setVisibility(View.GONE);
+            convertView.setMinimumHeight(40);
         }else {
-            tvNewPrice.setText(market.latest.substring(0, 8));
-        }
-        if(market.lowest_ask==null){
-            tvBestAskNum.setText("");
-        }else if(market.lowest_ask.length()<9){
-            tvBestAskNum.setText(market.lowest_ask);
-        }else {
-            tvBestAskNum.setText(market.lowest_ask.substring(0, 8));
-        }
-        if(market.highest_bid==null){
-            tvBestBidNum.setText("");
-        }else if(market.highest_bid.length()<9){
-            tvBestBidNum.setText(market.highest_bid);
-        }else {
-            tvBestBidNum.setText(market.highest_bid.substring(0, 8));
+            MarketTicker market = markets.get(i);
+            if (market.quote == null) {
+                tvCoin.setText("");
+            }
+            tvCoin.setText(market.quote);
+            DecimalFormat dfFluc = new DecimalFormat();
+            dfFluc.applyPattern("0.00");
+            String fluctuation = String.valueOf(dfFluc.format(market.percent_change)) + "%";
+            //Log.e("getView", "fluctuation: "+ fluctuation);
+            tvFluctuation.setText(fluctuation);
+            if (market.latest == null) {
+                tvNewPrice.setText("");
+            } else if (market.latest.length() < 9) {
+                tvNewPrice.setText(market.latest);
+            } else {
+                tvNewPrice.setText(market.latest.substring(0, 8));
+            }
+            if (market.lowest_ask == null) {
+                tvBestAskNum.setText("");
+            } else if (market.lowest_ask.length() < 9) {
+                tvBestAskNum.setText(market.lowest_ask);
+            } else {
+                tvBestAskNum.setText(market.lowest_ask.substring(0, 8));
+            }
+            if (market.highest_bid == null) {
+                tvBestBidNum.setText("");
+            } else if (market.highest_bid.length() < 9) {
+                tvBestBidNum.setText(market.highest_bid);
+            } else {
+                tvBestBidNum.setText(market.highest_bid.substring(0, 8));
+            }
+
+            if (market.percent_change > 0) {
+
+                tvFluctuation.setTextColor(BtslandApplication.goUp);
+                tvNewPrice.setTextColor(BtslandApplication.goUp);
+            } else if (market.percent_change < 0) {
+                tvFluctuation.setTextColor(BtslandApplication.goDown);
+                tvNewPrice.setTextColor(BtslandApplication.goDown);
+            } else {
+                tvFluctuation.setTextColor(BtslandApplication.suspend);
+                tvNewPrice.setTextColor(BtslandApplication.suspend);
+            }
+            if (selectorItem == i) {
+                //设置选定样式
+            }
+            tvAdd.setVisibility(View.GONE);
+            clBack.setVisibility(View.VISIBLE);
         }
 
-        if (market.percent_change > 0) {
-
-            tvFluctuation.setTextColor(BtslandApplication.goUp);
-            tvNewPrice.setTextColor(BtslandApplication.goUp);
-        } else if(market.percent_change < 0) {
-            tvFluctuation.setTextColor(BtslandApplication.goDown);
-            tvNewPrice.setTextColor(BtslandApplication.goDown);
-        }else {
-            tvFluctuation.setTextColor(BtslandApplication.suspend);
-            tvNewPrice.setTextColor(BtslandApplication.suspend);
-        }
-        rowOnClickListener clickListener=new rowOnClickListener(market);
+        rowOnClickListener clickListener=new rowOnClickListener(i);
         convertView.setOnClickListener(clickListener);
         return convertView;
 
@@ -130,30 +156,39 @@ public class MarketRowAdapter extends BaseAdapter {
     long mLastTime=0;
     long mCurTime=0;
     private class rowOnClickListener implements View.OnClickListener{
-        private MarketTicker market;
+        private int index;
 
-        public rowOnClickListener(MarketTicker market) {
-            this.market=market;
+        public rowOnClickListener(int index) {
+            this.index=index;
         }
 
         @Override
         public void onClick(View v) {
             Message message=Message.obtain();
-            mLastTime=mCurTime;
-            mCurTime= System.currentTimeMillis();
-            if(mCurTime-mLastTime<300){//双击事件
-                mCurTime =0;
-                mLastTime = 0;
+            if(index<markets.size()){
+                mLastTime=mCurTime;
+                mCurTime= System.currentTimeMillis();
+                if(mCurTime-mLastTime<300){//双击事件
+                    mCurTime =0;
+                    mLastTime = 0;
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("result",2);
+                    bundle.putInt("index",index);
+                    //Log.i(TAG, "onClick: market:"+market);
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }else{//单击事件
+                    Bundle bundle=new Bundle();
+                    bundle.putInt("result",1);
+                    bundle.putInt("index",index);
+                    //Log.i(TAG, "onClick: market:"+market);
+                    message.setData(bundle);
+                    handler.sendMessage(message);
+                }
+            }else {
                 Bundle bundle=new Bundle();
-                bundle.putInt("result",2);
-                bundle.putSerializable("MarketTicker",market);
-                //Log.i(TAG, "onClick: market:"+market);
-                message.setData(bundle);
-                handler.sendMessage(message);
-            }else{//单击事件
-                Bundle bundle=new Bundle();
-                bundle.putInt("result",1);
-                bundle.putSerializable("MarketTicker",market);
+                bundle.putInt("result",3);
+                bundle.putInt("index",index);
                 //Log.i(TAG, "onClick: market:"+market);
                 message.setData(bundle);
                 handler.sendMessage(message);
@@ -166,18 +201,34 @@ public class MarketRowAdapter extends BaseAdapter {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             Bundle bundle=msg.getData();
-            MarketTicker market = (MarketTicker) bundle.getSerializable("MarketTicker");
+            int i=bundle.getInt("index");
+            MarketTicker market;
+            if(i<markets.size()){
+                market = markets.get(i);
+            }else {
+                market=null;
+            }
             switch (bundle.getInt("result")) {
                 case 1:
-                    Toast.makeText(context,BtslandApplication.getInstance().getString(R.string.str_double_click),Toast.LENGTH_SHORT).show();
-                    //Log.i(TAG, "handleMessage: market:"+market);
-                    simpleKFragment.drawK(market);
+                    itemClickListener.onClick(i,market);
+                    //simpleKFragment.drawK(market);
                     break;
                 case 2:
+                    itemClickListener.dblClick(i,market);
                     //Log.i(TAG, "handleMessage: market:"+market);
-                    MarketDetailedActivity.startAction(context,market,1);
+                    //MarketDetailedActivity.startAction(context,market,1);
+                    break;
+                case 3:
+                    itemClickListener.onClick(i,market);
+                    //Log.i(TAG, "handleMessage: market:"+market);
+                    //MarketDetailedActivity.startAction(context,market,1);
                     break;
             }
         }
     };
+
+    public interface MarketItemClickListener{
+        void dblClick(int i,MarketTicker market);
+        void onClick(int i,MarketTicker market);
+    }
 }

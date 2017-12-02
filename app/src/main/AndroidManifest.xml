@@ -64,27 +64,25 @@
         <activity
             android:name=".ui.activity.AboutUsActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.activity.VersionInformationActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.TransactionActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.activity.RecentActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.activity.EntrustActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/welcomeTheme.TranslucentStatus" />
-        <activity android:name=".ui.activity.TransferActivity"></activity>
+        <activity android:name=".ui.activity.TransferActivity" />
+        <activity android:name=".ui.activity.Main2Activity" />
+        <activity android:name=".ui.activity.SettingDealActivity" />
     </application>
 
 </manifest>

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.multidex.MultiDexApplication;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
@@ -57,12 +58,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
     public static Map<String,OrderBook> orderBookMap=new HashMap<>();
     public static Map<String,List<MarketTicker>> marketMap=new HashMap<>();
+    public static List<asset_object> allAsset=new ArrayList<>();
+    public static boolean isQueryALlAsset=false;
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;
 
     public static String[] bases={"CNY", "BTS", "USD", "BTC"};
-    public static String[] quotes1={"BTC", "ETH", "BTS", "LTC", "OMG", "STEEM", "VEN", "HPB", "OCT", "YOYOW", "DOGE", "HASH"};
     public static String[] quotes2={"CNY","BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
     public static Map<object_id<asset_object>, asset_object> assetObjectMap=new HashMap<object_id<info.btsland.app.api.asset_object>, info.btsland.app.api.asset_object>();
     public static boolean isRefurbish=true;//是否自动刷新
@@ -88,6 +90,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             "wss://bitshares.crypto.fans/ws"
 
     );
+    public static List<String> baseList;
+    public static List<String> quoteList;
 
     public static void setFluctuationType(){
         if(BtslandApplication.fluctuationType==1){
@@ -130,6 +134,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         super.onCreate();
         //Fabric.with(this, new Crashlytics());
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
+        init();
+        ConnectThread();
+    }
+    private void init(){
         instance=getApplicationContext();
         application=this;
         sharedPreferences=getInstance().getSharedPreferences("appConfigure", Context.MODE_PRIVATE);
@@ -138,35 +146,100 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         isRefurbish = readIsRefurbish();
         strServer = readStrServer();
         Language = readLanguage();
-        while (true){
-            if(InternetUtil.isConnected(this)){
-                ConnectThread();
-                break;
-            }else {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(this, "无法连接网络", Toast.LENGTH_LONG).show();
-            }
-        }
+        baseList = arrayToList(bases);
+        quoteList = arrayToList(quotes2);
         setFluctuationType();
         fiiiInMarketMap();
-
     }
 
-    private static void fiiiInMarketMap() {
-        for(int i=0;i<bases.length;i++){
-            List<MarketTicker> tickers=new ArrayList<>();
-            for(int j=0;j<quotes2.length;j++){
-                if(bases[i].equals(quotes2[j])){
-                    continue;
+
+    private List<String> arrayToList(String[] array){
+        List<String> list=new ArrayList<>();
+        for (int i=0;i<array.length;i++){
+            list.add(array[i]);
+        }
+        return list;
+    }
+
+    /**
+     * 查询所有货币
+     */
+    public static void queryAllAsset(Handler handler){
+        try {
+            while (true){
+                if(allAsset.size()>0) {
+                    asset_object assetObject=allAsset.get(allAsset.size() - 1);
+                    if (assetObject != null) {
+                        List<asset_object> objects=BtslandApplication.getMarketStat().mWebsocketApi.list_assets(assetObject.symbol,100);
+                        allAsset.addAll(objects);
+                        if(objects.size()<100){
+                            isQueryALlAsset=true;
+                            break;
+                        }
+                    }
                 }else {
-                    tickers.add(new MarketTicker(bases[i], quotes2[j]));
+                    allAsset = BtslandApplication.getMarketStat().mWebsocketApi.list_assets("", 100);
                 }
             }
-            marketMap.put(bases[i],tickers);
+            if(handler!=null) {
+                handler.sendEmptyMessage(1);
+            }
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+        }
+    }
+    public static List<asset_object> getAssetByName(String n){
+        String name=n.toUpperCase();
+        List<asset_object> newAsset=new ArrayList<>();
+        if(!isQueryALlAsset){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    queryAllAsset(null);
+                }
+            }).start();
+        }
+        while (true){
+            if(isQueryALlAsset){
+                for(int i=0;i<allAsset.size();i++){
+                    asset_object object=allAsset.get(i);
+                    String assetName=object.symbol;
+                    if(assetName.indexOf(name)!=-1){
+                        newAsset.add(object);
+                        continue;
+                    }
+//                    byte[] aByte=name.getBytes();
+//                    int o=0;
+//                    for(int j=0;j<assetName.length();j++){
+//                        for(int t=0;t<name.length();t++){
+//                            if(assetName.charAt(j)==name.charAt(t)){
+//                                o++;
+//                                continue;
+//                            }
+//                        }
+//
+//                    }
+//                    if(o==name.length()){
+//                        newAsset.add(object);
+//                        continue;
+//                    }
+                }
+                break;
+            }
+        }
+        return newAsset;
+    }
+    private static void fiiiInMarketMap() {
+        for(int i=0;i<baseList.size();i++){
+            List<MarketTicker> tickers=new ArrayList<>();
+            for(int j=0;j<quoteList.size();j++){
+                if(baseList.get(i).equals(quoteList.get(j))){
+                    continue;
+                }else {
+                    tickers.add(new MarketTicker(baseList.get(i), quoteList.get(j)));
+                }
+            }
+            marketMap.put(baseList.get(i),tickers);
         }
     }
 
@@ -190,12 +263,23 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
         return 0.0;
     }
-
-
     public static void ConnectThread(){
-        MarketStat marketStat = getMarketStat();
-        MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
-        connect.start();
+        while (true){
+            if(InternetUtil.isConnected(BtslandApplication.getInstance())){
+                MarketStat marketStat = getMarketStat();
+                MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
+                connect.start();
+                break;
+            }else {
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(BtslandApplication.getInstance(), "无法连接网络", Toast.LENGTH_LONG).show();
+            }
+        }
+
     }
 
 

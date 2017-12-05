@@ -207,7 +207,7 @@
                     android:id="@+id/tv_purse_backup"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:text="@string/walletbackup"
+                    android:text="@string/look"
                     android:paddingLeft="8dp"
                     android:gravity="center_vertical"
                     android:layout_marginLeft="5dp"

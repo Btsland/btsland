@@ -90,17 +90,14 @@ public class PurseFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_purse, container, false);
         init(view);
-
+        fillIn();
+        yesOrNoLogin();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
-        fillIn();
-        yesOrNoLogin();
-
     }
 
 
@@ -112,7 +109,6 @@ public class PurseFragment extends Fragment {
            flPurseLoginPrompt.setOnTouchListener(new View.OnTouchListener(){
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
-                    // TODO Auto-generated method stub
                     return true;
                 }
 

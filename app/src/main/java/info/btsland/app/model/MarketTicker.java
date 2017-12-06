@@ -17,7 +17,17 @@ public class MarketTicker implements Serializable {
         this.base=base;
         this.quote=quote;
     }
-
+    public MarketTicker replase(MarketTicker ticker){
+        this.base=ticker.base;
+        this.quote=ticker.quote;
+        this.latest=ticker.latest;//最新价格
+        this.lowest_ask=ticker.lowest_ask;
+        this.highest_bid=ticker.highest_bid;
+        this.percent_change=ticker.percent_change;
+        this.base_volume=ticker.base_volume;
+        this.quote_volume=ticker.quote_volume;
+        return this;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

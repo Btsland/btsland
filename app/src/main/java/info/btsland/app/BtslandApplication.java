@@ -7,12 +7,16 @@ import android.support.multidex.MultiDexApplication;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
+import java.lang.reflect.Array;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +29,7 @@ import info.btsland.app.api.asset_object;
 import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
+import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.WelcomeActivity;
@@ -48,20 +53,16 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static account_object accountObject;
     public static List<IAsset> iAssets;
-    public static boolean isWel=false;
     private static SharedPreferences sharedPreferences;
 
     private static MarketStat marketStat;
     public static WebSocket mWebsocket;
     private static Wallet_api walletApi;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
-    public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
-    public static Map<String,OrderBook> orderBookMap=new HashMap<>();
-    public static Map<String,MarketTicker> marketMap3=new HashMap<>();
+    public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new LinkedHashMap<>();
+    public static Map<String,OrderBook> orderBookMap=new LinkedHashMap<>();
 
-    public static Map<String,Map<String,MarketTicker>> marketMap2=new HashMap<>();
-
-    public static Map<String,List<MarketTicker>> marketMap=new HashMap<>();
+    public static Map<String,Map<String,MarketTicker>> marketMap=new LinkedHashMap<>();
 
 
     public static List<asset_object> allAsset=new ArrayList<>();
@@ -69,10 +70,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int _nDatabaseId = -1;
     public static int _nHistoryId = -1;
     public static int _nBroadcastId = -1;
-
-    public static String[] bases={"CNY", "BTS", "USD", "BTC"};
-    public static String[] quotes2={"CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
-    public static Map<object_id<asset_object>, asset_object> assetObjectMap=new HashMap<object_id<info.btsland.app.api.asset_object>, info.btsland.app.api.asset_object>();
+    public static Map<object_id<asset_object>, asset_object> assetObjectMap=new LinkedHashMap<>();
     public static boolean isRefurbish=true;//是否自动刷新
     public static int fluctuationType=1;//涨跌颜色类型
     public static String strServer="wss://bitshares.dacplay.org/ws";//节点
@@ -96,8 +94,18 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             "wss://bitshares.crypto.fans/ws"
 
     );
-    public static List<String> baseList;
-    public static List<String> quoteList;
+
+    public static List<String> baseList = Arrays.asList("CNY", "BTS", "USD", "BTC");
+
+    public static Map<String,List<String>> listMap=new LinkedHashMap<>();
+
+    private static String strListMap="{\"CNY\":[\"BTS\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"BTS\":[\"CNY\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"USD\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IPFS\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"BTC\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]}";
+    public static List<MarketTicker> tickerList=new ArrayList<>();
+
+    //public static List<String> quoteList=Arrays.asList("CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO");
 
     public static void setFluctuationType(){
 
@@ -154,20 +162,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         isRefurbish = readIsRefurbish();
         strServer = readStrServer();
         Language = readLanguage();
-        baseList = arrayToList(bases);
-        quoteList = arrayToList(quotes2);
+        strListMap = readListMap();
         setFluctuationType();
-        fiiiInMarketMap();
+        fillInListMap();
+        fillInMarketMap();
     }
 
-
-    private List<String> arrayToList(String[] array){
-        List<String> list=new ArrayList<>();
-        for (int i=0;i<array.length;i++){
-            list.add(array[i]);
-        }
-        return list;
-    }
 
     /**
      * 查询所有货币
@@ -179,7 +179,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     asset_object assetObject=allAsset.get(allAsset.size() - 1);
                     if (assetObject != null) {
                         List<asset_object> objects=BtslandApplication.getMarketStat().mWebsocketApi.list_assets(assetObject.symbol,100);
-                        allAsset.addAll(objects);
+                        synchronized (allAsset){
+                            allAsset.addAll(objects);
+                        }
                         if(objects.size()<100){
                             isQueryALlAsset=true;
                             break;
@@ -197,58 +199,48 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
     }
     public static List<asset_object> getAssetByName(String n){
+        List<asset_object> all=new ArrayList<>();
+        all.addAll(allAsset);
         String name=n.toUpperCase();
         List<asset_object> newAsset=new ArrayList<>();
-        if(!isQueryALlAsset){
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    queryAllAsset(null);
-                }
-            }).start();
-        }
-        while (true){
-            if(isQueryALlAsset){
-                for(int i=0;i<allAsset.size();i++){
-                    asset_object object=allAsset.get(i);
-                    String assetName=object.symbol;
-                    if(assetName.indexOf(name)!=-1){
-                        newAsset.add(object);
-                        continue;
-                    }
-//                    byte[] aByte=name.getBytes();
-//                    int o=0;
-//                    for(int j=0;j<assetName.length();j++){
-//                        for(int t=0;t<name.length();t++){
-//                            if(assetName.charAt(j)==name.charAt(t)){
-//                                o++;
-//                                continue;
-//                            }
-//                        }
-//
-//                    }
-//                    if(o==name.length()){
-//                        newAsset.add(object);
-//                        continue;
-//                    }
-                }
-                break;
+        for(int i=0;i<all.size();i++){
+            asset_object object=all.get(i);
+            String assetName=object.symbol;
+            if(assetName.indexOf(name)!=-1){
+                newAsset.add(object);
+                continue;
             }
         }
         return newAsset;
     }
-    private static void fiiiInMarketMap() {
-        for(int i=0;i<baseList.size();i++){
-            List<MarketTicker> tickers=new ArrayList<>();
-            for(int j=0;j<quoteList.size();j++){
-                if(baseList.get(i).equals(quoteList.get(j))){
+
+    /**
+     * 默认的市场
+     */
+    private static void fillInListMap(){
+        Gson gson=new Gson();
+        listMap=gson.fromJson(strListMap,listMap.getClass());
+    }
+
+    /**
+     * 初始化交易对
+     */
+    private static void fillInMarketMap() {
+
+        for(String base : listMap.keySet()){
+            Map<String,MarketTicker> tickers=new HashMap<>();
+            for(int i=0;i<listMap.get(base).size();i++){
+                String quote=listMap.get(base).get(i);
+                if(quote.equals(base)){
                     continue;
-                }else {
-                    tickers.add(new MarketTicker(baseList.get(i), quoteList.get(j)));
                 }
+                MarketTicker ticker=new MarketTicker(base,quote);
+                tickerList.add(ticker);
+                tickers.put(quote,ticker);
             }
-            marketMap.put(baseList.get(i),tickers);
+            marketMap.put(base,tickers);
         }
+
     }
 
     @Override
@@ -432,6 +424,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
 
     }
+    public static boolean saveListMap(){
+
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        Gson gson=new Gson();
+        String strListMap=gson.toJson(listMap);
+        editor.putString("listMap",strListMap);
+        return editor.commit();
+    }
 
     public static boolean saveIsRefurbish(){
 
@@ -465,6 +465,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
     public static String readLanguage(){
         return sharedPreferences.getString("Language",Language);
+    }
+    public static String readListMap(){
+        return sharedPreferences.getString("listMap",strListMap);
     }
     public static boolean readIsRefurbish(){
 

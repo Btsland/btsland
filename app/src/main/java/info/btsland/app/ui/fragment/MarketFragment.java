@@ -1,9 +1,11 @@
 package info.btsland.app.ui.fragment;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
@@ -20,6 +22,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +31,7 @@ import info.btsland.app.Adapter.MarketRowAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
+import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
@@ -44,25 +48,11 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
 
     private ListView lvMarketCoin;
 
-    private int coinIndex=0;
-
-//    private Map<String,MarketTicker> ethMarket=new HashMap<>();
-    private MarketRowAdapter cnyAdapter ;
-    private MarketRowAdapter btsAdapter ;
-    private MarketRowAdapter usdAdapter ;
-    private MarketRowAdapter btcAdapter ;
-//    private MarketRowAdapter ethRowAdapter ;
+    private String coin="CNY";
     private MarketStat marketStat;
-    public static int NOTIFY_CNY=1;
-    public static int NOTIFY_BTS=2;
-    public static int NOTIFY_USD=3;
-    public static int NOTIFY_BTC=4;
-    public static int NOTIFY_ETH=5;
 
     private MarketRowAdapter rowAdapter;
     private CoinsAdapter coinsAdapter;
-    private String[] bases;
-    private String[] quotes;
     public MarketFragment() {
 
 
@@ -76,44 +66,36 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         if(stat.MarketTicker.base==null||stat.MarketTicker.quote==null){
             return;
         }
-        //Log.e(TAG, "onMarketStatUpdate: marketStat.MarketTicker："+stat.MarketTicker);
         Message message=Message.obtain();
-        for (int i=0;i<BtslandApplication.baseList.size();i++){
-            String base=BtslandApplication.baseList.get(i);
+        for (String base:BtslandApplication.listMap.keySet()){
             if(base.equals(stat.MarketTicker.base)){
                 if (stat.MarketTicker.quote.equals(base)) {
                     return;
                 }
-                if (BtslandApplication.marketMap.get(base) != null && BtslandApplication.marketMap.get(base).size() > quotes.length) {
-                    BtslandApplication.marketMap.get(base).clear();
+                if(BtslandApplication.marketMap.get(base)!=null){
+                    if (!replaceMarket(BtslandApplication.marketMap.get(base), stat.MarketTicker)) {
+                        //Log.i(TAG, "handleMessage: ");
+                        return;
+                    }
                 }
-                if (!replaceMarket(BtslandApplication.marketMap.get(base), stat.MarketTicker)) {
-                    //Log.i(TAG, "handleMessage: ");
-                    return;
-                }
+
                 if(!isAdded()){
                     return;
                 }
-                message.what = i;
+                message.obj=base;
             }
         }
         mHandler.sendMessage(message);
     }
-    public boolean replaceMarket(List<MarketTicker> oldMarkets,MarketTicker newMarket){
-        for(int i=0;i<oldMarkets.size();i++) {
-           synchronized (oldMarkets.get(i)){
-                if (oldMarkets.get(i) != null) {
-                    if (oldMarkets.get(i).quote.equals(newMarket.quote)) {
-                        oldMarkets.remove(i);
 
-                        oldMarkets.add(i, newMarket);
-                        return true;
-                    }
-                } else {
-                    oldMarkets.add(newMarket);
-                    return true;
-                }
+    public boolean replaceMarket(Map<String,MarketTicker> oldMarkets, MarketTicker newMarket){
+        if(oldMarkets.get(newMarket.quote)!=null){
+            synchronized (oldMarkets.get(newMarket.quote)){
+                oldMarkets.get(newMarket.quote).replase(newMarket);
+                return true;
             }
+        }else {
+            oldMarkets.put(newMarket.quote,newMarket);
         }
         return true;
 
@@ -121,8 +103,9 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==coinIndex){
-                rowAdapter.setMarkets(BtslandApplication.marketMap.get(BtslandApplication.baseList.get(coinIndex)));
+            if(msg.obj.equals(coin)){
+                List<MarketTicker> tickers= new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(coin).values());
+                rowAdapter.setMarkets(tickers);
             }
         }
     };
@@ -138,10 +121,13 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_market, container, false);
         this.marketStat= BtslandApplication.getMarketStat();
-        bases=BtslandApplication.bases;
-        quotes=BtslandApplication.quotes2;
         if(InternetUtil.isConnected(BtslandApplication.getInstance())){
-            marketStat.subscribe(bases,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_MARKE_SECS,this);
+            String[] bases = BtslandApplication.listMap.keySet().toArray(new String[]{});
+            for(String base : bases){
+                String[] quotes= BtslandApplication.listMap.get(base).toArray(new String[]{});
+                marketStat.subscribe(base,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_MARKE_SECS,this);
+            }
+
         }
         //Log.e(TAG, "onCreateView: ");
         fillInSimpleK(null);
@@ -169,13 +155,14 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private void fillInMarket(View view){
         coinsAdapter=new CoinsAdapter(view.getContext());
         lvMarketCoin.setAdapter(coinsAdapter);
-        coinsAdapter.setCoins(BtslandApplication.baseList);
-        coinsAdapter.setSelectorItem(0);//设置默认
+        coinsAdapter.setCoins(new ArrayList<String>(BtslandApplication.listMap.keySet()));
+        coinsAdapter.setSelectorItem(coin);//设置默认
         lvMarketCoin.setOnItemClickListener(new CoinItemClickListener());
 
         rowAdapter=new MarketRowAdapter(simpleKFragment,view.getContext());
         lvMarketInfo.setAdapter(rowAdapter);
-        rowAdapter.setMarkets(BtslandApplication.marketMap.get(BtslandApplication.baseList.get(0)));//设置默认
+        List<MarketTicker> tickers =new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(BtslandApplication.baseList.get(0)).values());
+        rowAdapter.setMarkets(tickers);//设置默认
         rowAdapter.setMarketItemClickListener(new IMarketItemClickListener());
     }
 
@@ -185,15 +172,13 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     class CoinItemClickListener implements ListView.OnItemClickListener{
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-            if(i<BtslandApplication.baseList.size()){
-                coinsAdapter.setSelectorItem(i);//设置选定的特效
-                coinIndex=i;
-                String coin = BtslandApplication.baseList.get(i);
-                lvMarketInfo.setAdapter(rowAdapter);
-                rowAdapter.setMarkets(BtslandApplication.marketMap.get(coin));
-            }else {
-                SettingDealActivity.startAction(getActivity(),1);
-            }
+            coinsAdapter.setSelectorItem(i);//设置选定的特效
+            coin=new ArrayList<String>(BtslandApplication.listMap.keySet()).get(i);
+            Log.e(TAG, "onItemClick:coin: "+coin );
+            List<MarketTicker> tickers = new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(coin).values());
+            Log.e(TAG, "onItemClick: marketMap: "+BtslandApplication.marketMap.get(coin).values().size() );
+            Log.e(TAG, "onItemClick: tickers:"+tickers.size() );
+            rowAdapter.setMarkets(tickers);
         }
     }
 
@@ -218,8 +203,6 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         public void onClick(int i,MarketTicker market) {
             if(market!=null){
                 simpleKFragment.drawK(market);
-            }else {
-                SettingDealActivity.startAction(getActivity(),2);
             }
         }
     }

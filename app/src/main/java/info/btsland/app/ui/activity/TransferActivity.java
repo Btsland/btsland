@@ -1,5 +1,6 @@
 package info.btsland.app.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -36,7 +39,9 @@ import info.btsland.app.api.object_id;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
+import info.btsland.app.model.Market;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.NumericUtil;
@@ -56,6 +61,8 @@ public class TransferActivity extends AppCompatActivity {
     private EditText edRemarkText;
     private TextView tvSend;
     private TextView tvBalanceNum;
+    private TextView tvSecond;
+    private TextView tvMsg;
     private PasswordDialog passwordDialog;
 
     private Map<String,IAsset> iAssetMap;
@@ -100,8 +107,12 @@ public class TransferActivity extends AppCompatActivity {
         for(int i=0;i<iAssets.size();i++){
             iAssetMap.put(iAssets.get(i).coinName,iAssets.get(i));
         }
+        tvSecond=findViewById(R.id.tv_transfer_second);
+        tvMsg=findViewById(R.id.tv_transfer_msg);
     }
     private void flinIn(){
+        tvSecond.setVisibility(View.INVISIBLE);
+        tvMsg.setVisibility(View.INVISIBLE);
         createPortrait(wvFrom,BtslandApplication.accountObject.name);
         edFrom.setText(BtslandApplication.accountObject.name);
         edFrom.setFocusable(false);
@@ -195,6 +206,9 @@ public class TransferActivity extends AppCompatActivity {
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(time==0){
+                    return;
+                }
                 if(time!=10){
                     time=10;
                     if(timer!=null){
@@ -259,10 +273,16 @@ public class TransferActivity extends AppCompatActivity {
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(time==0){
+                    return;
+                }
+                tvSecond.setVisibility(View.INVISIBLE);
+                tvMsg.setVisibility(View.INVISIBLE);
                 tvSend.setText("确定");
                 if(timer!=null){
                     timer.cancel();
                     timer=null;
+                    time=10;
                     AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","取消成功！");
                     appDialog.show();
                 }else {
@@ -327,6 +347,8 @@ public class TransferActivity extends AppCompatActivity {
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
+            tvSecond.setVisibility(View.INVISIBLE);
+            tvMsg.setVisibility(View.INVISIBLE);
             if(msg.what==1){
                 Toast.makeText(BtslandApplication.getInstance(),"转账成功",Toast.LENGTH_SHORT).show();
                 tvSend.setText("确定");
@@ -343,6 +365,12 @@ public class TransferActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             tvSend.setText("确定("+msg.what+")");
+            tvSecond.setVisibility(View.VISIBLE);
+            tvSecond.setText(""+msg.what);
+            tvMsg.setVisibility(View.VISIBLE);
+            if(msg.what==0){
+                tvSend.setText("正在转账。。。");
+            }
         }
     };
 }

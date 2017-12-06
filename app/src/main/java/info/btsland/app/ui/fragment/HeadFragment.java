@@ -161,7 +161,7 @@ public class HeadFragment extends Fragment {
                 rightTextView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        SettingDealActivity.startAction(getActivity(),2);
+                        SettingDealActivity.startAction(getActivity());
                     }
                 });
                 break;

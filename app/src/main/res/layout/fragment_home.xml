@@ -15,7 +15,7 @@
     app:pstsTabTextColor="@color/color_black"
     app:pstsIndicatorColor="@color/color_font_red"
     android:background="@color/color_white">
-</com.astuetz.PagerSlidingTabStrip>
+    </com.astuetz.PagerSlidingTabStrip>
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_detailed"
         android:layout_width="match_parent"

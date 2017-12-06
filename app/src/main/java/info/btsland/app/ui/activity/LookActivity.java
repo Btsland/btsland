@@ -119,7 +119,7 @@ public class LookActivity extends AppCompatActivity {
                                 final account_object accountObject = BtslandApplication.getMarketStat().mWebsocketApi.get_account_by_name(name);
                                 if(accountObject!=null){
                                     accountMap.put(accountObject.name,accountObject);
-                                    handler.sendEmptyMessage(1);
+                                    //handler.sendEmptyMessage(1);
                                     new Thread(new Runnable() {
                                         @Override
                                         public void run() {

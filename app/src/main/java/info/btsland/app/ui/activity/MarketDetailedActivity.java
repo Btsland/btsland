@@ -44,8 +44,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
     //买卖是否刷新成功
     public boolean isRefOrder=false;
 
-    private List<MarketTicker> tickers;
-
     public static RefurbishK refurbishK;
 
     public static RefurbishBuyAndSell refurbishBuyAndSell;
@@ -92,17 +90,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
         }
         dataKey= KeyUtil.constructingDateKKey(market.base,market.quote,DetailedKFragment.range,DetailedKFragment.ago);
         orderKey=KeyUtil.constructingOrderBooksKey(market.base,market.quote);
-        this.tickers=new ArrayList<>();
-        for(int i=0;i<BtslandApplication.bases.length;i++){
-            for(int j=0;j<BtslandApplication.quotes2.length;j++){
-                String base=BtslandApplication.bases[i];
-                String quote=BtslandApplication.quotes2[j];
-                if(!base.equals(quote)){
-                    MarketTicker ticker=new MarketTicker(base,quote);
-                    this.tickers.add(ticker);
-                }
-            }
-        }
         fillInHead();
         init();
     }
@@ -154,7 +141,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         headFragment.setSelectListener(new HeadFragment.OnSelectOnClickListener() {
             @Override
             public void onClick(View view) {
-                AppListDialog listDialog=new AppListDialog(MarketDetailedActivity.this,tickers);
+                AppListDialog listDialog=new AppListDialog(MarketDetailedActivity.this,BtslandApplication.tickerList);
                 listDialog.setListener(new AppListDialog.OnDialogInterationListener() {
                     @Override
                     public void onConfirm(final MarketTicker market) {

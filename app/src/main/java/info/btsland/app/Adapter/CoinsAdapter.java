@@ -95,4 +95,15 @@ public class CoinsAdapter extends BaseAdapter {
         this.selectorItem=i;
         this.notifyDataSetChanged();
     }
+    public void setSelectorItem(String coin) {
+        int index=0;
+        for(int i=0;i< coins.size();i++){
+            if(coins.get(i).equals(coin)){
+                index=i;
+                break;
+            }
+        }
+        this.selectorItem=index;
+        this.notifyDataSetChanged();
+    }
 }

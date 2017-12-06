@@ -69,24 +69,18 @@ public class MarketStat {
      * @param stats
      * @param l
      */
-    public void subscribe(String[] base,String[] quote,int stats,long intervalMillis,
+    public void subscribe(String base,String[] quote,int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
         this.quotes=quote;
-        this.bases=base;
         ////Log.e(TAG, "subscribe: base:"+base+"stats:"+stats );
-        for(int i=0;i<bases.length;i++){
-            for (int j=0;j<quotes.length;j++){
-                if(bases[i].equals(quotes[j])){
-                    continue;
-                }
-                unsubscribe(bases[i], quotes[j],stats);
-                Subscription subscription =new Subscription(bases[i],quotes[j], stats, intervalMillis,l);
-                subscriptionHashMap.put(makeMarketName(bases[i], quotes[j],stats), subscription);
+        for (int j=0;j<quotes.length;j++){
+            if(base.equals(quotes[j])){
+                continue;
             }
-
+            unsubscribe(base, quotes[j],stats);
+            Subscription subscription =new Subscription(base,quotes[j], stats, intervalMillis,l);
+            subscriptionHashMap.put(makeMarketName(base, quotes[j],stats), subscription);
         }
-
-
     }
     public Connect connect(int stats,
                           OnMarketStatUpdateListener l) {

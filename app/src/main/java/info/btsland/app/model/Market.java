@@ -172,5 +172,11 @@ public class Market implements Serializable {
         this.fluctuation = fluctuation;
     }
 
-
+    @Override
+    public Market clone() throws CloneNotSupportedException {
+        Market market = new Market();
+        market.bestAsk=this.bestAsk;
+        market.bestBid=this.bestBid;
+        return market;
+    }
 }

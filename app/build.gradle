@@ -8,8 +8,8 @@ android {
         applicationId "info.btsland.app"
         minSdkVersion 22
         targetSdkVersion 26
-        versionCode 19
-        versionName "1.2.00"
+        versionCode 20
+        versionName "1.2.01"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {

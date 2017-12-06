@@ -28,6 +28,7 @@ public class account_object implements Serializable {
     public Integer top_n_control_flags;
 
     public List<asset> assetlist=new ArrayList <>();
+    public List<operation_history_object> listHistoryObject=new ArrayList<>();
 
     public Double totalCNY=0.0;//总值
     public Double totalUsable;//可用总额

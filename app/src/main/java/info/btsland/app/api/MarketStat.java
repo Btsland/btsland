@@ -349,6 +349,9 @@ public class MarketStat {
                 statHandler.postDelayed(this,intervalMillis);
             }
         }
+        public void close(){
+            Thread.yield();
+        }
 
         @Override
         public  void run() {

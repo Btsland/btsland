@@ -18,6 +18,7 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.activity.LoginActivity;
+import info.btsland.app.ui.activity.LookActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
@@ -258,8 +259,8 @@ public class PurseFragment extends Fragment {
                     MarketDetailedActivity.startAction(getActivity(), null, 2);
                     break;
                 case R.id.tv_purse_backup:
-                    //钱包备份
-                    Intent backup=new Intent(getActivity(), PurseWalletBackupActivity.class);
+                    //观察
+                    Intent backup=new Intent(getActivity(), LookActivity.class);
                     getActivity().startActivity(backup);
                     break;
                 case R.id.tv_user_logoff:

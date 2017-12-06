@@ -18,6 +18,7 @@ import java.io.InputStream;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.activity.SettingActivity;
+import info.btsland.app.ui.activity.SettingDealActivity;
 
 /**
  * 通用顶部导航栏碎片类
@@ -137,6 +138,33 @@ public class HeadFragment extends Fragment {
                 });
                 rightTextView.setVisibility(View.GONE);
                 break;
+            case HeadType.BACK_SELECT_ADD:
+                leftTextView.setOnClickListener(back);
+                titleTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
+                selectTextView.setVisibility(View.VISIBLE);
+                selectTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        listener.onClick(view);
+                    }
+                });
+                rightTextView.setVisibility(View.VISIBLE);
+                Drawable add=getActivity().getResources().getDrawable(R.drawable.image_add_coin,null);
+                //Log.i(TAG, "fillIn: ");
+                add.setBounds(0,0,add.getMinimumWidth(),add.getMinimumHeight());
+                rightTextView.setCompoundDrawables(null,null,add,null);
+                rightTextView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        SettingDealActivity.startAction(getActivity(),2);
+                    }
+                });
+                break;
 
         }
     }
@@ -219,6 +247,7 @@ public class HeadFragment extends Fragment {
         public static final int NULL_NULL = 4;
         public static final int BACK_SELECT_NULL = 5;
         public static final int DEFAULT = 1;
+        public static final int BACK_SELECT_ADD = 6;
     }
     public interface OnSelectOnClickListener{
         void onClick(View view);

@@ -45,7 +45,7 @@ public class CoinsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return coins.size()+1;
+        return coins.size();
     }
 
     @Override

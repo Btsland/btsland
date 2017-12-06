@@ -146,7 +146,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
     private void fillInHead(){
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment==null){
-            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_SELECT_NULL,"");
+            headFragment=HeadFragment.newInstance(HeadFragment.HeadType.BACK_SELECT_ADD,"");
             transaction.add(R.id.fra_detailed_head,headFragment);
         }
         transaction.commit();

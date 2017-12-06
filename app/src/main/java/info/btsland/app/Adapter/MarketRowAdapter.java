@@ -58,7 +58,7 @@ public class MarketRowAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return markets.size()+1;
+        return markets.size();
     }
 
     @Override

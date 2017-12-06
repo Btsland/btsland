@@ -57,7 +57,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new HashMap<>();
     public static Map<String,OrderBook> orderBookMap=new HashMap<>();
+    public static Map<String,MarketTicker> marketMap3=new HashMap<>();
+
+    public static Map<String,Map<String,MarketTicker>> marketMap2=new HashMap<>();
+
     public static Map<String,List<MarketTicker>> marketMap=new HashMap<>();
+
+
     public static List<asset_object> allAsset=new ArrayList<>();
     public static boolean isQueryALlAsset=false;
     public static int _nDatabaseId = -1;
@@ -65,7 +71,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int _nBroadcastId = -1;
 
     public static String[] bases={"CNY", "BTS", "USD", "BTC"};
-    public static String[] quotes2={"CNY","BTS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
+    public static String[] quotes2={"CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO"};
     public static Map<object_id<asset_object>, asset_object> assetObjectMap=new HashMap<object_id<info.btsland.app.api.asset_object>, info.btsland.app.api.asset_object>();
     public static boolean isRefurbish=true;//是否自动刷新
     public static int fluctuationType=1;//涨跌颜色类型
@@ -94,6 +100,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<String> quoteList;
 
     public static void setFluctuationType(){
+
+
         if(BtslandApplication.fluctuationType==1){
             goUp=getInstance().getResources().getColor(R.color.color_green);
             goDown=getInstance().getResources().getColor(R.color.color_font_red);

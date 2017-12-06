@@ -16,7 +16,11 @@
     <EditText
         android:id="@+id/ed_look_name"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_margin="5dp"
+        android:paddingLeft="20dp"
+        android:hint="@string/Username"
+        android:layout_height="40dp"
+        android:background="@drawable/edit_text"
         app:layout_constraintTop_toBottomOf="@+id/fra_look_head"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toLeftOf="@+id/tv_look_sousuo"/>
@@ -26,6 +30,7 @@
         android:layout_height="50dp"
         android:gravity="center"
         android:text="搜索"
+        android:background="@drawable/selector_row"
         android:textColor="@color/color_black"
         app:layout_constraintTop_toBottomOf="@+id/fra_look_head"
         app:layout_constraintRight_toRightOf="parent"

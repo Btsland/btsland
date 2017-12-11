@@ -60,8 +60,6 @@ public class MainActivity extends BaseActivity {
         switchLanguage(BtslandApplication.Language);
         if (savedInstanceState != null) {
             index = savedInstanceState.getInt("index", 1);
-        } else {
-            index = 1;
         }
         setContentView(R.layout.activity_main);
         fillInHead();
@@ -165,21 +163,20 @@ public class MainActivity extends BaseActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (homeFragment == null) {
             homeFragment = new HomeFragment();
-            transaction.add(R.id.fra_main_body, homeFragment);
         }
-
         if (marketFragment == null) {
             marketFragment = new MarketFragment();
-            transaction.add(R.id.fra_main_body, marketFragment);
         }
         if (purseFragment == null) {
             purseFragment = new PurseFragment();
-            transaction.add(R.id.fra_main_body, purseFragment);
         }
         if (c2cFragment == null) {
             c2cFragment = new C2CFragment();
-            transaction.add(R.id.fra_main_body, c2cFragment);
         }
+        transaction.add(R.id.fra_main_body, homeFragment);
+        transaction.add(R.id.fra_main_body, marketFragment);
+        transaction.add(R.id.fra_main_body, purseFragment);
+        transaction.add(R.id.fra_main_body, c2cFragment);
         transaction.commit();
     }
 

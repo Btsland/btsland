@@ -91,13 +91,13 @@ public class PurseFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_purse, container, false);
         init(view);
         fillIn();
-        yesOrNoLogin();
         return view;
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        yesOrNoLogin();
     }
 
 

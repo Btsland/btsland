@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PersistableBundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -34,7 +35,7 @@ import info.btsland.app.util.PreferenceUtil;
  */
 public class MainActivity extends BaseActivity {
     public static String title;
-    private String TAG="MainActivity";
+    private String TAG = "MainActivity";
     private TextView tvNavHome;
     private TextView tvNavMarket;
     private TextView tvNavPurse;
@@ -45,7 +46,7 @@ public class MainActivity extends BaseActivity {
     private HeadFragment headFragment;
     public static String dataKKey;
 
-    private int index=1;
+    private int index = 1;
     private C2CFragment c2cFragment;
 
 
@@ -55,11 +56,11 @@ public class MainActivity extends BaseActivity {
         // 初始化PreferenceUtil
         PreferenceUtil.init(this);
         // 依据上次的语言设置，又一次设置语言
-        Log.e(TAG, "onCreate: "+BtslandApplication.Language);
+        Log.e(TAG, "onCreate: " + BtslandApplication.Language);
         switchLanguage(BtslandApplication.Language);
-        if(savedInstanceState!=null){
-            index = savedInstanceState.getInt("index",1);
-        }else {
+        if (savedInstanceState != null) {
+            index = savedInstanceState.getInt("index", 1);
+        } else {
             index = 1;
         }
         setContentView(R.layout.activity_main);
@@ -78,41 +79,43 @@ public class MainActivity extends BaseActivity {
         tvNavHome = (TextView) findViewById(R.id.tv_nav_home);
         tvNavMarket = (TextView) findViewById(R.id.tv_nav_market);
         tvNavPurse = (TextView) findViewById(R.id.tv_nav_purse);
-        tvNavC2C=findViewById(R.id.tv_nav_c2c);
+        tvNavC2C = findViewById(R.id.tv_nav_c2c);
         //绑定监听器
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
         tvNavC2C.setOnClickListener(new NavOnClickListener());
-        if(index==0){
-            touchColor(tvNavHome, tvNavMarket, tvNavPurse,tvNavC2C);
+        if (index == 0) {
+            touchColor(tvNavHome, tvNavMarket, tvNavPurse, tvNavC2C);
             touchImage(tvNavHome);
             showFragment(tvNavHome);
-        }else if(index==1){
-            touchColor(tvNavMarket, tvNavHome, tvNavPurse,tvNavC2C);
+        } else if (index == 1) {
+            touchColor(tvNavMarket, tvNavHome, tvNavPurse, tvNavC2C);
             touchImage(tvNavMarket);
             showFragment(tvNavMarket);//显示行情页面
-        }else if(index==2){
-            touchColor(tvNavPurse, tvNavHome, tvNavMarket,tvNavC2C);
+        } else if (index == 2) {
+            touchColor(tvNavPurse, tvNavHome, tvNavMarket, tvNavC2C);
             touchImage(tvNavPurse);
             showFragment(tvNavPurse);
-        }else if(index==3){
-            touchColor(tvNavC2C,tvNavPurse, tvNavHome, tvNavMarket);
+        } else if (index == 3) {
+            touchColor(tvNavC2C, tvNavPurse, tvNavHome, tvNavMarket);
             touchImage(tvNavC2C);
             showFragment(tvNavC2C);
         }
 
     }
-    public HeadFragment getHeadFragment(){
+
+    public HeadFragment getHeadFragment() {
         return headFragment;
     }
+
     /**
      * 装载顶部导航
      */
     private void fillInHead() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (headFragment == null) {
-            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.SHARE_SET,"");
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.SHARE_SET, "");
             transaction.add(R.id.fra_main_head, headFragment);
         }
         transaction.commit();
@@ -135,11 +138,19 @@ public class MainActivity extends BaseActivity {
 //        };
 //        timer.schedule(task, TimeUnit.MINUTES.toMillis(2),TimeUnit.MINUTES.toMillis(2));
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("index",index);
+        outState.putInt("index", index);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.remove(homeFragment);
+        transaction.remove(marketFragment);
+        transaction.remove(purseFragment);
+        transaction.remove(c2cFragment);
+        transaction.commitAllowingStateLoss();
         super.onSaveInstanceState(outState);
     }
+
 
     @Override
     public void finish() {
@@ -158,15 +169,15 @@ public class MainActivity extends BaseActivity {
         }
 
         if (marketFragment == null) {
-            marketFragment =new MarketFragment();
+            marketFragment = new MarketFragment();
             transaction.add(R.id.fra_main_body, marketFragment);
         }
         if (purseFragment == null) {
-            purseFragment =new PurseFragment();
+            purseFragment = new PurseFragment();
             transaction.add(R.id.fra_main_body, purseFragment);
         }
         if (c2cFragment == null) {
-            c2cFragment =new C2CFragment();
+            c2cFragment = new C2CFragment();
             transaction.add(R.id.fra_main_body, c2cFragment);
         }
         transaction.commit();
@@ -246,30 +257,30 @@ public class MainActivity extends BaseActivity {
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.tv_nav_home:
-                    index=0;
+                    index = 0;
                     headFragment.setTitleName(getString(R.string.homepage));
-                    touchColor(tvNavHome, tvNavMarket, tvNavPurse,tvNavC2C);//控件特效
+                    touchColor(tvNavHome, tvNavMarket, tvNavPurse, tvNavC2C);//控件特效
                     touchImage(tvNavHome);
                     showFragment(tvNavHome);
                     break;
                 case R.id.tv_nav_market:
-                    index=1;
+                    index = 1;
                     headFragment.setTitleName(MainActivity.title);
-                    touchColor(tvNavMarket, tvNavHome, tvNavPurse,tvNavC2C);//控件特效
+                    touchColor(tvNavMarket, tvNavHome, tvNavPurse, tvNavC2C);//控件特效
                     touchImage(tvNavMarket);
                     showFragment(tvNavMarket);
                     break;
                 case R.id.tv_nav_purse:
-                    index=2;
+                    index = 2;
                     headFragment.setTitleName(getString(R.string.wallet));
-                    touchColor(tvNavPurse, tvNavHome, tvNavMarket,tvNavC2C);//控件特效
+                    touchColor(tvNavPurse, tvNavHome, tvNavMarket, tvNavC2C);//控件特效
                     touchImage(tvNavPurse);
                     showFragment(tvNavPurse);
                     break;
                 case R.id.tv_nav_c2c:
-                    index=3;
+                    index = 3;
                     headFragment.setTitleName(getString(R.string.c2c));
-                    touchColor(tvNavC2C,tvNavPurse, tvNavHome, tvNavMarket);//控件特效
+                    touchColor(tvNavC2C, tvNavPurse, tvNavHome, tvNavMarket);//控件特效
                     touchImage(tvNavC2C);
                     showFragment(tvNavC2C);
                     break;
@@ -282,52 +293,53 @@ public class MainActivity extends BaseActivity {
 
     /**
      * 设置图片点击特效
+     *
      * @param textView
      */
     private void touchImage(TextView textView) {
-        Drawable homeTouch = getResources().getDrawable(R.drawable.image_nav_home_touch,null);
-        Drawable marketTouch = getResources().getDrawable(R.drawable.image_nav_market_touch,null);
-        Drawable purseTouch = getResources().getDrawable(R.drawable.image_nav_purse_touch,null);
-        Drawable c2cTouch = getResources().getDrawable(R.drawable.image_nav_c2c_touch,null);
-        Drawable home = getResources().getDrawable(R.drawable.image_nav_home,null);
-        Drawable market = getResources().getDrawable(R.drawable.image_nav_market,null);
-        Drawable purse = getResources().getDrawable(R.drawable.image_nav_purse,null);
-        Drawable c2c = getResources().getDrawable(R.drawable.image_nav_c2c,null);
+        Drawable homeTouch = getResources().getDrawable(R.drawable.image_nav_home_touch, null);
+        Drawable marketTouch = getResources().getDrawable(R.drawable.image_nav_market_touch, null);
+        Drawable purseTouch = getResources().getDrawable(R.drawable.image_nav_purse_touch, null);
+        Drawable c2cTouch = getResources().getDrawable(R.drawable.image_nav_c2c_touch, null);
+        Drawable home = getResources().getDrawable(R.drawable.image_nav_home, null);
+        Drawable market = getResources().getDrawable(R.drawable.image_nav_market, null);
+        Drawable purse = getResources().getDrawable(R.drawable.image_nav_purse, null);
+        Drawable c2c = getResources().getDrawable(R.drawable.image_nav_c2c, null);
 
         //显示图片
-        homeTouch.setBounds(0,0,homeTouch.getMinimumWidth(),homeTouch.getMinimumHeight());
-        marketTouch.setBounds(0,0,marketTouch.getMinimumWidth(),marketTouch.getMinimumHeight());
-        purseTouch.setBounds(0,0,purseTouch.getMinimumWidth(),purseTouch.getMinimumHeight());
-        c2cTouch.setBounds(0,0,c2cTouch.getMinimumWidth(),c2cTouch.getMinimumHeight());
-        home.setBounds(0,0,home.getMinimumWidth(),home.getMinimumHeight());
-        market.setBounds(0,0,market.getMinimumWidth(),market.getMinimumHeight());
-        purse.setBounds(0,0,purse.getMinimumWidth(),purse.getMinimumHeight());
-        c2c.setBounds(0,0,c2c.getMinimumWidth(),c2c.getMinimumHeight());
+        homeTouch.setBounds(0, 0, homeTouch.getMinimumWidth(), homeTouch.getMinimumHeight());
+        marketTouch.setBounds(0, 0, marketTouch.getMinimumWidth(), marketTouch.getMinimumHeight());
+        purseTouch.setBounds(0, 0, purseTouch.getMinimumWidth(), purseTouch.getMinimumHeight());
+        c2cTouch.setBounds(0, 0, c2cTouch.getMinimumWidth(), c2cTouch.getMinimumHeight());
+        home.setBounds(0, 0, home.getMinimumWidth(), home.getMinimumHeight());
+        market.setBounds(0, 0, market.getMinimumWidth(), market.getMinimumHeight());
+        purse.setBounds(0, 0, purse.getMinimumWidth(), purse.getMinimumHeight());
+        c2c.setBounds(0, 0, c2c.getMinimumWidth(), c2c.getMinimumHeight());
 
         switch (textView.getId()) {
             case R.id.tv_nav_home:
-                tvNavHome.setCompoundDrawables(null,homeTouch,null,null);
-                tvNavMarket.setCompoundDrawables(null,market,null,null);
-                tvNavPurse.setCompoundDrawables(null,purse,null,null);
-                tvNavC2C.setCompoundDrawables(null,c2c,null,null);
+                tvNavHome.setCompoundDrawables(null, homeTouch, null, null);
+                tvNavMarket.setCompoundDrawables(null, market, null, null);
+                tvNavPurse.setCompoundDrawables(null, purse, null, null);
+                tvNavC2C.setCompoundDrawables(null, c2c, null, null);
                 break;
             case R.id.tv_nav_market:
-                tvNavHome.setCompoundDrawables(null,home,null,null);
-                tvNavMarket.setCompoundDrawables(null,marketTouch,null,null);
-                tvNavPurse.setCompoundDrawables(null,purse,null,null);
-                tvNavC2C.setCompoundDrawables(null,c2c,null,null);
+                tvNavHome.setCompoundDrawables(null, home, null, null);
+                tvNavMarket.setCompoundDrawables(null, marketTouch, null, null);
+                tvNavPurse.setCompoundDrawables(null, purse, null, null);
+                tvNavC2C.setCompoundDrawables(null, c2c, null, null);
                 break;
             case R.id.tv_nav_purse:
-                tvNavHome.setCompoundDrawables(null,home,null,null);
-                tvNavMarket.setCompoundDrawables(null,market,null,null);
-                tvNavPurse.setCompoundDrawables(null,purseTouch,null,null);
-                tvNavC2C.setCompoundDrawables(null,c2c,null,null);
+                tvNavHome.setCompoundDrawables(null, home, null, null);
+                tvNavMarket.setCompoundDrawables(null, market, null, null);
+                tvNavPurse.setCompoundDrawables(null, purseTouch, null, null);
+                tvNavC2C.setCompoundDrawables(null, c2c, null, null);
                 break;
             case R.id.tv_nav_c2c:
-                tvNavC2C.setCompoundDrawables(null,c2cTouch,null,null);
-                tvNavHome.setCompoundDrawables(null,home,null,null);
-                tvNavMarket.setCompoundDrawables(null,market,null,null);
-                tvNavPurse.setCompoundDrawables(null,purse,null,null);
+                tvNavC2C.setCompoundDrawables(null, c2cTouch, null, null);
+                tvNavHome.setCompoundDrawables(null, home, null, null);
+                tvNavMarket.setCompoundDrawables(null, market, null, null);
+                tvNavPurse.setCompoundDrawables(null, purse, null, null);
                 break;
         }
     }
@@ -339,7 +351,7 @@ public class MainActivity extends BaseActivity {
      * @param textView1
      * @param textView2
      */
-    protected void touchColor(TextView facingTextView, TextView textView1, TextView textView2,TextView textView3) {
+    protected void touchColor(TextView facingTextView, TextView textView1, TextView textView2, TextView textView3) {
         facingTextView.setBackground(getDrawable(R.drawable.tv_border_touch));
         textView1.setBackground(getDrawable(R.drawable.tv_border));
         textView2.setBackground(getDrawable(R.drawable.tv_border));
@@ -398,3 +410,6 @@ public class MainActivity extends BaseActivity {
         }
     };
 }
+
+
+

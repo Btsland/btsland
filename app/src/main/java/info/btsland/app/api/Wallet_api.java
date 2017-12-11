@@ -16,6 +16,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -25,6 +28,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import de.bitsharesmunich.graphenej.BrainKey;
 import de.bitsharesmunich.graphenej.FileBin;
@@ -47,6 +58,8 @@ import okhttp3.Response;
 public class Wallet_api {
     private static int buyTimeSec = 5 * 365 * 24 * 60 * 60;
     private static final String TAG="Wallet_api";
+    private static final String BTSLAND_FAUCET = "faucet.btsland.info";
+    private static final String OPENLEDGER_FAUCET = "openledger.io";
 
     private Websocket_api mWebsocketApi;
     private sha512_object mCheckSum = new sha512_object();
@@ -111,14 +124,9 @@ public class Wallet_api {
      */
     public int create_account_with_password(String strAccountName,
                                             String strPassword) throws NetworkStatusException, CreateAccountException {
-        /*String[] strAddress = {
-                "https://bitshares.openledger.info/api/v1/accounts",
-                "https://openledger.io/api/v1/accounts",
-                "https://openledger.hk/api/v1/accounts"
-        };*/
-        //https://openledger.io/api/v1/accounts
-        String[] strAddress = {"https://openledger.io/api/v1/accounts"};
         Log.i(TAG, "create_account_with_password: ");
+        String[] strAddress = {"https://faucet.btsland.info/api/v1/accounts", "https://openledger.io/api/v1/accounts"};
+
 
         int nRet = -1;
         for (int i = 0; i < strAddress.length; ++i) {
@@ -220,9 +228,50 @@ public class Wallet_api {
     }
 
 
-    private int create_account_with_password(String strServerUrl,
-                                            String strAccountName,
-                                            String strPassword) throws NetworkStatusException, CreateAccountException {
+    private int create_account_with_password(String strServerUrl, String strAccountName, String strPassword)
+            throws NetworkStatusException, CreateAccountException {
+
+        // Trust All Certificates
+        final TrustManager[] trustManagers = new TrustManager[]{new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                X509Certificate[] x509Certificates = new X509Certificate[0];
+                return x509Certificates;
+            }
+
+            @Override
+            public void checkServerTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+        }};
+
+        X509TrustManager x509TrustManager = new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                X509Certificate[] x509Certificates = new X509Certificate[0];
+                return x509Certificates;
+            }
+
+            @Override
+            public void checkServerTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+        };
+
         private_key privateActiveKey = private_key.from_seed(strAccountName + "active" + strPassword);
         private_key privateOwnerKey = private_key.from_seed(strAccountName + "owner" + strPassword);
 
@@ -244,20 +293,47 @@ public class Wallet_api {
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
 
         String strAddress = strServerUrl;
-        OkHttpClient okHttpClient = new OkHttpClient();
+
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+
+        try {
+            String PROTOCOL = "SSL";
+            SSLContext sslContext = SSLContext.getInstance(PROTOCOL);
+            KeyManager[] keyManagers = null;
+            SecureRandom secureRandom = new SecureRandom();
+            sslContext.init(keyManagers, trustManagers, secureRandom);
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            okHttpClientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+                Log.i(TAG, "hostname: " + String.valueOf(hostname));
+                if (hostname.equals(BTSLAND_FAUCET) || hostname.equals(OPENLEDGER_FAUCET)) {
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        okHttpClientBuilder.hostnameVerifier(hostnameVerifier);
+        OkHttpClient okHttpClient = okHttpClientBuilder.build();
 
         RequestBody requestBody = RequestBody.create(
                 MediaType.parse("application/json"),
                 gson.toJson(createAccountObject)
         );
-        Log.i(TAG, "create_account_with_password:requestBody: "+gson.toJson(createAccountObject));
+        Log.i(TAG, "create_account_with_password:requestBody: " + gson.toJson(createAccountObject));
         Request request = new Request.Builder()
                 .url(strAddress)
                 .addHeader("Accept", "application/json")
                 .post(requestBody)
                 .build();
 
-        create_account_object.create_account_response createAccountResponse = null;
+        create_account_object.create_account_response createAccountResponse;
         try {
             Response response = okHttpClient.newCall(request).execute();
 

@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
+import com.mrd.bitlib.crypto.ec.Parameters;
 
 import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
 import info.btsland.app.BtslandApplication;
@@ -114,12 +115,6 @@ public class DetailedBuyAndSellFragment extends Fragment
         View view=inflater.inflate(R.layout.fragment_detailed_buy_and_sell, container, false);
         init(view);
         listener=this;
-        hud = KProgressHUD.create(getActivity())
-                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                .setLabel(BtslandApplication.getInstance().getString(R.string.str_broadcast))
-                .setCancellable(false)
-                .setAnimationSpeed(2)
-                .setDimAmount(0.5f);
         MarketDetailedActivity.refurbishBuyAndSell=this;
         return view;
     }
@@ -433,25 +428,26 @@ public class DetailedBuyAndSellFragment extends Fragment
                 builder = new PasswordDialog(getActivity());
                 builder.setListener(new PasswordDialog.OnDialogInterationListener(){
                     @Override
-                    public void onConfirm(AlertDialog dialog, String passwordString) {
+                    public void onConfirm(AlertDialog dialog, final String passwordString) {
                         hud=KProgressHUD.create(getActivity());
                         hud.setLabel(getResources().getString(R.string.please_wait));
                         hud.show();
-                        try {
-
-                            account_object accountObject= BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
-                            if(accountObject!=null){
-                                hud.dismiss();
-                                dialog.dismiss();
-                                goTrading();
-                            }else {
-                                builder.setTvPoint(false);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    account_object accountObject= BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
+                                    if(accountObject!=null){
+                                        handler2.sendEmptyMessage(0);
+                                        goTrading();
+                                    }else {
+                                        handler2.sendEmptyMessage(-2);
+                                    }
+                                } catch (NetworkStatusException e) {
+                                    e.printStackTrace();
+                                }
                             }
-                        } catch (NetworkStatusException e) {
-                            e.printStackTrace();
-                        }
-
-
+                        }).start();
                     }
 
                     @Override
@@ -472,6 +468,12 @@ public class DetailedBuyAndSellFragment extends Fragment
         }
 
         private void goTrading(){
+            hud = KProgressHUD.create(getActivity())
+                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                    .setLabel(BtslandApplication.getInstance().getString(R.string.str_broadcast))
+                    .setCancellable(false)
+                    .setAnimationSpeed(2)
+                    .setDimAmount(0.5f);
             if (!BtslandApplication.getWalletApi().is_locked()) {
                 hud.show();
                 if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
@@ -485,7 +487,6 @@ public class DetailedBuyAndSellFragment extends Fragment
                     @Override
                     public void onConfirm(AlertDialog dialog, String passwordString) {
                         if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
-                            dialog.dismiss();
                             hud.show();
                             if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
                                 buy();
@@ -493,8 +494,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                                 sell();
                             }
                         } else {
-                            builder.setTvPoint(false);
-                            //Toast.makeText(getContext(), getContext().getString(R.string.password_invalid), Toast.LENGTH_LONG).show();
+                            handler2.sendEmptyMessage(-2);
                         }
                     }
 
@@ -592,14 +592,18 @@ public class DetailedBuyAndSellFragment extends Fragment
     private Handler handler2=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-        if(hud.isShowing()){
-            hud.dismiss();
-        }
-        if(msg.what==1){
-            Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
-        }else if(msg.what==-1){
-            Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
-        }
+            if(hud.isShowing()){
+                hud.dismiss();
+            }
+            if(msg.what==1){
+                Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
+            }else if(msg.what==-1){
+                Toast.makeText(getActivity(), "广播发布失败", Toast.LENGTH_SHORT).show();
+            }else if(msg.what==0) {
+                Toast.makeText(getActivity(), "密码正确", Toast.LENGTH_SHORT).show();
+            }else if(msg.what==-2){
+                Toast.makeText(getActivity(), "密码错误", Toast.LENGTH_SHORT).show();
+            }
         }
     };
 

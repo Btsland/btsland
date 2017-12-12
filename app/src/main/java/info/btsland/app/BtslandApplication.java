@@ -93,6 +93,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             "wss://altcap.io/ws",
             "wss://bitshares.crypto.fans/ws"
 
+
+
     );
 
     public static List<String> baseList = Arrays.asList("CNY", "BTS", "USD", "BTC");

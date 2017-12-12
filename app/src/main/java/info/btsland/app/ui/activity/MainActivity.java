@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.PersistableBundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
@@ -40,14 +42,14 @@ public class MainActivity extends BaseActivity {
     private TextView tvNavMarket;
     private TextView tvNavPurse;
     private TextView tvNavC2C;
-    private MarketFragment marketFragment;
-    private HomeFragment homeFragment;
-    private PurseFragment purseFragment;
+    private Fragment marketFragment;
+    private Fragment homeFragment;
+    private Fragment purseFragment;
     private HeadFragment headFragment;
     public static String dataKKey;
-
+    private FragmentManager manager;
     private int index = 1;
-    private C2CFragment c2cFragment;
+    private Fragment c2cFragment;
 
 
     @Override
@@ -58,13 +60,21 @@ public class MainActivity extends BaseActivity {
         // 依据上次的语言设置，又一次设置语言
         Log.e(TAG, "onCreate: " + BtslandApplication.Language);
         switchLanguage(BtslandApplication.Language);
+        manager=getSupportFragmentManager();
+        setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             index = savedInstanceState.getInt("index", 1);
+            homeFragment = manager.findFragmentByTag("home");
+            marketFragment = manager.findFragmentByTag("market");
+            purseFragment = manager.findFragmentByTag("purse");
+            c2cFragment = manager.findFragmentByTag("c2c");
+            headFragment = (HeadFragment) manager.findFragmentByTag("head");
+        }else {
+            fillInHead();
+            fillInBody();
         }
-        setContentView(R.layout.activity_main);
-        fillInHead();
-        fillInBody();
         init();
+        showFragment(index);
 
     }
 
@@ -83,6 +93,64 @@ public class MainActivity extends BaseActivity {
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
         tvNavC2C.setOnClickListener(new NavOnClickListener());
+    }
+
+    public HeadFragment getHeadFragment() {
+        return headFragment;
+    }
+
+    /**
+     * 装载顶部导航
+     */
+    private void fillInHead() {
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (headFragment == null) {
+            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.SHARE_SET, "");
+            transaction.add(R.id.fra_main_head, headFragment,"head");
+        }
+        transaction.commit();
+    }
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("index", index);
+//        FragmentTransaction transaction = manager.beginTransaction();
+//        transaction.remove(homeFragment);
+//        transaction.remove(marketFragment);
+//        transaction.remove(purseFragment);
+//        transaction.remove(c2cFragment);
+//        transaction.commitAllowingStateLoss();
+        super.onSaveInstanceState(outState);
+    }
+
+
+
+    /**
+     * 装载主体内容
+     */
+    private synchronized void fillInBody() {
+        //初始化fra_main_body
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (homeFragment == null) {
+            homeFragment = new HomeFragment();
+        }
+        if (marketFragment == null) {
+            marketFragment = new MarketFragment();
+        }
+        if (purseFragment == null) {
+            purseFragment = new PurseFragment();
+        }
+        if (c2cFragment == null) {
+            c2cFragment = new C2CFragment();
+        }
+        transaction.add(R.id.fra_main_body, homeFragment,"home");
+        transaction.add(R.id.fra_main_body, marketFragment,"market");
+        transaction.add(R.id.fra_main_body, purseFragment,"purse");
+        transaction.add(R.id.fra_main_body, c2cFragment,"c2c");
+        transaction.commitAllowingStateLoss();
+    }
+    private void showFragment(int index){
         if (index == 0) {
             touchColor(tvNavHome, tvNavMarket, tvNavPurse, tvNavC2C);
             touchImage(tvNavHome);
@@ -100,84 +168,6 @@ public class MainActivity extends BaseActivity {
             touchImage(tvNavC2C);
             showFragment(tvNavC2C);
         }
-
-    }
-
-    public HeadFragment getHeadFragment() {
-        return headFragment;
-    }
-
-    /**
-     * 装载顶部导航
-     */
-    private void fillInHead() {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (headFragment == null) {
-            headFragment = HeadFragment.newInstance(HeadFragment.HeadType.SHARE_SET, "");
-            transaction.add(R.id.fra_main_head, headFragment);
-        }
-        transaction.commit();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-//        Timer timer=new Timer();
-//        TimerTask task=new TimerTask() {
-//            @Override
-//            public void run() {
-//                Map<String,MarketStat.Subscription> map = BtslandApplication.getMarketStat().subscriptionHashMap;
-//                if(map!=null){
-//                    for (MarketStat.Subscription subscription : map.values()) {
-//                        subscription.updateImmediately();
-//                    }
-//                }
-//            }
-//        };
-//        timer.schedule(task, TimeUnit.MINUTES.toMillis(2),TimeUnit.MINUTES.toMillis(2));
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putInt("index", index);
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.remove(homeFragment);
-        transaction.remove(marketFragment);
-        transaction.remove(purseFragment);
-        transaction.remove(c2cFragment);
-        transaction.commitAllowingStateLoss();
-        super.onSaveInstanceState(outState);
-    }
-
-
-    @Override
-    public void finish() {
-        //super.finish();
-    }
-
-    /**
-     * 装载主体内容
-     */
-    private void fillInBody() {
-        //初始化fra_main_body
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        if (homeFragment == null) {
-            homeFragment = new HomeFragment();
-        }
-        if (marketFragment == null) {
-            marketFragment = new MarketFragment();
-        }
-        if (purseFragment == null) {
-            purseFragment = new PurseFragment();
-        }
-        if (c2cFragment == null) {
-            c2cFragment = new C2CFragment();
-        }
-        transaction.add(R.id.fra_main_body, homeFragment);
-        transaction.add(R.id.fra_main_body, marketFragment);
-        transaction.add(R.id.fra_main_body, purseFragment);
-        transaction.add(R.id.fra_main_body, c2cFragment);
-        transaction.commit();
     }
 
     /**
@@ -186,39 +176,21 @@ public class MainActivity extends BaseActivity {
      * @param textView 选定的控件
      */
     private void showFragment(TextView textView) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = manager.beginTransaction();
         switch (textView.getId()) {
             case R.id.tv_nav_home:
-                if (homeFragment == null) {
-                    homeFragment = new HomeFragment();
-                    transaction.add(R.id.fra_main_body, homeFragment);
-                }
                 hideFragment(transaction);
                 transaction.show(homeFragment);
-
                 break;
             case R.id.tv_nav_market:
-                if (marketFragment == null) {
-                    marketFragment = new MarketFragment();
-                    transaction.add(R.id.fra_main_body, marketFragment);
-                }
                 hideFragment(transaction);
                 transaction.show(marketFragment);
-
                 break;
             case R.id.tv_nav_purse:
-                if (purseFragment == null) {
-                    purseFragment = new PurseFragment();
-                    transaction.add(R.id.fra_main_body, purseFragment);
-                }
                 hideFragment(transaction);
                 transaction.show(purseFragment);
                 break;
             case R.id.tv_nav_c2c:
-                if (c2cFragment == null) {
-                    c2cFragment = new C2CFragment();
-                    transaction.add(R.id.fra_main_body, c2cFragment);
-                }
                 hideFragment(transaction);
                 transaction.show(c2cFragment);
                 break;
@@ -243,7 +215,7 @@ public class MainActivity extends BaseActivity {
         if (c2cFragment != null) {
             transaction.hide(c2cFragment);
         }
-        transaction.commit();
+        transaction.commitAllowingStateLoss();
     }
 
     /**
@@ -406,6 +378,8 @@ public class MainActivity extends BaseActivity {
             isExit = false;
         }
     };
+
+
 }
 
 

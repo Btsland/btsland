@@ -200,6 +200,7 @@ public class Websocket_api extends WebSocketListener {
         }
 
         Request request = new Request.Builder().url(BtslandApplication.strServer).build();
+
         mOkHttpClient = new OkHttpClient();
         mWebsocket = mOkHttpClient.newWebSocket(request, this);
         synchronized (mWebsocket) {
@@ -254,6 +255,7 @@ public class Websocket_api extends WebSocketListener {
     public List<operation_history_object> get_account_history(object_id<account_object> accountId,
                                                               object_id<operation_history_object> startId,
                                                               int nLimit) throws NetworkStatusException {
+        Log.e(TAG, "get_account_history: " );
         Call callObject = new Call();
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";

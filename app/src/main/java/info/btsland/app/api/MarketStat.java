@@ -129,6 +129,7 @@ public class MarketStat {
         if (subscription != null) {
             subscriptionHashMap.remove(market);
             subscription.cancel();
+            subscription.close();
         }
     }
     public void restartSubscription() {

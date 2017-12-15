@@ -559,6 +559,29 @@ public class Websocket_api extends WebSocketListener {
 
         return replyLookupAccountNames.result;
     }
+    public Double getAssetTotalByAccountAndCoin(String account,String coin){
+        Double total=0.0;
+        try {
+            List<asset> assets = BtslandApplication.getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
+            List<object_id<asset_object>> object_ids=new ArrayList <>();
+            for(int i=0;i<assets.size();i++){
+                object_ids.add(assets.get(i).asset_id);
+            }
+            List<asset_object> assetObjects = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(object_ids);
+            if(assetObjects!=null){
+                for(int i=0;i<assetObjects.size();i++){
+                    asset_object objects = assetObjects.get(i);
+                    if(objects.symbol.equals(coin)){
+                        total=assets.get(i).amount/Math.pow(10,objects.precision);
+                        break;
+                    }
+                }
+            }
+        } catch (NetworkStatusException e) {
+            e.printStackTrace();
+        }
+        return total;
+    }
     public List<bucket_object>  get_market_history(object_id<asset_object> assetObjectId1,
                                                    object_id<asset_object> assetObjectId2,
                                                    int nBucket,

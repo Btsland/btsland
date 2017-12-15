@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="info.btsland.app.ui.activity.C2CExchangeActivity">
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_C2C_head"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+    </FrameLayout>
+    <TextView
+        android:id="@+id/tv_c2c_cancel"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:layout_width="0dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        app:layout_constraintHorizontal_weight="4"
+        android:background="@drawable/btn_transparent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/tv_c2c_confirm"/>
+    <TextView
+        android:id="@+id/tv_c2c_confirm"
+        android:gravity="center"
+        android:layout_width="0dp"
+        android:text="@string/confirm"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        app:layout_constraintHorizontal_weight="6"
+        android:background="@drawable/btn_green"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_c2c_cancel"/>
+</android.support.constraint.ConstraintLayout>

@@ -68,6 +68,7 @@ public class DetailedBuyAndSellFragment extends Fragment
     private Double total;
 
     private KProgressHUD hud;
+    private KProgressHUD hud1;
     private PasswordDialog builder;
     private asset_object btsAssetObj;
     private asset_object baseAssetObj;
@@ -116,6 +117,14 @@ public class DetailedBuyAndSellFragment extends Fragment
         init(view);
         listener=this;
         MarketDetailedActivity.refurbishBuyAndSell=this;
+        hud1 = KProgressHUD.create(getActivity())
+                .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
+                .setLabel(BtslandApplication.getInstance().getString(R.string.str_broadcast))
+                .setCancellable(false)
+                .setAnimationSpeed(2)
+                .setDimAmount(0.5f);
+        hud=KProgressHUD.create(getActivity());
+        hud.setLabel(getResources().getString(R.string.please_wait));
         return view;
     }
 
@@ -429,8 +438,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                 builder.setListener(new PasswordDialog.OnDialogInterationListener(){
                     @Override
                     public void onConfirm(AlertDialog dialog, final String passwordString) {
-                        hud=KProgressHUD.create(getActivity());
-                        hud.setLabel(getResources().getString(R.string.please_wait));
+
                         hud.show();
                         new Thread(new Runnable() {
                             @Override
@@ -457,7 +465,6 @@ public class DetailedBuyAndSellFragment extends Fragment
                 });
                 builder.show();
             }else {
-
                 goTrading();
             }
 
@@ -468,14 +475,8 @@ public class DetailedBuyAndSellFragment extends Fragment
         }
 
         private void goTrading(){
-            hud = KProgressHUD.create(getActivity())
-                    .setStyle(KProgressHUD.Style.SPIN_INDETERMINATE)
-                    .setLabel(BtslandApplication.getInstance().getString(R.string.str_broadcast))
-                    .setCancellable(false)
-                    .setAnimationSpeed(2)
-                    .setDimAmount(0.5f);
             if (!BtslandApplication.getWalletApi().is_locked()) {
-                hud.show();
+                handler2.sendEmptyMessage(10);
                 if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
                     buy();
                 }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
@@ -487,14 +488,14 @@ public class DetailedBuyAndSellFragment extends Fragment
                     @Override
                     public void onConfirm(AlertDialog dialog, String passwordString) {
                         if (BtslandApplication.getWalletApi().unlock(passwordString) == 0) {
-                            hud.show();
+                            hud1.show();
                             if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.BUY)){
                                 buy();
                             }else if(mwant.equals(ConfirmOrderDialog.ConfirmOrderData.SELL)){
                                 sell();
                             }
                         } else {
-                            handler2.sendEmptyMessage(-2);
+                            handler2.sendEmptyMessage(10);
                         }
                     }
 
@@ -595,6 +596,9 @@ public class DetailedBuyAndSellFragment extends Fragment
             if(hud.isShowing()){
                 hud.dismiss();
             }
+            if(hud1.isShowing()){
+                hud1.dismiss();
+            }
             if(msg.what==1){
                 Toast.makeText(getActivity(), "广播发布成功", Toast.LENGTH_SHORT).show();
             }else if(msg.what==-1){
@@ -603,6 +607,8 @@ public class DetailedBuyAndSellFragment extends Fragment
                 Toast.makeText(getActivity(), "密码正确", Toast.LENGTH_SHORT).show();
             }else if(msg.what==-2){
                 Toast.makeText(getActivity(), "密码错误", Toast.LENGTH_SHORT).show();
+            }else if(msg.what==10){
+                hud1.show();
             }
         }
     };

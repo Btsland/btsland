@@ -24,7 +24,6 @@
         app:layout_constraintTop_toBottomOf="@+id/fra_market_simple"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent">
-
     </ListView>
     <!--<TextView-->
     <!--android:id="@+id/tv_market_left_coin1"-->

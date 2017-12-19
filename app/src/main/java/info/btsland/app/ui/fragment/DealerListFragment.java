@@ -57,13 +57,13 @@ public class DealerListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.type=getArguments().getInt("type");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_dealer_list, container, false);
-        this.type=getArguments().getInt("type");
         init(view);
         fillIn();
         return view;

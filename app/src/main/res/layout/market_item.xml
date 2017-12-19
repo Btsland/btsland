@@ -17,8 +17,6 @@
             android:id="@+id/tv_back"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:background="@drawable/select_row_white"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -35,8 +33,7 @@
             app:layout_constraintTop_toTopOf="@+id/tv_back"
             app:layout_constraintBottom_toBottomOf="@+id/tv_back"
             app:layout_constraintLeft_toLeftOf="@+id/tv_back"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp" />
+            android:layout_marginLeft="5dp"/>
         <TextView
             android:id="@+id/tv_fluctuation"
             android:textSize="12sp"
@@ -46,8 +43,7 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_coin"
             app:layout_constraintBottom_toBottomOf="@+id/tv_back"
             app:layout_constraintLeft_toLeftOf="@+id/tv_back"
-            android:layout_marginLeft="5dp"
-            android:layout_marginStart="5dp" />
+            android:layout_marginLeft="5dp"/>
         <TextView
             android:id="@+id/tv_newPrice"
             android:textSize="20sp"

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="70dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="5dp">
+    <TextView
+        android:id="@+id/tv_exeNote_item_dealerName"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:text="某某某"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_exeNote_item_startTime"/>
+    <TextView
+        android:id="@+id/tv_exeNote_item_startTime"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:text="12-12 12:25"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/tv_exeNote_item_dealerName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+    <TextView
+        android:id="@+id/tv_exeNote_item_num"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:text="10000"
+        android:textStyle="bold"
+        android:textColor="@color/color_font_red"
+        android:layout_marginRight="5dp"
+        android:gravity="center"
+        android:textSize="20sp"
+        app:layout_constraintRight_toLeftOf="@+id/tv_exeNote_item_coin"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_exeNote_item_stat"/>
+
+    <TextView
+        android:id="@+id/tv_exeNote_item_coin"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:text="CNY"
+        android:textSize="14sp"
+        app:layout_constraintBottom_toTopOf="@+id/tv_exeNote_item_stat"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/tv_exeNote_item_stat"
+        android:layout_width="wrap_content"
+        android:layout_height="25dp"
+        android:text="已完成"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/tv_exeNote_item_num"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+</android.support.constraint.ConstraintLayout>

@@ -31,7 +31,9 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.view.AppDialog;
+import info.btsland.app.util.NumericUtil;
 import info.btsland.exchange.entity.Note;
+import info.btsland.exchange.entity.RealAsset;
 import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.TradeHttp;
 import info.btsland.exchange.http.UserHttp;
@@ -67,6 +69,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
 
     private TextView tvConfirm;
     private String TAG ="C2CExchangeActivity";
+    private int spPaysIndex;
 
     public C2CExchangeActivity() {
     }
@@ -249,6 +252,17 @@ public class C2CExchangeActivity extends AppCompatActivity {
             spPays.setSelection(0);
             adapter.notifyDataSetChanged();
         }
+        spPays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                spPaysIndex=i;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         tvRemafkCodeCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,6 +272,66 @@ public class C2CExchangeActivity extends AppCompatActivity {
                 Toast.makeText(C2CExchangeActivity.this,"已复制到剪贴板",Toast.LENGTH_SHORT).show();
             }
         });
+        tvConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String num= edtotalNum.getText().toString();
+                if(num==null||num.equals("")){
+                    AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+                    appDialog.setMsg("请输入充值额度");
+                    appDialog.show();
+                    return;
+                }
+                if(user.realAssets==null||user.realAssets.size()==0){
+                    AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+                    appDialog.setMsg("您没有付款帐号");
+                    appDialog.show();
+                    return;
+                }
+                RealAsset realAsset = user.realAssets.get(spPaysIndex);
+                String depict = edRemark.getText().toString();
+                note.setRealNo(realAsset.getRealAssetNo());
+                note.setRealType(realAsset.getRealAssetType());
+                note.setRealDepict(realAsset.getDepict());
+                note.setAssetNum(NumericUtil.parseDouble(num));
+                note.setDepict(depict);
+//                SaveNote saveNote=new SaveNote(user.getAccount(), note, new Callback() {
+//                    @Override
+//                    public void onFailure(Call call, IOException e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Call call, Response response) throws IOException {
+//                        int a = Integer.parseInt(response.body().string());
+//                        Log.i(TAG, "onResponse: "+a);
+//                        Bundle bundle=new Bundle();
+//                        bundle.putInt("a",a);
+//                        Message message=Message.obtain();
+//                        message.setData(bundle);
+//                        saveHandler.sendMessage(message);
+//                    }
+//                });
+//                saveNote.start();
+            }
+        });
+    }
+
+    class SaveNote extends Thread{
+        private Callback callback;
+        private Note note;
+        private String account;
+        public SaveNote(String account,Note note,Callback callback) {
+            this.account=account;
+            this.note=note;
+            this.callback=callback;
+        }
+
+        @Override
+        public void run() {
+            Gson gson=new Gson();
+            TradeHttp.saveNote(account,gson.toJson(note),callback);
+        }
     }
 
 
@@ -306,6 +380,24 @@ public class C2CExchangeActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             fillInBody();
+        }
+    };
+
+    private Handler saveHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            int a= msg.getData().getInt("a");
+            AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+            if(a>0){
+                appDialog.setMsg("订单发起成功，线下完成转账后请确认转账。");
+                appDialog.show();
+            }else if(a==0){
+                appDialog.setMsg("订单失效，请重试或请重新生成订单。");
+                appDialog.show();
+            }else if(a==-1) {
+                appDialog.setMsg("不能发起重复的订单。");
+                appDialog.show();
+            }
         }
     };
 

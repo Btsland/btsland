@@ -84,18 +84,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             "wss://www.btsland.info/ws",
             "wss://bit.btsabc.org/ws",
             "wss://bitshares-api.wancloud.io/ws",
-            "wss://bitshares.dacplay.org/ws",
             "wss://bitshares.openledger.info/ws",
-            "wss://openledger.hk/ws",
-            "wss://eu.openledger.info/ws",
-            "wss://bts.transwiser.com/ws",
-            "wss://secure.freedomledger.com/ws",
-            "wss://dexnode.net/ws",
-            "wss://altcap.io/ws",
-            "wss://bitshares.crypto.fans/ws"
-
-
-
+            "wss://openledger.hk/ws"
     );
 
     public static List<String> baseList = Arrays.asList("CNY", "BTS", "USD", "BTC");

@@ -39,6 +39,17 @@ public class Note {
 
     private String flowPath;
 
+    private String dealerName;
+
+    public String getDealerName() {
+        return dealerName;
+    }
+
+    public Note setDealerName(String dealerName) {
+        this.dealerName = dealerName;
+        return this;
+    }
+
     public Integer getId() {
         return id;
     }

@@ -22,6 +22,11 @@ public class DetailedFragmentAdapter extends FragmentPagerAdapter {
         this.fragmentList=fragmentList;
         this.titles=titles;
     }
+    public DetailedFragmentAdapter(FragmentManager fm, List<Fragment> fragmentList) {
+        super(fm);
+        this.fragmentList=fragmentList;
+    }
+
 
 
 
@@ -37,7 +42,12 @@ public class DetailedFragmentAdapter extends FragmentPagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return titles[position];
+        if(titles!=null&&titles.length>0){
+            return titles[position];
+        }else {
+            return "";
+        }
+
     }
     public int getPageIconResId(int position){
         return 1;

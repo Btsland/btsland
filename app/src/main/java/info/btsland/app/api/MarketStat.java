@@ -241,9 +241,8 @@ public class MarketStat {
             Looper.prepare();
             final Stat stat = new Stat();
             int a=0;
-            int i=0;
+            int i=-1;
             while (true) {
-                BtslandApplication.strServer=BtslandApplication.mListNode.get(i);
                 if(a<2) {
                     stat.nRet = mWebsocketApi.connect();
                     Log.e(TAG, "run: "+stat.nRet );
@@ -255,6 +254,7 @@ public class MarketStat {
                     continue;
                 }
                 i++;
+                BtslandApplication.strServer=BtslandApplication.mListNode.get(i);
                 if(i>BtslandApplication.mListNode.size()){
                     AppDialog appDialog=new AppDialog(BtslandApplication.getInstance());
                     appDialog.setMsg("目前的节点都无法连接！");

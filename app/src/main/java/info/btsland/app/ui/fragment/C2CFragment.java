@@ -1,52 +1,18 @@
 package info.btsland.app.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import com.astuetz.PagerSlidingTabStrip;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-
-import org.spongycastle.crypto.agreement.srp.SRP6Client;
-
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.asset;
-import info.btsland.app.api.asset_object;
-import info.btsland.app.ui.activity.C2CExchangeActivity;
-import info.btsland.app.ui.view.AppDialog;
-import info.btsland.exchange.C2C;
-import info.btsland.app.Adapter.DealerListAdapter;
-import info.btsland.exchange.entity.Note;
-import info.btsland.exchange.entity.User;
-import info.btsland.exchange.http.UserHttp;
-import info.btsland.exchange.utils.GsonDateAdapter;
-import info.btsland.exchange.utils.NoteUtil;
-import info.btsland.app.exception.NetworkStatusException;
-import info.btsland.app.util.MyUitls;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 
 public class C2CFragment extends Fragment {
@@ -81,10 +47,9 @@ public class C2CFragment extends Fragment {
         init(view);
         return view;
     }
-
-
     private void init(View view) {
         ViewPager viewPager1= view.findViewById(R.id.vp_c2c);
+        viewPager1.setOffscreenPageLimit(2);
         String[] titles={"充值(RMB-CNY)","提现(CNY-RMB)"};
         List<Fragment> fragments=new ArrayList<Fragment>();
         DealerListFragment inFragment = DealerListFragment.newInstance(1);

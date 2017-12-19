@@ -1,10 +1,9 @@
 package info.btsland.exchange.entity;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class User implements Serializable {
-    private Integer id;
+public class User {
+    private Integer id=0;
 
     private String dealerId;
 
@@ -14,7 +13,9 @@ public class User implements Serializable {
 
     private String account;
 
-    private Double brokerage;
+    private Double brokerageIn;
+
+    private Double brokerageOut;
 
     private String depict;
 
@@ -22,7 +23,11 @@ public class User implements Serializable {
 
     private Integer type;
 
-    private Double lowerLimit;
+    private Double lowerLimitIn;
+
+    private Double upperLimitOut;
+
+    private Double lowerLimitOut;
 
     public UserInfo userInfo;
 
@@ -70,12 +75,20 @@ public class User implements Serializable {
         this.account = account == null ? null : account.trim();
     }
 
-    public Double getBrokerage() {
-        return brokerage;
+    public Double getBrokerageIn() {
+        return brokerageIn;
     }
 
-    public void setBrokerage(Double brokerage) {
-        this.brokerage = brokerage;
+    public void setBrokerageIn(Double brokerageIn) {
+        this.brokerageIn = brokerageIn;
+    }
+
+    public Double getBrokerageOut() {
+        return brokerageOut;
+    }
+
+    public void setBrokerageOut(Double brokerageOut) {
+        this.brokerageOut = brokerageOut;
     }
 
     public String getDepict() {
@@ -102,11 +115,27 @@ public class User implements Serializable {
         this.type = type;
     }
 
-    public Double getLowerLimit() {
-        return lowerLimit;
+    public Double getLowerLimitIn() {
+        return lowerLimitIn;
     }
 
-    public void setLowerLimit(Double lowerLimit) {
-        this.lowerLimit = lowerLimit;
+    public void setLowerLimitIn(Double lowerLimitIn) {
+        this.lowerLimitIn = lowerLimitIn;
+    }
+
+    public Double getUpperLimitOut() {
+        return upperLimitOut;
+    }
+
+    public void setUpperLimitOut(Double upperLimitOut) {
+        this.upperLimitOut = upperLimitOut;
+    }
+
+    public Double getLowerLimitOut() {
+        return lowerLimitOut;
+    }
+
+    public void setLowerLimitOut(Double lowerLimitOut) {
+        this.lowerLimitOut = lowerLimitOut;
     }
 }

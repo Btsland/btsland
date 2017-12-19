@@ -24,6 +24,13 @@
             android:gravity="center"
             android:layout_height="match_parent"
             android:layout_weight="1"/>
+        <TextView
+            android:id="@+id/tv_look_asset_charge"
+            android:layout_width="0dp"
+            android:text="折合"
+            android:gravity="center"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
     </LinearLayout>
     <ListView
         android:id="@+id/lv_look_asset_list"

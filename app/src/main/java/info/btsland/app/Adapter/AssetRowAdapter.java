@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,6 +64,10 @@ public class AssetRowAdapter extends BaseAdapter {
         tvName.setText(asset.coinName);
         TextView tvNum=convertView.findViewById(R.id.tv_coin_num);
         tvNum.setText(String.valueOf(asset.total));
+        TextView tvtotal=convertView.findViewById(R.id.tv_coin_total);
+        BigDecimal b =new BigDecimal(asset.totalCNY);
+        double f1 = b.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
+        tvtotal.setText("≈"+String.valueOf(f1));
         return convertView;
     }
 

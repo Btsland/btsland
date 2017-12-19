@@ -20,7 +20,7 @@ import info.btsland.app.R;
 public class HomeFragment extends Fragment {
     private String TAG="HomeFragment";
     public HomeFragment() {
-        // Required empty public constructor
+
     }
     public HomeFragment newInstance() {
         HomeFragment homeFragment=new HomeFragment();

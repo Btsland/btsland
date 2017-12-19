@@ -17,4 +17,11 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="40dp" />
+    <TextView
+        android:id="@+id/tv_coin_total"
+        android:gravity="center"
+        android:textColor="@color/color_black"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="40dp" />
 </LinearLayout>

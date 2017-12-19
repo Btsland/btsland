@@ -53,10 +53,22 @@ public class UserHttp extends C2CHttp {
      * @param dealerId
      * @param callback
      */
-    public static void queryUser(String dealerId,Callback callback){
-        String action="/user/queryUser";
+    public static void queryDealer(String dealerId,Callback callback){
+        String action="/user/queryDealer";
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("dealerId",dealerId);
+        post(action,paramMap,callback);
+    }
+
+    /**
+     * 查询用户信息
+     * @param account
+     * @param callback
+     */
+    public static void queryAccount(String account,Callback callback){
+        String action="/user/queryAccount";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("account",account);
         post(action,paramMap,callback);
     }
 

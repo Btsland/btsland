@@ -63,6 +63,7 @@ public class TransferActivity extends AppCompatActivity {
     private TextView tvBalanceNum;
     private TextView tvSecond;
     private TextView tvMsg;
+    private TextView tvId;
     private PasswordDialog passwordDialog;
 
     private Map<String,IAsset> iAssetMap;
@@ -81,6 +82,10 @@ public class TransferActivity extends AppCompatActivity {
     String symbol;
     String memo;
     Double volNum;
+
+    String id;
+
+    List<asset_object> asset_objects = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +107,7 @@ public class TransferActivity extends AppCompatActivity {
         tvCancel=findViewById(R.id.tv_transfer_cancel);
         tvBalanceNum=findViewById(R.id.tv_transfer_balanceNum);
         tvPoint=findViewById(R.id.tv_transfer_point);
+        tvId=findViewById(R.id.tv_transfer_to_id);
         List<IAsset> iAssets=BtslandApplication.iAssets;
         iAssetMap=new HashMap<>();
         for(int i=0;i<iAssets.size();i++){
@@ -133,6 +139,11 @@ public class TransferActivity extends AppCompatActivity {
             public void afterTextChanged(Editable editable) {
                 String str=editable.toString();
                 createPortrait(wvTo,str);
+                if(!str.equals("")){
+                    getId(str);
+                }else {
+                    idHander.sendEmptyMessage(-2);
+                }
             }
         });
 
@@ -169,39 +180,25 @@ public class TransferActivity extends AppCompatActivity {
 
         List<asset> assets = BtslandApplication.accountObject.assetlist;
 
-        List<object_id<asset_object>> assetObjects=new ArrayList<>();
-        List<asset_object> asset_objects=null;
+        final List<object_id<asset_object>> assetObjects=new ArrayList<>();
         for (int i=0;i<assets.size();i++){
             assetObjects.add(assets.get(i).asset_id);
         }
-        try {
-            asset_objects = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(assetObjects);
-        } catch (NetworkStatusException e) {
-            e.printStackTrace();
-        }
-        if(asset_objects==null){
-            return;
-        }
-        String[] strings=new String[asset_objects.size()];
-        for(int i=0;i<asset_objects.size();i++){
-            strings[i]=asset_objects.get(i).symbol;
-        }
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.coin_item,R.id.tv_transfer_coinName,strings);
-        spCoin.setAdapter(adapter);
-        spCoin.setSelection(0);
-        spCoin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        new Thread(new Runnable() {
             @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String coin = (String) spCoin.getItemAtPosition(i);
-                iAssetMap.get(coin);
-                tvBalanceNum.setText(String .valueOf(iAssetMap.get(coin).total));
+            public void run() {
+                try {
+                    asset_objects = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(assetObjects);
+                    sphandler.sendEmptyMessage(1);
+                } catch (NetworkStatusException e) {
+                    e.printStackTrace();
+                }
+                if(asset_objects ==null){
+                    return;
+                }
             }
+        }).start();
 
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
         timer=new Timer();
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -295,6 +292,28 @@ public class TransferActivity extends AppCompatActivity {
         });
 
     }
+    public void fillINSp(){
+        String[] strings=new String[asset_objects.size()];
+        for(int i = 0; i< asset_objects.size(); i++){
+            strings[i]= asset_objects.get(i).symbol;
+        }
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.coin_item,R.id.tv_transfer_coinName,strings);
+        spCoin.setAdapter(adapter);
+        spCoin.setSelection(0);
+        spCoin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                String coin = (String) spCoin.getItemAtPosition(i);
+                iAssetMap.get(coin);
+                tvBalanceNum.setText(String .valueOf(iAssetMap.get(coin).total));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+    }
     public void transfer(){
         Thread thread=new Thread(new Runnable() {
             @Override
@@ -332,6 +351,27 @@ public class TransferActivity extends AppCompatActivity {
         WebSettings webSettings=webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.loadData(htmlShareAccountName, "text/html", "UTF-8");
+    }
+    public void getId(final String account){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    account_object accountObject = BtslandApplication.getMarketStat().mWebsocketApi.get_account_by_name(account);
+                    if(accountObject==null){
+                        idHander.sendEmptyMessage(-1);
+                        return;
+                    }
+                    Message message=Message.obtain();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("accountId","#" + accountObject.id.get_instance());
+                    message.setData(bundle);
+                    idHander.sendMessage(message);
+                } catch (NetworkStatusException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
     /**
      * 装载顶部导航
@@ -371,6 +411,28 @@ public class TransferActivity extends AppCompatActivity {
             if(msg.what==0){
                 tvSend.setText("正在转账。。。");
             }
+        }
+    };
+
+    private Handler idHander=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(msg.what==-1){
+                tvId.setText("该账号不存在");
+                return;
+            }else if(msg.what==-2) {
+                tvId.setText("");
+                return;
+            }
+            id = msg.getData().getString("accountId");
+            tvId.setText(id);
+        }
+    };
+
+    private Handler sphandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            fillINSp();
         }
     };
 }

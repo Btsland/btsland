@@ -171,8 +171,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
                                 }
                             }
                         }).start();
-
-
                     }
 
                     @Override

@@ -8,6 +8,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -28,6 +29,7 @@ import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.fragment.DetailedKFragment;
+import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.KeyUtil;
 import info.btsland.app.util.NumericUtil;
@@ -236,12 +238,35 @@ public class MarketStat {
 
         @Override
         public synchronized void run() {
-            //Log.e(TAG, "run: "+Thread.currentThread().getName());
-            //登录
+            Looper.prepare();
             final Stat stat = new Stat();
-            if ((stats & STAT_COUNECT) != 0) {
-                stat.nRet= mWebsocketApi.connect();
-                listener.onMarketStatUpdate(stat);
+            int a=0;
+            int i=0;
+            while (true) {
+                BtslandApplication.strServer=BtslandApplication.mListNode.get(i);
+                if(a<2) {
+                    stat.nRet = mWebsocketApi.connect();
+                    Log.e(TAG, "run: "+stat.nRet );
+                    if(stat.nRet==0){
+                        listener.onMarketStatUpdate(stat);
+                        break;
+                    }
+                    a++;
+                    continue;
+                }
+                i++;
+                if(i>BtslandApplication.mListNode.size()){
+                    AppDialog appDialog=new AppDialog(BtslandApplication.getInstance());
+                    appDialog.setMsg("目前的节点都无法连接！");
+                    appDialog.show();
+                    break;
+                }
+                a=0;
+                try {
+                    Thread.sleep(256);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }

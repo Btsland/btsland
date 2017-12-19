@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.asset;
@@ -48,17 +51,8 @@ import okhttp3.Response;
 
 public class C2CFragment extends Fragment {
     private static final String TAG="C2CFragment";
+    private int index =0;
 
-    private int type=1;
-
-    public static final int IN=1;//进（充值）
-    public static final int OUT=2;//出（提现）
-
-    private ImageView imageView;
-    private LinearLayout layout;
-    private ListView listView;
-    private DealerListAdapter dealerListAdapter;
-    private List<DealerListAdapter.DealerData> dataList;
 
     public C2CFragment() {
         // Required empty public constructor
@@ -81,95 +75,50 @@ public class C2CFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_c2c, container, false);
+        if(savedInstanceState!=null){
+            this.index = savedInstanceState.getInt("index", 1);
+        }
         init(view);
-        fillIn();
         return view;
     }
 
 
     private void init(View view) {
-        imageView=view.findViewById(R.id.img_c2c);
-        layout=view.findViewById(R.id.ll_c2c);
-        //vNo1=view.findViewById(R.id.v_c2c_no1_back);
-        listView=view.findViewById(R.id.lv_c2c_list);
+        ViewPager viewPager1= view.findViewById(R.id.vp_c2c);
+        String[] titles={"充值(RMB-CNY)","提现(CNY-RMB)"};
+        List<Fragment> fragments=new ArrayList<Fragment>();
+        DealerListFragment inFragment = DealerListFragment.newInstance(1);
+        DealerListFragment outFragment = DealerListFragment.newInstance(2);
+        fragments.add(inFragment);
+        fragments.add(outFragment);
+        DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments,titles);
+        PagerSlidingTabStrip tabStrip = view.findViewById(R.id.psts_c2c_title1);
+        viewPager1.setAdapter(adapter);
+        viewPager1.setCurrentItem(index);
+        tabStrip.setViewPager(viewPager1);
+        tabStrip.setOnPageChangeListener(new OnPage());
     }
-    private void fillIn() {
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                imageView.setVisibility(View.GONE);
-                layout.setVisibility(View.VISIBLE);
-            }
-        });
-        dataList=new ArrayList<>();
-        dealerListAdapter=new DealerListAdapter(getActivity());
-        listView.setAdapter(dealerListAdapter);
-        Timer timer=new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                queryAllUser();
-            }
-        },0,10000);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DealerListAdapter.DealerData dealerData = dataList.get(i);
-                toExchange(dealerData.user);
-            }
-        });
+    class OnPage implements ViewPager.OnPageChangeListener{
 
-    }
-    private void toExchange(User user){
-        if(BtslandApplication.accountObject==null){
-            AppDialog appDialog=new AppDialog(getActivity());
-            appDialog.setMsg("您未登录，请先登录！");
-            appDialog.show();
-        }else {
-            C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name, type, user.getDealerId());
-        }
-    }
-
-    private void queryAllUser(){
-        UserHttp.queryAllDealer(0, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String str = response.body().string();
-                if(str!=null&&!str.equals("")){
-                    fillInUser(str);
-                }
-            }
-        });
-    }
-
-    private void fillInUser(String json){
-        Gson gson=new Gson();
-        Log.e(TAG, "fillInList: json"+json );
-        List<User> users = gson.fromJson(json,new TypeToken<List<User>>() {}.getType());
-        for(int i=0;i<users.size();i++){
-            DealerListAdapter.DealerData dealerData=new DealerListAdapter.DealerData();
-            User user=users.get(i);
-            dealerData.user=user;
-            if (dataList.size()>i&&dataList.get(i)!=null) {
-                dataList.get(i).replce(dealerData);
-            } else {
-                dataList.add(dealerData);
-            }
-        }
-        handler.sendEmptyMessage(1);
-    }
-
-
-    private Handler handler=new Handler(){
         @Override
-        public void handleMessage(Message msg) {
-            dealerListAdapter.setDataList(dataList);
-        }
-    };
+        public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+        }
+
+        @Override
+        public void onPageSelected(int position) {
+
+        }
+
+        @Override
+        public void onPageScrollStateChanged(int state) {
+
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putInt("index",index);
+        super.onSaveInstanceState(outState);
+    }
 }

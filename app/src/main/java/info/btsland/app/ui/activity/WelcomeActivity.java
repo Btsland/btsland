@@ -25,6 +25,7 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Websocket_api;
+import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.util.InternetUtil;
 
 public class WelcomeActivity extends AppCompatActivity{
@@ -72,8 +73,12 @@ public class WelcomeActivity extends AppCompatActivity{
                             startActivity(intent2);
                             finish();
                         }
-                    }, 3000);
+                    }, 2000);
 
+                }else if(nRet==Websocket_api.WEBSOCKET_CONNECT_NO_NETWORK) {
+                    AppDialog appDialog=new AppDialog(WelcomeActivity.this);
+                    appDialog.setMsg("无网络连接，请确保网络正常后重新打开软件。");
+                    appDialog.show();
                 }
             }
         }

@@ -1,7 +1,9 @@
 package info.btsland.app.ui.view;
 
 import android.app.Activity;
+import android.content.Context;
 import android.support.v7.app.AlertDialog;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -9,7 +11,8 @@ import android.widget.TextView;
 import info.btsland.app.R;
 
 public class AppDialog {
-    private Activity mActivity;
+    private LayoutInflater inflater;
+    private Context mActivity;
     private AlertDialog.Builder mDialogBuilder;
     private AlertDialog mDialog;
     private OnDialogInterationListener mListener;
@@ -24,20 +27,22 @@ public class AppDialog {
     private String title="提示";
 
 
-    public AppDialog(Activity mActivity,String title,String msg) {
-        this.mActivity = mActivity;
+    public AppDialog(Context context,String title,String msg) {
+        this.mActivity = context;
+        this.inflater = LayoutInflater.from(context);
         this.title=title;
         this.msg=msg;
         fillIn();
     }
-    public AppDialog(Activity mActivity) {
-        this.mActivity = mActivity;
+    public AppDialog(Context context) {
+        this.mActivity = context;
+        this.inflater = LayoutInflater.from(context);
         fillIn();
     }
     public void fillIn(){
         mDialogBuilder = new AlertDialog.Builder(mActivity);
 
-        view = mActivity.getLayoutInflater().inflate(R.layout.dialog_app, null);
+        view = inflater.inflate(R.layout.dialog_app, null);
         tvTitle=view.findViewById(R.id.tv_app_dialog_title);
         tvMsg=view.findViewById(R.id.tv_app_dialog_msg);
 

@@ -13,6 +13,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.reflect.Type;
+import java.security.SecureRandom;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,12 +25,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -165,48 +178,86 @@ public class Websocket_api extends WebSocketListener {
     }
 
     public synchronized int connect() {
-
-        //Log.e(TAG, "connect: "+Thread.currentThread().getName());
-//        Request request = new Request.Builder().url("wss://bitshares.openledger.info/ws").build();
-//        mOkHttpClient = new OkHttpClient();
-//        mWebsocket = mOkHttpClient.newWebSocket(request, this);
-//
-//        int nRet = 0;
-//        try {
-//            boolean bLogin = login("", "");
-//            if (bLogin == true) {
-//                _nDatabaseId = get_websocket_bitshares_api_id("database");
-//                _nHistoryId = get_websocket_bitshares_api_id("history");
-//                _nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
-//            } else {
-//                nRet = ERROR_CONNECT_SERVER_FAILD;
-//            }
-//        } catch (NetworkStatusException e) {
-//            e.printStackTrace();
-//            nRet = ERROR_CONNECT_SERVER_FAILD;
-//        }
-//
-//        if (nRet != 0) {
-//            mWebsocket.close(1000, "");
-//            mWebsocket = null;
-//        }
-//        return nRet;
+        Gson gson = global_config_object.getInstance().getGsonBuilder().create();
         if (mnConnectStatus == WEBSOCKET_ALL_READY) {
             return 0;
         }
-
         if (StringUtils.isEmpty(BtslandApplication.strServer)) {
             return -9;
         }
+        // Trust All Certificates
+        final TrustManager[] trustManagers = new TrustManager[]{new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                X509Certificate[] x509Certificates = new X509Certificate[0];
+                return x509Certificates;
+            }
 
+            @Override
+            public void checkServerTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+        }};
+        X509TrustManager x509TrustManager = new X509TrustManager() {
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                X509Certificate[] x509Certificates = new X509Certificate[0];
+                return x509Certificates;
+            }
+
+            @Override
+            public void checkServerTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+
+            @Override
+            public void checkClientTrusted(final X509Certificate[] chain,
+                                           final String authType) throws CertificateException {
+                Log.i(TAG, "authType: " + String.valueOf(authType));
+            }
+        };
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        try {
+            String PROTOCOL = "SSL";
+            SSLContext sslContext = SSLContext.getInstance(PROTOCOL);
+            KeyManager[] keyManagers = null;
+            SecureRandom secureRandom = new SecureRandom();
+            sslContext.init(keyManagers, trustManagers, secureRandom);
+            SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
+            okHttpClientBuilder.sslSocketFactory(sslSocketFactory, x509TrustManager);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+            @Override
+            public boolean verify(String hostname, SSLSession session) {
+//                Log.i(TAG, "hostname: " + String.valueOf(hostname));
+//                if (hostname.equals("www.btsland.info")) {
+//                    return true;
+//                }
+//                return false;
+             return true;
+            }
+        };
+
+        okHttpClientBuilder.hostnameVerifier(hostnameVerifier);
+        OkHttpClient okHttpClient = okHttpClientBuilder.build();
         Request request = new Request.Builder().url(BtslandApplication.strServer).build();
-
-        mOkHttpClient = new OkHttpClient();
-        mWebsocket = mOkHttpClient.newWebSocket(request, this);
+        mWebsocket = okHttpClient.newWebSocket(request, this);
         synchronized (mWebsocket) {
             if (mnConnectStatus == WEBSOCKET_CONNECT_INVALID) {
                 try {
-                    mWebsocket.wait();
+                    Log.e(TAG, "connect: 11111111111111111" );
+                    mWebsocket.wait(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -216,10 +267,7 @@ public class Websocket_api extends WebSocketListener {
                 }
             }
         }
-
         int nRet = 0;
-
-
         boolean bLogin = false;
         try {
             bLogin = login("","");
@@ -227,20 +275,14 @@ public class Websocket_api extends WebSocketListener {
                 _nDatabaseId = get_websocket_bitshares_api_id("database");
                 _nHistoryId = get_websocket_bitshares_api_id("history");
                 BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
-                //Log.i(TAG, "connect: _nDatabaseId:"+ _nDatabaseId);
-                //Log.i(TAG, "connect: _nHistoryId:"+ _nHistoryId);
-                //Log.i(TAG, "connect: _nBroadcastId:"+BtslandApplication._nBroadcastId);
-//                String query9="{\"id\":111111,\"method\":\"call\",\"params\":[2,\"list_account_balances\",[\"li-88888\",[]]]}";
-//                //Log.e(TAG, "connect: 99999999999999999999999999999999999999999" );
-//                mWebsocket.send(query9);
             } else {
                 nRet = -9;
             }
         } catch (NetworkStatusException e) {
             nRet=-9;
             e.printStackTrace();
+            return nRet;
         }
-
         if (nRet != 0) {
             mWebsocket.close(1000, "");
             mWebsocket = null;
@@ -753,10 +795,8 @@ public class Websocket_api extends WebSocketListener {
                 }
             }
             try {
-                replyObjectProcess.wait();
-                //Log.i(TAG, "sendForReplyImpl: wait");
+                replyObjectProcess.wait(10000);
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
-                ////Log.e("websocket2", "sendForReplyImpl: replyObject:"+replyObject);
                 String strError = replyObjectProcess.getError();
                 if (TextUtils.isEmpty(strError) == false) {
                     throw new NetworkStatusException(strError);

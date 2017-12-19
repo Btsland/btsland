@@ -21,6 +21,8 @@ public class IAsset {
     public Double usable=0.0;
     public Double orders=0.0;
     public String coinName;
+    public Double totalCNY=0.0;
+
     public IAsset( String coinName){
         this.coinName=coinName;
         mAsset=new asset();
@@ -29,7 +31,11 @@ public class IAsset {
         this.mAsset=mAsset;
         fillIn();
     }
-
+    public IAsset(asset mAsset,Double totalCNY) {
+        this.mAsset=mAsset;
+        this.totalCNY=totalCNY;
+        fillIn();
+    }
     public IAsset() {
     }
 

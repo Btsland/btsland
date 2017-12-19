@@ -73,7 +73,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static Map<object_id<asset_object>, asset_object> assetObjectMap=new LinkedHashMap<>();
     public static boolean isRefurbish=true;//是否自动刷新
     public static int fluctuationType=1;//涨跌颜色类型
-    public static String strServer="wss://bitshares.dacplay.org/ws";//节点
+    public static String strServer="wss://www.btsland.info/ws";//节点
     public static String chargeUnit="CNY";//计价单位
     public static String Language="zh";//语言
     public static int goUp=0;
@@ -81,13 +81,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int suspend=0;
 
     public static List<String> mListNode = Arrays.asList(
-            "wss://bitshares.openledger.info/ws",
-            "wss://eu.openledger.info/ws",
+            "wss://www.btsland.info/ws",
             "wss://bit.btsabc.org/ws",
-            "wss://bts.transwiser.com/ws",
-            "wss://bitshares.dacplay.org/ws",
             "wss://bitshares-api.wancloud.io/ws",
+            "wss://bitshares.dacplay.org/ws",
+            "wss://bitshares.openledger.info/ws",
             "wss://openledger.hk/ws",
+            "wss://eu.openledger.info/ws",
+            "wss://bts.transwiser.com/ws",
             "wss://secure.freedomledger.com/ws",
             "wss://dexnode.net/ws",
             "wss://altcap.io/ws",
@@ -266,21 +267,16 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         return 0.0;
     }
     public static void ConnectThread(){
-        while (true){
-            if(InternetUtil.isConnected(BtslandApplication.getInstance())){
-                MarketStat marketStat = getMarketStat();
-                MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
-                connect.start();
-                break;
-            }else {
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Toast.makeText(BtslandApplication.getInstance(), "无法连接网络", Toast.LENGTH_LONG).show();
-            }
+
+        if(InternetUtil.isConnected(BtslandApplication.getInstance())){
+            MarketStat marketStat = getMarketStat();
+            MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
+            connect.start();
+        }else {
+            Toast.makeText(BtslandApplication.getInstance(), "无法连接网络", Toast.LENGTH_LONG).show();
+            WelcomeActivity.sendBroadcast(getInstance(),Websocket_api.WEBSOCKET_CONNECT_NO_NETWORK);
         }
+
 
     }
 

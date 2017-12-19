@@ -16,6 +16,7 @@ import java.util.List;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.exchange.entity.RealAsset;
 import info.btsland.exchange.entity.User;
 import info.btsland.exchange.utils.UserStatUtil;
@@ -33,8 +34,14 @@ public class DealerListAdapter extends BaseAdapter {
 
     private List<View> views=new ArrayList<>();
     private String TAG="DealerListAdapter";
+    private int type;
 
     public DealerListAdapter(Context context) {
+        this.context=context;
+        this.inflater=LayoutInflater.from(context);
+    }
+    public DealerListAdapter(Context context,int type) {
+        this.type = type;
         this.context=context;
         this.inflater=LayoutInflater.from(context);
     }
@@ -47,7 +54,9 @@ public class DealerListAdapter extends BaseAdapter {
             queryTotal(i);
         }
     }
-
+    public void setType(int type) {
+        this.type = type;
+    }
     private void fillInViews(int i){
         View view=inflater.inflate(R.layout.c2c_item, null);
         if(dataList.get(i)==null){
@@ -71,30 +80,42 @@ public class DealerListAdapter extends BaseAdapter {
         TextView tvZFB=view.findViewById(R.id.tv_c2c_item_zfb);//支付宝图标
         TextView tvWX=view.findViewById(R.id.tv_c2c_item_wx);//微信图标
         TextView tvYH=view.findViewById(R.id.tv_c2c_item_yh);//银行图标
-
         tvName.setText(dealerData.user.getDealerName());
         tvDepict.setText(dealerData.user.getDepict());
-        tvBrokerage.setText(dealerData.user.getBrokerage()*100+"%");
+        tvBrokerage.setText(dealerData.user.getBrokerageIn()*100+"%");
         tvAccountNo.setText(dealerData.user.getAccount());
         tvContact.setOnClickListener(dealerData.constactOnClickListener);
-        tvMax.setText(""+dealerData.max);
-        tvUsable.setText(""+dealerData.usable);
         tvStat.setText(""+ UserStatUtil.getUserStat(dealerData.user.getStat()));
-        tvLower.setText(""+dealerData.user.getLowerLimit());
+        if(type== DealerListFragment.IN) {
+            tvMax.setText("" + dealerData.maxCNY);
+            tvUsable.setText("" + dealerData.usableCNY);
+            tvLower.setText("" + dealerData.user.getLowerLimitIn());
+        }else if(type== DealerListFragment.OUT){
+            tvMax.setText("" + dealerData.user.getUpperLimitOut());
+            tvUsable.setText("" + (dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount()));
+            tvLower.setText("" + dealerData.user.getLowerLimitOut());
+        }
+
         if(dealerData.user.userInfo!=null){
             tvLevel.setText(""+dealerData.user.userInfo.getLevel());
         }else {
             tvLevel.setText(""+0.0);
         }
         if(dealerData.user.userRecord!=null){
-            tvHaving.setText(""+dealerData.user.userRecord.getHavingTotal());
+            if(type== DealerListFragment.IN) {
+                tvHaving.setText("" + dealerData.user.userRecord.getInHavingTotal());
+                tvCount.setText(""+dealerData.user.userRecord.getInClinchCount());
+                tvTotal.setText(""+dealerData.user.userRecord.getInClinchTotal());
+            }else if(type== DealerListFragment.OUT){
+                tvHaving.setText("" + dealerData.user.userRecord.getOutHavingTotal());
+                tvCount.setText(""+dealerData.user.userRecord.getOutClinchCount());
+                tvTotal.setText(""+dealerData.user.userRecord.getOutClinchTotal());
+            }
             if(dealerData.user.userRecord.getTime()==-1){
                 tvTime.setText("-");
             } else {
                 tvTime.setText(""+dealerData.user.userRecord.getTime());
             }
-            tvCount.setText(""+dealerData.user.userRecord.getClinchCount());
-            tvTotal.setText(""+dealerData.user.userRecord.getClinchTotal());
         }else {
             tvHaving.setText(""+0.0);
             tvTime.setText(""+0.0);
@@ -135,10 +156,10 @@ public class DealerListAdapter extends BaseAdapter {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Double total = BtslandApplication.getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(account,"CNY");
+                Double totalCNY = BtslandApplication.getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(account,"CNY");
                 Message msg=Message.obtain();
                 Bundle bundle=new Bundle();
-                bundle.putDouble("total",total);
+                bundle.putDouble("totalCNY",totalCNY);
                 msg.setData(bundle);
                 msg.what=a;
                 handler.sendMessage(msg);
@@ -165,12 +186,15 @@ public class DealerListAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         return views.get(i);
     }
+
+    
+
     public static class DealerData{
         public DealerData(User user, View.OnClickListener constactOnClickListener, Double max, Double usable, List<Integer> types) {
             this.user = user;
             this.constactOnClickListener = constactOnClickListener;
-            this.max = max;
-            this.usable = usable;
+            this.maxCNY = max;
+            this.usableCNY = usable;
         }
 
         public DealerData() {
@@ -178,8 +202,9 @@ public class DealerListAdapter extends BaseAdapter {
 
         public User user;
         public View.OnClickListener constactOnClickListener;
-        public Double max=0.0;
-        public Double usable=0.0;
+
+        public Double maxCNY=0.0;
+        public Double usableCNY=0.0;
 
         public void replce(DealerData dealerData) {
             this.user=dealerData.user;
@@ -188,10 +213,10 @@ public class DealerListAdapter extends BaseAdapter {
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            Double total=msg.getData().getDouble("total");
-            dataList.get(msg.what).max=total;
-            Double having = dataList.get(msg.what).user.userRecord.getHavingTotal();
-            dataList.get(msg.what).usable=total-having;
+            Double totalCNY=msg.getData().getDouble("totalCNY");
+            dataList.get(msg.what).maxCNY=totalCNY;
+            Double inhaving = dataList.get(msg.what).user.userRecord.getInHavingTotal();
+            dataList.get(msg.what).usableCNY=totalCNY-inhaving;
             fillInViews(msg.what);
             notifyDataSetChanged();
         }

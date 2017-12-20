@@ -35,7 +35,7 @@ public class NewsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private WebView webView;
-    private String url = "http://www.fastchain.info/index.php";
+    private String url = "http://www.fastchain.info/?page_id=513";
     private String Tag = "MQL";
 
 //    private OnFragmentInteractionListener mListener;
@@ -90,11 +90,11 @@ public class NewsFragment extends Fragment {
 
         webView.getSettings().setJavaScriptEnabled(true);
         // 设置可以支持缩放
-        webView.getSettings().setSupportZoom(true);
+      //  webView.getSettings().setSupportZoom(true);
         // 设置出现缩放工具
-        webView.getSettings().setBuiltInZoomControls(true);
+       // webView.getSettings().setBuiltInZoomControls(true);
         //扩大比例的缩放
-        webView.getSettings().setUseWideViewPort(true);
+       // webView.getSettings().setUseWideViewPort(true);
         //自适应屏幕
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setLoadWithOverviewMode(true);
@@ -109,7 +109,7 @@ public class NewsFragment extends Fragment {
                 //返回false，意味着请求过程里，不管有多少次的跳转请求（即新的请求地址），均交给webView自己处理，这也是此方法的默认处理
                 //返回true，说明你自己想根据url，做新的跳转，比如在判断url符合条件的情况下，我想让webView加载http://ask.csdn.net/questions/178242
 
-                if (url.toString().contains("fastchain.info")){
+                if (url.toString().contains("http://www.fastchain.info/?page_id=513")){
                     view.loadUrl("http://www.fastchain.info/?page_id=513");
                     return true;
                 }
@@ -123,7 +123,7 @@ public class NewsFragment extends Fragment {
                 //返回false，意味着请求过程里，不管有多少次的跳转请求（即新的请求地址），均交给webView自己处理，这也是此方法的默认处理
                 //返回true，说明你自己想根据url，做新的跳转，比如在判断url符合条件的情况下，我想让webView加载http://ask.csdn.net/questions/178242
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (request.getUrl().toString().contains("fastchain.info")){
+                    if (request.getUrl().toString().contains("http://www.fastchain.info/?page_id=513")){
                         view.loadUrl("http://www.fastchain.info/?page_id=513");
                         return true;
                     }

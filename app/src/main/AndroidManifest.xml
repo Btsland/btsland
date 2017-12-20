@@ -60,6 +60,11 @@
             android:screenOrientation="portrait">
             //注册NewsContentActivity活动
         </activity>
+        <activity android:name=".ui.activity.NewsTest"
+                  android:screenOrientation="portrait">
+            //新闻测试
+        </activity>
+
         <activity
             android:name=".ui.activity.AboutUsActivity"
             android:screenOrientation="portrait" />

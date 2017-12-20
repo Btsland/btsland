@@ -7,23 +7,17 @@ package info.btsland.app.Adapter;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.News;
-
-import static android.content.ContentValues.TAG;
 
 public class NewsAdapter extends BaseAdapter {
     private int id;
@@ -54,7 +48,7 @@ public class NewsAdapter extends BaseAdapter {
             //实例化新闻作者
             TextView newsAuthorText = (TextView) view.findViewById(R.id.news_author);
             //实例化新闻图片
-            ImageView newsImageText = (ImageView) view.findViewById(R.id.news_images);
+           // ImageView newsImageText = (ImageView) view.findViewById(R.id.news_images);
 
             //让新闻的标题在列表中进行显示
             newsTitleText.setText(news.get(i).getTitle());
@@ -65,7 +59,7 @@ public class NewsAdapter extends BaseAdapter {
             //让新闻的作者在列表中进行显示
             newsAuthorText.setText(news.get(i).getAuthor());
             //让新闻的图片在列表中进行显示
-            newsImageText.setImageDrawable(context.getDrawable(news.get(i).getImage()));
+           // newsImageText.setImageDrawable(context.getDrawable(news.get(i).getImage()));
             views1.add(view);
         }
     }

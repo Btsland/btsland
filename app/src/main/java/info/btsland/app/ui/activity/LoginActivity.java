@@ -1,7 +1,5 @@
 package info.btsland.app.ui.activity;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -112,7 +110,7 @@ public class LoginActivity extends AppCompatActivity {
         tvRegisterPwdClean= (TextView) findViewById(R.id.tv_register_Pwd_cleanUp);//清除密码
         edRegisterRePwd= (EditText) findViewById(R.id.ed_register_rePassword);//确认密码
         tvRegisterRePwdPoint= (TextView) findViewById(R.id.tv_register_rePwd_point);//确认密码提示
-        tvRegisterRePwdClean = (TextView) findViewById(R.id.tv_register_rePwd_cleanUp);;//清除确认密码
+        tvRegisterRePwdClean = (TextView) findViewById(R.id.tv_register_rePwd_cleanUp);//清除确认密码
         ckRegister= (CheckBox) findViewById(R.id.ck_register);//确认备份
         btnRegister= (Button) findViewById(R.id.btn_register);//注册
         btnToLogin= (Button) findViewById(R.id.btn_toLogin);//去登录

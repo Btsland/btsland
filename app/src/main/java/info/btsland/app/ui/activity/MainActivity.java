@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.PersistableBundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -16,17 +15,12 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.asset_object;
-import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.ui.fragment.C2CFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
+import info.btsland.app.ui.fragment.NewsFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.util.PreferenceUtil;
 
@@ -133,7 +127,7 @@ public class MainActivity extends BaseActivity {
         //初始化fra_main_body
         FragmentTransaction transaction = manager.beginTransaction();
         if (homeFragment == null) {
-            homeFragment = new HomeFragment();
+            homeFragment = new NewsFragment();
         }
         if (marketFragment == null) {
             marketFragment = new MarketFragment();

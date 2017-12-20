@@ -15,6 +15,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
             <TextView
+                android:id="@+id/tv_dealer_stat"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="在线状态"
@@ -27,6 +28,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_info"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="账户信息"
@@ -39,6 +41,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_real"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="收款帐号"
@@ -51,6 +54,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_having"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="进行中订单"
@@ -63,6 +67,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_clinch"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="已完成订单"
@@ -75,6 +80,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_help"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="我的客服"
@@ -87,6 +93,7 @@
                 android:drawablePadding="10dp"
                 />
             <TextView
+                android:id="@+id/tv_dealer_user"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:text="我的用户"

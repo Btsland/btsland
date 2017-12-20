@@ -75,12 +75,27 @@ public class UserHttp extends C2CHttp {
     /**
      * 查询全部承兑商
      * @param stat
-     * @param Callback
+     * @param callback
      */
-    public static void queryAllDealer(int stat,Callback Callback){
+    public static void queryAllDealer(int stat,Callback callback){
         String action="/user/queryAllDealer";
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("stat", String.valueOf(stat));
-        post(action, paramMap,Callback);
+        post(action, paramMap,callback);
+    }
+
+    /**
+     * 更新状态
+     * @param dealerId
+     * @param stat
+     * @return
+     */
+    public static void updateStat(String dealerId,String password,int stat,Callback callback){
+        String action="/user/updateStat";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("dealerId", dealerId);
+        paramMap.put("password", password);
+        paramMap.put("stat", String.valueOf(stat));
+        post(action, paramMap,callback);
     }
 }

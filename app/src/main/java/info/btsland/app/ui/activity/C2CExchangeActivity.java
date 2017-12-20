@@ -295,24 +295,24 @@ public class C2CExchangeActivity extends AppCompatActivity {
                 note.setRealDepict(realAsset.getDepict());
                 note.setAssetNum(NumericUtil.parseDouble(num));
                 note.setDepict(depict);
-//                SaveNote saveNote=new SaveNote(user.getAccount(), note, new Callback() {
-//                    @Override
-//                    public void onFailure(Call call, IOException e) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Call call, Response response) throws IOException {
-//                        int a = Integer.parseInt(response.body().string());
-//                        Log.i(TAG, "onResponse: "+a);
-//                        Bundle bundle=new Bundle();
-//                        bundle.putInt("a",a);
-//                        Message message=Message.obtain();
-//                        message.setData(bundle);
-//                        saveHandler.sendMessage(message);
-//                    }
-//                });
-//                saveNote.start();
+                SaveNote saveNote=new SaveNote(user.getAccount(), note, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        int a = Integer.parseInt(response.body().string());
+                        Log.i(TAG, "onResponse: "+a);
+                        Bundle bundle=new Bundle();
+                        bundle.putInt("a",a);
+                        Message message=Message.obtain();
+                        message.setData(bundle);
+                        saveHandler.sendMessage(message);
+                    }
+                });
+                saveNote.start();
             }
         });
     }

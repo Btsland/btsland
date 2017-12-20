@@ -16,25 +16,33 @@ public class NoteStatCode {
     public static final int CANCELLED=-2;
     public static final int TIMEOUT=-1;
 
+    public static final String CANCELED="已取消";
+    public static final String OVERTIME="已超时";
+    public static final String INITIATE="待发起";
+    public static final String TRANSFER="待转账";
+    public static final String TRADING="交易中";
+    public static final String OK="已完成";
+
+
     public static String getTabAccount(int stat){
         switch (stat){
             case -2:
-                return "已取消";
+                return CANCELED;
             case -1:
-                return "已超时";
+                return OVERTIME;
             case 0:
-                return "待发起";
+                return INITIATE;
             case 1:
-                return "待转账";
+                return TRANSFER;
             case 2:
             case 3:
             case 4:
             case 5:
             case 7:
-                return "交易中";
+                return TRADING;
             case 6:
             case 8:
-                return "已完成";
+                return OK;
         }
         return "";
     }

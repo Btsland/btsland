@@ -8,13 +8,17 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +39,15 @@ import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
+import info.btsland.exchange.entity.Note;
+import info.btsland.exchange.entity.User;
+import info.btsland.exchange.http.NoteHttp;
+import info.btsland.exchange.http.TradeHttp;
+import info.btsland.exchange.http.UserHttp;
+import info.btsland.exchange.utils.GsonDateAdapter;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 import okhttp3.WebSocket;
 
 /**
@@ -52,6 +65,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static Handler purseHandler;
 
     public static account_object accountObject;
+    public static User dealer;
+
+    public static List<Note> notes;
+
     public static List<IAsset> iAssets;
     private static SharedPreferences sharedPreferences;
 
@@ -159,6 +176,42 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         setFluctuationType();
         fillInListMap();
         fillInMarketMap();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                queryAllHaving();
+            }
+        }).start();
+
+    }
+
+    private void queryAllHaving(){
+        GsonBuilder gsonBuilder=new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+        final Gson gson=gsonBuilder.create();
+        while (true){
+            if(dealer!=null) {
+                NoteHttp.queryAllHavingNote(dealer.getDealerId(), new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String json = response.body().string();
+                        notes = gson.fromJson(json, new TypeToken<List<Note>>() {
+                        }.getType());
+                    }
+                });
+            }
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 
@@ -300,6 +353,18 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+                UserHttp.queryAccount(username, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        Gson gson=new Gson();
+                        dealer=gson.fromJson(response.body().string(),User.class);
+                    }
+                });
                 queryAsset(null);
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {

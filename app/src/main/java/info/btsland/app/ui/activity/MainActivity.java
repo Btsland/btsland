@@ -24,6 +24,7 @@ import info.btsland.app.R;
 import info.btsland.app.api.asset_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.ui.fragment.C2CFragment;
+import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
@@ -35,7 +36,7 @@ import info.btsland.app.util.PreferenceUtil;
  * 创建时间：2017/09/27
  * 完成时间：
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements DealerManageFragment.ShowPoint {
     public static String title;
     private String TAG = "MainActivity";
     private TextView tvNavHome;
@@ -46,11 +47,23 @@ public class MainActivity extends BaseActivity {
     private Fragment homeFragment;
     private Fragment purseFragment;
     private HeadFragment headFragment;
+    private TextView tvNavPursePoint;
     public static String dataKKey;
     private FragmentManager manager;
     private int index = 1;
     private Fragment c2cFragment;
+    private int point;
 
+    public void setPoint(int point) {
+        this.point = point;
+        if(point==0){
+            tvNavPursePoint.setText(""+point);
+            tvNavPursePoint.setVisibility(View.GONE);
+        }else {
+            tvNavPursePoint.setText(""+point);
+            tvNavPursePoint.setVisibility(View.VISIBLE);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +101,13 @@ public class MainActivity extends BaseActivity {
         tvNavMarket = (TextView) findViewById(R.id.tv_nav_market);
         tvNavPurse = (TextView) findViewById(R.id.tv_nav_purse);
         tvNavC2C = findViewById(R.id.tv_nav_c2c);
+        tvNavPursePoint=findViewById(R.id.tv_nav_purse_point);
         //绑定监听器
         tvNavHome.setOnClickListener(new NavOnClickListener());
         tvNavMarket.setOnClickListener(new NavOnClickListener());
         tvNavPurse.setOnClickListener(new NavOnClickListener());
         tvNavC2C.setOnClickListener(new NavOnClickListener());
+
     }
 
     public HeadFragment getHeadFragment() {
@@ -216,6 +231,13 @@ public class MainActivity extends BaseActivity {
             transaction.hide(c2cFragment);
         }
         transaction.commitAllowingStateLoss();
+    }
+
+    @Override
+    public void show(int i) {
+        if(tvNavPursePoint!=null){
+            setPoint(i);
+        }
     }
 
     /**
@@ -371,6 +393,27 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true){
+                    if(BtslandApplication.notes!=null){
+                        pointHandler.sendEmptyMessage(BtslandApplication.notes.size());
+                    }
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+    }
+
     Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -379,6 +422,12 @@ public class MainActivity extends BaseActivity {
         }
     };
 
+    Handler pointHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            setPoint(msg.what);
+        }
+    };
 
 }
 

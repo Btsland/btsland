@@ -1,12 +1,15 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -16,8 +19,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.spongycastle.jcajce.provider.symmetric.TEA;
-
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -25,8 +26,8 @@ import java.util.List;
 import info.btsland.app.Adapter.ExchangeNoteAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.ui.activity.ExchangeDetailedActivity;
 import info.btsland.exchange.entity.Note;
-import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
 import okhttp3.Call;
@@ -34,6 +35,8 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class ExchangeListFragment extends Fragment {
+    private String TAG="ExchangeListFragment";
+
     private int type=1;
 
     public static final int IN=1;//进（充值）
@@ -88,61 +91,77 @@ public class ExchangeListFragment extends Fragment {
         llHaving=view.findViewById(R.id.ll_excNote_having);
         lvHaving=view.findViewById(R.id.lv_excNote_having);
         lvClinch=view.findViewById(R.id.lv_excNote_clinch);
+    }
+    private void fillIn() {
         havingAdapter=new ExchangeNoteAdapter(getActivity());
         clinchAdapter=new ExchangeNoteAdapter(getActivity());
         lvClinch.setAdapter(clinchAdapter);
         lvHaving.setAdapter(havingAdapter);
-    }
-    private void fillIn() {
+        lvHaving.setOnItemClickListener(new HavingItemOnClickListener());
+        lvClinch.setOnItemClickListener(new ClinchItemOnClickListener());
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(BtslandApplication.accountObject!=null){
-                    String coin="";
-                    if(type==IN){
-                        coin="CNY";
-                    }else if (type==OUT) {
-                        coin="RMB";
+                while (true) {
+                    if (BtslandApplication.accountObject != null) {
+                        String coin = "";
+                        if (type == IN) {
+                            coin = "CNY";
+                        } else if (type == OUT) {
+                            coin = "RMB";
+                        }
+                        NoteHttp.queryAllClinchNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String json = response.body().string();
+                                fillInClinchList(json);
+                                handler.sendEmptyMessage(1);
+                            }
+                        });
                     }
-                    NoteHttp.queryAllClinchNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String json = response.body().string();
-                            fillInClinchList(json);
-                            handler.sendEmptyMessage(1);
-                        }
-                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if(BtslandApplication.accountObject!=null){
-                    String coin="";
-                    if(type==IN){
-                        coin="CNY";
-                    }else if (type==OUT) {
-                        coin="RMB";
+                while (true){
+                    if(BtslandApplication.accountObject!=null){
+                        String coin="";
+                        if(type==IN){
+                            coin="CNY";
+                        }else if (type==OUT) {
+                            coin="RMB";
+                        }
+                        NoteHttp.queryAllHavingNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
+                            @Override
+                            public void onFailure(Call call, IOException e) {
+
+                            }
+
+                            @Override
+                            public void onResponse(Call call, Response response) throws IOException {
+                                String json = response.body().string();
+                                fillInHavingList(json);
+                                handler.sendEmptyMessage(2);
+                            }
+                        });
                     }
-                    NoteHttp.queryAllHavingNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
-                        @Override
-                        public void onFailure(Call call, IOException e) {
-
-                        }
-
-                        @Override
-                        public void onResponse(Call call, Response response) throws IOException {
-                            String json = response.body().string();
-                            fillInHavingList(json);
-                            handler.sendEmptyMessage(2);
-                        }
-                    });
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }).start();
@@ -152,6 +171,7 @@ public class ExchangeListFragment extends Fragment {
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson = gsonBuilder.create();
+        Log.e(TAG, "fillInClinchList: "+ json);
         clinchNoteList=gson.fromJson(json,new TypeToken<List<Note>>() {}.getType());
     }
 
@@ -159,6 +179,7 @@ public class ExchangeListFragment extends Fragment {
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson = gsonBuilder.create();
+        Log.e(TAG, "fillInHavingList: "+ json);
         havingNoteList=gson.fromJson(json,new TypeToken<List<Note>>() {}.getType());
     }
     private void refurbishClinch(){
@@ -191,6 +212,27 @@ public class ExchangeListFragment extends Fragment {
         }
 
     }
+    class HavingItemOnClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Note note = havingNoteList.get(i);
+            Intent intent=new Intent(getActivity(), ExchangeDetailedActivity.class);
+            intent.putExtra("noteNo",note.getNoteNo());
+            intent.putExtra("type",type);
+            getActivity().startActivity(intent);
+        }
+    }
+    class ClinchItemOnClickListener implements AdapterView.OnItemClickListener{
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            Note note = clinchNoteList.get(i);
+            Intent intent=new Intent(getActivity(), ExchangeDetailedActivity.class);
+            intent.putExtra("noteNo",note.getNoteNo());
+            intent.putExtra("type",type);
+            getActivity().startActivity(intent);
+        }
+    }
+
     /**
      * 设置listView高度
      * @param listView
@@ -213,6 +255,9 @@ public class ExchangeListFragment extends Fragment {
         params.height = totalHeight + (listView.getDividerHeight() * (listAdapter.getCount() - 1));
         listView.setLayoutParams(params);
     }
+
+
+
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {

@@ -34,6 +34,7 @@ public class ExchangeNoteAdapter extends BaseAdapter {
         this.notes = notes;
     }
 
+
     public ExchangeNoteAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
@@ -62,7 +63,7 @@ public class ExchangeNoteAdapter extends BaseAdapter {
         if(notes==null){
             return null;
         }
-        Note note=notes.get(i);
+        final Note note=notes.get(i);
         if(note==null){
             return null;
         }
@@ -79,5 +80,6 @@ public class ExchangeNoteAdapter extends BaseAdapter {
         tvStat.setText(NoteStatCode.getTabAccount(note.getStatNo()));
         return convertView;
     }
+
 
 }

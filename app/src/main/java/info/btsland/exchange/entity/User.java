@@ -138,4 +138,26 @@ public class User {
     public void setLowerLimitOut(Double lowerLimitOut) {
         this.lowerLimitOut = lowerLimitOut;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", dealerId='" + dealerId + '\'' +
+                ", dealerName='" + dealerName + '\'' +
+                ", password='" + password + '\'' +
+                ", account='" + account + '\'' +
+                ", brokerageIn=" + brokerageIn +
+                ", brokerageOut=" + brokerageOut +
+                ", depict='" + depict + '\'' +
+                ", stat=" + stat +
+                ", type=" + type +
+                ", lowerLimitIn=" + lowerLimitIn +
+                ", upperLimitOut=" + upperLimitOut +
+                ", lowerLimitOut=" + lowerLimitOut +
+                ", userInfo=" + userInfo +
+                ", realAssets=" + realAssets +
+                ", userRecord=" + userRecord +
+                '}';
+    }
 }

@@ -41,12 +41,23 @@ public class Note {
 
     private String dealerName;
 
+    private String dealerPhone;
+
     public String getDealerName() {
         return dealerName;
     }
 
+    public String getDealerPhone() {
+        return dealerPhone;
+    }
+
     public Note setDealerName(String dealerName) {
         this.dealerName = dealerName;
+        return this;
+    }
+
+    public Note setDealerPhone(String dealerPhone) {
+        this.dealerPhone = dealerPhone;
         return this;
     }
 

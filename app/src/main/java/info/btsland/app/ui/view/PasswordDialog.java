@@ -19,11 +19,18 @@ public class PasswordDialog {
     private View view;
     private EditText editTextPwd;
     private TextView tvTitle;
-    private TextView tvPoint;
+    private TextView tvMeg;
     private TextView tvConfirm;
     private TextView txtCancel;
     private TextView tvHoint;
 
+    private String msg="请输入您的密码";
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+        tvMeg.setText(msg);
+
+    }
 
     public PasswordDialog(Activity mActivity) {
         this.mActivity = mActivity;
@@ -31,7 +38,7 @@ public class PasswordDialog {
         mDialogBuilder = new AlertDialog.Builder(mActivity);
 
         view = mActivity.getLayoutInflater().inflate(R.layout.dialog_password, null);
-
+        tvMeg=view.findViewById(R.id.tv_dialog_msg);
         editTextPwd =view.findViewById(R.id.editTextPassword);
         editTextPwd.addTextChangedListener(new TextWatcher() {
             @Override

@@ -5,7 +5,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
 
@@ -14,8 +13,6 @@ import java.util.List;
 
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.R;
-import info.btsland.app.ui.fragment.C2CFragment;
-import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.app.ui.fragment.ExchangeListFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 
@@ -28,20 +25,27 @@ public class PurseAccessRecordActivity extends AppCompatActivity{
 
     private int index=0;
 
+    private ViewPager viewPager;
+    private PagerSlidingTabStrip tabStrip;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_purse_access);
         fillInHead();
         init();
-    }
+        fillIn();
 
+    }
     /**
      * 初始化
      */
     private void init() {
-        ViewPager viewPager1 =findViewById(R.id.vp_access);
-        viewPager1.setOffscreenPageLimit(2);
+        viewPager =findViewById(R.id.vp_access);
+        tabStrip =findViewById(R.id.psts_access_title1);
+    }
+    private void fillIn() {
+        viewPager.setOffscreenPageLimit(2);
         String[] titles = {"充值", "提现"};
         List<Fragment> fragments = new ArrayList<Fragment>();
         ExchangeListFragment inFragment=ExchangeListFragment.newInstance(1);
@@ -49,12 +53,13 @@ public class PurseAccessRecordActivity extends AppCompatActivity{
         fragments.add(inFragment);
         fragments.add(outFragment);
         DetailedFragmentAdapter adapter = new DetailedFragmentAdapter(getSupportFragmentManager(), fragments, titles);
-        PagerSlidingTabStrip tabStrip =findViewById(R.id.psts_access_title1);
-        viewPager1.setAdapter(adapter);
-        viewPager1.setCurrentItem(index);
-        tabStrip.setViewPager(viewPager1);
+        viewPager.setAdapter(adapter);
+        viewPager.setCurrentItem(index);
+        tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(new OnPage());
     }
+
+
     class OnPage implements ViewPager.OnPageChangeListener{
 
         @Override

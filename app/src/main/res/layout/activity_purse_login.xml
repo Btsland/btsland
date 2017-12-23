@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/welcome_login"
+
+    >
+    <!--顶部导航栏-->
+    <!-- <FrameLayout
+         android:id="@+id/fra_login_head"
+         android:layout_width="match_parent"
+         android:layout_height="150dp"
+
+         />-->
+
+
+
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/cl_login"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <EditText
+            android:id="@+id/ed_login_userName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_user"
+            android:gravity="center|left"
+            android:hint="钱包文件"
+            android:lines="1"
+            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_login_user_point"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+        <TextView
+            android:id="@+id/tv_login_user_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_login_userName"
+            app:layout_constraintTop_toTopOf="@+id/ed_login_userName"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_userName"/>
+        <TextView
+            android:id="@+id/tv_login_user_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:textSize="12sp"
+            android:paddingLeft="40dp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_userName"
+            app:layout_constraintBottom_toTopOf="@+id/ed_login_password"/>
+
+        <EditText
+            android:id="@+id/ed_login_password"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:gravity="center|left"
+            android:hint="@string/password_login"
+            android:inputType="textPassword"
+            android:lines="1"
+            android:paddingLeft="10dp"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_login_Pwd_point"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_user_point"/>
+        <TextView
+            android:id="@+id/tv_login_pwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_login_password"
+            app:layout_constraintTop_toTopOf="@+id/ed_login_password"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_password"/>
+        <TextView
+            android:id="@+id/tv_login_Pwd_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:paddingLeft="40dp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintTop_toBottomOf="@+id/ed_login_password"
+            app:layout_constraintBottom_toTopOf="@+id/btn_login"/>
+
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/select_login_btn"
+            android:text="钱包登陆"
+            android:gravity="center"
+            android:textSize="@dimen/activity_vertical_margin"
+            android:textStyle="italic"
+            app:layout_constraintTop_toBottomOf="@+id/tv_login_Pwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv"/>
+        <TextView
+            android:id="@+id/tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="10sp"
+            android:paddingLeft="40dp"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintBottom_toTopOf="@+id/btn_toRegister"/>
+        <Button
+            android:id="@+id/btn_toRegister"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/go_register"
+            android:gravity="center"
+            android:textStyle="bold"
+            android:background="@drawable/btn_transparent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_login"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:visibility="gone"
+        android:id="@+id/cl_register"
+        android:layout_width="0dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <EditText
+            android:id="@+id/ed_register_userName"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/Username"
+            android:lines="1"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_user"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_user_point"/>
+        <TextView
+            android:id="@+id/tv_register_user_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_userName"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_userName"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_userName"/>
+        <TextView
+            android:id="@+id/tv_register_user_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_userName"
+            app:layout_constraintBottom_toTopOf="@+id/ed_register_password"/>
+        <EditText
+            android:id="@+id/ed_register_password"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/password_login"
+            android:lines="1"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_user_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_Pwd_point"/>
+        <TextView
+            android:id="@+id/tv_register_Pwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_password"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_password"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_password"/>
+        <TextView
+            android:id="@+id/tv_register_Pwd_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_password"
+            app:layout_constraintBottom_toTopOf="@+id/ed_register_rePassword"/>
+        <EditText
+            android:id="@+id/ed_register_rePassword"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="@string/confirm_password"
+            android:lines="1"
+            android:inputType="textPassword"
+            android:textSize="16sp"
+            android:gravity="center|left"
+            android:background="@drawable/edit_text"
+            android:drawableLeft="@drawable/ic_login_password"
+            android:paddingLeft="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_Pwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/tv_register_rePwd_point"/>
+        <TextView
+            android:id="@+id/tv_register_rePwd_cleanUp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:paddingLeft="8dp"
+            android:visibility="gone"
+            android:drawableLeft="@drawable/ic_clean"
+            app:layout_constraintRight_toRightOf="@+id/ed_register_rePassword"
+            app:layout_constraintTop_toTopOf="@+id/ed_register_rePassword"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_rePassword"/>
+        <TextView
+            android:id="@+id/tv_register_rePwd_point"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textColor="@color/color_font_red"
+            app:layout_constraintLeft_toLeftOf="@+id/tv_point"
+            app:layout_constraintTop_toBottomOf="@+id/ed_register_rePassword"
+            app:layout_constraintBottom_toTopOf="@+id/tv_point"/>
+        <CheckBox
+            android:id="@+id/ck_register"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintTop_toTopOf="@+id/tv_point"
+            app:layout_constraintRight_toLeftOf="@+id/tv_point"
+            app:layout_constraintLeft_toLeftOf="parent"/>
+        <TextView
+            android:id="@+id/tv_point"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintHorizontal_weight="9"
+            android:text="@string/register_txt"
+            app:layout_constraintLeft_toRightOf="@+id/ck_register"
+            app:layout_constraintTop_toBottomOf="@+id/tv_register_rePwd_point"
+            app:layout_constraintBottom_toTopOf="@+id/btn_register"
+            app:layout_constraintRight_toRightOf="parent"/>
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="@drawable/select_login_btn"
+            android:text="@string/register"
+            android:gravity="center"
+            android:textSize="@dimen/activity_vertical_margin"
+            app:layout_constraintTop_toBottomOf="@+id/tv_point"/>
+        <Button
+            android:id="@+id/btn_toLogin"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/to_login_btn"
+            android:gravity="center"
+            android:background="@drawable/btn_transparent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_register"/>
+
+
+    </android.support.constraint.ConstraintLayout>
+
+
+
+
+</android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

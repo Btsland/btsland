@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -39,16 +40,16 @@ public class NewsAdapter extends BaseAdapter {
     public void fillIn(){
         for (int i=0;i<news.size();i++){
             View view = inflater.inflate(id, null);
-            //实例化新闻标题
+            //标题
             TextView newsTitleText = (TextView) view.findViewById(R.id.news_title);
-            //实例化新闻内容
+            //内容
             TextView newsTitleContentText = (TextView) view.findViewById(R.id.news_titlecontent);
-            //实例化时间
+            //时间
             TextView newsDateText = (TextView) view.findViewById(R.id.news_date);
-            //实例化新闻作者
+            //作者
             TextView newsAuthorText = (TextView) view.findViewById(R.id.news_author);
-            //实例化新闻图片
-           // ImageView newsImageText = (ImageView) view.findViewById(R.id.news_images);
+            //图片
+            ImageView newsImageText = (ImageView) view.findViewById(R.id.news_images);
 
             //让新闻的标题在列表中进行显示
             newsTitleText.setText(news.get(i).getTitle());
@@ -59,7 +60,7 @@ public class NewsAdapter extends BaseAdapter {
             //让新闻的作者在列表中进行显示
             newsAuthorText.setText(news.get(i).getAuthor());
             //让新闻的图片在列表中进行显示
-           // newsImageText.setImageDrawable(context.getDrawable(news.get(i).getImage()));
+            newsImageText.setImageDrawable(context.getDrawable(news.get(i).getImage()));
             views1.add(view);
         }
     }
@@ -80,7 +81,7 @@ public class NewsAdapter extends BaseAdapter {
     }
 
     @Override
-    //重写父类ArrayAdapterd的getView方法
+    //重写父类ArrayAdapter的getView方法
     public View getView(int position, View view, ViewGroup parent) {
         return views1.get(position);
     }

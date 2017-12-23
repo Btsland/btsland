@@ -232,7 +232,7 @@
         android:id="@+id/fl_purse_login_prompt"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
+        android:visibility="visible"
         android:clickable="true">
         <info.btsland.app.ui.view.MyConstraintLayout
             android:id="@+id/cl_purse_login_prompt"
@@ -261,6 +261,22 @@
                 app:layout_constraintLeft_toLeftOf="@+id/back"
                 app:layout_constraintRight_toRightOf="@+id/back"
                 app:layout_constraintTop_toTopOf="@+id/back"/>
+
+            <!--<TextView-->
+                <!--android:id="@+id/tv_go_purse_login"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="45dp"-->
+                <!--android:background="@drawable/btn_red"-->
+                <!--android:gravity="center"-->
+                <!--android:text="@string/go_purse_login"-->
+                <!--android:textColor="@color/color_white"-->
+                <!--android:textSize="20sp"-->
+                <!--android:layout_marginLeft="20dp"-->
+                <!--android:layout_marginRight="20dp"-->
+                <!--android:layout_marginBottom="20dp"-->
+                <!--app:layout_constraintBottom_toTopOf="@+id/tv_go_login"-->
+
+                <!--/>-->
 
             <TextView
                 android:id="@+id/tv_go_login"

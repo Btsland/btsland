@@ -20,6 +20,7 @@ import info.btsland.app.R;
 import info.btsland.app.ui.fragment.C2CFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.ui.fragment.NewsFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
@@ -142,7 +143,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         //初始化fra_main_body
         FragmentTransaction transaction = manager.beginTransaction();
         if (homeFragment == null) {
-            homeFragment = new NewsFragment();
+            homeFragment = new HomeFragment();
         }
         if (marketFragment == null) {
             marketFragment = new MarketFragment();

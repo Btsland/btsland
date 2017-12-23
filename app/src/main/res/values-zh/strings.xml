@@ -55,7 +55,7 @@
     <string name="stringzh">中文</string>
     <string name="stringen">English</string>
     <string name="not_logged">您好，您还没有登录</string>
-    <string name="go_login">去登录</string>
+    <string name="go_login">账户登录</string>
     <string name="go_register">去注册</string>
 
     <string name="Username">用户名：</string>
@@ -120,5 +120,6 @@
     <string name="str_confirm">确定</string>
     <string name="c2c">C2C</string>
     <string name="look">观察</string>
+    <string name="go_purse_login">钱包登陆</string>
 
 </resources>

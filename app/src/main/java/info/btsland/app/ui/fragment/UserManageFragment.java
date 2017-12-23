@@ -38,7 +38,7 @@ import info.btsland.app.ui.view.MyConstraintLayout;
  */
 
 /**
- * 行情
+ * 用户界面
  */
 public class UserManageFragment extends Fragment {
     //全部资产

@@ -15,11 +15,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
 import com.mrd.bitlib.crypto.ec.Parameters;
+
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
 import info.btsland.app.BtslandApplication;
@@ -56,7 +60,7 @@ public class DetailedBuyAndSellFragment extends Fragment
     private EditText edVol;//输入量
     private TextView tvVolCoin;//输入量的货币
 
-    private TextView tvTotalNum;//总金额数值
+    private EditText edTotalNum;//总金额数值
     private TextView tvTotalCoin;//总金额货币
 
     private TextView tvChargeNum;//手续费数组
@@ -64,6 +68,11 @@ public class DetailedBuyAndSellFragment extends Fragment
 
     private TextView tvBuy;
     private TextView tvSell;
+
+    private TextView tvBuyHintNum;
+    private TextView tvBuyHintCoin;
+    private TextView tvSellHintNum;
+    private TextView tvSellHintCoin;
 
     private Double total;
 
@@ -145,13 +154,18 @@ public class DetailedBuyAndSellFragment extends Fragment
         edVol=view.findViewById(R.id.et_volNum);
         tvPriceCoin=view.findViewById(R.id.tv_priceCoin);
         tvVolCoin=view.findViewById(R.id.tv_volCoin);
-        tvTotalNum=view.findViewById(R.id.tv_total_num);
+        edTotalNum=view.findViewById(R.id.tv_total_num);
         tvChargeNum=view.findViewById(R.id.tv_charge_num);
         tvTotalCoin=view.findViewById(R.id.tv_total_coin);
         tvChageCoin=view.findViewById(R.id.tv_charge_coin);
 
         tvBuy=view.findViewById(R.id.tv_detailed_buy);
         tvSell=view.findViewById(R.id.tv_detailed_sell);
+
+        tvBuyHintNum=view.findViewById(R.id.tv_detailed_buy_hint_num);
+        tvBuyHintCoin=view.findViewById(R.id.tv_detailed_buy_hint_coin);
+        tvSellHintNum=view.findViewById(R.id.tv_detailed_sell_hint_num);
+        tvSellHintCoin=view.findViewById(R.id.tv_detailed_sell_hint_coin);
 
         rlvBuy.setLayoutManager(new LinearLayoutManager(getContext()));
         rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice);
@@ -164,10 +178,31 @@ public class DetailedBuyAndSellFragment extends Fragment
         rlvSell.setItemAnimator(null);
 
         tvChargeNum.setText("0.00");
-        tvTotalNum.setText("0.00");
+    }
+
+    boolean volIsUserInput=false;
+    boolean totalIsUserInput=false;
+    private String num(double n){
+        DecimalFormat decimalFormat = new DecimalFormat("#.#####");
+        double b=0.0;
+        String str="";
+        if(n < 1000) {
+            str = Double.toString(n);
+        } else if(n >=1000 && n < 1000000){
+            b = n/1000;
+            str=decimalFormat.format(b)+"K";
+        }else if(n >=1000000 && n < 1000000000){
+            b = n/1000000;
+            str = decimalFormat.format(b)+"M";
+        }
+        return str;
     }
     private void fillIn(){
         market=MarketDetailedActivity.market;
+        tvBuyHintNum.setText(num(BtslandApplication.getAssetTotalByName(market.base)));
+        tvBuyHintCoin.setText(market.base);
+        tvSellHintNum.setText(num(BtslandApplication.getAssetTotalByName(market.quote)));
+        tvSellHintCoin.setText(market.quote);
         tvNewPrice.setText(market.latest);
         tvNewPrice.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -216,9 +251,20 @@ public class DetailedBuyAndSellFragment extends Fragment
                     vol = NumericUtil.parseDouble(strVol, 0.0D);
                 }
                 total=price*vol;
-                tvTotalNum.setText(String.valueOf(total));
+                if(edVol.getEditableText().toString().equals("")){
+                    edTotalNum.getEditableText().clear();
+                    return;
+                }
+                edTotalNum.getEditableText().clear();
+                edTotalNum.getEditableText().insert(0,""+total);
                 double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
                 tvChargeNum.setText(String.valueOf(fee));
+            }
+        });
+        edVol.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                volIsUserInput=b;
             }
         });
         edVol.addTextChangedListener(new TextWatcher() {
@@ -234,23 +280,73 @@ public class DetailedBuyAndSellFragment extends Fragment
 
             @Override
             public void afterTextChanged(Editable editable) {
-                Double vol= 0.0;
-                Double price=0.0;
-                String strVol = editable.toString();
-                if(strVol!=null&&strVol.length()!=0){
-                    if(strVol.substring(0,1).equals(".")){
-                        editable.insert(0,"0");
+                if(volIsUserInput) {
+                    Double vol = 0.0;
+                    Double price = 0.0;
+                    String strVol = editable.toString();
+                    if (strVol != null && strVol.length() != 0) {
+                        if (strVol.substring(0, 1).equals(".")) {
+                            editable.insert(0, "0");
+                        }
+                        vol = NumericUtil.parseDouble(strVol, 0.0D);
+                    }else if(strVol.equals("")) {
+                        edTotalNum.getEditableText().clear();
+                        return;
                     }
-                    vol=  NumericUtil.parseDouble(strVol, 0.0D);
+                    String strPrice = edPrice.getText().toString();
+                    if (strPrice != null && strPrice.length() != 0) {
+                        price = NumericUtil.parseDouble(strPrice, 0.0D);
+                    }
+                    total = price * vol;
+                    edTotalNum.getEditableText().clear();
+                    edTotalNum.getEditableText().insert(0, ""+total);
+                    double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
+                    tvChargeNum.setText(String.valueOf(fee));
                 }
-                String strPrice = edPrice.getText().toString();
-                if(strPrice!=null&&strPrice.length()!=0){
-                    price= NumericUtil.parseDouble(strPrice, 0.0D);
+            }
+        });
+        edTotalNum.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                totalIsUserInput=b;
+            }
+        });
+        edTotalNum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if(totalIsUserInput) {
+                    Double total = 0.0;
+                    Double price = 0.0;
+                    String strTotal = editable.toString();
+                    if (strTotal != null && strTotal.length() != 0) {
+                        if (strTotal.substring(0, 1).equals(".")) {
+                            editable.insert(0, "0");
+                        }
+                        total = NumericUtil.parseDouble(strTotal, 0.0D);
+                    }else if(strTotal.equals("")) {
+                        edVol.getEditableText().clear();
+                        return;
+                    }
+                    String strPrice = edPrice.getText().toString();
+                    if (strPrice != null && strPrice.length() != 0) {
+                        price = NumericUtil.parseDouble(strPrice, 0.0D);
+                    }
+                    vol = total / price;
+                    edVol.getEditableText().clear();
+                    edVol.getEditableText().insert(0,""+vol);
+                    double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
+                    tvChargeNum.setText(String.valueOf(fee));
                 }
-                total=price*vol;
-                tvTotalNum.setText(String.valueOf(total));
-                double fee = calculateBuyFee(quoteAssetObj, baseAssetObj, price, vol);
-                tvChargeNum.setText(String.valueOf(fee));
             }
         });
 
@@ -281,7 +377,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                                     ConfirmOrderDialog.ConfirmOrderData.BUY,
                                     edPrice.getText().toString(),
                                     market.base,
-                                    tvTotalNum.getText().toString(),
+                                    edTotalNum.getText().toString(),
                                     edVol.getText().toString(),
                                     tvChargeNum.getText().toString(),
                                     market.quote,
@@ -318,7 +414,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                                     ConfirmOrderDialog.ConfirmOrderData.SELL,
                                     edPrice.getText().toString(),
                                     market.base,
-                                    tvTotalNum.getText().toString(),
+                                    edTotalNum.getText().toString(),
                                     edVol.getText().toString(),
                                     tvChargeNum.getText().toString(),
                                     market.quote,

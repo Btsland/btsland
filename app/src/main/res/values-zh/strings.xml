@@ -91,7 +91,7 @@
     <string name="str_transfers">转了</string>
     <string name="str_publish">发布</string>
     <string name="str_double_click">双击可以进入详细页面哦！</string>
-    <string name="total">总价：</string>
+    <string name="total">总额：</string>
     <string name="charge">手续费：</string>
     <string name="str_buy">买入</string>
     <string name="str_off_take">卖出</string>

@@ -1,6 +1,7 @@
 package info.btsland.app.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,6 +21,7 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.ui.activity.DealerHavingListActivity;
 import info.btsland.app.ui.activity.SettingActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.AppListDialog;
@@ -87,6 +89,22 @@ public class DealerManageFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 showStatDialog();
+            }
+        });
+        tvHaving.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), DealerHavingListActivity.class);
+                intent.putExtra("type",1);
+                getActivity().startActivity(intent);
+            }
+        });
+        tvClinch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), DealerHavingListActivity.class);
+                intent.putExtra("type",2);
+                getActivity().startActivity(intent);
             }
         });
     }

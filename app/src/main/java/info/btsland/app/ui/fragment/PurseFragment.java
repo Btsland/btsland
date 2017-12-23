@@ -71,11 +71,13 @@ public class PurseFragment extends Fragment {
         List<Fragment> fragments=new ArrayList<Fragment>();
         UserManageFragment userManageFragment=new UserManageFragment();
         DealerManageFragment dealerManageFragment=new DealerManageFragment();
+        HelpManageFragment helpManageFragment=new HelpManageFragment();
         fragments.add(userManageFragment);
         fragments.add(dealerManageFragment);
+        fragments.add(helpManageFragment);
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments);
         viewPager.setAdapter(adapter);
-        viewPager.setOffscreenPageLimit(2);
+        viewPager.setOffscreenPageLimit(3);
         viewPager.setCurrentItem(0);
         adapter.notifyDataSetChanged();
     }

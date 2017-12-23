@@ -26,7 +26,6 @@ public class PurseAssetActivity extends AppCompatActivity {
     private HeadFragment headFragment;
 
     private ListView lvAsset;
-    private List<asset> assets=new ArrayList <>();
     private AssetSimpleCursorAdapter adapter;
 
     @Override
@@ -36,32 +35,18 @@ public class PurseAssetActivity extends AppCompatActivity {
         Log.i("PurseAssetActivity", "onCreate: ");
         fillInHead();
         init();
-        BtslandApplication.purseHandler=handler;
     }
-
-//    public void queryAllAsset(){
-//
-//        BtslandApplication.queryAsset(handler);
-//
-//
-//    }
 
 
     @Override
     protected void onStart() {
         super.onStart();
-
-        setLvAsset();
-
-        
+        fillIn();
     }
 
-    private void setLvAsset(){
-//        assets =BtslandApplication.accountObject.assetlist;
-//        Log.e(TAG, "setLvAsset: "+assets.size() );
-        adapter=new AssetSimpleCursorAdapter(this,BtslandApplication.iAssets);
-        lvAsset.setAdapter(adapter);
-
+    private void fillIn(){
+        adapter.notifyDataSetChanged();
+        BtslandApplication.purseHandler=handler;
     }
 
 
@@ -69,9 +54,9 @@ public class PurseAssetActivity extends AppCompatActivity {
      * 初始化
      */
     private void init() {
-
-        lvAsset=  (ListView) findViewById(R.id.lv_asset);
-
+        lvAsset= findViewById(R.id.lv_asset);
+        adapter=new AssetSimpleCursorAdapter(this,BtslandApplication.iAssets);
+        lvAsset.setAdapter(adapter);
     }
 
     /**
@@ -92,12 +77,13 @@ public class PurseAssetActivity extends AppCompatActivity {
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.what==1){
-
-                adapter.notifyDataSetChanged();
-
+            synchronized (BtslandApplication.iAssets){
+                Log.e(TAG, "handleMessage: "+ BtslandApplication.iAssets.size());
+                if(adapter!=null&&BtslandApplication.iAssets!=null){
+                    adapter.setAssets(BtslandApplication.iAssets);
+                    adapter.notifyDataSetChanged();
+                }
             }
-
 
         }
     };

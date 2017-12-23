@@ -33,6 +33,10 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         this.inflater=LayoutInflater.from(context);
     }
 
+    public void setAssets(List<IAsset> assets) {
+        this.assets = assets;
+    }
+
     @Override
     public int getCount() {
         return assets.size();

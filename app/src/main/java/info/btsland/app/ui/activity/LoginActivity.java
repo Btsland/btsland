@@ -351,7 +351,6 @@ public class LoginActivity extends AppCompatActivity {
                         loginRet="failure";
                     }else {
                         BtslandApplication.accountObject=accountObject;
-                        BtslandApplication.queryAsset(null);
                         BtslandApplication.isLogin=true;
                     }
                     loginBundle.putString("login",loginRet);

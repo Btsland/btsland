@@ -394,11 +394,11 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
             @Override
             public void run() {
                 while (true){
-                    if(BtslandApplication.notes!=null){
-                        pointHandler.sendEmptyMessage(BtslandApplication.notes.size());
+                    if(BtslandApplication.dealerHavingNotes!=null){
+                        pointHandler.sendEmptyMessage(BtslandApplication.dealerHavingNotes.size());
                     }
                     try {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

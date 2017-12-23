@@ -37,6 +37,7 @@ import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.WelcomeActivity;
+import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
 import info.btsland.exchange.entity.Note;
@@ -65,11 +66,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static Handler purseHandler;
 
     public static account_object accountObject;
+    public static String account;
     public static User dealer;
 
-    public static List<Note> notes;
+    public static List<Note> dealerHavingNotes;
+    public static List<Note> dealerClinchNotes;
 
-    public static List<IAsset> iAssets;
+    public static List<IAsset> iAssets=new ArrayList<>();
     private static SharedPreferences sharedPreferences;
 
     private static MarketStat marketStat;
@@ -163,6 +166,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         init();
         ConnectThread();
     }
+    private BaseThread queryAllHaving;
+    private BaseThread queryAllClinch;
     private void init(){
         instance=getApplicationContext();
         application=this;
@@ -176,21 +181,21 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         setFluctuationType();
         fillInListMap();
         fillInMarketMap();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                queryAllHaving();
-            }
-        }).start();
+        queryAllClinch=new QueryAllClinch();
+        queryAllHaving=new QueryAllHaving();
+        queryAllHaving.start();
+        queryAllClinch.start();
 
     }
-
-    private void queryAllHaving(){
-        GsonBuilder gsonBuilder=new GsonBuilder();
-        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
-        final Gson gson=gsonBuilder.create();
-        while (true){
-            if(dealer!=null) {
+    private Gson gson;
+    class QueryAllHaving extends BaseThread{
+        @Override
+        public void execute() {
+            GsonBuilder gsonBuilder=new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+            gson=gsonBuilder.create();
+            if(dealer!=null&&dealer.getDealerId()!=null) {
+                Log.e(TAG, "queryAllHaving: "+dealer );
                 NoteHttp.queryAllHavingNote(dealer.getDealerId(), new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -200,18 +205,37 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
-                        notes = gson.fromJson(json, new TypeToken<List<Note>>() {
-                        }.getType());
+                        dealerHavingNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
                     }
                 });
             }
+        }
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+
+    }
+    class QueryAllClinch extends BaseThread{
+        @Override
+        public void execute() {
+            GsonBuilder gsonBuilder=new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+            gson=gsonBuilder.create();
+            if(dealer!=null&&dealer.getDealerId()!=null) {
+                Log.e(TAG, "queryAllHaving: "+dealer );
+                NoteHttp.queryAllClinchNote(dealer.getDealerId(), new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String json = response.body().string();
+                        dealerClinchNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
+                    }
+                });
             }
         }
+
     }
 
 
@@ -301,11 +325,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     }
     public static Double getAssetTotalByName(String name){
-        for(int i=0;i<BtslandApplication.iAssets.size();i++){
-            if(BtslandApplication.iAssets.get(i).coinName.equals(name)){
-                return BtslandApplication.iAssets.get(i).total;
-            }
+        if(BtslandApplication.iAssets!=null) {
+            for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
+                if (BtslandApplication.iAssets.get(i).coinName.equals(name)) {
+                    return BtslandApplication.iAssets.get(i).total;
+                }
 
+            }
         }
         return 0.0;
     }
@@ -353,6 +379,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
             try {
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
+                account=accountObject.name;
                 UserHttp.queryAccount(username, new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -362,7 +389,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         Gson gson=new Gson();
-                        dealer=gson.fromJson(response.body().string(),User.class);
+                        String json=response.body().string();
+                        dealer=gson.fromJson(json,User.class);
+                        if(dealer!=null){
+                            switch (dealer.getType()){
+
+                            }
+                        }
                     }
                 });
                 queryAsset(null);
@@ -396,87 +429,70 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         @Override
         public void run() {
-            try {
-                if(accountObject==null||accountObject.name.equals("")){
-                    return;
-                }
-                List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
+            while (true) {
+                if (accountObject != null && !accountObject.name.equals("")) {
+                    try {
+
+                        List<asset> assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
 //                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
-                accountObject.assetlist=assets;
-                iAssets=new ArrayList <>();
-                if(assets==null||assets.size()==0){
-                    iAssets.add(new IAsset(chargeUnit));
-                }else {
-                    for(int i=0;i<assets.size();i++) {
-                        iAssets.add(new IAsset(assets.get(i)));
+                        accountObject.assetlist = assets;
+                        synchronized (iAssets) {
+                            iAssets.clear();
+                            if (assets == null || assets.size() == 0) {
+                                iAssets.add(new IAsset(chargeUnit));
+                            } else {
+                                double total=0.0;
+                                for (int i = 0; i < assets.size(); i++) {
+                                    IAsset asset=new IAsset(assets.get(i));
+                                    if (asset.coinName.equals(chargeUnit)) {
+                                        if (asset!= null) {
+                                            total += asset.total;
+                                        } else {
+                                            total+= 0.0;
+                                        }
+                                    }else {
+                                        try {
+                                            MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker(chargeUnit, asset.coinName);
+                                            if (ticker == null) {
+                                                continue;
+                                            }
+                                            Double price = NumericUtil.parseDouble(ticker.latest);
+                                            if (price != null) {
+                                                total += asset.total * price;
+                                            }
+                                        } catch (NetworkStatusException e) {
+                                            e.printStackTrace();
+
+                                        }
+                                    }
+                                    iAssets.add(asset);
+                                }
+                                accountObject.totalCNY=total;
+
+                            }
+
+                        }
+                        if(purseHandler!=null) {
+                            purseHandler.sendEmptyMessage(1);
+                        }
+                        if (this.handler != null) {
+                            this.handler.sendEmptyMessage(1);
+                        }
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
                     }
                 }
-                if (this.handler!=null){
-                    this.handler.sendEmptyMessage(1);
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-
-                CuntTotalCNY();
-            } catch (NetworkStatusException e) {
-                e.printStackTrace();
             }
 
         }
     }
 
 
-    /**
-     * 外部调用查询总资产线程的方法
-     */
-    public static void CuntTotalCNY(){
-
-        new CuntTotalCNYThread().start();
-
-    }
-
-
-
-
-    /**
-     * 查询总资产线程
-     */
-    private static class CuntTotalCNYThread extends Thread{
-
-        @Override
-        public synchronized void run() {
-            if (accountObject==null||accountObject.name.equals("")){
-                return;
-            }
-            accountObject.totalCNY=0.0;
-            for (int i=0; i < iAssets.size(); i++) {
-                if(iAssets.get(i).coinName.equals(chargeUnit)){
-                    if(iAssets.get(i)!=null){
-                        accountObject.totalCNY+=iAssets.get(i).total;
-                    }else {
-                        accountObject.totalCNY+=0.0;
-                    }
-                    continue;
-                }
-                try {
-                    MarketTicker ticker =getMarketStat().mWebsocketApi.get_ticker(chargeUnit, iAssets.get(i).coinName);
-                    if(ticker==null){
-                        continue;
-                    }
-                    Double price= NumericUtil.parseDouble(ticker.latest);
-                    if (price!=null){
-                        accountObject.totalCNY+=iAssets.get(i).total * price;
-                    }
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-
-                }
-            }
-
-       }
-
-
-
-
-    }
     public static boolean saveListMap(){
 
         SharedPreferences.Editor editor=sharedPreferences.edit();

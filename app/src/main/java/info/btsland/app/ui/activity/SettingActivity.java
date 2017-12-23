@@ -346,7 +346,6 @@ public class SettingActivity extends BaseActivity{
             public void onConfirm(String server) {
                 BtslandApplication.chargeUnit=server;
                 BtslandApplication.saveChargeUnit();
-                BtslandApplication.queryAsset(null);
             }
 
             @Override

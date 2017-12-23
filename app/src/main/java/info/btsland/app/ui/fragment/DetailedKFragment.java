@@ -205,7 +205,7 @@ public class DetailedKFragment extends Fragment implements MarketStat.OnMarketSt
                     tvLowNum.setText(String.valueOf(historyPrice.low));
                     tvOpenNum.setText(String.valueOf(historyPrice.open));
                     tvCloseNum.setText(String.valueOf(historyPrice.close));
-                    tvVolumeNum.setText(String.valueOf(num(historyPrice.volume)));
+                    tvVolumeNum.setText(num(historyPrice.volume));
                     Log.e(TAG, "onValueSelected: "+num(historyPrice.volume) );
                 }
             }

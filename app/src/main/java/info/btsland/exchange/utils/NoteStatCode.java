@@ -59,7 +59,7 @@ public class NoteStatCode {
             case 2:
                 return "待确认收款";
             case 3:
-                return "待转账";
+                return "待发起提议";
             case 4:
                 return "客服确认中";
             case 5:

@@ -27,6 +27,7 @@ import info.btsland.app.Adapter.ExchangeNoteAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.activity.ExchangeDetailedActivity;
+import info.btsland.app.util.BaseThread;
 import info.btsland.exchange.entity.Note;
 import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
@@ -55,6 +56,9 @@ public class ExchangeListFragment extends Fragment {
     private ExchangeNoteAdapter havingAdapter;
     private ExchangeNoteAdapter clinchAdapter;
 
+    private BaseThread queyHaving;
+    private BaseThread queyClinch;
+
     public ExchangeListFragment() {
     }
 
@@ -80,6 +84,10 @@ public class ExchangeListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_exchange_list, container, false);
         init(view);
         fillIn();
+        queyHaving=new QueryNotes(1);
+        queyHaving.start();
+        queyClinch=new QueryNotes(2);
+        queyClinch.start();
         return view;
     }
 
@@ -99,92 +107,95 @@ public class ExchangeListFragment extends Fragment {
         lvHaving.setAdapter(havingAdapter);
         lvHaving.setOnItemClickListener(new HavingItemOnClickListener());
         lvClinch.setOnItemClickListener(new ClinchItemOnClickListener());
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    if (BtslandApplication.accountObject != null) {
-                        String coin = "";
-                        if (type == IN) {
-                            coin = "CNY";
-                        } else if (type == OUT) {
-                            coin = "RMB";
-                        }
-                        NoteHttp.queryAllClinchNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String json = response.body().string();
-                                fillInClinchList(json);
-                                handler.sendEmptyMessage(1);
-                            }
-                        });
-                    }
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    if(BtslandApplication.accountObject!=null){
-                        String coin="";
-                        if(type==IN){
-                            coin="CNY";
-                        }else if (type==OUT) {
-                            coin="RMB";
-                        }
-                        NoteHttp.queryAllHavingNoteByAccount(BtslandApplication.accountObject.name, coin, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String json = response.body().string();
-                                fillInHavingList(json);
-                                handler.sendEmptyMessage(2);
-                            }
-                        });
-                    }
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }).start();
     }
+    class QueryNotes extends BaseThread{
+        private final int want;
 
+        public QueryNotes(int want) {
+            this.want=want;
+        }
+
+        @Override
+        public void execute() {
+            if (want == 1) {
+                if (BtslandApplication.account != null) {
+                    String coin = "";
+                    if (type == IN) {
+                        coin = "CNY";
+                    } else if (type == OUT) {
+                        coin = "RMB";
+                    }
+                    NoteHttp.queryAllHavingNoteByAccount(BtslandApplication.account, coin, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String json = response.body().string();
+                            Log.e(TAG, "onResponse: " + json);
+                            fillInHavingList(json);
+                            handler.sendEmptyMessage(2);
+                        }
+                    });
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                if (BtslandApplication.account != null) {
+                    String coin = "";
+                    if (type == IN) {
+                        coin = "CNY";
+                    } else if (type == OUT) {
+                        coin = "RMB";
+                    }
+                    NoteHttp.queryAllClinchNoteByAccount(BtslandApplication.account, coin, new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String json = response.body().string();
+                            fillInClinchList(json);
+                            handler.sendEmptyMessage(1);
+                        }
+                    });
+                }
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
     private void fillInClinchList(String json) {
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson = gsonBuilder.create();
-        Log.e(TAG, "fillInClinchList: "+ json);
         clinchNoteList=gson.fromJson(json,new TypeToken<List<Note>>() {}.getType());
+        Log.e(TAG, "fillInClinchList: "+clinchNoteList.size());
     }
 
     private void fillInHavingList(String json){
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson = gsonBuilder.create();
-        Log.e(TAG, "fillInHavingList: "+ json);
         havingNoteList=gson.fromJson(json,new TypeToken<List<Note>>() {}.getType());
+        Log.e(TAG, "fillInHavingList: "+havingNoteList.size() );
     }
     private void refurbishClinch(){
+        Log.e(TAG, "refurbishClinch: ");
         if(clinchNoteList!=null&&clinchNoteList.size()>0){
             clinchAdapter.setNotes(clinchNoteList);
+            Log.e(TAG, "if()refurbishClinch: " );
             clinchAdapter.notifyDataSetChanged();
             setListViewHeightBasedOnChildren(lvClinch);
             llClinch.setVisibility(View.VISIBLE);
@@ -198,10 +209,12 @@ public class ExchangeListFragment extends Fragment {
 
     }
     private void refurbishHaving(){
+        Log.e(TAG, "refurbishHaving: " );
         if(havingNoteList!=null&&havingNoteList.size()>0){
+            Log.e(TAG, "if()refurbishHaving: " );
             havingAdapter.setNotes(havingNoteList);
             havingAdapter.notifyDataSetChanged();
-            setListViewHeightBasedOnChildren(lvHaving );
+            setListViewHeightBasedOnChildren(lvHaving);
             llHaving.setVisibility(View.VISIBLE);
             lvHaving.setVisibility(View.VISIBLE);
             tvHavingHint.setVisibility(View.VISIBLE);
@@ -257,6 +270,12 @@ public class ExchangeListFragment extends Fragment {
     }
 
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        queyClinch.kill();
+        queyHaving.kill();
+    }
 
     private Handler handler=new Handler(){
         @Override

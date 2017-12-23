@@ -35,6 +35,16 @@ public class User {
 
     public UserRecord userRecord;
 
+    public List<User> dealers;
+
+    public List<User> getDealers() {
+        return dealers;
+    }
+
+    public void setDealers(List<User> dealers) {
+        this.dealers = dealers;
+    }
+
     public Integer getId() {
         return id;
     }

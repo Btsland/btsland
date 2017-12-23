@@ -59,11 +59,11 @@
             android:screenOrientation="portrait">
             //注册NewsContentActivity活动
         </activity>
-        <activity android:name=".ui.activity.NewsTest"
-                  android:screenOrientation="portrait">
+        <activity
+            android:name=".ui.activity.NewsTest"
+            android:screenOrientation="portrait">
             //新闻测试
         </activity>
-
         <activity
             android:name=".ui.activity.AboutUsActivity"
             android:screenOrientation="portrait" />
@@ -87,7 +87,9 @@
         <activity android:name=".ui.activity.SettingDealActivity" />
         <activity android:name=".ui.activity.LookActivity" />
         <activity android:name=".ui.activity.C2CExchangeActivity" />
-        <activity android:name=".ui.activity.ExchangeDetailedActivity"></activity>
+        <activity android:name=".ui.activity.ExchangeDetailedActivity" />
+        <activity android:name=".ui.activity.DealerHavingListActivity" />
+        <activity android:name=".ui.activity.DealerExchangeDetailedActivity"></activity>
     </application>
 
 </manifest>

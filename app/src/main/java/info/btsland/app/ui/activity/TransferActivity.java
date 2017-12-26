@@ -1,10 +1,13 @@
 package info.btsland.app.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -15,17 +18,11 @@ import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.kaopiz.kprogresshud.KProgressHUD;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -33,15 +30,10 @@ import java.util.TimerTask;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.account_object;
-import info.btsland.app.api.asset;
-import info.btsland.app.api.asset_object;
-import info.btsland.app.api.object_id;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
-import info.btsland.app.model.Market;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.NumericUtil;
@@ -65,34 +57,35 @@ public class TransferActivity extends AppCompatActivity {
     private TextView tvMsg;
     private TextView tvId;
     private PasswordDialog passwordDialog;
-
     private Map<String,IAsset> iAssetMap;
-
     private HeadFragment headFragment;
     private TextView tvPoint;
     private TextView tvCancel;
     private int time=10;
     private Timer timer;
-
     private String password;
-
-    String from;
-    String to;
-    String vol;
-    String symbol;
-    String memo;
-    Double volNum;
-
-    String id;
-
-    List<asset_object> asset_objects = new ArrayList<>();
+    private String from;
+    private String to;
+    private String vol;
+    private String symbol;
+    private String memo;
+    private Double volNum;
+    private String id;
+    private TransferFillInSp transferFillInSp;
+    private ArrayAdapter<String> adapter;
+    private String[] coins;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer);
-        init();
+        transferFillInSp = new TransferFillInSp();
+        IntentFilter intentFilter =new IntentFilter(TransferFillInSp.EVENT);
+        LocalBroadcastManager.getInstance(this).registerReceiver(transferFillInSp,intentFilter);
         fillInHead();
+        init();
+        fillInData();
+        fillInSp();
         flinIn();
     }
     private void init(){
@@ -108,17 +101,13 @@ public class TransferActivity extends AppCompatActivity {
         tvBalanceNum=findViewById(R.id.tv_transfer_balanceNum);
         tvPoint=findViewById(R.id.tv_transfer_point);
         tvId=findViewById(R.id.tv_transfer_to_id);
-        List<IAsset> iAssets=BtslandApplication.iAssets;
-        iAssetMap=new HashMap<>();
-        for(int i=0;i<iAssets.size();i++){
-            iAssetMap.put(iAssets.get(i).coinName,iAssets.get(i));
-        }
         tvSecond=findViewById(R.id.tv_transfer_second);
         tvMsg=findViewById(R.id.tv_transfer_msg);
-    }
-    private void flinIn(){
         tvSecond.setVisibility(View.INVISIBLE);
         tvMsg.setVisibility(View.INVISIBLE);
+
+    }
+    private void flinIn(){
         createPortrait(wvFrom,BtslandApplication.accountObject.name);
         edFrom.setText(BtslandApplication.accountObject.name);
         edFrom.setFocusable(false);
@@ -126,15 +115,9 @@ public class TransferActivity extends AppCompatActivity {
         edFrom.setClickable(false);
         edTo.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
             public void afterTextChanged(Editable editable) {
                 String str=editable.toString();
@@ -146,17 +129,11 @@ public class TransferActivity extends AppCompatActivity {
                 }
             }
         });
-
         edCoinNum.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
 
             @Override
             public void afterTextChanged(Editable editable) {
@@ -168,37 +145,17 @@ public class TransferActivity extends AppCompatActivity {
                 String coin=spCoin.getSelectedItem().toString();
                 IAsset iasset=iAssetMap.get(coin);
                 Double d=NumericUtil.parseDouble(s);
-                if(d>iasset.total){
-                    tvPoint.setTextColor(getResources().getColor(R.color.color_font_red));
-                    tvPoint.setText("余额不足！");
-                }else {
-                    tvPoint.setTextColor(getResources().getColor(R.color.color_green));
-                    tvPoint.setText("余额充足！");
+                if(iasset!=null) {
+                    if (d > iasset.total) {
+                        tvPoint.setTextColor(getResources().getColor(R.color.color_font_red));
+                        tvPoint.setText("余额不足！");
+                    } else {
+                        tvPoint.setTextColor(getResources().getColor(R.color.color_green));
+                        tvPoint.setText("余额充足！");
+                    }
                 }
             }
         });
-
-        List<asset> assets = BtslandApplication.accountObject.assetlist;
-
-        final List<object_id<asset_object>> assetObjects=new ArrayList<>();
-        for (int i=0;i<assets.size();i++){
-            assetObjects.add(assets.get(i).asset_id);
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    asset_objects = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(assetObjects);
-                    sphandler.sendEmptyMessage(1);
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-                }
-                if(asset_objects ==null){
-                    return;
-                }
-            }
-        }).start();
-
         timer=new Timer();
         tvSend.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -259,9 +216,7 @@ public class TransferActivity extends AppCompatActivity {
                             }
                         }
                         @Override
-                        public void onReject(AlertDialog dialog) {
-
-                        }
+                        public void onReject(AlertDialog dialog) {}
                     });
                     passwordDialog.show();
                 }
@@ -286,18 +241,24 @@ public class TransferActivity extends AppCompatActivity {
                     AppDialog appDialog=new AppDialog(TransferActivity.this,"提示","当前未发起转账！");
                     appDialog.show();
                 }
-
-
             }
         });
+    }
+
+    public void fillInData(){
+        coins=new String[BtslandApplication.iAssets.size()];
+        for(int i = 0; i< BtslandApplication.iAssets.size(); i++){
+            coins[i]= BtslandApplication.iAssets.get(i).coinName;
+        }
+        iAssetMap=new HashMap<>();
+        for(int i=0;i<BtslandApplication.iAssets.size();i++){
+            iAssetMap.put(BtslandApplication.iAssets.get(i).coinName,BtslandApplication.iAssets.get(i));
+        }
+        dataHandler.sendEmptyMessage(1);
 
     }
-    public void fillINSp(){
-        String[] strings=new String[asset_objects.size()];
-        for(int i = 0; i< asset_objects.size(); i++){
-            strings[i]= asset_objects.get(i).symbol;
-        }
-        ArrayAdapter<String> adapter=new ArrayAdapter<String>(this,R.layout.coin_item,R.id.tv_transfer_coinName,strings);
+    public void fillInSp(){
+        adapter=new ArrayAdapter<>(this,R.layout.coin_item,R.id.tv_transfer_coinName,coins);
         spCoin.setAdapter(adapter);
         spCoin.setSelection(0);
         spCoin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -307,11 +268,8 @@ public class TransferActivity extends AppCompatActivity {
                 iAssetMap.get(coin);
                 tvBalanceNum.setText(String .valueOf(iAssetMap.get(coin).total));
             }
-
             @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
+            public void onNothingSelected(AdapterView<?> adapterView) {}
         });
     }
     public void transfer(){
@@ -322,7 +280,6 @@ public class TransferActivity extends AppCompatActivity {
                     try {
                         if (BtslandApplication.getWalletApi().transfer(from, to, vol, symbol, memo) != null) {
                             handler.sendEmptyMessage(1);
-
                         } else {
                             handler.sendEmptyMessage(-1);
                         }
@@ -384,6 +341,34 @@ public class TransferActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(transferFillInSp);
+    }
+
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(TransferFillInSp.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    class TransferFillInSp extends BroadcastReceiver{
+        public static final String EVENT="TransferFillInSp";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            coins=new String[BtslandApplication.iAssets.size()];
+            for(int i = 0; i< BtslandApplication.iAssets.size(); i++){
+                coins[i]= BtslandApplication.iAssets.get(i).coinName;
+            }
+        }
+    }
+    private Handler dataHandler =new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            adapter.notifyDataSetChanged();
+        }
+    };
+
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
@@ -429,10 +414,4 @@ public class TransferActivity extends AppCompatActivity {
         }
     };
 
-    private Handler sphandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            fillINSp();
-        }
-    };
 }

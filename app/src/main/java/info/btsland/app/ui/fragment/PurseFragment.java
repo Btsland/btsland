@@ -1,19 +1,19 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,17 +21,7 @@ import java.util.List;
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.sha256_object;
-import info.btsland.app.ui.activity.LoginActivity;
-import info.btsland.app.ui.activity.LookActivity;
-import info.btsland.app.ui.activity.MarketDetailedActivity;
-import info.btsland.app.ui.activity.PurseAccessRecordActivity;
-import info.btsland.app.ui.activity.PurseAssetActivity;
-import info.btsland.app.ui.activity.PurseTradingRecordActivity;
-import info.btsland.app.ui.activity.PurseWalletBackupActivity;
-import info.btsland.app.ui.activity.TransferActivity;
-import info.btsland.app.ui.view.AppDialog;
-import info.btsland.app.ui.view.MyConstraintLayout;
+import info.btsland.exchange.utils.UserTypeCode;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -46,7 +36,10 @@ import info.btsland.app.ui.view.MyConstraintLayout;
  * 行情
  */
 public class PurseFragment extends Fragment {
+    private static String TAG="PurseFragment";
     private ViewPager viewPager;
+    private DetailedFragmentAdapter adapter;
+    private PurseReceiver purseReceiver;
     public PurseFragment() {
         // Required empty public constructor
     }
@@ -55,6 +48,9 @@ public class PurseFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        purseReceiver = new PurseReceiver() ;
+        IntentFilter intentFilter =new IntentFilter(PurseReceiver.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(purseReceiver,intentFilter);
     }
 
     @Override
@@ -66,24 +62,62 @@ public class PurseFragment extends Fragment {
         fillIn();
         return view;
     }
-
-    private void fillIn() {
-        List<Fragment> fragments=new ArrayList<Fragment>();
+    private void init(View view) {
+        viewPager=view.findViewById(R.id.vp_purse);
+        List<Fragment> fragments=new ArrayList<>();
         UserManageFragment userManageFragment=new UserManageFragment();
-        DealerManageFragment dealerManageFragment=new DealerManageFragment();
-        HelpManageFragment helpManageFragment=new HelpManageFragment();
         fragments.add(userManageFragment);
-        fragments.add(dealerManageFragment);
-        fragments.add(helpManageFragment);
-        DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments);
+        adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments);
         viewPager.setAdapter(adapter);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setCurrentItem(0);
-        adapter.notifyDataSetChanged();
+    }
+    private void fillIn() {
+        Log.e(TAG, "fillIn: " );
+        List<Fragment> fragments=new ArrayList<>();
+        UserManageFragment userManageFragment=new UserManageFragment();
+        fragments.add(userManageFragment);
+        if(BtslandApplication.dealer!=null){
+            if(BtslandApplication.dealer.getType()== UserTypeCode.HELP){
+                Log.e(TAG, "fillIn: help" );
+                HelpManageFragment helpManageFragment=new HelpManageFragment();
+                fragments.add(helpManageFragment);
+            }else if(BtslandApplication.dealer.getType()== UserTypeCode.DEALER) {
+                Log.e(TAG, "fillIn: dealer" );
+                DealerManageFragment dealerManageFragment=new DealerManageFragment();
+                fragments.add(dealerManageFragment);
+            }else if(BtslandApplication.dealer.getType()== UserTypeCode.ADMIN){
+                Log.e(TAG, "fillIn: admin" );
+            }
+        }
+
+        adapter.setFragmentList(fragments);
+        handler.sendEmptyMessage(1);
     }
 
-    private void init(View view) {
-        viewPager=view.findViewById(R.id.vp_purse);
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(purseReceiver);
     }
+
+    private Handler handler=new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            adapter.notifyDataSetChanged();
+        }
+    };
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(PurseReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class PurseReceiver extends BroadcastReceiver{
+        public static final String EVENT="PurseReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: " );
+            fillIn();
+        }
+    }
+
 }

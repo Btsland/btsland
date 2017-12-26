@@ -35,15 +35,11 @@ public class User {
 
     public UserRecord userRecord;
 
-    public List<User> dealers;
+    public List<Note> havingNotes;
 
-    public List<User> getDealers() {
-        return dealers;
-    }
+    public List<Chat> helpOldChatList;
 
-    public void setDealers(List<User> dealers) {
-        this.dealers = dealers;
-    }
+    public List<Chat> helpNewChatList;
 
     public Integer getId() {
         return id;

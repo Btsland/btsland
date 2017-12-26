@@ -1,10 +1,14 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,6 +63,7 @@ public class ExchangeListFragment extends Fragment {
     private BaseThread queyHaving;
     private BaseThread queyClinch;
 
+    private ExchangeListReceiver exchangeListReceiver ;
     public ExchangeListFragment() {
     }
 
@@ -73,6 +78,8 @@ public class ExchangeListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter =new IntentFilter(ExchangeListReceiver.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(exchangeListReceiver,intentFilter);
         if(getArguments()!=null){
             this.type=getArguments().getInt("type");
         }
@@ -109,15 +116,15 @@ public class ExchangeListFragment extends Fragment {
         lvClinch.setOnItemClickListener(new ClinchItemOnClickListener());
     }
     class QueryNotes extends BaseThread{
-        private final int want;
-
-        public QueryNotes(int want) {
-            this.want=want;
+        public static final int HAVING = 1;
+        public static final int CLINCH = 2;
+        private int type;
+        public QueryNotes(int type) {
+            this.type=type;
         }
-
         @Override
         public void execute() {
-            if (want == 1) {
+            if (type == HAVING) {
                 if (BtslandApplication.account != null) {
                     String coin = "";
                     if (type == IN) {
@@ -140,12 +147,7 @@ public class ExchangeListFragment extends Fragment {
                         }
                     });
                 }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            } else {
+            } else if(type==CLINCH){
                 if (BtslandApplication.account != null) {
                     String coin = "";
                     if (type == IN) {
@@ -166,11 +168,6 @@ public class ExchangeListFragment extends Fragment {
                             handler.sendEmptyMessage(1);
                         }
                     });
-                }
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
                 }
 
             }
@@ -273,8 +270,33 @@ public class ExchangeListFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        queyClinch.kill();
-        queyHaving.kill();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(exchangeListReceiver);
+        if(queyClinch!=null){
+            queyClinch.kill();
+        }
+        if(queyHaving!=null){
+            queyHaving.kill();
+        }
+
+    }
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(ExchangeListReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class ExchangeListReceiver extends BroadcastReceiver {
+        public static final String EVENT = "ExchangeListReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    queyHaving=new QueryNotes(1);
+                    queyHaving.start();
+                    queyClinch=new QueryNotes(2);
+                    queyClinch.start();
+                }
+            }).start();
+        }
     }
 
     private Handler handler=new Handler(){

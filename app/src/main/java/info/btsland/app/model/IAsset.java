@@ -22,6 +22,7 @@ public class IAsset {
     public Double orders=0.0;
     public String coinName;
     public Double totalCNY=0.0;
+    public Double totalBTS=0.0;
 
     public IAsset( String coinName){
         this.coinName=coinName;
@@ -29,12 +30,16 @@ public class IAsset {
     }
     public IAsset(asset mAsset) {
         this.mAsset=mAsset;
-        fillIn();
+        if(!fillIn()){
+            this.mAsset=null;
+        }
     }
     public IAsset(asset mAsset,Double totalCNY) {
         this.mAsset=mAsset;
         this.totalCNY=totalCNY;
-        fillIn();
+        if(!fillIn()){
+            this.mAsset=null;
+        }
     }
     public IAsset() {
     }
@@ -55,7 +60,7 @@ public class IAsset {
     /**
      *
      */
-    private void fillIn(){
+    private boolean fillIn(){
         List<object_id<asset_object>> object_ids=new ArrayList <>();
         object_ids.add(mAsset.asset_id);
         try {
@@ -64,9 +69,14 @@ public class IAsset {
                 asset_object objects = assetObjects.get(0);
                 coinName=objects.symbol;
                 total=mAsset.amount/Math.pow(10,objects.precision);
+                return true;
+            }else {
+                return false;
             }
         } catch (NetworkStatusException e) {
             e.printStackTrace();
         }
+        return false;
     }
+
 }

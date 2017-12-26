@@ -1,9 +1,14 @@
 package info.btsland.app;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.os.Message;
 import android.support.multidex.MultiDexApplication;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import org.spongycastle.jce.provider.BouncyCastleProvider;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,19 +37,29 @@ import info.btsland.app.api.asset_object;
 import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
-import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.ui.activity.MainActivity;
+import info.btsland.app.ui.activity.PurseAssetActivity;
+import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
+import info.btsland.app.ui.fragment.DealerManageFragment;
+import info.btsland.app.ui.fragment.DealerNoteListFragment;
+import info.btsland.app.ui.fragment.ExchangeListFragment;
+import info.btsland.app.ui.fragment.PurseFragment;
+import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
+import info.btsland.exchange.entity.Chat;
 import info.btsland.exchange.entity.Note;
 import info.btsland.exchange.entity.User;
+import info.btsland.exchange.http.ChatHttp;
+import info.btsland.exchange.http.HelpHttp;
 import info.btsland.exchange.http.NoteHttp;
-import info.btsland.exchange.http.TradeHttp;
 import info.btsland.exchange.http.UserHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
+import info.btsland.exchange.utils.UserTypeCode;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -63,8 +77,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static boolean isLogin=false;
 
-    public static Handler purseHandler;
-
     public static account_object accountObject;
     public static String account;
     public static User dealer;
@@ -72,6 +84,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<Note> dealerHavingNotes;
     public static List<Note> dealerClinchNotes;
 
+    public static Map<String,User> helpUserMap=new LinkedHashMap<>();
+    public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
+    public static Map<String,HelpQueryChatDealer> helpQueryChatDealerThreadMap=new LinkedHashMap<>();
     public static List<IAsset> iAssets=new ArrayList<>();
     private static SharedPreferences sharedPreferences;
 
@@ -119,7 +134,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<MarketTicker> tickerList=new ArrayList<>();
 
     //public static List<String> quoteList=Arrays.asList("CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO");
-
+    private QueryReceiver queryReceiver ;
     public static void setFluctuationType(){
 
 
@@ -154,6 +169,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         return instance;
     }
 
+    public static BtslandApplication getApplication(){
+        return application;
+    }
+
     public static BtslandApplication getListener() {
         return application;
     }
@@ -164,6 +183,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         //Fabric.with(this, new Crashlytics());
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
         init();
+        IntentFilter intentFilter = new IntentFilter(QueryReceiver.EVENT);
+        queryReceiver=new QueryReceiver();
+        LocalBroadcastManager.getInstance(getInstance()).registerReceiver(queryReceiver,intentFilter);
         ConnectThread();
     }
     private BaseThread queryAllHaving;
@@ -178,6 +200,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         strServer = readStrServer();
         Language = readLanguage();
         strListMap = readListMap();
+        account = readUser();
         setFluctuationType();
         fillInListMap();
         fillInMarketMap();
@@ -195,7 +218,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
             gson=gsonBuilder.create();
             if(dealer!=null&&dealer.getDealerId()!=null) {
-                Log.e(TAG, "queryAllHaving: "+dealer );
                 NoteHttp.queryAllHavingNote(dealer.getDealerId(), new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -206,6 +228,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
                         dealerHavingNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
+                        if(dealerHavingNotes!=null&&dealerHavingNotes.size()>0){
+                            MainActivity.sendBroadcast(getInstance());
+                            DealerNoteListFragment.sendBroadcast(getInstance(),1);
+                        }
                     }
                 });
             }
@@ -220,7 +246,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
             gson=gsonBuilder.create();
             if(dealer!=null&&dealer.getDealerId()!=null) {
-                Log.e(TAG, "queryAllHaving: "+dealer );
                 NoteHttp.queryAllClinchNote(dealer.getDealerId(), new Callback() {
                     @Override
                     public void onFailure(Call call, IOException e) {
@@ -231,6 +256,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
                         dealerClinchNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
+                        if(dealerClinchNotes!=null&&dealerClinchNotes.size()>0){
+                            DealerNoteListFragment.sendBroadcast(getInstance(),2);
+                        }
                     }
                 });
             }
@@ -321,16 +349,16 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             this.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
         }
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
-        queryAccount();
-
+        queryAccount(account,handler);
     }
     public static Double getAssetTotalByName(String name){
         if(BtslandApplication.iAssets!=null) {
-            for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
-                if (BtslandApplication.iAssets.get(i).coinName.equals(name)) {
-                    return BtslandApplication.iAssets.get(i).total;
+            synchronized (BtslandApplication.iAssets) {
+                for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
+                    if (BtslandApplication.iAssets.get(i).coinName.equals(name)) {
+                        return BtslandApplication.iAssets.get(i).total;
+                    }
                 }
-
             }
         }
         return 0.0;
@@ -348,149 +376,306 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
 
     }
-
+    public static void sendBroadcast(Context context,String name){
+        Intent intent=new Intent(QueryReceiver.EVENT);
+        intent.putExtra("name",name);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class QueryReceiver extends BroadcastReceiver {
+        public static final String EVENT = "QueryReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String name=intent.getStringExtra("name");
+            queryAccount(name,handler);
+        }
+    }
 
     /**
      * 查询账户线程外部调用方法
      *
      */
-    public static void queryAccount(){
-        new QueryAccountThread().start();
+    public static void queryAccount(String name,Handler handler ){
+        new QueryAccountThread(name,handler).start();
     }
+    private static BaseThread queryDealer;
+    static class QueryDealer extends BaseThread{
+        @Override
+        public void execute() {
+            UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
 
+                }
 
-
-
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    GsonBuilder gsonBuilder = new GsonBuilder();
+                    gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+                    Gson gson = gsonBuilder.create();
+                    String json = response.body().string();
+                    dealer=gson.fromJson(json,User.class);
+                    if(dealer!=null){
+                        DealerManageFragment.sendBroadcast(getInstance());
+                    }
+                }
+            });
+        }
+    }
     /**
      * 查询账户线程
      *
      */
     private static class QueryAccountThread extends Thread{
+        private String name;
+        private Handler handler;
+
+        public QueryAccountThread(String name,Handler handler) {
+            this.name=name;
+            this.handler=handler;
+        }
         @Override
         public void run() {
-
-            String username=readUser();
             if (nRet!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
                 return;
             }
-            if(username==null||username.equals("")){
+            if(name==null||name.equals("")){
                 isLogin=false;
                 return;
             }
             try {
-                accountObject = getMarketStat().mWebsocketApi.get_account_by_name(username);
-                account=accountObject.name;
-                UserHttp.queryAccount(username, new Callback() {
+                accountObject = getMarketStat().mWebsocketApi.get_account_by_name(name);
+                if(accountObject!=null){
+                    account=accountObject.name;
+                    UserManageFragment.sendBroadcast(getInstance(),2);
+                    handler.sendEmptyMessage(1);
+                }
+                UserHttp.queryAccount(name, new Callback() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
-
-                    }
-
+                    public void onFailure(Call call, IOException e) {}
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        Gson gson=new Gson();
+                        final Gson gson=new Gson();
                         String json=response.body().string();
+                        Log.e(TAG, "onResponse: json:"+json );
                         dealer=gson.fromJson(json,User.class);
+                        Log.e(TAG, "onResponse: dealer:"+ dealer);
+                        PurseFragment.sendBroadcast(getInstance());
                         if(dealer!=null){
+                            ExchangeListFragment.sendBroadcast(getInstance());
                             switch (dealer.getType()){
-
+                                case UserTypeCode.ACCOUNT:
+                                    if(queryDealer!=null){
+                                        queryDealer.kill();
+                                    }
+                                    break;
+                                case UserTypeCode.DEALER:
+                                    queryDealer=new QueryDealer();
+                                    queryDealer.start();
+                                    break;
+                                case UserTypeCode.HELP:
+                                    if(queryDealer!=null){
+                                        queryDealer.kill();
+                                    }
+                                    HelpHttp.queryDealer(dealer.getDealerId(), new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            List<User> users = gson.fromJson(response.body().string(),new TypeToken<List<User>>() {}.getType() );
+                                            if(users!=null&&users.size()>0){
+                                                for(int i=0;i<users.size();i++){
+                                                    helpUserMap.put(users.get(i).getDealerId(),users.get(i));
+                                                    HelpQueryDealer helpQueryDealer = new HelpQueryDealer(users.get(i).getDealerId());
+                                                    helpQueryDealer.setTime(6);
+                                                    helpQueryDealer.start();
+                                                    helpQueryThreadMap.put(users.get(i).getDealerId(),helpQueryDealer);
+                                                    HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
+                                                    helpQueryChatDealer.setTime(3);
+                                                    helpQueryChatDealer.start();
+                                                    helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(),helpQueryChatDealer);
+                                                }
+                                            }
+                                        }
+                                    });
+                                    break;
+                                case UserTypeCode.ADMIN:
+                                    if(queryDealer!=null){
+                                        queryDealer.kill();
+                                    }
+                                    break;
                             }
                         }
                     }
                 });
-                queryAsset(null);
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
             }
         }
     }
+    static class HelpQueryDealer extends BaseThread{
+        private String name;
 
+        public HelpQueryDealer(String name) {
+            super(name);
+            this.name = name;
 
+        }
 
+        @Override
+        public void execute() {
+            if (helpUserMap.get(name)!=null){
+                NoteHttp.queryAllHavingNote(helpUserMap.get(name).getDealerId(), new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {}
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        GsonBuilder gsonBuilder=new GsonBuilder() ;
+                        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+                        Gson gson = gsonBuilder.create();
+                        List<Note> notes = gson.fromJson(response.body().string(),new TypeToken<List<Note>>(){}.getType());
+                        if(notes!=null&&notes.size()>0){
+                            helpUserMap.get(name).havingNotes=notes;
+                        }
+                    }
+                });
+            }
+        }
+    }
 
+    static class HelpQueryChatDealer extends BaseThread{
+        private String to;
+
+        public HelpQueryChatDealer(String to) {
+            this.to = to;
+        }
+
+        @Override
+        public void execute() {
+            if (helpUserMap.get(to)!=null){
+                ChatHttp.queryChat(account,helpUserMap.get(to).getAccount(),new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {}
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        GsonBuilder gsonBuilder=new GsonBuilder() ;
+                        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+                        Gson gson = gsonBuilder.create();
+                        if(helpUserMap.get(to).helpNewChatList==null){
+                            helpUserMap.get(to).helpNewChatList=new ArrayList<>();
+                        }
+                        String json = response.body().string();
+                        Log.e(TAG, "onResponse: "+json );
+                        List<Chat> chats =gson.fromJson(json,new TypeToken<List<Chat>>(){}.getType());
+                        helpUserMap.get(to).helpNewChatList.addAll(chats);
+                    }
+                });
+            }
+        }
+    }
+    private static   AssetThread assetThread;
     /**
      * 查询用余额线程外部调用方法
      */
-    public static void queryAsset(Handler handler){
-        new AccetThread(handler).start();
+    public static void queryAsset(String account){
+        if(assetThread!=null){
+            assetThread.kill();
+        }
+        assetThread  = new AssetThread(account);
+        assetThread.setTime(6).start();
     }
 
     /**
      * 查询分类资产线程
      *
      */
-    private static class AccetThread extends Thread{
-        private Handler handler;
+    private static class AssetThread extends BaseThread{
+        private String account;
 
-        public AccetThread(Handler handler) {
-            this.handler=handler;
+        public AssetThread(String account) {
+            this.account=account;
         }
 
         @Override
-        public void run() {
-            while (true) {
-                if (accountObject != null && !accountObject.name.equals("")) {
-                    try {
-
-                        List<asset> assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(accountObject.name);
-//                    List<asset> assets=getMarketStat().mWebsocketApi.list_account_balances_by_name("tiger5422");
-                        accountObject.assetlist = assets;
-                        synchronized (iAssets) {
-                            iAssets.clear();
-                            if (assets == null || assets.size() == 0) {
-                                iAssets.add(new IAsset(chargeUnit));
-                            } else {
-                                double total=0.0;
-                                for (int i = 0; i < assets.size(); i++) {
-                                    IAsset asset=new IAsset(assets.get(i));
-                                    if (asset.coinName.equals(chargeUnit)) {
-                                        if (asset!= null) {
-                                            total += asset.total;
-                                        } else {
-                                            total+= 0.0;
-                                        }
-                                    }else {
-                                        try {
-                                            MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker(chargeUnit, asset.coinName);
-                                            if (ticker == null) {
-                                                continue;
-                                            }
-                                            Double price = NumericUtil.parseDouble(ticker.latest);
-                                            if (price != null) {
-                                                total += asset.total * price;
-                                            }
-                                        } catch (NetworkStatusException e) {
-                                            e.printStackTrace();
-
-                                        }
-                                    }
-                                    iAssets.add(asset);
-                                }
-                                accountObject.totalCNY=total;
-
-                            }
-
-                        }
-                        if(purseHandler!=null) {
-                            purseHandler.sendEmptyMessage(1);
-                        }
-                        if (this.handler != null) {
-                            this.handler.sendEmptyMessage(1);
-                        }
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
-                    }
-                }
+        public void execute() {
+            if (account!= null && !account.equals("")) {
+                Double totalCNY=0.0;
+                Double totalBTS=0.0;
                 try {
-                    Thread.sleep(5000);
-                } catch (InterruptedException e) {
+                    List<asset> assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
+                    iAssets.clear();
+                    if (assets == null || assets.size() == 0) {
+                        iAssets.add(new IAsset(chargeUnit));
+                    } else {
+                        for (int i = 0; i < assets.size(); i++) {
+                            IAsset asset=new IAsset(assets.get(i));
+                            if(asset!=null){
+                                if (asset.coinName!=null&&asset.coinName.equals("CNY")) {
+                                    if (asset!= null) {
+                                        asset.totalCNY = asset.total;
+                                    } else {
+                                        asset.totalCNY = 0.0;
+                                    }
+                                }else {
+                                    try {
+                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("CNY", asset.coinName);
+                                        if (ticker == null) {
+                                            continue;
+                                        }
+                                        Double price = NumericUtil.parseDouble(ticker.latest);
+                                        if (price != null) {
+                                            asset.totalCNY = asset.total * price;
+                                            totalCNY+=asset.totalCNY;
+
+                                        }
+                                    } catch (NetworkStatusException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                if (asset.coinName!=null&&asset.coinName.equals("BTS")) {
+                                    if (asset!= null) {
+                                        asset.totalBTS = asset.total;
+                                    } else {
+                                        asset.totalBTS = 0.0;
+                                    }
+                                }else {
+                                    try {
+                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("BTS", asset.coinName);
+                                        if (ticker == null) {
+                                            continue;
+                                        }
+                                        Double price = NumericUtil.parseDouble(ticker.latest);
+                                        if (price != null) {
+                                            asset.totalBTS = asset.total * price;
+                                            totalBTS+=asset.totalBTS;
+                                        }
+                                    } catch (NetworkStatusException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                iAssets.add(asset);
+                            }
+                        }
+                        TransferActivity.sendBroadcast(getInstance());
+                        PurseAssetActivity.sendBroadcast(getInstance());
+                    }
+                } catch (NetworkStatusException e) {
                     e.printStackTrace();
                 }
+                UserManageFragment.sendBroadcast(getInstance(),totalCNY,"CNY");
+                UserManageFragment.sendBroadcast(getInstance(),totalBTS,"BTS");
             }
-
         }
     }
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(account!=null) {
+                queryAsset(account);
+            }
+        }
+    };
 
 
     public static boolean saveListMap(){
@@ -558,7 +743,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
      * 保存用户
      */
     public static boolean saveUser(){
-        //借助Editor实现共享参数储存
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("username",BtslandApplication.accountObject.name);
         return editor.commit();

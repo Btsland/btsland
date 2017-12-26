@@ -11,9 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp">
+        android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -24,7 +22,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -46,7 +46,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -68,7 +70,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -90,7 +94,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -119,7 +125,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -141,7 +149,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -172,7 +182,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -203,7 +215,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -225,7 +239,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -269,7 +285,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -291,7 +309,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

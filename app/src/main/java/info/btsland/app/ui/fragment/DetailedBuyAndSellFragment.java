@@ -15,14 +15,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
-import com.mrd.bitlib.crypto.ec.Parameters;
 
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import info.btsland.app.Adapter.TransactionSellBuyRecyclerViewAdapter;
@@ -88,7 +85,6 @@ public class DetailedBuyAndSellFragment extends Fragment
     private double lowSellPrice = -1;
     private double highBuyPrice = -1;
 
-    private  MarketTicker market;
 
     private ConfirmOrderDialog dialog;
 
@@ -198,12 +194,11 @@ public class DetailedBuyAndSellFragment extends Fragment
         return str;
     }
     private void fillIn(){
-        market=MarketDetailedActivity.market;
-        tvBuyHintNum.setText(num(BtslandApplication.getAssetTotalByName(market.base)));
-        tvBuyHintCoin.setText(market.base);
-        tvSellHintNum.setText(num(BtslandApplication.getAssetTotalByName(market.quote)));
-        tvSellHintCoin.setText(market.quote);
-        tvNewPrice.setText(market.latest);
+        tvBuyHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.base)));
+        tvBuyHintCoin.setText(MarketDetailedActivity.market.base);
+        tvSellHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.quote)));
+        tvSellHintCoin.setText(MarketDetailedActivity.market.quote);
+        tvNewPrice.setText(MarketDetailedActivity.market.latest);
         tvNewPrice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -214,16 +209,16 @@ public class DetailedBuyAndSellFragment extends Fragment
         if (MarketDetailedActivity.market.percent_change > 0) {
             tvNewPrice.setTextColor(BtslandApplication.goUp);
             tvNewPrice.setCompoundDrawables(null,null,getActivity().getDrawable(R.drawable.ic_up),null);
-        } else if(market.percent_change < 0) {
+        } else if(MarketDetailedActivity.market.percent_change < 0) {
             tvNewPrice.setCompoundDrawables(null,null,getActivity().getDrawable(R.drawable.ic_down),null);
             tvNewPrice.setTextColor(BtslandApplication.goDown);
         }else {
             tvNewPrice.setTextColor(BtslandApplication.suspend);
         }
-        tvNewPriceCoin.setText(market.base+"/"+market.quote);
+        tvNewPriceCoin.setText(MarketDetailedActivity.market.base+"/"+MarketDetailedActivity.market.quote);
 
-        tvPriceCoin.setText(market.base+"/"+market.quote);
-        tvVolCoin.setText(market.quote);
+        tvPriceCoin.setText(MarketDetailedActivity.market.base+"/"+MarketDetailedActivity.market.quote);
+        tvVolCoin.setText(MarketDetailedActivity.market.quote);
         edPrice.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -311,6 +306,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                 totalIsUserInput=b;
             }
         });
+
         edTotalNum.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -350,7 +346,7 @@ public class DetailedBuyAndSellFragment extends Fragment
             }
         });
 
-        tvTotalCoin.setText(market.base);
+        tvTotalCoin.setText(MarketDetailedActivity.market.base);
         tvChageCoin.setText("BTS");
         tvBuy.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,12 +372,12 @@ public class DetailedBuyAndSellFragment extends Fragment
                             new ConfirmOrderDialog.ConfirmOrderData(
                                     ConfirmOrderDialog.ConfirmOrderData.BUY,
                                     edPrice.getText().toString(),
-                                    market.base,
+                                    MarketDetailedActivity.market.base,
                                     edTotalNum.getText().toString(),
                                     edVol.getText().toString(),
                                     tvChargeNum.getText().toString(),
-                                    market.quote,
-                                    market.base,
+                                    MarketDetailedActivity.market.quote,
+                                    MarketDetailedActivity.market.base,
                                     tvChageCoin.getText().toString()
                             ),
                             new DialogListener());
@@ -413,12 +409,12 @@ public class DetailedBuyAndSellFragment extends Fragment
                             new ConfirmOrderDialog.ConfirmOrderData(
                                     ConfirmOrderDialog.ConfirmOrderData.SELL,
                                     edPrice.getText().toString(),
-                                    market.base,
+                                    MarketDetailedActivity.market.base,
                                     edTotalNum.getText().toString(),
                                     edVol.getText().toString(),
                                     tvChargeNum.getText().toString(),
-                                    market.quote,
-                                    market.base,
+                                    MarketDetailedActivity.market.quote,
+                                    MarketDetailedActivity.market.base,
                                     tvChageCoin.getText().toString()
                             ),
                             new DialogListener());
@@ -513,8 +509,8 @@ public class DetailedBuyAndSellFragment extends Fragment
             mwant=want;
             String strPrice = edPrice.getText().toString();
             String strVol = edVol.getText().toString();
-            strVolCoin = market.quote;
-            strPriceCoin= market.base;
+            strVolCoin = MarketDetailedActivity.market.quote;
+            strPriceCoin= MarketDetailedActivity.market.base;
             if (strPrice.equals("") || strVol.equals("")) {
                 return;
             }

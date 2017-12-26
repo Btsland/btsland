@@ -1,9 +1,12 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,13 +20,13 @@ import android.widget.TextView;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
+import info.btsland.app.ui.activity.BorrowActivity;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.LookActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.activity.PurseAccessRecordActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.PurseTradingRecordActivity;
-import info.btsland.app.ui.activity.PurseWalletBackupActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.MyConstraintLayout;
@@ -49,7 +52,7 @@ public class UserManageFragment extends Fragment {
     private TextView tvPurseDeal;
     //全部挂单
     private TextView tvPurseAllRemain;
-    //备份
+    //观察
     private TextView tvPurseBackup;
 
     private TextView tvPurseConvert;
@@ -62,6 +65,8 @@ public class UserManageFragment extends Fragment {
 
     //转账
     private TextView tvPurseTransferAccounts;
+    //抵押
+    private TextView tvBorrow;
 
     private TextView tvUserLogoff;
 
@@ -74,6 +79,7 @@ public class UserManageFragment extends Fragment {
 
     private ScrollView scrollView;
     private MyConstraintLayout clPurse;
+    private UserManageReceiver userManageReceiver ;
 
     public UserManageFragment() {
         // Required empty public constructor
@@ -83,6 +89,9 @@ public class UserManageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        userManageReceiver=new UserManageReceiver();
+        IntentFilter intentFilter =new IntentFilter(UserManageReceiver.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiver,intentFilter);
     }
 
     @Override
@@ -132,14 +141,7 @@ public class UserManageFragment extends Fragment {
         if (BtslandApplication.accountObject != null) {
             createPortrait();//设置头像
             tvUserName.setText(BtslandApplication.accountObject.name);
-
-            if(String.valueOf(BtslandApplication.accountObject.totalCNY)==null){
-                tvPurseConvert.setText(" 正在计算中。。");
-            }else if(String.valueOf(BtslandApplication.accountObject.totalCNY).length()>8){
-                tvPurseConvert.setText(String.valueOf(BtslandApplication.accountObject.totalCNY).substring(0,8) + BtslandApplication.chargeUnit);
-            }else {
-                tvPurseConvert.setText(String.valueOf(BtslandApplication.accountObject.totalCNY) + BtslandApplication.chargeUnit);
-            }
+            setTotal(0.0,BtslandApplication.chargeUnit);
             tvUserAnotherName.setText("#" + BtslandApplication.accountObject.id.get_instance());
         } else {
             portrait.stopLoading();
@@ -148,7 +150,18 @@ public class UserManageFragment extends Fragment {
             tvPurseConvert.setText("");
             tvUserAnotherName.setText("");
         }
+    }
 
+    private void setTotal(Double total,String coin){
+        if(BtslandApplication.chargeUnit.equals(coin)){
+            if(String.valueOf(total)==null){
+                tvPurseConvert.setText("0.0"+coin);
+            }else if(String.valueOf(total).length()>8){
+                tvPurseConvert.setText(String.valueOf(total).substring(0,8) + coin);
+            }else {
+                tvPurseConvert.setText(String.valueOf(total) + coin);
+            }
+        }
     }
 
 
@@ -191,6 +204,8 @@ public class UserManageFragment extends Fragment {
         //未登录
         flPurseLoginPrompt=view.findViewById(R.id.fl_purse_login_prompt);
 
+        tvBorrow=view.findViewById(R.id.tv_purse_borrow);
+
         portrait=view.findViewById(R.id.iv_user_pho);
         tvUserName=view.findViewById(R.id.tv_user_name);
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
@@ -207,9 +222,34 @@ public class UserManageFragment extends Fragment {
         tvGoLogin.setOnClickListener(onCLickListener);
         tvPurseTransferAccounts.setOnClickListener(onCLickListener);
         tvGoRegister.setOnClickListener(onCLickListener);
+        tvBorrow.setOnClickListener(onCLickListener);
 
     }
-
+    public static void sendBroadcast(Context context,Double total,String coin){
+        Intent intent=new Intent(UserManageReceiver.EVENT);
+        intent.putExtra("total",total);
+        intent.putExtra("coin",coin);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public static void sendBroadcast(Context context,int want){
+        Intent intent=new Intent(UserManageReceiver.EVENT);
+        intent.putExtra("want",want);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class UserManageReceiver extends BroadcastReceiver {
+        public static final String EVENT = "UserManageReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int want=intent.getIntExtra("want", 1);
+            if(want==1) {
+                Double total = intent.getDoubleExtra("total", 0.0);
+                String coin = intent.getStringExtra("coin");
+                setTotal(total, coin);
+            }else if(want==2) {
+                fillIn();
+            }
+        }
+    }
     /**
      * 单击特效
      *
@@ -295,6 +335,10 @@ public class UserManageFragment extends Fragment {
                     Intent iGoRegister=new Intent(getActivity(), LoginActivity.class);
                     iGoRegister.putExtra("want",LoginActivity.GOREGISTER);
                     getActivity().startActivity(iGoRegister);
+                    break;
+                case R.id.tv_purse_borrow:
+                    Intent iGoBorrow=new Intent(getActivity(), BorrowActivity.class);
+                    getActivity().startActivity(iGoBorrow);
                     break;
             }
         }

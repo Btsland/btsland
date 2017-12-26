@@ -25,6 +25,7 @@ import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.http.TradeHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
 import info.btsland.exchange.utils.NoteStatCode;
+import info.btsland.exchange.utils.UserTypeCode;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -130,19 +131,17 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
             }
             tvRemark.setText(note.getDepict());
             tvCode.setText(note.getRemarkCode());
-            tvCodeCopy.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            if(BtslandApplication.dealer.getType()!=UserTypeCode.ACCOUNT){
+                tvCodeCopy.setVisibility(View.GONE);
+            }else {
+                tvCodeCopy.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
 
-                }
-            });
+                    }
+                });
+            }
             tvRelationAccount.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                }
-            });
-            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -150,79 +149,232 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
             });
             switch (note.getStatNo()){
                 case NoteStatCode.ACCOUNT_CONFIRMED:
-                    tvConfirm.setVisibility(View.VISIBLE);
-                    tvConfirm.setBackgroundColor(BtslandApplication.getInstance().getResources().getColor(R.color.red));
-                    tvConfirm.setText("确认已收款");
-                    tvConfirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            TradeHttp.updateNoteStat(noteNo, NoteStatCode.DEALER_TRANSFERRING, new Callback() {
+                    switch (BtslandApplication.dealer.getType()){
+                        case UserTypeCode.DEALER:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("确认已收款");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    int a= Integer.parseInt(response.body().string());
-                                    if(a>0){
-                                        handler.sendEmptyMessage(10);
-                                        handler.sendEmptyMessage(1);
-                                    }
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.DEALER_TRANSFERRING, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
+                            tvRelationHelp.setText("联系客服");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                        case UserTypeCode.HELP:
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                        case UserTypeCode.ADMIN:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("承兑商确认已收款");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.ADMIN_TRANSFERRING, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                    }
                     break;
                 case NoteStatCode.DEALER_CONFIRMING:
-                    tvConfirm.setVisibility(View.VISIBLE);
-                    tvConfirm.setBackgroundColor(BtslandApplication.getInstance().getResources().getColor(R.color.red));
-                    tvConfirm.setText("确认已收款");
-                    tvConfirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            TradeHttp.updateNoteStat(noteNo, NoteStatCode.DEALER_TRANSFERRING, new Callback() {
+                    switch (BtslandApplication.dealer.getType()){
+                        case UserTypeCode.DEALER:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("确认已收款");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    int a= Integer.parseInt(response.body().string());
-                                    if(a>0){
-                                        handler.sendEmptyMessage(10);
-                                        handler.sendEmptyMessage(1);
-                                    }
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.DEALER_TRANSFERRING, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
+                            tvRelationHelp.setText("联系客服");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                        case UserTypeCode.HELP:
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                        case UserTypeCode.ADMIN:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("承兑商确认已收款");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.ADMIN_TRANSFERRING, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                    }
+
                     break;
                 case NoteStatCode.DEALER_TRANSFERRING:
-                    tvConfirm.setVisibility(View.VISIBLE);
-                    tvConfirm.setBackgroundColor(BtslandApplication.getInstance().getResources().getColor(R.color.red));
-                    tvConfirm.setText("确认已提议");
-                    tvConfirm.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            TradeHttp.updateNoteStat(noteNo, NoteStatCode.HELP_CONFIRMING, new Callback() {
+                    switch (BtslandApplication.dealer.getType()){
+                        case UserTypeCode.DEALER:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("确认已提议");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    int a= Integer.parseInt(response.body().string());
-                                    if(a>0){
-                                        handler.sendEmptyMessage(10);
-                                        handler.sendEmptyMessage(1);
-                                    }
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.HELP_CONFIRMING, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        }
-                    });
+                            tvRelationHelp.setText("联系客服");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                        case UserTypeCode.HELP:
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                        case UserTypeCode.ADMIN:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("管理员确认提议");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.ADMIN_CONFIRMED, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                    }
+                    break;
+                case NoteStatCode.HELP_CONFIRMING:
+                    switch (BtslandApplication.dealer.getType()){
+                        case UserTypeCode.DEALER:
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                        case UserTypeCode.HELP:
+                            tvConfirm.setVisibility(View.VISIBLE);
+                            tvConfirm.setText("确认同意提议");
+                            tvConfirm.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    TradeHttp.updateNoteStat(noteNo, NoteStatCode.HELP_CONFIRMED, new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {}
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            int a= Integer.parseInt(response.body().string());
+                                            if(a>0){
+                                                handler.sendEmptyMessage(10);
+                                                handler.sendEmptyMessage(1);
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                            tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
+                            break;
+                        case UserTypeCode.ADMIN:
+                            tvConfirm.setVisibility(View.GONE);
+                            break;
+                    }
                     break;
                 default:
                     tvConfirm.setVisibility(View.GONE);

@@ -11,7 +11,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.exchange.entity.Note;
 import info.btsland.exchange.utils.NoteStatCode;
@@ -20,7 +19,7 @@ import info.btsland.exchange.utils.NoteStatCode;
  * Created by Administrator on 2017/10/16.
  */
 
-public class DealerHavingNoteAdapter extends BaseAdapter {
+public class DealerNoteAdapter extends BaseAdapter {
 
     private static final String TAG = "AssetRowAdapter";
     private LayoutInflater inflater;
@@ -37,7 +36,7 @@ public class DealerHavingNoteAdapter extends BaseAdapter {
     }
 
 
-    public DealerHavingNoteAdapter(Context context) {
+    public DealerNoteAdapter(Context context) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
     }

@@ -88,8 +88,10 @@
         <activity android:name=".ui.activity.LookActivity" />
         <activity android:name=".ui.activity.C2CExchangeActivity" />
         <activity android:name=".ui.activity.ExchangeDetailedActivity" />
-        <activity android:name=".ui.activity.DealerHavingListActivity" />
-        <activity android:name=".ui.activity.DealerExchangeDetailedActivity"></activity>
+        <activity android:name=".ui.activity.DealerNoteListActivity" />
+        <activity android:name=".ui.activity.DealerExchangeDetailedActivity" />
+        <activity android:name=".ui.activity.BorrowActivity" />
+        <activity android:name=".ui.activity.DealerInfoActivity"></activity>
     </application>
 
 </manifest>

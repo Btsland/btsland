@@ -134,5 +134,5 @@
     <string name="str_confirm">confirm</string>
     <string name="c2c">C2C</string>
     <string name="look">look</string>
-    <string name="go_purse_login">钱包登陆</string>
+    <string name="borrow">borrow</string>
 </resources>

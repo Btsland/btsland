@@ -1,6 +1,9 @@
 package info.btsland.app.ui.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,6 +11,7 @@ import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -22,7 +26,6 @@ import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
-import info.btsland.app.ui.fragment.NewsFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.util.PreferenceUtil;
 
@@ -47,6 +50,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     private FragmentManager manager;
     private int index = 1;
     private Fragment c2cFragment;
+    private MainReceiver mainReceiver;
     private int point;
 
     public void setPoint(int point) {
@@ -69,6 +73,9 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         Log.e(TAG, "onCreate: " + BtslandApplication.Language);
         switchLanguage(BtslandApplication.Language);
         manager=getSupportFragmentManager();
+        mainReceiver=new MainReceiver();
+        IntentFilter intentFilter = new IntentFilter(MainActivity.MainReceiver.EVENT);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mainReceiver,intentFilter);
         setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             index = savedInstanceState.getInt("index", 1);
@@ -373,6 +380,11 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
             return super.onKeyDown(keyCode, event);
         }
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mainReceiver);
+    }
 
     private void exit() {
         if (isExit) {
@@ -391,22 +403,21 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     @Override
     protected void onStart() {
         super.onStart();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true){
-                    if(BtslandApplication.dealerHavingNotes!=null){
-                        pointHandler.sendEmptyMessage(BtslandApplication.dealerHavingNotes.size());
-                    }
-                    try {
-                        Thread.sleep(3000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
+    }
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(MainReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class MainReceiver extends BroadcastReceiver{
+        public static final String EVENT="MainReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(BtslandApplication.dealerHavingNotes!=null) {
+                setPoint(BtslandApplication.dealerHavingNotes.size());
+            }else {
+                setPoint(0);
             }
-        }).start();
-
+        }
     }
 
     Handler mHandler = new Handler() {
@@ -417,12 +428,6 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         }
     };
 
-    Handler pointHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            setPoint(msg.what);
-        }
-    };
 
 }
 

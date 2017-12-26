@@ -18,7 +18,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,10 +36,8 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
@@ -454,7 +451,7 @@ public class Websocket_api extends WebSocketListener {
         List<Object> listTransaction = new ArrayList<>();
         listTransaction.add(tx);
         callObject.params.add(listTransaction);
-
+        Log.e(TAG, "broadcast_transaction: 1111111111111111111111111111111111111111111111111111111111111111" );
         ReplyObjectProcess<Reply<Object>> replyObjectProcess =
                 new ReplyObjectProcess<>(new TypeToken<Reply<Integer>>(){}.getType());
         Reply<Object> replyObject = sendForReply(callObject, replyObjectProcess);

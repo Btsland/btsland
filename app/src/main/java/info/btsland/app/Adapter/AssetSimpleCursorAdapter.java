@@ -2,7 +2,6 @@ package info.btsland.app.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,8 +53,6 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Log.e("AssetSimple", "getView: "+position+"//"+assets.size());
-        Log.e("AssetSimple", "getView: "+assets.get(position) );
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.asset_item, null);
         }

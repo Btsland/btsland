@@ -91,9 +91,20 @@ public class DealerListAdapter extends BaseAdapter {
             tvUsable.setText("" + dealerData.usableCNY);
             tvLower.setText("" + dealerData.user.getLowerLimitIn());
         }else if(type== DealerListFragment.OUT){
-            tvMax.setText("" + dealerData.user.getUpperLimitOut());
-            tvUsable.setText("" + (dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount()));
-            tvLower.setText("" + dealerData.user.getLowerLimitOut());
+            if(dealerData.user!=null){
+                tvMax.setText("" + dealerData.user.getUpperLimitOut());
+                tvLower.setText("" + dealerData.user.getLowerLimitOut());
+                if(dealerData.user.userRecord!=null){
+                    tvUsable.setText("" + (dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount()));
+                }else {
+                    tvUsable.setText("" + (dealerData.user.getUpperLimitOut()));
+                }
+            }else {
+                tvMax.setText("");
+                tvLower.setText("");
+                tvUsable.setText("");
+            }
+
         }
 
         if(dealerData.user.userInfo!=null){
@@ -215,7 +226,10 @@ public class DealerListAdapter extends BaseAdapter {
         public void handleMessage(Message msg) {
             Double totalCNY=msg.getData().getDouble("totalCNY");
             dataList.get(msg.what).maxCNY=totalCNY;
-            Double inhaving = dataList.get(msg.what).user.userRecord.getInHavingTotal();
+            Double inhaving=0.0;
+            if(dataList.get(msg.what).user!=null&&dataList.get(msg.what).user.userRecord!=null){
+                inhaving = dataList.get(msg.what).user.userRecord.getInHavingTotal();
+            }
             dataList.get(msg.what).usableCNY=totalCNY-inhaving;
             fillInViews(msg.what);
             notifyDataSetChanged();

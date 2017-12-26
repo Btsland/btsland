@@ -29,8 +29,6 @@ public class account_object implements Serializable {
 
     public List<asset> assetlist=new ArrayList <>();
     public List<operation_history_object> listHistoryObject=new ArrayList<>();
-
-    public Double totalCNY=0.0;//总值
     public Double totalUsable;//可用总额
     public Double totalOrders;//总挂单
 
@@ -59,7 +57,6 @@ public class account_object implements Serializable {
                 ", active_special_authority=" + active_special_authority +
                 ", top_n_control_flags=" + top_n_control_flags +
                 ", assetlist=" + assetlist +
-                ", totalCNY=" + totalCNY +
                 ", totalUsable=" + totalUsable +
                 ", totalOrders=" + totalOrders +
                 '}';

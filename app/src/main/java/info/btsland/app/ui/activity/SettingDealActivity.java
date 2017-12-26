@@ -2,40 +2,24 @@ package info.btsland.app.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import info.btsland.app.Adapter.CoinsRowAdapter;
 import info.btsland.app.Adapter.DetailedFragmentAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
-import info.btsland.app.api.asset_object;
-import info.btsland.app.ui.fragment.DomesticInformationFragment;
-import info.btsland.app.ui.fragment.ForeignInformationFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.ui.fragment.HotNewsFragment;
-import info.btsland.app.ui.fragment.LatestNewsFragment;
 import info.btsland.app.ui.fragment.SetDealFragment;
-import info.btsland.app.ui.view.AppDialog;
 
 public class SettingDealActivity extends AppCompatActivity {
     private static String TAG="SettingDealActivity";

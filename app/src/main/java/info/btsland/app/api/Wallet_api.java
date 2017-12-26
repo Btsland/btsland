@@ -498,6 +498,38 @@ public class Wallet_api {
         return;
 
     }
+
+    /**
+     * 抵押
+     * @param amount_to_borrow 获得货币的数量
+     * @param asset_symbol 获得货币的名称
+     * @param amount_of_collateral 被用于抵押的货币的金额（BTS的金额）
+     * @return
+     * @throws NetworkStatusException
+     */
+    public signed_transaction borrow_asset( String amount_to_borrow, String asset_symbol, String amount_of_collateral) throws NetworkStatusException {
+        // 抵押的帐号
+        account_object accountObject = BtslandApplication.accountObject;
+        operations.borrow_asset_operation op = new operations.borrow_asset_operation();  //1
+        op.account=accountObject.id;//设置用户
+        asset asset=mWebsocketApi.lookup_asset_symbols(asset_symbol).amount_from_string(amount_to_borrow);
+        op.borrow=asset;
+        op.collateral=mWebsocketApi.lookup_asset_symbols("BTS").amount_from_string(amount_of_collateral);//设置用于的抵押的货币名称（BTS）和金额
+        op.extensions = new HashSet<>();
+
+        operations.operation_type operationType = new operations.operation_type();  //2
+        operationType.nOperationType = operations.ID_CREATE_BORROW_ASSET_OPERATION;//设置事务类型
+        operationType.operationContent = op;
+
+        signed_transaction tx = new signed_transaction();//3
+        tx.operations = new ArrayList<>();
+        tx.operations.add(operationType);
+
+        tx.extensions = new HashSet<>();
+        set_operation_fees(tx, mWebsocketApi.get_global_properties().parameters.current_fees);//设置手续费
+        return sign_transaction(tx);
+    }
+
     public signed_transaction sell_asset(String amountToSell, String symbolToSell,
                                          String minToReceive, String symbolToReceive,
                                          int timeoutSecs, boolean fillOrKill)
@@ -576,7 +608,6 @@ public class Wallet_api {
         }
     }
     private signed_transaction sign_transaction(signed_transaction tx) throws NetworkStatusException {
-        // // TODO: 07/09/2017 这里的set应出问题
         signed_transaction.required_authorities requiresAuthorities = tx.get_required_authorities();
 
         Set<object_id<account_object>> req_active_approvals = new HashSet<>();
@@ -622,8 +653,6 @@ public class Wallet_api {
                 approving_key_set.add(publicKeyType);
             }
         }
-
-        // // TODO: 07/09/2017 被简化了
         dynamic_global_property_object dynamicGlobalPropertyObject = mWebsocketApi.get_dynamic_global_properties();
         tx.set_reference_block(dynamicGlobalPropertyObject.head_block_id);
 
@@ -642,15 +671,15 @@ public class Wallet_api {
                 tx.sign(privateKey, mWalletObject.chain_id);
             }
         }
-
-        // 发出tx，进行广播，这里也涉及到序列化
-            int nRet = mWebsocketApi.broadcast_transaction(tx);
+        //发布广播
+        int nRet = mWebsocketApi.broadcast_transaction(tx);
         if (nRet == 0) {
             return tx;
         } else {
             return null;
         }
     }
+
     public asset calculate_buy_fee(asset_object assetToReceive, asset_object assetToSell,
                                    double rate, double amount,
                                    global_property_object globalPropertyObject) {
@@ -718,7 +747,6 @@ public class Wallet_api {
 
             types.private_key_type privateKeyType = mHashMapPub2Priv.get(accountObjectFrom.options.memo_key);
             if (privateKeyType == null) {
-                // // TODO: 07/09/2017 获取失败的问题
                 throw new NetworkStatusException("failed to get private key");
             }
             transferOperation.memo.set_message(

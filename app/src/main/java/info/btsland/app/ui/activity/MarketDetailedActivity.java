@@ -28,6 +28,7 @@ import info.btsland.app.ui.fragment.DetailedKFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.view.AppListDialog;
 import info.btsland.app.ui.view.IViewPager;
+import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.KeyUtil;
 
 public class MarketDetailedActivity extends AppCompatActivity{
@@ -49,6 +50,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
     public static RefurbishBuyAndSell refurbishBuyAndSell;
 
 
+
     public static void startAction(Context context, MarketTicker market,int index){
         Intent intent = new Intent(context, MarketDetailedActivity.class);
         if(market!=null){
@@ -57,6 +59,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         intent.putExtra("index", index);
         context.startActivity(intent);
     }
+    private BaseThread queryMarket;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,22 +68,8 @@ public class MarketDetailedActivity extends AppCompatActivity{
             if (getIntent().getSerializableExtra("MarketTicker") != null) {
                 this.market = (MarketTicker) getIntent().getSerializableExtra("MarketTicker");
             }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        MarketTicker marketTicker=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
-                        if(marketTicker!=null){
-                            market=marketTicker;
-                            handler.sendEmptyMessage(1);
-                        }
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }).start();
-
+            queryMarket=new QueryMarket();
+            queryMarket.start();
             this.index = getIntent().getIntExtra("index", index);
         }else {
             if(savedInstanceState!=null){
@@ -93,10 +82,28 @@ public class MarketDetailedActivity extends AppCompatActivity{
         fillInHead();
         init();
     }
-
+    class QueryMarket extends BaseThread{
+        @Override
+        public void execute() {
+            try {
+                MarketTicker marketTicker=BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(market.base,market.quote);
+                if(marketTicker!=null){
+                    market=marketTicker;
+                }
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+            }
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        queryMarket.kill();
     }
 
     @Override

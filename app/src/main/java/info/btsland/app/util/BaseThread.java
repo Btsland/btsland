@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class BaseThread extends Thread {
+    private static String TAG="BaseThread";
     private final static Logger logger = LoggerFactory.getLogger(BaseThread.class);
 
     /**

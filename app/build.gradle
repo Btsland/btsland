@@ -8,8 +8,8 @@ android {
         applicationId "info.btsland.app"
         minSdkVersion 22
         targetSdkVersion 27
-        versionCode 36
-        versionName "1.2.17"
+        versionCode 38
+        versionName "1.2.19"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
@@ -24,6 +24,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+
 }
 
 repositories {

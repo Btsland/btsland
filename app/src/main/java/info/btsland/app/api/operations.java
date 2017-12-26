@@ -22,12 +22,13 @@ import static info.btsland.app.api.config.GRAPHENE_BLOCKCHAIN_PRECISION;
 
 
 public class operations {
-    public static final int ID_TRANSER_OPERATION = 0;
-    public static final int ID_CREATE_LIMIT_ORDER_OPERATION = 1;
-    public static final int ID_CANCEL_LMMIT_ORDER_OPERATION = 2;
-    public static final int ID_UPDATE_LMMIT_ORDER_OPERATION = 3;
-    public static final int ID_FILL_LMMIT_ORDER_OPERATION = 4;
-    public static final int ID_CREATE_ACCOUNT_OPERATION = 5;
+    public static final int ID_TRANSER_OPERATION = 0;//转账
+    public static final int ID_CREATE_LIMIT_ORDER_OPERATION = 1;//创建交易
+    public static final int ID_CANCEL_LMMIT_ORDER_OPERATION = 2;//取消交易
+    public static final int ID_UPDATE_LMMIT_ORDER_OPERATION = 3;//更新交易
+    public static final int ID_FILL_LMMIT_ORDER_OPERATION = 4;//撮合
+    public static final int ID_CREATE_ACCOUNT_OPERATION = 5;//创建用户borrow_asset
+    public static final int ID_CREATE_BORROW_ASSET_OPERATION=6;
 
     public static operation_id_map operations_map = new operation_id_map();
     public static class operation_id_map {
@@ -42,12 +43,16 @@ public class operations {
             mHashId2Operation.put(ID_FILL_LMMIT_ORDER_OPERATION, fill_order_operation.class);
             mHashId2Operation.put(ID_CREATE_ACCOUNT_OPERATION, account_create_operation.class);
 
+            mHashId2Operation.put(ID_CREATE_BORROW_ASSET_OPERATION, borrow_asset_operation.class);
+
             mHashId2OperationFee.put(ID_TRANSER_OPERATION, transfer_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_CREATE_LIMIT_ORDER_OPERATION, limit_order_create_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_CANCEL_LMMIT_ORDER_OPERATION, limit_order_cancel_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_UPDATE_LMMIT_ORDER_OPERATION, call_order_update_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_FILL_LMMIT_ORDER_OPERATION, fill_order_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_CREATE_ACCOUNT_OPERATION, account_create_operation.fee_parameters_type.class);
+
+            mHashId2OperationFee.put(ID_CREATE_BORROW_ASSET_OPERATION, borrow_asset_operation.fee_parameters_type.class);
         }
 
         public Type getOperationObjectById(int nId) {
@@ -686,6 +691,90 @@ public class operations {
                     ", active=" + active +
                     ", options=" + options +
                     '}';
+        }
+    }
+    public static class borrow_asset_operation implements base_operation{
+        class fee_parameters_type {
+            long fee       = 0;
+        }
+//        String borrower_name;
+//        String amount_to_borrow;
+//        String asset_symbol;
+//        String amount_of_collateral;
+//        String broadcast;
+        public asset fee;
+        public object_id<account_object> account;
+        public asset borrow;
+        public asset collateral;
+        public Set<types.void_t> extensions;
+        @Override
+        public List<authority> get_required_authorities() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public List<object_id<account_object>> get_required_active_authorities() {
+            List<object_id<account_object>> activeList = new ArrayList<>();
+            activeList.add(fee_payer());
+            return activeList;
+        }
+
+        @Override
+        public List<object_id<account_object>> get_required_owner_authorities() {
+            return new ArrayList<>();
+        }
+
+        @Override
+        public void write_to_encoder(base_encoder baseEncoder) {
+            raw_type rawObject = new raw_type();
+
+            // fee
+            baseEncoder.write(rawObject.get_byte_array(fee.amount));
+            rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(fee.asset_id.get_instance()));
+
+            // borrower_name
+            rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(account.get_instance()));
+
+            // amount_to_borrow
+            baseEncoder.write(rawObject.get_byte_array(borrow.amount));
+            rawObject.pack(baseEncoder,
+                    UnsignedInteger.fromIntBits(borrow.asset_id.get_instance()));
+
+            // amount_of_collateral
+            baseEncoder.write(rawObject.get_byte_array(collateral.amount));
+
+            // extensions
+            rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(extensions.size()));
+        }
+
+        @Override
+        public long calculate_fee(Object objectFeeParameter) {
+            assert(borrow_asset_operation.fee_parameters_type.class.isInstance(objectFeeParameter));
+            borrow_asset_operation.fee_parameters_type feeParametersType = (borrow_asset_operation.fee_parameters_type)objectFeeParameter;
+            return feeParametersType.fee;
+        }
+
+        @Override
+        public void set_fee(asset assetFee) {
+            fee = assetFee;
+        }
+
+        @Override
+        public object_id<account_object> fee_payer() {
+            return account;
+        }
+
+        @Override
+        public List<object_id<account_object>> get_account_id_list() {
+            List<object_id<account_object>> listAccountId = new ArrayList<>();
+            listAccountId.add(account);
+            return listAccountId;
+        }
+
+        @Override
+        public List<object_id<asset_object>> get_asset_id_list() {
+            List<object_id<asset_object>> listAssetId = new ArrayList<>();
+            return listAssetId;
         }
     }
 }

@@ -1,17 +1,21 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.numberprogressbar.NumberProgressBar;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -21,8 +25,7 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.ui.activity.DealerHavingListActivity;
-import info.btsland.app.ui.activity.SettingActivity;
+import info.btsland.app.ui.activity.DealerNoteListActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.AppListDialog;
 import info.btsland.app.ui.view.PasswordDialog;
@@ -42,8 +45,25 @@ public class DealerManageFragment extends Fragment {
     private TextView tvHelp;
     private TextView tvUser;
 
-    private ShowPoint point;
+    private TextView tvStatText;
+    private TextView tvName;
+    private TextView tvDealerId;
+    private TextView tvInLowNum;
+    private TextView tvOutLowNum;
+    private TextView tvInBro;
+    private TextView tvOutBro;
+    private TextView tvTime;
+    private TextView tvDepict;
+    private TextView tvCountNum;
+    private TextView tvInNum;
+    private TextView tvOutNum;
+    private TextView tvWX;
+    private TextView tvZFB;
+    private TextView tvYH;
+    private ImageView ivPho;
+    private NumberProgressBar progressBar;
 
+    private DealerManageReceiver dealerManageReceiver;
 
     public DealerManageFragment() {
 
@@ -59,6 +79,9 @@ public class DealerManageFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter =new IntentFilter(DealerManageReceiver.EVENT) ;
+        dealerManageReceiver=new DealerManageReceiver() ;
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(dealerManageReceiver,intentFilter);
         if (getArguments() != null) {
         }
     }
@@ -75,6 +98,24 @@ public class DealerManageFragment extends Fragment {
 
 
     private void init(View view) {
+        ivPho=view.findViewById(R.id.iv_dealer_manage_pho);
+        progressBar=view.findViewById(R.id.nb_dealer_manage_level);
+        tvStatText=view.findViewById(R.id.tv_dealer_manage_stat);
+        tvName=view.findViewById(R.id.tv_dealer_manage_dealerName);
+        tvDealerId=view.findViewById(R.id.tv_dealer_manage_dealerId);
+        tvInLowNum=view.findViewById(R.id.tv_dealer_manage_inLowNum);
+        tvOutLowNum=view.findViewById(R.id.tv_dealer_manage_outLowNum);
+        tvInBro=view.findViewById(R.id.tv_dealer_manage_inBroNum);
+        tvOutBro=view.findViewById(R.id.tv_dealer_manage_outBroNum);
+        tvTime=view.findViewById(R.id.tv_dealer_manage_timeNum);
+        tvDepict=view.findViewById(R.id.tv_dealer_manage_depict);
+        tvCountNum=view.findViewById(R.id.tv_dealer_manage_countNum);
+        tvInNum=view.findViewById(R.id.tv_dealer_manage_inNum);
+        tvOutNum=view.findViewById(R.id.tv_dealer_manage_outNum);
+        tvWX=view.findViewById(R.id.tv_dealer_manage_wx);
+        tvZFB=view.findViewById(R.id.tv_dealer_manage_zfb);
+        tvYH=view.findViewById(R.id.tv_dealer_manage_yh);
+
         tvStat=view.findViewById(R.id.tv_dealer_stat);
         tvInfo=view.findViewById(R.id.tv_dealer_info);
         tvReal=view.findViewById(R.id.tv_dealer_real);
@@ -83,7 +124,80 @@ public class DealerManageFragment extends Fragment {
         tvHelp=view.findViewById(R.id.tv_dealer_help);
         tvUser=view.findViewById(R.id.tv_dealer_user);
     }
-
+    private void fillInTop(){
+        switch (BtslandApplication.dealer.getStat()){
+            case UserStatCode.ONLINE:
+                tvStatText.setText("在线");
+            break;
+            case UserStatCode.OFFLINE:
+                tvStatText.setText("离开");
+                break;
+            case UserStatCode.BEOUT:
+                tvStatText.setText("离线");
+                break;
+        }
+        tvName.setText(BtslandApplication.dealer.getDealerName());
+        tvDealerId.setText(BtslandApplication.dealer.getDealerId());
+        tvInLowNum.setText(""+BtslandApplication.dealer.getLowerLimitIn());
+        tvOutLowNum.setText(""+BtslandApplication.dealer.getLowerLimitOut());
+        tvInBro.setText(""+BtslandApplication.dealer.getBrokerageIn()*100+"%");
+        tvOutBro.setText(""+BtslandApplication.dealer.getBrokerageOut()*100+"%");
+        tvDepict.setText(BtslandApplication.dealer.getDepict());
+        progressBar.setMax(2000);
+        if(BtslandApplication.dealer.userInfo!=null){
+            Double level = BtslandApplication.dealer.userInfo.getLevel();
+            int a = (int) (level/20);
+            progressBar.setProgress((int) ((level-(a*20))*100));
+            switch (a){
+                case 0:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level1));
+                    break;
+                case 1:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level2));
+                    break;
+                case 2:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level3));
+                    break;
+                case 3:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level4));
+                    break;
+                case 4:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level5));
+                    break;
+                case 5:
+                    ivPho.setImageDrawable(getContext().getDrawable(R.mipmap.level5));
+                    progressBar.setProgress(2000);
+                    break;
+            }
+        }
+        if(BtslandApplication.dealer.userRecord!=null) {
+            tvTime.setText(""+BtslandApplication.dealer.userRecord.getTime());
+            tvInNum.setText(""+(BtslandApplication.dealer.userRecord.getInClinchTotal()+BtslandApplication.dealer.userRecord.getOutClinchTotal()));
+            tvOutNum.setText(""+(BtslandApplication.dealer.userRecord.getOutClinchTotal()+BtslandApplication.dealer.userRecord.getOutClinchTotal()));
+            tvCountNum.setText(""+(BtslandApplication.dealer.userRecord.getInClinchCount() + BtslandApplication.dealer.userRecord.getOutClinchCount()));
+        }else {
+            tvTime.setText("-");
+            tvInNum.setText("-");
+            tvOutNum.setText("-");
+            tvCountNum.setText("-");
+        }
+        tvWX.setVisibility(View.GONE);
+        tvZFB.setVisibility(View.GONE);
+        tvYH.setVisibility(View.GONE);
+        for(int i=0;i<BtslandApplication.dealer.realAssets.size();i++) {
+            switch (BtslandApplication.dealer.realAssets.get(i).getRealAssetType()) {
+                case "1":
+                    tvWX.setVisibility(View.VISIBLE);
+                    break;
+                case "2":
+                    tvZFB.setVisibility(View.VISIBLE);
+                    break;
+                case "3":
+                    tvYH.setVisibility(View.VISIBLE);
+                    break;
+            }
+        }
+    }
     private void fillIn() {
         tvStat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,18 +205,25 @@ public class DealerManageFragment extends Fragment {
                 showStatDialog();
             }
         });
+        tvInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         tvHaving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), DealerHavingListActivity.class);
+                Intent intent=new Intent(getActivity(), DealerNoteListActivity.class);
                 intent.putExtra("type",1);
+                intent.putExtra("dealerId","");
                 getActivity().startActivity(intent);
             }
         });
         tvClinch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent=new Intent(getActivity(), DealerHavingListActivity.class);
+                Intent intent=new Intent(getActivity(), DealerNoteListActivity.class);
                 intent.putExtra("type",2);
                 getActivity().startActivity(intent);
             }
@@ -110,8 +231,6 @@ public class DealerManageFragment extends Fragment {
     }
 
     private void showStatDialog() {
-
-
         final List<Integer> string1= Arrays.asList(UserStatCode.ONLINE,UserStatCode.OFFLINE,UserStatCode.BEOUT);
         final List<String> string2= Arrays.asList("在线","离开","离线");
         int checkNum=2;
@@ -219,6 +338,24 @@ public class DealerManageFragment extends Fragment {
         dialog.show();
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(dealerManageReceiver);
+    }
+
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(DealerManageReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    class DealerManageReceiver extends BroadcastReceiver{
+        public static final String EVENT="DealerManageReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            fillInTop();
+        }
+    }
 
     private boolean fillInUser(String json) {
         Gson gson=new Gson();

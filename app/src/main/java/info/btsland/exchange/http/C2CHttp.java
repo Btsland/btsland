@@ -15,6 +15,7 @@ import okhttp3.Response;
 
 public class C2CHttp {
     protected static String url="http://123.1.154.214:8080/";
+//    protected static String url="http://192.168.0.100:8080/";
 //    protected static String url="http://172.25.234.1:8080/";
     protected static OkHttpClient client = new OkHttpClient();
 

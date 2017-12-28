@@ -39,6 +39,7 @@ import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.ui.activity.AccountC2CTypesActivity;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.TransferActivity;
@@ -398,7 +399,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         new QueryAccountThread(name,handler).start();
     }
     private static BaseThread queryDealer;
-    static class QueryDealer extends BaseThread{
+    private static class QueryDealer extends BaseThread{
         @Override
         public void execute() {
             UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
@@ -447,7 +448,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 if(accountObject!=null){
                     account=accountObject.name;
                     UserManageFragment.sendBroadcast(getInstance(),2);
-                    handler.sendEmptyMessage(1);
+                    if(handler!=null){
+
+                        handler.sendEmptyMessage(1);
+                    }
                 }
                 UserHttp.queryAccount(name, new Callback() {
                     @Override
@@ -460,8 +464,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         dealer=gson.fromJson(json,User.class);
                         Log.e(TAG, "onResponse: dealer:"+ dealer);
                         PurseFragment.sendBroadcast(getInstance());
+//                        LocalBroadcastManager.getInstance(getInstance()).sendBroadcast(new Intent(AccountC2CTypesActivity.AccountTypeReceiver.EVENT));
+                        AccountC2CTypesActivity.sendBroadcast(getInstance());
                         if(dealer!=null){
-                            ExchangeListFragment.sendBroadcast(getInstance());
                             switch (dealer.getType()){
                                 case UserTypeCode.ACCOUNT:
                                     if(queryDealer!=null){
@@ -481,7 +486,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            List<User> users = gson.fromJson(response.body().string(),new TypeToken<List<User>>() {}.getType() );
+                                            String json = response.body().string();
+                                            Log.e(TAG, "onResponse: "+ json);
+                                            List<User> users = gson.fromJson(json,new TypeToken<List<User>>() {}.getType() );
                                             if(users!=null&&users.size()>0){
                                                 for(int i=0;i<users.size();i++){
                                                     helpUserMap.put(users.get(i).getDealerId(),users.get(i));

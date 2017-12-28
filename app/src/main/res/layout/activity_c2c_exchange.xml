@@ -22,294 +22,258 @@
         app:layout_constraintBottom_toTopOf="@+id/tv_c2c_cancel">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
-            <android.support.constraint.ConstraintLayout
+            android:padding="5dp"
+            android:background="@drawable/row_bottom_border">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/edit_text"
-                android:padding="2dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_dealerName"
                     android:layout_width="0dp"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_height="40dp"
                     android:gravity="center|right"
-                    android:text="承兑商昵称："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_dealerName_text"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_dealerName_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_dealerName_text"/>
+                    android:text="承兑商昵称："/>
                 <TextView
                     android:id="@+id/tv_exchange_dealerName_text"
                     android:layout_width="0dp"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="比特大陆"
-                    android:background="@drawable/row_bottom_border"
-                    android:textColor="@color/black"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_dealerName"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_dealerId_text"/>
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_dealerId"
-                    app:layout_constraintHorizontal_weight="4"
                     android:layout_width="0dp"
+                    android:layout_weight="4"
                     android:layout_height="40dp"
                     android:gravity="center|right"
-                    android:text="承兑商帐号："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_dealerId_text"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_dealerId_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_dealerId_text"/>
+                    android:text="资金帐号：" />
                 <TextView
                     android:id="@+id/tv_exchange_dealerId_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="Btsland001"
-                    android:background="@drawable/row_bottom_border"
-                    android:textColor="@color/black"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_dealerId"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_dealerName_text"
-                    app:layout_constraintBottom_toTopOf="@+id/lv_exchange_type_text"/>
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_exchange_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_type"
-                    app:layout_constraintHorizontal_weight="4"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:gravity="top|right"
+                    android:layout_weight="4"
+                    android:layout_height="match_parent"
+                    android:gravity="center|right"
                     android:paddingTop="10dp"
-                    android:text="承兑商&#160;&#160;&#8201;&#160;&#160;&#8201;\n收款帐号："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/lv_exchange_type_text"
-                    app:layout_constraintTop_toTopOf="@+id/lv_exchange_type_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/lv_exchange_type_text"/>
+                    android:text="承兑商收款帐号："/>
                 <ListView
                     android:id="@+id/lv_exchange_type_text"
-                    app:layout_constraintHorizontal_weight="6"
                     android:layout_width="0dp"
+                    android:layout_weight="6"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_type"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_dealerId_text"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_noteNo_text"/>
+                    android:gravity="center"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_noteNo"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center|right"
                     android:text="流水号："
-                    android:visibility="gone"
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_noteNo_text"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_noteNo_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_noteNo_text"/>
+                    android:visibility="gone"/>
                 <TextView
                     android:id="@+id/tv_exchange_noteNo_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="2017121965658"
-                    android:visibility="gone"
-                    android:background="@drawable/row_bottom_border"
                     android:textColor="@color/black"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_noteNo"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/lv_exchange_type_text"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_quote_text"/>
+                    android:visibility="gone"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_quote"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center|right"
-                    android:text="目标资产："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_quote_text"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_quote_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_quote_text"/>
+                    android:text="目标资产："/>
                 <TextView
                     android:id="@+id/tv_exchange_quote_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="CNY"
-                    android:background="@drawable/row_bottom_border"
-                    android:textColor="@color/black"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_quote"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_noteNo_text"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_brokerage_text"/>
+                    android:textColor="@color/black"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_brokerage"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center|right"
                     android:text="手续费："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_brokerage_text"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_brokerage_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_brokerage_text"/>
+                    />
                 <TextView
                     android:id="@+id/tv_exchange_brokerage_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center"
-                    android:text="0.5%"
-                    android:background="@drawable/row_bottom_border"
-                    android:textColor="@color/color_font_blue"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_brokerage"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_quote_text"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_remarkCode"/>
+                    android:textColor="@color/color_font_blue"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_remarkCode"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center|right"
-                    android:text="充值码："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toRightOf="@+id/tv_exchange_brokerage"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_remarkCode_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_remarkCode_text"/>
-                <View
-                    android:id="@+id/tv_exchange_remarkCode_back"
+                    android:text="充值码："/>
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_remarkCode"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_brokerage_text"
-                    app:layout_constraintBottom_toTopOf="@+id/tv_exchange_pay_text"
-                    app:layout_constraintRight_toRightOf="parent"/>
-                <TextView
-                    android:id="@+id/tv_exchange_remarkCode_text"
-                    app:layout_constraintHorizontal_weight="6"
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:text="qWTfeA"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/color_font_red"
-                    app:layout_constraintHorizontal_chainStyle="packed"
-                    app:layout_constraintLeft_toLeftOf="@+id/tv_exchange_remarkCode_back"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_remarkCode_back"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_remarkCode_back"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_remarkCode_text_copy"/>
-                <TextView
-                    android:id="@+id/tv_exchange_remarkCode_text_copy"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:gravity="center"
-                    android:layout_marginLeft="10dp"
-                    android:background="@drawable/image_copy"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_remarkCode_back"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_remarkCode_back"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_remarkCode_text"/>
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="6">
+                    <TextView
+                        android:id="@+id/tv_exchange_remarkCode_text"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:layout_marginLeft="40dp"
+                        android:textColor="@color/color_font_red" />
+                    <TextView
+                        android:id="@+id/tv_exchange_remarkCode_text_copy"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:gravity="center"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/image_copy"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
                 <TextView
                     android:id="@+id/tv_exchange_pay"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:gravity="center|right"
                     android:text="付款方式："
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/tv_exchange_pay_back"
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_pay_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_pay_text"/>
-                <View
-                    android:id="@+id/tv_exchange_pay_back"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:background="@drawable/row_bottom_border"/>
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:background="@drawable/row_bottom_border"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_pay"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_remarkCode"
-                    app:layout_constraintBottom_toTopOf="@+id/ed_exchange_aspect_text"/>
-                <Spinner
-                    android:id="@+id/tv_exchange_pay_text"
-                    android:layout_width="0dp"
-                    android:layout_height="40dp"
-                    android:gravity="center"
-                    android:text="付款方式："
-                    app:layout_constraintTop_toTopOf="@+id/tv_exchange_pay_back"
-                    app:layout_constraintLeft_toLeftOf="@+id/tv_exchange_pay_back"
-                    app:layout_constraintRight_toRightOf="@+id/tv_exchange_pay_back"
-                    app:layout_constraintBottom_toBottomOf="@+id/tv_exchange_pay_back"/>
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:orientation="horizontal"
+                    android:background="@drawable/row_bottom_border">
+                    <Spinner
+                        android:id="@+id/sp_exchange_pay_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"/>
+                    <TextView
+                        android:id="@+id/tv_exchange_pay_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_aspect"
-                    app:layout_constraintHorizontal_weight="4"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
                     android:layout_height="50dp"
                     android:gravity="center|right"
-                    android:text="充值额度："
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/ed_exchange_aspect_text"
-                    app:layout_constraintTop_toTopOf="@+id/ed_exchange_aspect_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/ed_exchange_aspect_text"/>
+                    android:text="充值额度："/>
                 <EditText
                     android:id="@+id/ed_exchange_aspect_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
-                    android:layout_height="40dp"
+                    android:layout_height="36dp"
                     android:gravity="center"
                     android:background="@drawable/edit_text"
-                    android:layout_margin="5dp"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_aspect"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_exchange_pay_text"
-                    app:layout_constraintBottom_toTopOf="@+id/ed_exchange_remark_text"/>
+                    android:layout_margin="1dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_exchange_remark"
-                    app:layout_constraintHorizontal_weight="2"
+                    android:layout_weight="4"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:gravity="top|right"
                     android:text="备注："
                     android:paddingTop="10dp"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintRight_toLeftOf="@+id/ed_exchange_remark_text"
-                    app:layout_constraintTop_toTopOf="@+id/ed_exchange_remark_text"
-                    app:layout_constraintBottom_toBottomOf="@+id/ed_exchange_remark_text"/>
+                    />
                 <EditText
                     android:id="@+id/ed_exchange_remark_text"
-                    app:layout_constraintHorizontal_weight="6"
+                    android:layout_weight="6"
                     android:layout_width="0dp"
                     android:layout_height="90dp"
                     android:gravity="top|left"
                     android:lines="3"
                     android:padding="10dp"
                     android:layout_margin="5dp"
-                    android:background="@drawable/edit_text"
-                    app:layout_constraintLeft_toRightOf="@+id/tv_exchange_remark"
-                    app:layout_constraintRight_toRightOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ed_exchange_aspect_text"
-                    app:layout_constraintBottom_toBottomOf="parent"/>
-            </android.support.constraint.ConstraintLayout>
+                    android:background="@drawable/edit_text"/>
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"

@@ -5,8 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -16,10 +19,16 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.kaopiz.kprogresshud.KProgressHUD;
+
+import java.io.IOException;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
+import info.btsland.app.ui.activity.AccountC2CTypesActivity;
 import info.btsland.app.ui.activity.BorrowActivity;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.LookActivity;
@@ -30,6 +39,11 @@ import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.MyConstraintLayout;
+import info.btsland.app.ui.view.PasswordDialog;
+import info.btsland.exchange.http.UserHttp;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +62,9 @@ public class UserManageFragment extends Fragment {
     private TextView tvPurseAllAsset;
     //充提记录
     private TextView tvPurseRW;
+    //c2c支付帐号
+    private TextView tvPueseTypes;
+
     //交易记录
     private TextView tvPurseDeal;
     //全部挂单
@@ -184,6 +201,7 @@ public class UserManageFragment extends Fragment {
         tvPurseAllAsset=view.findViewById(R.id.tv_purse_allAsset);
         //充提记录
         tvPurseRW=view.findViewById(R.id.tv_purse_rw);
+        tvPueseTypes=view.findViewById(R.id.tv_purse_types);
         //交易记录
         tvPurseDeal=view.findViewById(R.id.tv_purse_deal);
         //全部挂单
@@ -223,6 +241,7 @@ public class UserManageFragment extends Fragment {
         tvPurseTransferAccounts.setOnClickListener(onCLickListener);
         tvGoRegister.setOnClickListener(onCLickListener);
         tvBorrow.setOnClickListener(onCLickListener);
+        tvPueseTypes.setOnClickListener(onCLickListener);
 
     }
     public static void sendBroadcast(Context context,Double total,String coin){
@@ -279,6 +298,49 @@ public class UserManageFragment extends Fragment {
                     //充值记录
                     Intent rw=new Intent(getActivity(), PurseAccessRecordActivity.class);
                     getActivity().startActivity(rw);
+                    break;
+                case R.id.tv_purse_types:
+                    //c2c支付帐号
+                    if(BtslandApplication.dealer!=null){
+                        Intent types=new Intent(getActivity(), AccountC2CTypesActivity.class);
+                        types.putExtra("type",0);
+                        getActivity().startActivity(types);
+                    }else {
+                        Bundle bundle=new Bundle();
+                        bundle.putString("want","hud");
+                        Message msg=Message.obtain();
+                        msg.what=1;
+                        msg.setData(bundle);
+                        registerHandler.sendMessage(msg);
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                UserHttp.registerAccount(BtslandApplication.accountObject.name, "", new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        int a= Integer.parseInt(response.body().string());
+                                        Bundle bundle=new Bundle();
+                                        bundle.putString("want","register");
+                                        Message msg=Message.obtain();
+                                        msg.setData(bundle);
+                                        if(a>0){
+                                            msg.what=1;
+                                            registerHandler.sendMessage(msg);
+                                        }else {
+                                            msg.what=2;
+                                            registerHandler.sendMessage(msg);
+                                        }
+                                    }
+                                });
+                            }
+                        }).start();
+
+                    }
                     break;
                 case R.id.tv_purse_deal:
                     //交易记录
@@ -370,6 +432,43 @@ public class UserManageFragment extends Fragment {
             return false;
         }
     }
+    private KProgressHUD hud;
+    private Handler registerHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            String want = msg.getData().getString("want");
+            if(want.equals("register")) {
+                if (msg.what == 1) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if(hud!=null&&hud.isShowing()){
+                        hud.dismiss();
+                    }
+                    Toast.makeText(getActivity(),"第一次使用注册成功",Toast.LENGTH_SHORT).show();
+                    Intent types=new Intent(getActivity(), AccountC2CTypesActivity.class);
+                    types.putExtra("type",0);
+                    getActivity().startActivity(types);
+                }else {
+                    if(hud!=null&&hud.isShowing()){
+                        hud.dismiss();
+                    }
+                    Toast.makeText(getActivity(),"注册失败",Toast.LENGTH_SHORT).show();
+                }
+            }else if(want.equals("hud")){
+                if(msg.what==1){
+                    if(hud==null){
+                        hud=KProgressHUD.create(getActivity());
+                    }
+                    hud.setLabel("请稍等。。。");
+                    hud.show();
+                }
+
+            }
+        }
+    };
 
     @Override
     public void onAttach(Context context) {

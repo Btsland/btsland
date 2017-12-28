@@ -25,6 +25,7 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.ui.activity.DealerInfoActivity;
 import info.btsland.app.ui.activity.DealerNoteListActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.AppListDialog;
@@ -208,7 +209,8 @@ public class DealerManageFragment extends Fragment {
         tvInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Intent intent=new Intent(getActivity(), DealerInfoActivity.class);
+                getActivity().startActivity(intent);
             }
         });
         tvHaving.setOnClickListener(new View.OnClickListener() {

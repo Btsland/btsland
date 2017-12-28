@@ -17,6 +17,8 @@ public class UserInfo {
 
     private Integer type;
 
+    private String c2cAccount;
+
     public Integer getId() {
         return id;
     }
@@ -79,5 +81,13 @@ public class UserInfo {
 
     public void setType(Integer type) {
         this.type = type;
+    }
+
+    public String getC2cAccount() {
+        return c2cAccount;
+    }
+
+    public void setC2cAccount(String c2cAccount) {
+        this.c2cAccount = c2cAccount == null ? null : c2cAccount.trim();
     }
 }

@@ -21,7 +21,7 @@
             android:layout_margin="5dp">
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_excDet_stat_tab"
@@ -31,20 +31,20 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_stat"
                         android:layout_width="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_font_blue"
                         android:gravity="center"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_dealerId"
@@ -66,7 +66,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_name"
@@ -88,7 +88,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -97,7 +97,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_phone"
@@ -110,7 +110,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_excDet_num_tab"
@@ -120,20 +120,21 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_num"
                         android:layout_width="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_font_red"
                         android:gravity="center"
+                        android:textStyle="bold"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -142,7 +143,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_brokerage"
@@ -150,12 +151,13 @@
                         android:text=""
                         android:textColor="@color/black"
                         android:gravity="center"
+                        android:textStyle="bold"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_excDet_remarkCode_tab"
@@ -165,20 +167,22 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_remarkCode"
                         android:layout_width="wrap_content"
                         android:text=""
-                        android:textColor="@color/black"
+                        android:textColor="@color/color_font_blue"
                         android:gravity="center"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:id="@+id/tv_excDet_realNo_tab"
@@ -188,7 +192,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_realNo"
@@ -201,16 +205,16 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
-                    android:text="帐号类型："
+                    android:text="收款帐号："
                     android:gravity="center"
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_realType"
@@ -223,7 +227,7 @@
             </LinearLayout>
             <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="40dp"
             android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -232,7 +236,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_startTime"
@@ -245,7 +249,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,7 +258,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_accountReTime"
@@ -267,7 +271,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
                     android:layout_width="wrap_content"
@@ -276,7 +280,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_endTime"
@@ -289,7 +293,7 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="40dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="备注信息："
@@ -297,7 +301,7 @@
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
                         android:id="@+id/tv_excDet_depict"

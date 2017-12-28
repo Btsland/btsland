@@ -118,13 +118,13 @@ public class ExchangeListFragment extends Fragment {
     class QueryNotes extends BaseThread{
         public static final int HAVING = 1;
         public static final int CLINCH = 2;
-        private int type;
-        public QueryNotes(int type) {
-            this.type=type;
+        private int want;
+        public QueryNotes(int want) {
+            this.want=want;
         }
         @Override
         public void execute() {
-            if (type == HAVING) {
+            if (want == HAVING) {
                 if (BtslandApplication.account != null) {
                     String coin = "";
                     if (type == IN) {
@@ -132,6 +132,8 @@ public class ExchangeListFragment extends Fragment {
                     } else if (type == OUT) {
                         coin = "RMB";
                     }
+
+                    Log.e(TAG, "execute: coin:"+coin );
                     NoteHttp.queryAllHavingNoteByAccount(BtslandApplication.account, coin, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {
@@ -147,7 +149,7 @@ public class ExchangeListFragment extends Fragment {
                         }
                     });
                 }
-            } else if(type==CLINCH){
+            } else if(want==CLINCH){
                 if (BtslandApplication.account != null) {
                     String coin = "";
                     if (type == IN) {
@@ -155,6 +157,7 @@ public class ExchangeListFragment extends Fragment {
                     } else if (type == OUT) {
                         coin = "RMB";
                     }
+                    Log.e(TAG, "execute: coin:"+coin );
                     NoteHttp.queryAllClinchNoteByAccount(BtslandApplication.account, coin, new Callback() {
                         @Override
                         public void onFailure(Call call, IOException e) {

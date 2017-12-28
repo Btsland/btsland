@@ -83,7 +83,6 @@ public class DealerListAdapter extends BaseAdapter {
         tvName.setText(dealerData.user.getDealerName());
         tvDepict.setText(dealerData.user.getDepict());
         tvBrokerage.setText(dealerData.user.getBrokerageIn()*100+"%");
-        tvAccountNo.setText(dealerData.user.getAccount());
         tvContact.setOnClickListener(dealerData.constactOnClickListener);
         tvStat.setText(""+ UserStatUtil.getUserStat(dealerData.user.getStat()));
         if(type== DealerListFragment.IN) {
@@ -108,8 +107,10 @@ public class DealerListAdapter extends BaseAdapter {
         }
 
         if(dealerData.user.userInfo!=null){
+            tvAccountNo.setText(dealerData.user.userInfo.getC2cAccount());
             tvLevel.setText(""+dealerData.user.userInfo.getLevel());
         }else {
+            tvAccountNo.setText("");
             tvLevel.setText(""+0.0);
         }
         if(dealerData.user.userRecord!=null){
@@ -162,7 +163,7 @@ public class DealerListAdapter extends BaseAdapter {
 
     }
     public void queryTotal(int i){
-        final String account = dataList.get(i).user.getAccount();
+        final String account = dataList.get(i).user.userInfo.getC2cAccount();
         final int a=i;
         new Thread(new Runnable() {
             @Override

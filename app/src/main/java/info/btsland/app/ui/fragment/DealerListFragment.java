@@ -128,11 +128,13 @@ public class DealerListFragment extends Fragment {
         for(int i=0;i<users.size();i++){
             DealerListAdapter.DealerData dealerData=new DealerListAdapter.DealerData();
             User user=users.get(i);
-            dealerData.user=user;
-            if (dataList.size()>i&&dataList.get(i)!=null) {
-                dataList.get(i).replce(dealerData);
-            } else {
-                dataList.add(dealerData);
+            if(user.getType()==3) {
+                dealerData.user = user;
+                if (dataList.size() > i && dataList.get(i) != null) {
+                    dataList.get(i).replce(dealerData);
+                } else {
+                    dataList.add(dealerData);
+                }
             }
         }
         handler.sendEmptyMessage(1);

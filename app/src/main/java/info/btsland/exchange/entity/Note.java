@@ -1,8 +1,9 @@
 package info.btsland.exchange.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Note {
+public class Note implements Serializable {
     private Integer id;
 
     private String dealerId;
@@ -203,5 +204,31 @@ public class Note {
 
     public void setFlowPath(String flowPath) {
         this.flowPath = flowPath == null ? null : flowPath.trim();
+    }
+
+    @Override
+    public String toString() {
+        return "Note{" +
+                "id=" + id +
+                ", dealerId='" + dealerId + '\'' +
+                ", noteNo='" + noteNo + '\'' +
+                ", assetNum=" + assetNum +
+                ", assetCoin='" + assetCoin + '\'' +
+                ", brokerage=" + brokerage +
+                ", account='" + account + '\'' +
+                ", realNo='" + realNo + '\'' +
+                ", realType='" + realType + '\'' +
+                ", realDepict='" + realDepict + '\'' +
+                ", startTime=" + startTime +
+                ", accountReTime=" + accountReTime +
+                ", dealerReTime=" + dealerReTime +
+                ", endTime=" + endTime +
+                ", remarkCode='" + remarkCode + '\'' +
+                ", statNo=" + statNo +
+                ", depict='" + depict + '\'' +
+                ", flowPath='" + flowPath + '\'' +
+                ", dealerName='" + dealerName + '\'' +
+                ", dealerPhone='" + dealerPhone + '\'' +
+                '}';
     }
 }

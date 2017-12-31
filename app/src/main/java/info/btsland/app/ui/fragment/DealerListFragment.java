@@ -1,26 +1,23 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import info.btsland.app.Adapter.DealerListAdapter;
 import info.btsland.app.BtslandApplication;
@@ -28,10 +25,6 @@ import info.btsland.app.R;
 import info.btsland.app.ui.activity.C2CExchangeActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.exchange.entity.User;
-import info.btsland.exchange.http.UserHttp;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 public class DealerListFragment extends Fragment {
     private static String TAG="DealerListFragment";
@@ -43,6 +36,7 @@ public class DealerListFragment extends Fragment {
     private ListView listView;
     private DealerListAdapter dealerListAdapter;
     private List<DealerListAdapter.DealerData> dataList;
+    private AllDealersReceiver allDealersReceiver;
 
     public DealerListFragment() {
     }
@@ -58,6 +52,9 @@ public class DealerListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.type=getArguments().getInt("type");
+        IntentFilter intentFilter=new IntentFilter(AllDealersReceiver.EVENT);
+        allDealersReceiver=new AllDealersReceiver();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(allDealersReceiver,intentFilter);
     }
 
     @Override
@@ -66,6 +63,7 @@ public class DealerListFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_dealer_list, container, false);
         init(view);
         fillIn();
+        fillInUser();
         return view;
     }
 
@@ -78,13 +76,6 @@ public class DealerListFragment extends Fragment {
         dealerListAdapter=new DealerListAdapter(getActivity());
         dealerListAdapter.setType(type);
         listView.setAdapter(dealerListAdapter);
-        Timer timer=new Timer();
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                queryAllUser();
-            }
-        },0,10000);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -104,47 +95,49 @@ public class DealerListFragment extends Fragment {
         }
     }
 
-    private void queryAllUser(){
-        UserHttp.queryAllDealer(0, new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String str = response.body().string();
-                if(str!=null&&!str.equals("")){
-                    fillInUser(str);
-                }
-            }
-        });
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(allDealersReceiver);
     }
 
-    private void fillInUser(String json){
-        Gson gson=new Gson();
-        Log.e(TAG, "fillInList: json"+json );
-        List<User> users = gson.fromJson(json,new TypeToken<List<User>>() {}.getType());
-        for(int i=0;i<users.size();i++){
-            DealerListAdapter.DealerData dealerData=new DealerListAdapter.DealerData();
-            User user=users.get(i);
-            if(user.getType()==3) {
-                dealerData.user = user;
-                if (dataList.size() > i && dataList.get(i) != null) {
-                    dataList.get(i).replce(dealerData);
-                } else {
-                    dataList.add(dealerData);
+    private void fillInUser(){
+        if(BtslandApplication.dealers!=null) {
+            synchronized (BtslandApplication.dealers) {
+                for (int i = 0; i < BtslandApplication.dealers.size(); i++) {
+                    DealerListAdapter.DealerData dealerData = new DealerListAdapter.DealerData();
+                    User user = BtslandApplication.dealers.get(i);
+                    if (user.getType() == 3) {
+                        dealerData.user = user;
+                        if (dataList.size() > i && dataList.get(i) != null) {
+                            dataList.get(i).replce(dealerData);
+                        } else {
+                            dataList.add(dealerData);
+                        }
+                    }
                 }
+                handler.sendEmptyMessage(1);
             }
         }
-        handler.sendEmptyMessage(1);
     }
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(AllDealersReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    class AllDealersReceiver extends BroadcastReceiver{
+        public static final String EVENT="AllDealersReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: " );
+            fillInUser();
 
-
+        }
+    }
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             dealerListAdapter.setDataList(dataList);
+            dealerListAdapter.notifyDataSetChanged();
         }
     };
 }

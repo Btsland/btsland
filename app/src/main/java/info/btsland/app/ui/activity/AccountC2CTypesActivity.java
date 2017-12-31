@@ -1,46 +1,37 @@
 package info.btsland.app.ui.activity;
 
-import android.accounts.Account;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.internal.bind.DateTypeAdapter;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.IOException;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import info.btsland.app.Adapter.AccountTypesAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.view.AccountTpyeDialog;
 import info.btsland.app.ui.view.AppDialog;
-import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.exchange.entity.RealAsset;
-import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.RealAssetHttp;
 import info.btsland.exchange.http.UserHttp;
-import info.btsland.exchange.utils.GsonDateAdapter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -75,6 +66,46 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
         init();
         fillIn();
         fillInBody();
+        if(BtslandApplication.dealer==null) {
+            Bundle bundle=new Bundle();
+            bundle.putString("want","hud");
+            Message msg=Message.obtain();
+            msg.what=1;
+            msg.setData(bundle);
+            registerHandler.sendMessage(msg);
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    UserHttp.registerAccount(BtslandApplication.accountObject.name, "", new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            String json = response.body().string();
+                            if (json.indexOf("error") != -1) {
+                                BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this, json);
+                            } else {
+                                Bundle bundle = new Bundle();
+                                bundle.putString("want", "register");
+                                Message msg = Message.obtain();
+                                msg.setData(bundle);
+                                int a = Integer.parseInt(json);
+                                if (a > 0) {
+                                    msg.what = 1;
+                                    registerHandler.sendMessage(msg);
+                                } else {
+                                    msg.what = 2;
+                                    registerHandler.sendMessage(msg);
+                                }
+                            }
+                        }
+                    });
+                }
+            }).start();
+        }
     }
 
     private void init() {
@@ -87,7 +118,23 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
     private void fillIn(){
         if(BtslandApplication.dealer!=null){
             if(BtslandApplication.dealer.realAssets!=null){
-                adapter.setAsset(BtslandApplication.dealer.realAssets);
+                List<RealAsset> accountRealAssets=new ArrayList<>();
+                List<RealAsset> dealerRealAssets=new ArrayList<>();
+                synchronized (BtslandApplication.dealer.realAssets) {
+                    for (int i = 0; i < BtslandApplication.dealer.realAssets.size(); i++) {
+                        RealAsset realAsset = BtslandApplication.dealer.realAssets.get(i);
+                        if (realAsset.getType() == DEALER) {
+                            dealerRealAssets.add(realAsset);
+                        } else if (realAsset.getType() == ACCOUNT) {
+                            accountRealAssets.add(realAsset);
+                        }
+                    }
+                }
+                if(type==DEALER){
+                    adapter.setAsset(dealerRealAssets);
+                }else if(type==ACCOUNT) {
+                    adapter.setAsset(accountRealAssets);
+                }
                 handler.sendEmptyMessage(1);
             }
         }
@@ -109,43 +156,8 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
         @Override
         public void onCancel(final List<RealAsset> realAssets, final int i) {
             if(BtslandApplication.dealer.getPassword()==null||BtslandApplication.dealer.getPassword().equals("")){
-                if(type==ACCOUNT){
+                if(i<realAssets.size()){
                     cancelRealAsset(realAssets.get(i));
-                }else if(type==DEALER){
-                    PasswordDialog passwordDialog = new PasswordDialog(AccountC2CTypesActivity.this);
-                    passwordDialog.setMsg("请输入密码");
-                    passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                        @Override
-                        public void onConfirm(AlertDialog dialog, String passwordString) {
-                            UserHttp.loginDealer(BtslandApplication.accountObject.name, passwordString, new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    String json=response.body().string();
-                                    GsonBuilder gsonBuilder=new GsonBuilder();
-                                    gsonBuilder.registerTypeAdapter(Date.class,new DateTypeAdapter());
-                                    Gson gson=gsonBuilder.create();
-                                    BtslandApplication.dealer=gson.fromJson(json,User.class);
-                                    if(BtslandApplication.dealer!=null){
-                                        cancelRealAsset(realAssets.get(i));
-                                    }else {
-                                        AccountHandler.sendEmptyMessage(5);
-                                    }
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onReject(AlertDialog dialog) {
-
-                        }
-                    });
-                    passwordDialog.show();
                 }
             }
 
@@ -164,11 +176,16 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
 
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        int a = Integer.parseInt(response.body().string());
-                        if(a>0){
-                            AccountHandler.sendEmptyMessage(3);
+                        String json = response.body().string();
+                        if(json.indexOf("error")!=-1){
+                            BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this,json);
                         }else {
-                            AccountHandler.sendEmptyMessage(4);
+                            int a= Integer.parseInt(json);
+                            if (a > 0) {
+                                AccountHandler.sendEmptyMessage(3);
+                            } else {
+                                AccountHandler.sendEmptyMessage(4);
+                            }
                         }
                     }
                 });
@@ -180,51 +197,10 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
     class IOnItemClickListener implements AccountTypesAdapter.OnItemClickListener {
         @Override
         public void onItemClick(final List<RealAsset> realAssets, final int i) {
-            if(BtslandApplication.dealer.getPassword()==null||BtslandApplication.dealer.getPassword().equals("")){
-                if(type==ACCOUNT){
-                    updateRessAsset(realAssets.get(i));
-                }else if(type==DEALER){
-                    PasswordDialog passwordDialog = new PasswordDialog(AccountC2CTypesActivity.this);
-                    passwordDialog.setMsg("请输入密码");
-                    passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                        @Override
-                        public void onConfirm(AlertDialog dialog, String passwordString) {
-                            UserHttp.loginDealer(BtslandApplication.accountObject.name, passwordString, new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    String json=response.body().string();
-                                    GsonBuilder gsonBuilder=new GsonBuilder();
-                                    gsonBuilder.registerTypeAdapter(Date.class,new DateTypeAdapter());
-                                    Gson gson=gsonBuilder.create();
-                                    BtslandApplication.dealer=gson.fromJson(json,User.class);
-                                    if(BtslandApplication.dealer!=null){
-                                        updateRessAsset(realAssets.get(i));
-                                    }else {
-                                        AccountHandler.sendEmptyMessage(5);
-                                    }
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onReject(AlertDialog dialog) {
-
-                        }
-                    });
-                    passwordDialog.show();
-                }
-            }
-
-
+            updateRealAsset(realAssets.get(i));
         }
     }
-    private void updateRessAsset(RealAsset realAsset){
+    private void updateRealAsset(RealAsset realAsset){
         AccountTpyeDialog accountTpyeDialog=new AccountTpyeDialog(AccountC2CTypesActivity.this,realAsset);
         accountTpyeDialog.setListener(new AccountTpyeDialog.OnDialogInterationListener() {
             @Override
@@ -233,7 +209,8 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        RealAssetHttp.updateRealAsset(BtslandApplication.dealer.getDealerId(),BtslandApplication.dealer.getPassword(), BtslandApplication.dealer.getAccount(),realAsset, new Callback() {
+                        Log.e(TAG, "run: "+BtslandApplication.dealer );
+                        RealAssetHttp.updateRealAsset(BtslandApplication.dealer.getDealerId(), BtslandApplication.dealer.getAccount(),realAsset, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
 
@@ -241,11 +218,16 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                int a = Integer.parseInt(response.body().string());
-                                if(a>0){
-                                    AccountHandler.sendEmptyMessage(3);
+                                String json = response.body().string();
+                                if(json.indexOf("error")!=-1){
+                                    BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this,json);
                                 }else {
-                                    AccountHandler.sendEmptyMessage(4);
+                                    int a= Integer.parseInt(json);
+                                    if (a > 0) {
+                                        AccountHandler.sendEmptyMessage(3);
+                                    } else {
+                                        AccountHandler.sendEmptyMessage(4);
+                                    }
                                 }
                             }
                         });
@@ -263,47 +245,13 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
     class IAddOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if(BtslandApplication.dealer.getPassword()==null||BtslandApplication.dealer.getPassword().equals("")){
-                if(type==ACCOUNT){
-                    updateRessAsset(null);
-                }else if(type==DEALER){
-                    PasswordDialog passwordDialog = new PasswordDialog(AccountC2CTypesActivity.this);
-                    passwordDialog.setMsg("请输入密码");
-                    passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                        @Override
-                        public void onConfirm(AlertDialog dialog, String passwordString) {
-                            UserHttp.loginDealer(BtslandApplication.accountObject.name, passwordString, new Callback() {
-                                @Override
-                                public void onFailure(Call call, IOException e) {
-
-                                }
-
-                                @Override
-                                public void onResponse(Call call, Response response) throws IOException {
-                                    String json=response.body().string();
-                                    GsonBuilder gsonBuilder=new GsonBuilder();
-                                    gsonBuilder.registerTypeAdapter(Date.class,new DateTypeAdapter());
-                                    Gson gson=gsonBuilder.create();
-                                    BtslandApplication.dealer=gson.fromJson(json,User.class);
-                                    if(BtslandApplication.dealer!=null){
-                                        updateRessAsset(null);
-                                    }else {
-                                        AccountHandler.sendEmptyMessage(5);
-                                    }
-                                }
-                            });
-
-                        }
-
-                        @Override
-                        public void onReject(AlertDialog dialog) {
-
-                        }
-                    });
-                    passwordDialog.show();
-                }
+            if (BtslandApplication.dealer != null) {
+                RealAsset realAsset=new RealAsset();
+                realAsset.setType(type);
+                updateRealAsset(realAsset);
+            } else {
+                AccountHandler.sendEmptyMessage(5);
             }
-
         }
     }
     private void fillInHead(){
@@ -402,10 +350,46 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: " );
             fillIn();
         }
     }
 
+    private Handler registerHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            String want = msg.getData().getString("want");
+            if(want.equals("register")) {
+                if (msg.what == 1) {
+                    try {
+                        Thread.sleep(2000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if(hud!=null&&hud.isShowing()){
+                        hud.dismiss();
+                    }
+                    Toast.makeText(AccountC2CTypesActivity.this,"第一次使用注册成功",Toast.LENGTH_SHORT).show();
+                    Intent types=new Intent(AccountC2CTypesActivity.this, AccountC2CTypesActivity.class);
+                    types.putExtra("type",0);
+                    AccountC2CTypesActivity.this.startActivity(types);
+                }else {
+                    if(hud!=null&&hud.isShowing()){
+                        hud.dismiss();
+                    }
+                    Toast.makeText(AccountC2CTypesActivity.this,"注册失败",Toast.LENGTH_SHORT).show();
+                }
+            }else if(want.equals("hud")){
+                if(msg.what==1){
+                    if(hud==null){
+                        hud=KProgressHUD.create(AccountC2CTypesActivity.this);
+                    }
+                    hud.setLabel("请稍等。。。");
+                    hud.show();
+                }
 
+            }
+        }
+    };
 
 }

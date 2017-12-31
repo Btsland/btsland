@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/back_dialog"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_app_dialog_title"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="提示"
+        android:textColor="@color/color_black"
+        android:layout_height="40dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:text="从："
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_dialog_from"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:textColor="@color/black"
+                android:layout_height="40dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:text="转给："
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_dialog_to"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:textColor="@color/color_font_blue"
+                android:layout_height="40dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:text="类型："
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_dialog_coin"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:layout_height="40dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:text="数量："
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_dialog_num"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:textColor="@color/color_font_red"
+                android:layout_height="40dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:gravity="center|right"
+                android:text="备注："
+                android:layout_height="40dp" />
+            <TextView
+                android:id="@+id/tv_dialog_memo"
+                android:layout_width="0dp"
+                android:layout_weight="7"
+                android:gravity="center"
+                android:layout_height="40dp" />
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_app_dialog_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/color_frenchGrey"
+            android:background="@drawable/select_dialog_btn"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="1px"
+            android:background="@color/color_frenchGrey"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_app_dialog_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@color/color_frenchGrey"
+            android:background="@drawable/select_dialog_btn"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

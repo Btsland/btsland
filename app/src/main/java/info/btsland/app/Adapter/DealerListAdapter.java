@@ -107,7 +107,7 @@ public class DealerListAdapter extends BaseAdapter {
         }
 
         if(dealerData.user.userInfo!=null){
-            tvAccountNo.setText(dealerData.user.userInfo.getC2cAccount());
+            tvAccountNo.setText(dealerData.user.getDealerId());
             tvLevel.setText(""+dealerData.user.userInfo.getLevel());
         }else {
             tvAccountNo.setText("");
@@ -163,7 +163,7 @@ public class DealerListAdapter extends BaseAdapter {
 
     }
     public void queryTotal(int i){
-        final String account = dataList.get(i).user.userInfo.getC2cAccount();
+        final String account = dataList.get(i).user.getDealerId();
         final int a=i;
         new Thread(new Runnable() {
             @Override

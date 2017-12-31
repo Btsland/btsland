@@ -51,6 +51,23 @@ public class TradeHttp extends C2CHttp {
     }
 
     /**
+     * 更新订单
+     * @param noteNo
+     * @param realNo
+     * @param realType
+     * @param realDepict
+     * @param callback
+     */
+    public static void updateNoteReal(String noteNo,String realNo,String realType,String realDepict,Callback callback) {
+        String action="/trade/updateNoteReal";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("noteNo",noteNo);
+        paramMap.put("realNo",realNo);
+        paramMap.put("realType",realType);
+        paramMap.put("realDepict",realDepict);
+        post(action,paramMap,callback);
+    }
+    /**
      * 更新订单状态
      * @param noteNo
      * @param stat

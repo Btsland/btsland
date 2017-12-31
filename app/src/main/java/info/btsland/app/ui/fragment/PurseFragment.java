@@ -69,6 +69,7 @@ public class PurseFragment extends Fragment {
         fragments.add(userManageFragment);
         adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments);
         viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         viewPager.setOffscreenPageLimit(3);
         viewPager.setCurrentItem(0);
     }

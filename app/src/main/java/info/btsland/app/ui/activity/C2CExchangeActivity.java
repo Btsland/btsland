@@ -4,21 +4,19 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,8 +25,6 @@ import com.google.gson.reflect.TypeToken;
 import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.IOException;
-import java.io.Serializable;
-import java.util.List;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
@@ -39,7 +35,6 @@ import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.app.util.NumericUtil;
 import info.btsland.exchange.entity.Note;
-import info.btsland.exchange.entity.RealAsset;
 import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.TradeHttp;
 import info.btsland.exchange.http.UserHttp;
@@ -66,13 +61,13 @@ public class C2CExchangeActivity extends AppCompatActivity {
     private TextView tvNoteNo;
     private TextView tvQuote;
     private TextView tvBrokerage;
-    private Spinner spPays;
+//    private Spinner spPays;
     private EditText edtotalNum;
     private TextView tvRemarkCode;
     private EditText edRemark;
     private TextView tvRemafkCodeCopy;
     private TextView tvAspect;
-    private TextView tvPays;
+//    private TextView tvPays;
     private LinearLayout llTypes;
 
     private TextView tvConfirm;
@@ -106,9 +101,6 @@ public class C2CExchangeActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
-        appDialog.setMsg("C2C模块系统测试已经完成，APP客户端入口即将开发完成，当前展示的内容为测试数据，感谢您的使用和支持。");
-        appDialog.show();
     }
 
     private void init() {
@@ -118,18 +110,24 @@ public class C2CExchangeActivity extends AppCompatActivity {
         tvNoteNo=findViewById(R.id.tv_exchange_noteNo_text);
         tvQuote=findViewById(R.id.tv_exchange_quote_text);
         lvTypes=findViewById(R.id.lv_exchange_type_text);
-        spPays=findViewById(R.id.sp_exchange_pay_text);
+//        spPays=findViewById(R.id.sp_exchange_pay_text);
         edtotalNum=findViewById(R.id.ed_exchange_aspect_text);
         edRemark=findViewById(R.id.ed_exchange_remark_text);
         tvRemarkCode=findViewById(R.id.tv_exchange_remarkCode_text);
         tvRemafkCodeCopy=findViewById(R.id.tv_exchange_remarkCode_text_copy);
         tvConfirm=findViewById(R.id.tv_c2c_confirm);
         tvAspect=findViewById(R.id.tv_exchange_aspect);
-        tvPays=findViewById(R.id.tv_exchange_pay_text);
+//        tvPays=findViewById(R.id.tv_exchange_pay_text);
         llTypes=findViewById(R.id.ll_exchange_type);
+        if(type==IN){
+            tvConfirm.setText("确认充值");
+        }else if(type==OUT){
+            tvConfirm.setText("确认提现");
+        }
     }
 
     private void fillIn() {
+        Log.e(TAG, "fillIn: " );
         final int[] a = {0};
         if(type==IN){
             new Thread(new Runnable() {
@@ -140,12 +138,15 @@ public class C2CExchangeActivity extends AppCompatActivity {
                         public void onFailure(Call call, IOException e) {}
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String str = response.body().string();
-                            Log.e(TAG, "onResponse:dealer: "+str);
-                            fillInUser(str);
-                            a[0]++;
-                            if(a[0]==2) {
-                                handler.sendEmptyMessage(1);
+                            String json = response.body().string();
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                            }else {
+                                fillInUser(json);
+                                a[0]++;
+                                if (a[0] == 2) {
+                                    handler.sendEmptyMessage(1);
+                                }
                             }
                         }
                     });
@@ -157,18 +158,22 @@ public class C2CExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String str = response.body().string();
-                            fillInNote(str);
-                            a[0]++;
-                            if(a[0]==2){
-                                handler.sendEmptyMessage(1);
-                                //查询保证金
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        max = BtslandApplication.getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(dealer.userInfo.getC2cAccount(),"CNY");
-                                    }
-                                }).start();
+                            String json = response.body().string();
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                            }else {
+                                fillInNote(json);
+                                a[0]++;
+                                if (a[0] == 2) {
+                                    handler.sendEmptyMessage(1);
+                                    //查询保证金
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            max = BtslandApplication.getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(dealer.getDealerId(), "CNY");
+                                        }
+                                    }).start();
+                                }
                             }
                         }
                     });
@@ -184,12 +189,15 @@ public class C2CExchangeActivity extends AppCompatActivity {
                         public void onFailure(Call call, IOException e) {}
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String str = response.body().string();
-                            Log.e(TAG, "onResponse:dealer: "+str);
-                            fillInUser(str);
-                            a[0]++;
-                            if(a[0]==2) {
-                                handler.sendEmptyMessage(1);
+                            String json = response.body().string();
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                            }else {
+                                fillInUser(json);
+                                a[0]++;
+                                if (a[0] == 2) {
+                                    handler.sendEmptyMessage(1);
+                                }
                             }
                         }
                     });
@@ -201,11 +209,15 @@ public class C2CExchangeActivity extends AppCompatActivity {
 
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            String str = response.body().string();
-                            fillInNote(str);
-                            a[0]++;
-                            if(a[0]==2){
-                                handler.sendEmptyMessage(1);
+                            String json = response.body().string();
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                            }else {
+                                fillInNote(json);
+                                a[0]++;
+                                if (a[0] == 2) {
+                                    handler.sendEmptyMessage(1);
+                                }
                             }
                         }
                     });
@@ -234,20 +246,32 @@ public class C2CExchangeActivity extends AppCompatActivity {
         if(type==IN) {
             tvAspect.setText("充值额度：");
             tvQuote.setText("CNY");
-            tvPays.setVisibility(View.GONE);
-            spPays.setVisibility(View.VISIBLE);
+//            tvPays.setVisibility(View.GONE);
+//            spPays.setVisibility(View.VISIBLE);
 
         }else if(type==OUT) {
             llTypes.setVisibility(View.GONE);
             tvAspect.setText("提现额度：");
             tvQuote.setText("RMB");
-            tvPays.setVisibility(View.VISIBLE);
-            tvPays.setText(BtslandApplication.accountObject.name);
-            spPays.setVisibility(View.GONE);
+//            tvPays.setVisibility(View.VISIBLE);
+//            tvPays.setText(BtslandApplication.accountObject.name);
+//            spPays.setVisibility(View.GONE);
         }
-        tvNoteNo.setText(note.getNoteNo());
-        tvBrokerage.setText(""+note.getBrokerage()*100+"%");
-        tvRemarkCode.setText(note.getRemarkCode());
+        if(note.getNoteNo()!=null){
+            tvNoteNo.setText(note.getNoteNo());
+        }else {
+            tvNoteNo.setText("");
+        }
+        if(note.getBrokerage()!=null){
+            tvBrokerage.setText(""+note.getBrokerage()*100+"%");
+        }else {
+            tvBrokerage.setText("0.0%");
+        }
+        if(note.getRemarkCode()!=null){
+            tvRemarkCode.setText(note.getRemarkCode());
+        }else {
+            tvRemarkCode.setText("");
+        }
         Log.e(TAG, "fillInBody: dealer.realAssets:"+dealer.realAssets.size() );
         if(dealer.realAssets!=null&&dealer.realAssets.size()>0) {
             String[] strings = new String[dealer.realAssets.size()];
@@ -277,21 +301,21 @@ public class C2CExchangeActivity extends AppCompatActivity {
             }
             Log.e(TAG, "fillInBody: user:"+strings.toString() );
             ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.coin_item, R.id.tv_transfer_coinName, strings);
-            spPays.setAdapter(adapter);
-            spPays.setSelection(0);
+//            spPays.setAdapter(adapter);
+//            spPays.setSelection(0);
             adapter.notifyDataSetChanged();
         }
-        spPays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                spPaysIndex=i;
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+//        spPays.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+//            @Override
+//            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+//                spPaysIndex=i;
+//            }
+//
+//            @Override
+//            public void onNothingSelected(AdapterView<?> adapterView) {
+//
+//            }
+//        });
         tvRemafkCodeCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -304,25 +328,54 @@ public class C2CExchangeActivity extends AppCompatActivity {
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String num= edtotalNum.getText().toString();
+                final String num= edtotalNum.getText().toString();
                 if(num==null||num.equals("")){
                     AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
                     appDialog.setMsg("请输入充值额度");
                     appDialog.show();
                     return;
                 }
+
                 if(BtslandApplication.dealer.realAssets==null||BtslandApplication.dealer.realAssets.size()==0||BtslandApplication.dealer.realAssets.get(0).getRealAssetNo()==null||BtslandApplication.dealer.realAssets.get(0).getRealAssetNo().equals("")){
                     AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
-                    appDialog.setMsg("您没有付款帐号");
+                    appDialog.setMsg("您没有付款帐号,请设置");
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent=new Intent(C2CExchangeActivity.this,AccountC2CTypesActivity.class);
+                            intent.putExtra("type",0);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
                     appDialog.show();
                     return;
+                }Double iNum= Double.valueOf(num);
+                if(type==IN){
+                    if(iNum<dealer.getLowerLimitIn()){
+                        AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+                        appDialog.setMsg("充值额度不能低于额度"+dealer.getLowerLimitIn());
+                        appDialog.show();
+                        return;
+                    }
+                }else if(type==OUT){
+                    if(iNum<dealer.getLowerLimitOut()){
+                        AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+                        appDialog.setMsg("充值额度不能低于额度"+dealer.getLowerLimitOut());
+                        appDialog.show();
+                        return;
+                    }else if(iNum>dealer.getUpperLimitOut()) {
+                        AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
+                        appDialog.setMsg("充值额度不能大于额度"+dealer.getLowerLimitOut());
+                        appDialog.show();
+                        return;
+                    }
                 }
-
-                RealAsset realAsset = BtslandApplication.dealer.realAssets.get(spPaysIndex);
                 String depict = edRemark.getText().toString();
-                note.setRealNo(realAsset.getRealAssetNo());
-                note.setRealType(realAsset.getRealAssetType());
-                note.setRealDepict(realAsset.getDepict());
                 note.setAssetNum(NumericUtil.parseDouble(num));
                 note.setDepict(depict);
                 PasswordDialog passwordDialog=new PasswordDialog(C2CExchangeActivity.this);
@@ -330,17 +383,14 @@ public class C2CExchangeActivity extends AppCompatActivity {
                 passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
                     @Override
                     public void onConfirm(AlertDialog dialog, final String passwordString) {
-                        if(hud==null){
-                            hud=KProgressHUD.create(C2CExchangeActivity.this);
-                            hud.setLabel("请稍等。。。");
-                        }
-                        hud.show();
+                        hudHandler.sendEmptyMessage(1);
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
                                 try {
                                     account_object accountObject = BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
                                     if(accountObject!=null){
+                                        Log.e(TAG, "run: "+note);
                                         SaveNote saveNote=new SaveNote(BtslandApplication.dealer.getAccount(), note, new Callback() {
                                             @Override
                                             public void onFailure(Call call, IOException e) {
@@ -349,19 +399,35 @@ public class C2CExchangeActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onResponse(Call call, Response response) throws IOException {
-                                                int a = Integer.parseInt(response.body().string());
-                                                Log.i(TAG, "onResponse: "+a);
-                                                Bundle bundle=new Bundle();
-                                                bundle.putInt("a",a);
-                                                Message message=Message.obtain();
+                                                String json = response.body().string();
+                                                Bundle bundle = new Bundle();
+                                                String noteNo="";
+                                                int a=0;
+                                                if(json.indexOf("error")!=-1){
+                                                    BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                                                    a=-3;
+                                                }else {
+                                                    noteNo=json;
+                                                    if(noteNo.equals("")){
+                                                        a=-3;
+                                                    }else {
+                                                        a=1;
+                                                    }
+                                                }
+                                                bundle.putInt("a", a);
+                                                bundle.putString("noteNo",noteNo);
+                                                Message message = Message.obtain();
                                                 message.setData(bundle);
                                                 saveHandler.sendMessage(message);
+
                                             }
                                         });
                                         saveNote.start();
                                     }else {
+                                        Log.e(TAG, "run: 密码错误" );
                                         Bundle bundle=new Bundle();
                                         bundle.putInt("a",-2);
+                                        bundle.putString("noteNo","");
                                         Message message=Message.obtain();
                                         message.setData(bundle);
                                         saveHandler.sendMessage(message);
@@ -449,19 +515,62 @@ public class C2CExchangeActivity extends AppCompatActivity {
             fillInBody();
         }
     };
-
+    private Handler hudHandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            if(hud==null){
+                hud=KProgressHUD.create(C2CExchangeActivity.this);
+                hud.setLabel("请稍等。。。");
+            }
+            hud.show();
+        }
+    };
     private Handler saveHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
             int a= msg.getData().getInt("a");
+            final String noteNo=msg.getData().getString("noteNo");
             if(hud!=null&&hud.isShowing()){
                 hud.dismiss();
                 hud=null;
             }
             AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
             if(a>0){
-                appDialog.setMsg("订单发起成功，线下完成转账后请确认转账");
-                appDialog.show();
+                if(type==IN) {
+                    appDialog.setMsg("订单发起成功，线下完成转账后请确认转账");
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent = new Intent(C2CExchangeActivity.this, ExchangeDetailedActivity.class);
+                            intent.putExtra("noteNo", noteNo);
+                            intent.putExtra("type",type);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
+                    appDialog.show();
+                }else if(type==OUT){
+                    appDialog.setMsg("订单发起成功，完善订单并且向承兑商资金账户进行转账后，承兑商将会给您提供的收款账户进行转账");
+                    appDialog.setListener(new AppDialog.OnDialogInterationListener() {
+                        @Override
+                        public void onConfirm() {
+                            Intent intent = new Intent(C2CExchangeActivity.this, ExchangeDetailedActivity.class);
+                            intent.putExtra("noteNo", noteNo);
+                            intent.putExtra("type",type);
+                            startActivity(intent);
+                        }
+
+                        @Override
+                        public void onReject() {
+
+                        }
+                    });
+                    appDialog.show();
+                }
             }else if(a==0){
                 appDialog.setMsg("订单失效，请重试或请重新生成订单");
                 appDialog.show();
@@ -470,6 +579,9 @@ public class C2CExchangeActivity extends AppCompatActivity {
                 appDialog.show();
             }else if(a==-2){
                 appDialog.setMsg("密码错误");
+                appDialog.show();
+            }else if(a==-3){
+                appDialog.setMsg("订单发起失败，请重试");
                 appDialog.show();
             }
         }

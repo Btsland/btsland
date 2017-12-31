@@ -411,6 +411,9 @@ public class Wallet_api {
         List<types.public_key_type> listPublicKeyType = new ArrayList<>();
         listPublicKeyType.add(publicActiveKeyType);
         listPublicKeyType.add(publicOwnerKeyType);
+        if(mWalletObject==null) {
+            initialize();
+        }
         mWalletObject.update_account(accountObject);
         mWalletObject.extra_keys.put(accountObject.id, listPublicKeyType);
         mHashMapPub2Priv.put(publicActiveKeyType, new types.private_key_type(privateActiveKey));

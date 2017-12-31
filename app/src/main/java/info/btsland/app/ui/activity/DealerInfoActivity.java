@@ -29,7 +29,6 @@ import okhttp3.Response;
 
 public class DealerInfoActivity extends AppCompatActivity {
     private HeadFragment headFragment;
-    private EditText edDealerId;
     private EditText edDealerName;
     private EditText edDealer;
     private EditText edAccount;
@@ -43,6 +42,7 @@ public class DealerInfoActivity extends AppCompatActivity {
     private TextView tvCancel;
     private KProgressHUD hud;
     private String TAG="DealerInfoActivity";
+    private User user=new User();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,24 +54,29 @@ public class DealerInfoActivity extends AppCompatActivity {
     }
 
     private void fillIn() {
-        edDealerId.getEditableText().insert(0,BtslandApplication.dealer.getDealerId());
-        edDealerId.setFocusable(false);
-        edDealerId.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
-        edDealerId.setClickable(false);
+        edDealerName.getEditableText().clear();
         edDealerName.getEditableText().insert(0,BtslandApplication.dealer.getDealerName());
+        edAccount.getEditableText().clear();
         edAccount.getEditableText().insert(0,BtslandApplication.dealer.getAccount());
         edAccount.setFocusable(false);
         edAccount.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
         edAccount.setClickable(false);
-        edDealer.getEditableText().insert(0,BtslandApplication.dealer.userInfo.getC2cAccount());
+        edDealer.getEditableText().clear();
+        edDealer.getEditableText().insert(0,BtslandApplication.dealer.getDealerId());
         edDealer.setFocusable(false);
         edDealer.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
         edDealer.setClickable(false);
+        edDepict.getEditableText().clear();
         edDepict.getEditableText().insert(0,BtslandApplication.dealer.getDepict());
+        edInBro.getEditableText().clear();
         edInBro.getEditableText().insert(0,""+(BtslandApplication.dealer.getBrokerageIn()*100));
+        edOutBro.getEditableText().clear();
         edOutBro.getEditableText().insert(0,""+(BtslandApplication.dealer.getBrokerageOut()*100));
+        edLowIn.getEditableText().clear();
         edLowIn.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitIn());
+        edLowOut.getEditableText().clear();
         edLowOut.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitOut());
+        edUpOut.getEditableText().clear();
         edUpOut.getEditableText().insert(0,""+BtslandApplication.dealer.getUpperLimitOut());
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,13 +95,15 @@ public class DealerInfoActivity extends AppCompatActivity {
                 String lowIn=edLowIn.getEditableText().toString();
                 String lowOut=edLowOut.getEditableText().toString();
                 String upOut=edUpOut.getEditableText().toString();
-                BtslandApplication.dealer.setDealerName(dealerName);
-                BtslandApplication.dealer.setBrokerageIn(Double.valueOf(inBro)/100);
-                BtslandApplication.dealer.setBrokerageOut(Double.valueOf(outBro)/100);
-                BtslandApplication.dealer.setDepict(depict);
-                BtslandApplication.dealer.setLowerLimitIn(Double.valueOf(lowIn));
-                BtslandApplication.dealer.setLowerLimitOut(Double.valueOf(lowOut));
-                BtslandApplication.dealer.setUpperLimitOut(Double.valueOf(upOut));
+
+                user.setDealerId(BtslandApplication.dealer.getDealerId());
+                user.setDealerName(dealerName);
+                user.setBrokerageIn(Double.valueOf(inBro)/100);
+                user.setBrokerageOut(Double.valueOf(outBro)/100);
+                user.setDepict(depict);
+                user.setLowerLimitIn(Double.valueOf(lowIn));
+                user.setLowerLimitOut(Double.valueOf(lowOut));
+                user.setUpperLimitOut(Double.valueOf(upOut));
                 Log.e(TAG, "onClick: "+BtslandApplication.dealer );
                 PasswordDialog passwordDialog=new PasswordDialog(DealerInfoActivity.this);
                 passwordDialog.setMsg("请输入密码");
@@ -114,7 +121,7 @@ public class DealerInfoActivity extends AppCompatActivity {
                                 try {
                                     account_object accountObject=BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
                                     if(accountObject!=null){
-                                        UserHttp.updateUser(BtslandApplication.dealer.getDealerId(), BtslandApplication.dealer, new Callback() {
+                                        UserHttp.updateUser(BtslandApplication.dealer.getDealerId(),user, new Callback() {
                                             @Override
                                             public void onFailure(Call call, IOException e) {
 
@@ -122,9 +129,13 @@ public class DealerInfoActivity extends AppCompatActivity {
 
                                             @Override
                                             public void onResponse(Call call, Response response) throws IOException {
-                                                int a= Integer.parseInt(response.body().string());
-                                                Log.e(TAG, "onResponse: "+a );
-                                                handler.sendEmptyMessage(a);
+                                                String json= response.body().string();
+                                                if(json.indexOf("error")!=-1){
+                                                    BtslandApplication.sendBroadcastDialog(DealerInfoActivity.this,json);
+                                                }else {
+                                                    int a= Integer.parseInt(json);
+                                                    handler.sendEmptyMessage(a);
+                                                }
                                             }
                                         });
                                     }else {
@@ -160,7 +171,6 @@ public class DealerInfoActivity extends AppCompatActivity {
     }
 
     private void init() {
-        edDealerId=findViewById(R.id.ed_dealer_info_dealerId);
         edDealerName=findViewById(R.id.ed_dealer_info_dealerName);
         edDealer=findViewById(R.id.ed_dealer_info_dealer);
         edAccount=findViewById(R.id.ed_dealer_info_account);

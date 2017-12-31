@@ -16,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.exchange.entity.RealAsset;
 
@@ -89,13 +90,21 @@ public class AccountTpyeDialog {
         spType.setAdapter(adapter);
 
         if(realAsset!=null){
-            if(realAsset.getType()!=null){
-                spType.setSelection(realAsset.getType()+1);
+            if(realAsset.getRealAssetType()!=null){
+                spType.setSelection(Integer.parseInt(realAsset.getRealAssetType())-1);
             }else {
                 spType.setSelection(0);
             }
-            edName.getEditableText().insert(0,realAsset.getName());
-            edNo.getEditableText().insert(0,realAsset.getRealAssetNo());
+            if(realAsset.getName()!=null){
+                edName.getEditableText().insert(0,realAsset.getName());
+            }else {
+                edName.getEditableText().insert(0,"");
+            }
+            if(realAsset.getRealAssetNo()!=null){
+                edNo.getEditableText().insert(0,realAsset.getRealAssetNo());
+            }else {
+                edNo.getEditableText().insert(0,"");
+            }
             if(realAsset.getDepict()!=null){
                 int a =realAsset.getDepict().indexOf("(");
                 if(a!=-1){
@@ -190,6 +199,8 @@ public class AccountTpyeDialog {
                         realAsset.setRealAssetNo(no);
                         realAsset.setDepict(depict);
                         realAsset.setRealAssetType("" + (type + 1));
+                        realAsset.setIsAvailable(1);
+                        realAsset.setDealerId(BtslandApplication.dealer.getDealerId());
                         mDialog.dismiss();
                         mListener.onConfirm(realAsset);
                     }

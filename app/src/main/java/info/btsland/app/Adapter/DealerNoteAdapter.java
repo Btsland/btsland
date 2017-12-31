@@ -75,7 +75,16 @@ public class DealerNoteAdapter extends BaseAdapter {
         TextView tvCoin=convertView.findViewById(R.id.tv_dealer_having_item_coin);
         TextView tvStat=convertView.findViewById(R.id.tv_dealer_having_item_stat);
         TextView tvTime=convertView.findViewById(R.id.tv_dealer_having_item_time);
-        tvPay.setText(note.getRealNo()+"("+note.getRealType()+")");
+        String depict="";
+        if(note.getRealDepict()!=null) {
+            int a = note.getRealDepict().indexOf("(");
+            if (a != -1) {
+                depict = "(" + note.getRealDepict().substring(0, a) + ")";
+            } else {
+                depict = "(" + note.getRealDepict() + ")";
+            }
+        }
+        tvPay.setText(note.getRealNo()+depict);
         tvCode.setText(note.getRemarkCode());
         tvCoin.setText(note.getAssetCoin());
         tvAccount.setText(note.getAccount());

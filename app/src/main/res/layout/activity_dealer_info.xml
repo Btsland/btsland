@@ -25,36 +25,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:text="承兑账号："
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/ed_dealer_info_dealerId"
-                    android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:gravity="center|right"
-                    android:textColor="@color/gray"
-                    android:paddingRight="10dp"
-                    android:background="@drawable/edit_text"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal"
-                android:paddingLeft="5dp"
-                android:paddingRight="5dp">
-                <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="资金账号："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_dealer"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:textColor="@color/gray"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
@@ -67,15 +48,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="个人账号："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_account"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:textColor="@color/gray"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
@@ -88,15 +71,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="昵称："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_dealerName"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
             </LinearLayout>
@@ -108,15 +93,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="描述："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_depict"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
             </LinearLayout>
@@ -125,7 +112,7 @@
                 android:layout_height="wrap_content"
                 android:text="充值信息"
                 android:gravity="center|left"
-                android:paddingLeft="10dp"
+                android:paddingLeft="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/row_bottom_border"/>
             <LinearLayout
@@ -136,27 +123,35 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="充值手续费："
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/ed_dealer_info_inBro"
+                    android:gravity="center|right"/>
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="40dp"
-                    android:gravity="center|right"
-                    android:paddingRight="10dp"
-                    android:background="@drawable/edit_text"/>
-                <TextView
-                    android:id="@+id/ed_dealer_info_inBroC"
-                    android:layout_width="20dp"
+                    android:layout_weight="7"
                     android:layout_height="match_parent"
-                    android:text="%"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/ed_dealer_info_inBro"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:background="@drawable/edit_text"/>
+                    <TextView
+                        android:id="@+id/ed_dealer_info_inBroC"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:text="%"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_font_blue"/>
+                </LinearLayout>
+
 
             </LinearLayout>
             <LinearLayout
@@ -167,15 +162,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="充值下限："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_lowIn"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
             </LinearLayout>
@@ -184,7 +181,7 @@
                 android:layout_height="wrap_content"
                 android:text="提现信息"
                 android:gravity="center|left"
-                android:paddingLeft="10dp"
+                android:paddingLeft="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/row_bottom_border"/>
             <LinearLayout
@@ -195,27 +192,35 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="提现手续费："
-                    android:gravity="center"/>
-                <EditText
-                    android:id="@+id/ed_dealer_info_outBro"
+                    android:gravity="center|right"/>
+                <LinearLayout
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="40dp"
-                    android:gravity="center|right"
-                    android:paddingRight="10dp"
-                    android:background="@drawable/edit_text"/>
-                <TextView
-                    android:id="@+id/ed_dealer_info_outBroC"
-                    android:layout_width="20dp"
+                    android:layout_weight="7"
                     android:layout_height="match_parent"
-                    android:text="%"
-                    android:textSize="16sp"
-                    android:gravity="center"
-                    android:textStyle="bold"
-                    android:textColor="@color/black"/>
+                    android:orientation="horizontal">
+                    <EditText
+                        android:id="@+id/ed_dealer_info_outBro"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="40dp"
+                        android:gravity="center"
+                        android:paddingRight="10dp"
+                        android:background="@drawable/edit_text"/>
+                    <TextView
+                        android:id="@+id/ed_dealer_info_outBroC"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:text="%"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textColor="@color/color_font_blue"/>
+                </LinearLayout>
+
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -225,15 +230,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="提现上限："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_upOut"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
             </LinearLayout>
@@ -245,15 +252,17 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:text="提现下限："
-                    android:gravity="center"/>
+                    android:gravity="center|right"/>
                 <EditText
                     android:id="@+id/ed_dealer_info_lowOut"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="7"
                     android:layout_height="40dp"
-                    android:gravity="center|right"
+                    android:gravity="center"
                     android:paddingRight="10dp"
                     android:background="@drawable/edit_text"/>
             </LinearLayout>

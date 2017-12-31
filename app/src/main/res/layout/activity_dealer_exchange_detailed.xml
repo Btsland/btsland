@@ -38,7 +38,9 @@
                         android:id="@+id/tv_dealer_excDet_item_account"
                         android:layout_width="wrap_content"
                         android:gravity="center"
-                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/color_font_red"
                         android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
@@ -62,7 +64,9 @@
                         android:id="@+id/tv_dealer_excDet_item_realNo"
                         android:layout_width="wrap_content"
                         android:gravity="center"
-                        android:textColor="@color/black"
+                        android:textStyle="bold"
+                        android:textSize="16sp"
+                        android:textColor="@color/color_font_blue"
                         android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
@@ -86,6 +90,7 @@
                         android:id="@+id/tv_dealer_excDet_item_realType"
                         android:layout_width="wrap_content"
                         android:gravity="center"
+                        android:textSize="16sp"
                         android:textColor="@color/black"
                         android:layout_height="match_parent" />
                 </LinearLayout>
@@ -110,14 +115,15 @@
                         android:id="@+id/tv_dealer_excDet_item_num"
                         android:layout_width="wrap_content"
                         android:gravity="center"
+                        android:textSize="16sp"
                         android:textColor="@color/black"
                         android:layout_height="match_parent" />
                     <TextView
                         android:id="@+id/tv_dealer_excDet_item_coin"
                         android:layout_width="wrap_content"
                         android:gravity="center"
+                        android:textSize="16sp"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
                         android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
@@ -166,15 +172,14 @@
                         android:layout_width="wrap_content"
                         android:gravity="center"
                         android:textSize="16sp"
+                        android:textColor="@color/black"
                         android:textStyle="bold"
-                        android:textColor="@color/green"
                         android:layout_height="match_parent" />
                     <TextView
                         android:id="@+id/tv_dealer_excDet_item_coin2"
                         android:layout_width="wrap_content"
                         android:gravity="center"
                         android:layout_marginLeft="5dp"
-                        android:textColor="@color/black"
                         android:layout_height="match_parent" />
                 </LinearLayout>
             </LinearLayout>
@@ -199,7 +204,7 @@
                         android:layout_width="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
-                        android:textSize="16sp"
+                        android:textSize="20sp"
                         android:textColor="@color/color_font_blue"
                         android:layout_height="match_parent" />
                     <TextView
@@ -263,7 +268,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:background="@drawable/row_bottom_border"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

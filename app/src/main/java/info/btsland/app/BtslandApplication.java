@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.multidex.MultiDexApplication;
@@ -44,9 +45,9 @@ import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
+import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.DealerNoteListFragment;
-import info.btsland.app.ui.fragment.ExchangeListFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.app.util.BaseThread;
@@ -84,6 +85,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static List<Note> dealerHavingNotes;
     public static List<Note> dealerClinchNotes;
+    public static List<User> dealers;
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
@@ -136,6 +138,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     //public static List<String> quoteList=Arrays.asList("CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO");
     private QueryReceiver queryReceiver ;
+    private DialogReceiver dialogReceiver ;
     public static void setFluctuationType(){
 
 
@@ -187,10 +190,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         IntentFilter intentFilter = new IntentFilter(QueryReceiver.EVENT);
         queryReceiver=new QueryReceiver();
         LocalBroadcastManager.getInstance(getInstance()).registerReceiver(queryReceiver,intentFilter);
+        IntentFilter dialogFilter = new IntentFilter(DialogReceiver.EVENT);
+        dialogReceiver=new DialogReceiver();
+        LocalBroadcastManager.getInstance(getInstance()).registerReceiver(dialogReceiver,dialogFilter);
         ConnectThread();
     }
     private BaseThread queryAllHaving;
     private BaseThread queryAllClinch;
+    private BaseThread queryAllDealer;
     private void init(){
         instance=getApplicationContext();
         application=this;
@@ -207,8 +214,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         fillInMarketMap();
         queryAllClinch=new QueryAllClinch();
         queryAllHaving=new QueryAllHaving();
+        queryAllDealer=new QueryAllDealer();
+        Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
+        queryAllDealer.setTime(10);
+        queryAllDealer.start();
 
     }
     private Gson gson;
@@ -228,10 +239,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
-                        dealerHavingNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
-                        if(dealerHavingNotes!=null&&dealerHavingNotes.size()>0){
-                            MainActivity.sendBroadcast(getInstance());
-                            DealerNoteListFragment.sendBroadcast(getInstance(),1);
+                        if(json.indexOf("error")!=-1){
+                            BtslandApplication.sendBroadcastDialog(BtslandApplication.this,json);
+                        }else {
+                            dealerHavingNotes = gson.fromJson(json, new TypeToken<List<Note>>() {
+                            }.getType());
+                            if (dealerHavingNotes != null && dealerHavingNotes.size() > 0) {
+                                MainActivity.sendBroadcast(getInstance());
+                                DealerNoteListFragment.sendBroadcast(getInstance(), 1);
+                            }
                         }
                     }
                 });
@@ -256,9 +272,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
                         String json = response.body().string();
-                        dealerClinchNotes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
-                        if(dealerClinchNotes!=null&&dealerClinchNotes.size()>0){
-                            DealerNoteListFragment.sendBroadcast(getInstance(),2);
+                        if(json.indexOf("error")!=-1){
+                            BtslandApplication.sendBroadcastDialog(BtslandApplication.this,json);
+                        }else {
+                            dealerClinchNotes = gson.fromJson(json, new TypeToken<List<Note>>() {
+                            }.getType());
+                            if (dealerClinchNotes != null && dealerClinchNotes.size() > 0) {
+                                DealerNoteListFragment.sendBroadcast(getInstance(), 2);
+                            }
                         }
                     }
                 });
@@ -356,7 +377,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         if(BtslandApplication.iAssets!=null) {
             synchronized (BtslandApplication.iAssets) {
                 for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
-                    if (BtslandApplication.iAssets.get(i).coinName.equals(name)) {
+                    if (BtslandApplication.iAssets.get(i).coinName!=null&&BtslandApplication.iAssets.get(i).coinName.equals(name)) {
                         return BtslandApplication.iAssets.get(i).total;
                     }
                 }
@@ -391,6 +412,39 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
     }
 
+
+    public static void sendBroadcastDialog(Context context,String str){
+        Intent intent=new Intent(DialogReceiver.EVENT);
+        intent.putExtra("str",str);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    public class DialogReceiver extends BroadcastReceiver {
+        public static final String EVENT = "DialogReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(context!=null) {
+                String str = intent.getStringExtra("str");
+                dialogContext=context;
+                Bundle bundle=new Bundle();
+                bundle.putString("str",str);
+                Message message=Message.obtain();
+                message.setData(bundle);
+                dialogHandler.sendMessage(message);
+                Log.e(TAG, "DialogOnReceive: " + str);
+
+            }
+        }
+    }
+    private Context dialogContext;
+    private Handler dialogHandler=new Handler(){
+
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle=msg.getData();
+            String str=bundle.getString("str");
+            Toast.makeText(dialogContext, str,Toast.LENGTH_LONG).show();
+        }
+    };
     /**
      * 查询账户线程外部调用方法
      *
@@ -398,7 +452,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static void queryAccount(String name,Handler handler ){
         new QueryAccountThread(name,handler).start();
     }
-    private static BaseThread queryDealer;
+    private static BaseThread queryDealer=new QueryDealer();
     private static class QueryDealer extends BaseThread{
         @Override
         public void execute() {
@@ -414,9 +468,14 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
                     Gson gson = gsonBuilder.create();
                     String json = response.body().string();
-                    dealer=gson.fromJson(json,User.class);
-                    if(dealer!=null){
-                        DealerManageFragment.sendBroadcast(getInstance());
+                    if(json.indexOf("error")!=-1){
+                        sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                    }else {
+                        dealer = gson.fromJson(json, User.class);
+                        if (dealer != null) {
+                            DealerManageFragment.sendBroadcast(getInstance());
+                            AccountC2CTypesActivity.sendBroadcast(getInstance());
+                        }
                     }
                 }
             });
@@ -460,56 +519,59 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     public void onResponse(Call call, Response response) throws IOException {
                         final Gson gson=new Gson();
                         String json=response.body().string();
-                        Log.e(TAG, "onResponse: json:"+json );
-                        dealer=gson.fromJson(json,User.class);
-                        Log.e(TAG, "onResponse: dealer:"+ dealer);
-                        PurseFragment.sendBroadcast(getInstance());
-//                        LocalBroadcastManager.getInstance(getInstance()).sendBroadcast(new Intent(AccountC2CTypesActivity.AccountTypeReceiver.EVENT));
-                        AccountC2CTypesActivity.sendBroadcast(getInstance());
-                        if(dealer!=null){
-                            switch (dealer.getType()){
-                                case UserTypeCode.ACCOUNT:
-                                    if(queryDealer!=null){
-                                        queryDealer.kill();
+                        if(json.indexOf("error")!=-1){
+                            sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                        }else {
+                            dealer=gson.fromJson(json,User.class);
+                            PurseFragment.sendBroadcast(getInstance());
+                            if(dealer!=null) {
+                                if(!queryDealer.isDead()) {
+                                    if (!queryDealer.isStart()) {
+                                        queryDealer.start();
+                                    } else if (queryDealer.isRun()) {
+                                        queryDealer.reStart();
                                     }
-                                    break;
-                                case UserTypeCode.DEALER:
-                                    queryDealer=new QueryDealer();
-                                    queryDealer.start();
-                                    break;
-                                case UserTypeCode.HELP:
-                                    if(queryDealer!=null){
-                                        queryDealer.kill();
-                                    }
-                                    HelpHttp.queryDealer(dealer.getDealerId(), new Callback() {
-                                        @Override
-                                        public void onFailure(Call call, IOException e) {}
-                                        @Override
-                                        public void onResponse(Call call, Response response) throws IOException {
-                                            String json = response.body().string();
-                                            Log.e(TAG, "onResponse: "+ json);
-                                            List<User> users = gson.fromJson(json,new TypeToken<List<User>>() {}.getType() );
-                                            if(users!=null&&users.size()>0){
-                                                for(int i=0;i<users.size();i++){
-                                                    helpUserMap.put(users.get(i).getDealerId(),users.get(i));
-                                                    HelpQueryDealer helpQueryDealer = new HelpQueryDealer(users.get(i).getDealerId());
-                                                    helpQueryDealer.setTime(6);
-                                                    helpQueryDealer.start();
-                                                    helpQueryThreadMap.put(users.get(i).getDealerId(),helpQueryDealer);
-                                                    HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
-                                                    helpQueryChatDealer.setTime(3);
-                                                    helpQueryChatDealer.start();
-                                                    helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(),helpQueryChatDealer);
+                                }
+                                switch (dealer.getType()) {
+                                    case UserTypeCode.ACCOUNT:
+                                        break;
+                                    case UserTypeCode.DEALER:
+                                        break;
+                                    case UserTypeCode.HELP:
+                                        HelpHttp.queryDealer(dealer.getDealerId(), new Callback() {
+                                            @Override
+                                            public void onFailure(Call call, IOException e) {
+                                            }
+
+                                            @Override
+                                            public void onResponse(Call call, Response response) throws IOException {
+                                                String json = response.body().string();
+                                                if (json.indexOf("error") != -1) {
+                                                    sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                                                } else {
+                                                    Log.e(TAG, "onResponse: " + json);
+                                                    List<User> users = gson.fromJson(json, new TypeToken<List<User>>() {
+                                                    }.getType());
+                                                    if (users != null && users.size() > 0) {
+                                                        for (int i = 0; i < users.size(); i++) {
+                                                            helpUserMap.put(users.get(i).getDealerId(), users.get(i));
+                                                            HelpQueryDealer helpQueryDealer = new HelpQueryDealer(users.get(i).getDealerId());
+                                                            helpQueryDealer.setTime(6);
+                                                            helpQueryDealer.start();
+                                                            helpQueryThreadMap.put(users.get(i).getDealerId(), helpQueryDealer);
+                                                            HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
+                                                            helpQueryChatDealer.setTime(3);
+                                                            helpQueryChatDealer.start();
+                                                            helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(), helpQueryChatDealer);
+                                                        }
+                                                    }
                                                 }
                                             }
-                                        }
-                                    });
-                                    break;
-                                case UserTypeCode.ADMIN:
-                                    if(queryDealer!=null){
-                                        queryDealer.kill();
-                                    }
-                                    break;
+                                        });
+                                        break;
+                                    case UserTypeCode.ADMIN:
+                                        break;
+                                }
                             }
                         }
                     }
@@ -540,9 +602,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         GsonBuilder gsonBuilder=new GsonBuilder() ;
                         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
                         Gson gson = gsonBuilder.create();
-                        List<Note> notes = gson.fromJson(response.body().string(),new TypeToken<List<Note>>(){}.getType());
-                        if(notes!=null&&notes.size()>0){
-                            helpUserMap.get(name).havingNotes=notes;
+                        String json=response.body().string();
+                        if (json.indexOf("error") != -1) {
+                            sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                        } else {
+                            List<Note> notes = gson.fromJson(json, new TypeToken<List<Note>>() {
+                            }.getType());
+                            if (notes != null && notes.size() > 0) {
+                                helpUserMap.get(name).havingNotes = notes;
+                            }
                         }
                     }
                 });
@@ -573,9 +641,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             helpUserMap.get(to).helpNewChatList=new ArrayList<>();
                         }
                         String json = response.body().string();
-                        Log.e(TAG, "onResponse: "+json );
-                        List<Chat> chats =gson.fromJson(json,new TypeToken<List<Chat>>(){}.getType());
-                        helpUserMap.get(to).helpNewChatList.addAll(chats);
+                        if (json.indexOf("error") != -1) {
+                            sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                        } else {
+                            List<Chat> chats = gson.fromJson(json, new TypeToken<List<Chat>>() {}.getType());
+                            if(chats!=null){
+                                helpUserMap.get(to).helpNewChatList.addAll(chats);
+                            }
+
+                        }
                     }
                 });
             }
@@ -673,6 +747,35 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 UserManageFragment.sendBroadcast(getInstance(),totalCNY,"CNY");
                 UserManageFragment.sendBroadcast(getInstance(),totalBTS,"BTS");
             }
+        }
+    }
+
+
+    class QueryAllDealer extends BaseThread{
+        @Override
+        public void execute() {
+            Log.e(TAG, "QueryAllDealer execute: " );
+            UserHttp.queryAllDealer(0, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String json = response.body().string();
+                    Log.e(TAG, "onResponse: "+json );
+                    if(json.indexOf("error")!=-1){
+                        sendBroadcastDialog(null,json);
+                    }else {
+                        if (json != null && !json.equals("")) {
+                            Gson gson=new Gson();
+                            dealers = gson.fromJson(json,new TypeToken<List<User>>() {}.getType());
+                            DealerListFragment.sendBroadcast(getInstance());
+                        }
+                    }
+                }
+            });
         }
     }
     private Handler handler=new Handler(){

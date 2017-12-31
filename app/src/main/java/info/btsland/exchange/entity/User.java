@@ -1,5 +1,6 @@
 package info.btsland.exchange.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -37,9 +38,9 @@ public class User {
 
     public List<Note> havingNotes;
 
-    public List<Chat> helpOldChatList;
+    public List<Chat> helpOldChatList=new ArrayList<>();
 
-    public List<Chat> helpNewChatList;
+    public List<Chat> helpNewChatList=new ArrayList<>();
 
     public Integer getId() {
         return id;

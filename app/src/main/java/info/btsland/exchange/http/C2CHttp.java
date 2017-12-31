@@ -7,17 +7,21 @@ import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
-import okhttp3.Response;
 
 /**
  * Created by Administrator on 2017/12/15.
  */
 
 public class C2CHttp {
-    protected static String url="http://123.1.154.214:8080/";
+//    protected static String url="http://123.1.154.214:8080/";
 //    protected static String url="http://192.168.0.100:8080/";
 //    protected static String url="http://172.25.234.1:8080/";
+//    protected static String url="http://192.168.1.102:8080/";
+    protected static String url="http://192.168.43.112:8080/";
+//    protected static String url="http://192.168.1.112:8080/";
     protected static OkHttpClient client = new OkHttpClient();
+
+    private static String TAG="C2CHttp";
 
     protected static void get(String action,Callback callback){
         Request request = new Request.Builder().url(url+action).build();
@@ -30,7 +34,11 @@ public class C2CHttp {
     protected static void post(String action, Map<String,String> paramMap, Callback callback){
         FormBody.Builder builder=new FormBody.Builder();
         for(String name : paramMap.keySet()){
-            builder.add(name,paramMap.get(name));
+            String value=paramMap.get(name);
+            if(value==null){
+                value="";
+            }
+            builder.add(name,value);
         }
         Request request = new Request.Builder().url(url+action).post(builder.build()).build();
         Call call=client.newCall(request);

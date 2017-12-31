@@ -792,7 +792,7 @@ public class Websocket_api extends WebSocketListener {
                 }
             }
             try {
-                replyObjectProcess.wait(10000);
+                replyObjectProcess.wait(5000);
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
                 String strError = replyObjectProcess.getError();
                 if (TextUtils.isEmpty(strError) == false) {

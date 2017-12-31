@@ -5,9 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,11 +26,11 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.ui.activity.AccountC2CTypesActivity;
 import info.btsland.app.ui.activity.DealerInfoActivity;
 import info.btsland.app.ui.activity.DealerNoteListActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.AppListDialog;
-import info.btsland.app.ui.view.PasswordDialog;
 import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.UserHttp;
 import info.btsland.exchange.utils.UserStatCode;
@@ -213,6 +214,14 @@ public class DealerManageFragment extends Fragment {
                 getActivity().startActivity(intent);
             }
         });
+        tvReal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(), AccountC2CTypesActivity.class);
+                intent.putExtra("type",1);
+                getActivity().startActivity(intent);
+            }
+        });
         tvHaving.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -258,69 +267,24 @@ public class DealerManageFragment extends Fragment {
                     if(string2.get(i).equals(server)){
                         Log.e("1111111111111111", "onConfirm: "+BtslandApplication.dealer );
                         if(BtslandApplication.dealer!=null){
-                            if(BtslandApplication.dealer.getPassword()==null){
-                                PasswordDialog passwordDialog=new PasswordDialog(getActivity());
-                                passwordDialog.setMsg("请输入您的承兑密码！");
-                                final int finalI = i;
-                                passwordDialog.setListener(new PasswordDialog.OnDialogInterationListener() {
-                                    @Override
-                                    public void onConfirm(AlertDialog dialog, String passwordString) {
-                                        Log.e("ssssssssssssssssss", "onConfirm: "+passwordString );
-                                        UserHttp.loginDealer(BtslandApplication.dealer.getDealerId(), passwordString, new Callback() {
-                                            @Override
-                                            public void onFailure(Call call, IOException e) {
+                            UserHttp.updateStat(BtslandApplication.dealer.getDealerId(), string1.get(i), new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
 
-                                            }
+                                }
 
-                                            @Override
-                                            public void onResponse(Call call, Response response) throws IOException {
-                                                String json=response.body().string();
-                                                if(json==null||json.equals("")){
-                                                    AppDialog appDialog=new AppDialog(getActivity());
-                                                    appDialog.setMsg("密码错误！");
-                                                    appDialog.show();
-                                                    return;
-                                                }
-                                                if(fillInUser(json)){
-                                                    UserHttp.updateStat(BtslandApplication.dealer.getDealerId(), BtslandApplication.dealer.getPassword(), string1.get(finalI), new Callback() {
-                                                        @Override
-                                                        public void onFailure(Call call, IOException e) {
-
-                                                        }
-
-                                                        @Override
-                                                        public void onResponse(Call call, Response response) throws IOException {
-                                                            String json=response.body().string();
-                                                            fillInUser(json);
-                                                        }
-                                                    });
-                                                }
-
-                                            }
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onReject(AlertDialog dialog) {
-
-                                    }
-                                });
-                                passwordDialog.show();
-                            }else {
-                                UserHttp.updateStat(BtslandApplication.dealer.getDealerId(), BtslandApplication.dealer.getPassword(), string1.get(i), new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
-
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        String json=response.body().string();
-                                        Log.e("wwwwwwwwwwwwwwwww", "onResponse: "+json );
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    String json=response.body().string();
+                                    if(json.indexOf("error")!=-1){
+                                        BtslandApplication.sendBroadcastDialog(getActivity(),json);
+                                        handler.sendEmptyMessage(-1);
+                                    }else {
+                                        handler.sendEmptyMessage(1);
                                         fillInUser(json);
                                     }
-                                });
-                            }
+                                }
+                            });
                         }else {
                             AppDialog appDialog = new AppDialog(getActivity());
                             appDialog.setMsg("您未登录，请登录。");
@@ -359,14 +323,27 @@ public class DealerManageFragment extends Fragment {
         }
     }
 
-    private boolean fillInUser(String json) {
+    private void fillInUser(String json) {
         Gson gson=new Gson();
         BtslandApplication.dealer=gson.fromJson(json,User.class);
-        return true;
     }
 
     public interface ShowPoint{
         void show(int i);
     }
+
+    private Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            AppDialog appDialog=new AppDialog(getActivity());
+            if(msg.what==1){
+                appDialog.setMsg("状态更新成功");
+                fillInTop();
+            }else {
+                appDialog.setMsg("状态更新失败，请重试");
+            }
+            appDialog.show();
+        }
+    };
 
 }

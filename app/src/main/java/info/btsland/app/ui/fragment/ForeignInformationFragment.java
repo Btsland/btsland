@@ -29,7 +29,7 @@ public class ForeignInformationFragment extends Fragment implements AdapterView.
         super.onAttach(activity);
         //初始化新闻数据
         newsList = getNews();
-        adapter = new NewsAdapter(activity, R.layout.activity_newsitem, newsList);
+//        adapter = new NewsAdapter(activity, R.layout.activity_newsitem, newsList);
     }
 
     @Override

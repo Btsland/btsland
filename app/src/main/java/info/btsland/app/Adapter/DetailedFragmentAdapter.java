@@ -30,6 +30,7 @@ public class DetailedFragmentAdapter extends FragmentStatePagerAdapter {
     public DetailedFragmentAdapter(FragmentManager fm) {
         super(fm);
     }
+
     public void setFragmentList(List<Fragment> fragmentList) {
         if(this.fragmentList != null){
             if(fm!=null) {

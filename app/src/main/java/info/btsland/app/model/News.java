@@ -7,7 +7,6 @@ import java.io.Serializable;
 
 /**
  * Created by zyf on 2017/10/8.
- * 新闻实体类,title表示新闻标题,content表示新闻内容
  */
 public class News implements Serializable {
     private String title;
@@ -75,13 +74,13 @@ public class News implements Serializable {
 //        this.image = image;
     }
 
-    public News(String title, String content, String date, String titleContent, String author) {
+    public News(String title, String content, String date, String titleContent, String author,int  image) {
         this.title = title;
         this.content = content;
         this.date = date;
         this.titleContent = titleContent;
         this.author = author;
-//        this.image = image;
+        this.image = image;
     }
 
     @Override

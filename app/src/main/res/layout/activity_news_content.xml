@@ -1,0 +1,161 @@
+<!-- Created by zyf on 2017/10/8.
+编写新闻内容部分的代码
+头部显示完整的新闻标题,正文部分显示新闻内容,
+中间使用一条细线分隔开 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_news_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    </FrameLayout>
+
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="vertical"
+        android:fadingEdge="vertical"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+        <!-- android:visibility 设置布局的可见性，invisibe为不可见 -->
+        <LinearLayout
+            android:id="@+id/visibility_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+
+            <TextView
+                android:id="@+id/news_title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/news_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textColor="#212121"
+                android:lineSpacingExtra="2dp"
+                android:lineSpacingMultiplier="1.2"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:padding="10dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/news_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginTop="10dp"
+                android:textColor="#000000"
+                android:textSize="12sp"/>
+
+            <TextView
+                android:id="@+id/news_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginLeft="16dp"
+                android:textColor="#757575"
+                android:textSize="12sp"/>
+
+            <WebView
+                android:id="@+id/news_content"
+                android:layout_width="match_parent"
+                android:lineSpacingExtra="3dp"
+                android:lineSpacingMultiplier="1.2"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:textColor="#212121"
+                android:padding="15dp"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <Button
+                android:id="@+id/news_like"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/btn_red"
+                android:drawableLeft="@drawable/pointtheicon"
+                android:paddingBottom="10dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:textColor="#FFFFFF"
+                android:onClick="likeButton"
+                android:text="赞"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#000000"
+                android:textSize="50sp" />
+
+        </LinearLayout>
+
+    </ScrollView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- 隐藏光标 -->
+        <LinearLayout android:focusable="true"
+            android:focusableInTouchMode="true" android:layout_width="0px"
+            android:layout_height="0px" />
+
+        <EditText
+            android:id="@+id/news_edi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/edit_text"
+            android:layout_gravity="bottom"
+            android:paddingBottom="10dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            android:hint="写评论"
+            android:imeOptions="actionSend"
+            android:textColor="#cccccc"
+            android:textColorHint="#BDBDBD" />
+
+        <!--android:cursorVisible="false"-->
+        <!--android:focusable="true"-->
+        <!--android:focusableInTouchMode="true"-->
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_weight="1"
+            android:textSize="30dp"
+            android:layout_toRightOf="@+id/news_edi"/>
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:scaleType="fitXY" />"
+</LinearLayout>

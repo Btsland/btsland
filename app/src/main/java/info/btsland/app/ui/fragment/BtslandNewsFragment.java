@@ -2,9 +2,6 @@ package info.btsland.app.ui.fragment;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -30,49 +27,37 @@ import info.btsland.app.Adapter.NewsAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.BitNew;
 import info.btsland.app.model.News;
-import info.btsland.app.ui.activity.DealerExchangeDetailedActivity;
 import info.btsland.app.ui.activity.NewsContentActivity;
-import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.NewsHttp;
-import info.btsland.exchange.entity.Note;
-import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-
-public class LatestNewsFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemClickListener {
+    private static final String TAG = "BtslandNewsFragment";
     private ListView newsTitleListView;
-    private NewsAdapter adapter =new NewsAdapter();
+    private List<BitNew> newsList1=new ArrayList<>();
+    private NewsAdapter adapter;
+    private BaseThread QueryBtslandNews;
     private boolean isTwoPane;
-    private  BitNew news;
-    private BaseThread queryLatestNews;
-    List<BitNew> newsList1=new ArrayList<>();
-    private String TAG="LatestNewsFragment";
-
-//    @Override
-//    public void onAttach(Activity activity) {
-//        super.onAttach(activity);
-//
-//
-//    }
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        queryLatestNews=new QueryNews();
-        queryLatestNews.setTime(60);
-        queryLatestNews.start();
-        //加载fragment_latest_news.xml 布局
-        View view = inflater.inflate(R.layout.fragment_latest_news, container, false);
+        QueryBtslandNews=new QueryBtslandNews();
+        QueryBtslandNews.setTime(60);
+        QueryBtslandNews.start();
+        //加载fragment_newstitle.xml 布局
+        View view = inflater.inflate(R.layout.fragment_domestic_information, container, false);
         //得到ListView的实例
-        newsTitleListView = (ListView) view.findViewById(R.id.news_latest_view);
-        adapter = new NewsAdapter(getActivity(), newsList1);
+        newsTitleListView = (ListView) view.findViewById(R.id.news_domestic_view);
+        adapter = new NewsAdapter(getActivity(),newsList1);
         //启动ListView的适配器，这样ListView就能与适配器的数据相关联了
         newsTitleListView.setAdapter(adapter);
+        //为ListView中的子项设置监听器
         adapter.setOnItemClickListener(new NewsAdapter.onItemClickListener() {
             @Override
             public void onItemClick(BitNew bitnews) {
@@ -83,13 +68,19 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
             }
         });
 
-//        //为ListView中的子项设置监听器
-//        newsTitleListView.setOnItemClickListener(this);
 
         return view;
-}
+    }
 
-
+    @Override
+    //ListView子项目的点击事件
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        BitNew news = newsList1.get(position);
+        //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
+        Intent intent3 = new Intent(getActivity(), NewsContentActivity.class);
+        intent3.putExtra("news", news);
+        getActivity().startActivity(intent3);
+    }
 
     private void fillInNews(String json){
         GsonBuilder gsonBuilder=new GsonBuilder();
@@ -118,16 +109,9 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         }
     };
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        BitNew news = newsList1.get(position);
-        //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-        Intent intent = new Intent(getActivity(), NewsContentActivity.class);
-        intent.putExtra("news", news);
-        getActivity().startActivity(intent);    //标记位置
-    }
 
-    class QueryNews extends BaseThread {
+
+    class QueryBtslandNews extends BaseThread {
         @Override
         public void execute() {
             NewsHttp.queryLatest(new Callback() {
@@ -147,9 +131,6 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
         }
 
     }
-
-
-
 
 
 }

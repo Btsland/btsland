@@ -54,16 +54,22 @@ public class HomeFragment extends Fragment {
     private void init(View view){
         Log.e(TAG, "init: ");
         ViewPager viewPager1= view.findViewById(R.id.vp_detailed);
-        String[] titles={"最新资讯","热点资讯","国内资讯","国外资讯"};
+        String[] titles={"最新资讯","热点资讯","BTSLAND","IFAST"};
         List<Fragment> fragments=new ArrayList<Fragment>();
+        //最新资讯
         LatestNewsFragment latestNewsFragment=new LatestNewsFragment();
+        //热点资讯
         HotNewsFragment hotNewsFragment=new HotNewsFragment();
-        DomesticInformationFragment domesticInformationFragment=new DomesticInformationFragment();
+        //国内资讯
+        BtslandNewsFragment btslandNewsFragment=new BtslandNewsFragment();
+        //国外资讯
         ForeignInformationFragment foreignInformationFragment=new ForeignInformationFragment();
+
         fragments.add(latestNewsFragment);
         fragments.add(hotNewsFragment);
-        fragments.add(domesticInformationFragment);
+        fragments.add(btslandNewsFragment);
         fragments.add(foreignInformationFragment);
+
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments,titles);
         PagerSlidingTabStrip tabStrip = view.findViewById(R.id.psts_detailed_title1);
         viewPager1.setAdapter(adapter);

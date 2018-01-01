@@ -4,7 +4,7 @@
     android:background="#FFFFFF"
     android:orientation="horizontal"
     android:layout_height="100dp">
-    <ImageView
+    <WebView
         android:id="@+id/news_images"
         android:layout_width="120dp"
         android:layout_height="90dp"

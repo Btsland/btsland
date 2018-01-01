@@ -32,7 +32,7 @@ import info.btsland.app.api.asset;
 import info.btsland.app.api.object_id;
 import info.btsland.app.api.operation_history_object;
 import info.btsland.app.exception.NetworkStatusException;
-import info.btsland.app.ui.fragment.DomesticInformationFragment;
+
 import info.btsland.app.ui.fragment.ForeignInformationFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HotNewsFragment;

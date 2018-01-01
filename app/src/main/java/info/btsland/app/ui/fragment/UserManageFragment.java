@@ -5,11 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,11 +16,8 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kaopiz.kprogresshud.KProgressHUD;
-
-import java.io.IOException;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
@@ -39,11 +33,6 @@ import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.MyConstraintLayout;
-import info.btsland.app.ui.view.PasswordDialog;
-import info.btsland.exchange.http.UserHttp;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -82,6 +71,8 @@ public class UserManageFragment extends Fragment {
 
     //转账
     private TextView tvPurseTransferAccounts;
+
+    private TextView tvChat;
     //抵押
     private TextView tvBorrow;
 
@@ -94,9 +85,12 @@ public class UserManageFragment extends Fragment {
 
     private TextView tvGoRegister;
 
+    private TextView tvPoint;
+
     private ScrollView scrollView;
     private MyConstraintLayout clPurse;
     private UserManageReceiver userManageReceiver ;
+    private UserManageReceiverPoint userManageReceiverPoint ;
 
     public UserManageFragment() {
         // Required empty public constructor
@@ -109,6 +103,9 @@ public class UserManageFragment extends Fragment {
         userManageReceiver=new UserManageReceiver();
         IntentFilter intentFilter =new IntentFilter(UserManageReceiver.EVENT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiver,intentFilter);
+        userManageReceiverPoint=new UserManageReceiverPoint();
+        IntentFilter intentFilter2 =new IntentFilter(UserManageReceiverPoint.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiverPoint,intentFilter2);
     }
 
     @Override
@@ -212,7 +209,8 @@ public class UserManageFragment extends Fragment {
         tvPurseConvert=view.findViewById(R.id.tv_purse_convert);
         //转账操作
         tvPurseTransferAccounts=view.findViewById(R.id.tv_purse_transfer_accounts);
-
+        //聊天
+        tvChat=view.findViewById(R.id.tv_purse_chat);
         //去登陆按钮
         tvGoLogin=view.findViewById(R.id.tv_go_login);
         //去注册
@@ -229,6 +227,7 @@ public class UserManageFragment extends Fragment {
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
         tvUserLogoff=view.findViewById(R.id.tv_user_logoff);
         scrollView=view.findViewById(R.id.sv_purse);
+        tvPoint=view.findViewById(R.id.tv_user_manage_point);
 
         TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
@@ -242,6 +241,7 @@ public class UserManageFragment extends Fragment {
         tvGoRegister.setOnClickListener(onCLickListener);
         tvBorrow.setOnClickListener(onCLickListener);
         tvPueseTypes.setOnClickListener(onCLickListener);
+        tvChat.setOnClickListener(onCLickListener);
 
     }
     public static void sendBroadcast(Context context,Double total,String coin){
@@ -267,6 +267,36 @@ public class UserManageFragment extends Fragment {
             }else if(want==2) {
                 fillIn();
             }
+        }
+    }
+    public void setPoint(int point) {
+        if(point==0){
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.GONE);
+        }else {
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiverPoint);
+    }
+
+    public static void sendBroadcastPoint(Context context, int num){
+        Intent intent=new Intent(UserManageReceiverPoint.EVENT);
+        intent.putExtra("num",num);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    private class UserManageReceiverPoint extends BroadcastReceiver {
+        public static final String EVENT = "UserManageReceiverPoint";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int num=intent.getIntExtra("num",0);
+            setPoint(num);
         }
     }
     /**
@@ -301,46 +331,10 @@ public class UserManageFragment extends Fragment {
                     break;
                 case R.id.tv_purse_types:
                     //c2c支付帐号
-                    if(BtslandApplication.dealer!=null){
-                        Intent types=new Intent(getActivity(), AccountC2CTypesActivity.class);
-                        types.putExtra("type",0);
-                        getActivity().startActivity(types);
-                    }else {
-                        Bundle bundle=new Bundle();
-                        bundle.putString("want","hud");
-                        Message msg=Message.obtain();
-                        msg.what=1;
-                        msg.setData(bundle);
-                        registerHandler.sendMessage(msg);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                UserHttp.registerAccount(BtslandApplication.accountObject.name, "", new Callback() {
-                                    @Override
-                                    public void onFailure(Call call, IOException e) {
+                    Intent types=new Intent(getActivity(), AccountC2CTypesActivity.class);
+                    types.putExtra("type",0);
+                    getActivity().startActivity(types);
 
-                                    }
-
-                                    @Override
-                                    public void onResponse(Call call, Response response) throws IOException {
-                                        int a= Integer.parseInt(response.body().string());
-                                        Bundle bundle=new Bundle();
-                                        bundle.putString("want","register");
-                                        Message msg=Message.obtain();
-                                        msg.setData(bundle);
-                                        if(a>0){
-                                            msg.what=1;
-                                            registerHandler.sendMessage(msg);
-                                        }else {
-                                            msg.what=2;
-                                            registerHandler.sendMessage(msg);
-                                        }
-                                    }
-                                });
-                            }
-                        }).start();
-
-                    }
                     break;
                 case R.id.tv_purse_deal:
                     //交易记录
@@ -355,6 +349,11 @@ public class UserManageFragment extends Fragment {
                     //观察
                     Intent backup=new Intent(getActivity(), LookActivity.class);
                     getActivity().startActivity(backup);
+                    break;
+                case R.id.tv_purse_chat:
+                    //聊天
+//                    Intent chat=new Intent(getActivity(), LookActivity.class);
+//                    getActivity().startActivity(chat);
                     break;
                 case R.id.tv_user_logoff:
                     AppDialog appDialog=new AppDialog(getActivity());
@@ -433,42 +432,7 @@ public class UserManageFragment extends Fragment {
         }
     }
     private KProgressHUD hud;
-    private Handler registerHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            String want = msg.getData().getString("want");
-            if(want.equals("register")) {
-                if (msg.what == 1) {
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if(hud!=null&&hud.isShowing()){
-                        hud.dismiss();
-                    }
-                    Toast.makeText(getActivity(),"第一次使用注册成功",Toast.LENGTH_SHORT).show();
-                    Intent types=new Intent(getActivity(), AccountC2CTypesActivity.class);
-                    types.putExtra("type",0);
-                    getActivity().startActivity(types);
-                }else {
-                    if(hud!=null&&hud.isShowing()){
-                        hud.dismiss();
-                    }
-                    Toast.makeText(getActivity(),"注册失败",Toast.LENGTH_SHORT).show();
-                }
-            }else if(want.equals("hud")){
-                if(msg.what==1){
-                    if(hud==null){
-                        hud=KProgressHUD.create(getActivity());
-                    }
-                    hud.setLabel("请稍等。。。");
-                    hud.show();
-                }
 
-            }
-        }
-    };
 
     @Override
     public void onAttach(Context context) {

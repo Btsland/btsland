@@ -75,14 +75,38 @@ public class DealerNoteAdapter extends BaseAdapter {
         TextView tvCoin=convertView.findViewById(R.id.tv_dealer_having_item_coin);
         TextView tvStat=convertView.findViewById(R.id.tv_dealer_having_item_stat);
         TextView tvTime=convertView.findViewById(R.id.tv_dealer_having_item_time);
-        tvPay.setText(note.getRealNo()+"("+note.getRealType()+")");
-        tvCode.setText(note.getRemarkCode());
-        tvCoin.setText(note.getAssetCoin());
-        tvAccount.setText(note.getAccount());
-        tvStat.setText(NoteStatCode.getTabDealer(note.getStatNo()));
-        tvNum.setText(""+note.getAssetNum());
-        SimpleDateFormat format=new SimpleDateFormat("MM-dd/HH:MM");
-        tvTime.setText(format.format(note.getStartTime()));
+        String depict="";
+        if(note.getRealDepict()!=null) {
+            int a = note.getRealDepict().indexOf("(");
+            if (a != -1) {
+                depict = "(" + note.getRealDepict().substring(0, a) + ")";
+            } else {
+                depict = "(" + note.getRealDepict() + ")";
+            }
+        }
+        if(note.getRealNo()!=null){
+            tvPay.setText(note.getRealNo()+depict);
+        }
+        if(note.getRemarkCode()!=null){
+            tvCode.setText(note.getRemarkCode());
+        }
+        if(note.getAssetCoin()!=null){
+            tvCoin.setText(note.getAssetCoin());
+        }
+        if(note.getAccount()!=null){
+            tvAccount.setText(note.getAccount());
+        }
+        if(note.getStatNo()!=null){
+            tvStat.setText(NoteStatCode.getTabDealer(note.getStatNo()));
+        }
+        if(note.getAssetNum()!=null){
+            tvNum.setText(""+note.getAssetNum());
+        }
+        if(note.getStartTime()!=null){
+            SimpleDateFormat format=new SimpleDateFormat("MM-dd/HH:MM");
+            tvTime.setText(format.format(note.getStartTime()));
+        }
+
         convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

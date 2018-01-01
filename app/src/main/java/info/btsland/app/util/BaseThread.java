@@ -7,6 +7,7 @@ public class BaseThread extends Thread {
     private static String TAG="BaseThread";
     private final static Logger logger = LoggerFactory.getLogger(BaseThread.class);
 
+    private boolean isStart=false;
     /**
      * isDead:是否杀死线程
      */
@@ -28,7 +29,11 @@ public class BaseThread extends Thread {
     private boolean isSleep = false;
     private int sleepTime;
 
-    private int time=3;
+    private int time=6;
+
+    public boolean isStart(){
+        return isStart;
+    }
 
     public double getTime() {
         return time;
@@ -41,7 +46,7 @@ public class BaseThread extends Thread {
 
     public BaseThread() {
         super();
-        this.setDaemon(false);//设置为非守护线程  
+        this.setDaemon(false);//设置为非守护线程
         logger.info("线程:[" + this.getId() + "] 被创建");
     }
 
@@ -73,6 +78,12 @@ public class BaseThread extends Thread {
         }
         isRun = false;
         logger.info("线程:[" + this.getName() + "-" + this.getId() + "] 消亡");
+    }
+
+    @Override
+    public synchronized void start() {
+        super.start();
+        isStart=true;
     }
 
     /**

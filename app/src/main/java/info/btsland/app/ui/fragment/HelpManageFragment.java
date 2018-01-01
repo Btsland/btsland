@@ -103,7 +103,6 @@ public class HelpManageFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(helpManageDealerList);
         fillIn.kill();
     }
-
     public static void sendBroadcast(Context context){
         Intent intent=new Intent(HelpManageDealerList.EVENT);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

@@ -143,9 +143,12 @@ public class ExchangeListFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
-                            Log.e(TAG, "onResponse: " + json);
-                            fillInHavingList(json);
-                            handler.sendEmptyMessage(2);
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(getActivity(),json);
+                            }else {
+                                fillInHavingList(json);
+                                handler.sendEmptyMessage(2);
+                            }
                         }
                     });
                 }
@@ -167,8 +170,12 @@ public class ExchangeListFragment extends Fragment {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
-                            fillInClinchList(json);
-                            handler.sendEmptyMessage(1);
+                            if(json.indexOf("error")!=-1){
+                                BtslandApplication.sendBroadcastDialog(getActivity(),json);
+                            }else {
+                                fillInClinchList(json);
+                                handler.sendEmptyMessage(1);
+                            }
                         }
                     });
                 }

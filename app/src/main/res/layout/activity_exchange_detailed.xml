@@ -8,6 +8,19 @@
         android:layout_width="match_parent"
         android:layout_height="50dp">
     </FrameLayout>
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_excDet_types"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="5dp">
+    </android.support.v4.view.ViewPager>
+    <LinearLayout
+        android:id="@+id/ll_excDet_types_table"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+    </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -178,6 +191,13 @@
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_height="match_parent"/>
+                    <TextView
+                        android:id="@+id/tv_excDet_codeCopy"
+                        android:layout_width="30dp"
+                        android:gravity="center"
+                        android:background="@drawable/image_copy"
+                        android:textColor="@color/black"
+                        android:layout_height="30dp" />
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout
@@ -185,9 +205,9 @@
                 android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
-                    android:id="@+id/tv_excDet_realNo_tab"
+                    android:id="@+id/tv_excDet_inNo_tab"
                     android:layout_width="wrap_content"
-                    android:text="支付帐号："
+                    android:text="收款帐号："
                     android:gravity="center"
                     android:layout_height="match_parent"/>
                 <LinearLayout
@@ -195,7 +215,7 @@
                     android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
-                        android:id="@+id/tv_excDet_realNo"
+                        android:id="@+id/tv_excDet_outNo"
                         android:layout_width="wrap_content"
                         android:text=""
                         android:textColor="@color/black"
@@ -208,8 +228,9 @@
                 android:layout_height="40dp"
                 android:background="@drawable/row_bottom_border">
                 <TextView
+                    android:id="@+id/tv_excDet_outNo_tab"
                     android:layout_width="wrap_content"
-                    android:text="收款帐号："
+                    android:text="付款账号："
                     android:gravity="center"
                     android:layout_height="match_parent"/>
                 <LinearLayout
@@ -217,10 +238,19 @@
                     android:layout_height="40dp"
                     android:gravity="right">
                     <TextView
-                        android:id="@+id/tv_excDet_realType"
+                        android:id="@+id/tv_excDet_inNo"
                         android:layout_width="wrap_content"
                         android:text=""
                         android:textColor="@color/black"
+                        android:gravity="center"
+                        android:layout_height="match_parent"/>
+                    <TextView
+                        android:id="@+id/tv_excDet_inNo_btn"
+                        android:layout_width="wrap_content"
+                        android:text="选择"
+                        android:textColor="@color/color_font_blue"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginLeft="5dp"
                         android:gravity="center"
                         android:layout_height="match_parent"/>
                 </LinearLayout>
@@ -293,23 +323,24 @@
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp">
+                android:layout_height="80dp">
                 <TextView
                     android:layout_width="wrap_content"
                     android:text="备注信息："
-                    android:gravity="center"
+                    android:gravity="top"
+                    android:layout_marginTop="10dp"
                     android:layout_height="match_parent"/>
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="80dp"
                     android:gravity="right">
-                    <TextView
-                        android:id="@+id/tv_excDet_depict"
-                        android:layout_width="wrap_content"
-                        android:text=""
+                    <EditText
+                        android:id="@+id/ed_excDet_depict"
+                        android:layout_width="match_parent"
                         android:textColor="@color/black"
                         android:gravity="center"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="80dp"
+                        android:background="@drawable/edit_text"/>
                 </LinearLayout>
             </LinearLayout>
             <TextView

@@ -96,11 +96,10 @@ public class UserHttp extends C2CHttp {
      * @param stat
      * @return
      */
-    public static void updateStat(String dealerId,String password,int stat,Callback callback){
+    public static void updateStat(String dealerId,int stat,Callback callback){
         String action="/user/updateStat";
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("dealerId", dealerId);
-        paramMap.put("password", password);
         paramMap.put("stat", String.valueOf(stat));
         post(action, paramMap,callback);
     }

@@ -1,5 +1,8 @@
 package info.btsland.app.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -110,7 +114,14 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         if(note!=null){
             tvAccount.setText(note.getAccount());
             tvRealNo.setText(note.getRealNo());
-            tvRealType.setText(note.getRealType());
+            int a=note.getRealDepict().indexOf("(");
+            String depict;
+            if(a!=-1){
+                depict=note.getRealDepict().substring(0,a);
+            }else {
+                depict=note.getRealDepict();
+            }
+            tvRealType.setText(depict);
             tvNum.setText(""+note.getAssetNum());
             tvCoin.setText(note.getAssetCoin());
             tvNum2.setText(""+(note.getAssetNum()*(1-note.getBrokerage())));
@@ -137,7 +148,10 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                 tvCodeCopy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData mClipData = ClipData.newPlainText("Label", tvCode.getText().toString());
+                        cm.setPrimaryClip(mClipData);
+                        Toast.makeText(DealerExchangeDetailedActivity.this,"已复制到剪贴板",Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -161,10 +175,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a= Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -180,6 +199,13 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             break;
                         case UserTypeCode.HELP:
                             tvConfirm.setVisibility(View.GONE);
+                            tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+
+                                }
+                            });
                             break;
                         case UserTypeCode.ADMIN:
                             tvConfirm.setVisibility(View.VISIBLE);
@@ -192,10 +218,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a = Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -224,10 +255,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a= Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -255,10 +291,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a= Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -288,10 +329,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a= Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -319,10 +365,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a = Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -354,10 +405,15 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                         public void onFailure(Call call, IOException e) {}
                                         @Override
                                         public void onResponse(Call call, Response response) throws IOException {
-                                            int a= Integer.parseInt(response.body().string());
-                                            if(a>0){
-                                                handler.sendEmptyMessage(10);
-                                                handler.sendEmptyMessage(1);
+                                            String json= response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                                            } else {
+                                                int a= Integer.parseInt(json);
+                                                if (a > 0) {
+                                                    handler.sendEmptyMessage(10);
+                                                    handler.sendEmptyMessage(1);
+                                                }
                                             }
                                         }
                                     });
@@ -420,7 +476,11 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     String json = response.body().string();
-                    fillInNote(json);
+                    if (json.indexOf("error") != -1) {
+                        BtslandApplication.sendBroadcastDialog(DealerExchangeDetailedActivity.this,json);
+                    } else {
+                        fillInNote(json);
+                    }
                 }
             });
         }

@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class DetailedFragmentAdapter extends FragmentStatePagerAdapter {
     private static final String TAG = "DetailedFragmentAdapter";
-    private List<Fragment> fragmentList;
+    private List<Fragment> fragmentList=new ArrayList<>();
     private String[] titles;
     private FragmentManager fm;
 

@@ -75,6 +75,7 @@ public class TransferActivity extends AppCompatActivity {
     private ArrayAdapter<String> adapter;
     private String[] coins;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

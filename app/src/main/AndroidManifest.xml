@@ -92,7 +92,8 @@
         <activity android:name=".ui.activity.DealerExchangeDetailedActivity" />
         <activity android:name=".ui.activity.BorrowActivity" />
         <activity android:name=".ui.activity.DealerInfoActivity" />
-        <activity android:name=".ui.activity.AccountC2CTypesActivity"></activity>
+        <activity android:name=".ui.activity.AccountC2CTypesActivity" />
+        <activity android:name=".ui.activity.ChatAccountListActivity"></activity>
     </application>
 
 </manifest>

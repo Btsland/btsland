@@ -56,7 +56,7 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.asset_item, null);
         }
-        if(assets.get(position)==null){
+        if(assets.size()>0&&assets.get(position)==null){
             return convertView;
         }
         TextView tvAssetCoin=convertView.findViewById(R.id.tv_asset_coin);
@@ -82,12 +82,12 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         });
 
 
-        if(assets.get(position).coinName!=null&&!assets.get(position).coinName.equals("")){
+        if(assets.size()>0&&assets.get(position).coinName!=null&&!assets.get(position).coinName.equals("")){
             tvAssetCoin.setText(String.valueOf(assets.get(position).coinName));
         }else{
             tvAssetCoin.setText("");
         }
-        if(assets.get(position).total!=null){
+        if(assets.size()>0&&assets.get(position).total!=null){
             tvAssetNum.setText(String.valueOf(assets.get(position).total));
         }else{
             tvAssetNum.setText("0.0");

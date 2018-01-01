@@ -29,7 +29,7 @@ public class BaseThread extends Thread {
     private boolean isSleep = false;
     private int sleepTime;
 
-    private int time=3;
+    private int time=6;
 
     public boolean isStart(){
         return isStart;

@@ -71,6 +71,8 @@ public class UserManageFragment extends Fragment {
 
     //转账
     private TextView tvPurseTransferAccounts;
+
+    private TextView tvChat;
     //抵押
     private TextView tvBorrow;
 
@@ -83,9 +85,12 @@ public class UserManageFragment extends Fragment {
 
     private TextView tvGoRegister;
 
+    private TextView tvPoint;
+
     private ScrollView scrollView;
     private MyConstraintLayout clPurse;
     private UserManageReceiver userManageReceiver ;
+    private UserManageReceiverPoint userManageReceiverPoint ;
 
     public UserManageFragment() {
         // Required empty public constructor
@@ -98,6 +103,9 @@ public class UserManageFragment extends Fragment {
         userManageReceiver=new UserManageReceiver();
         IntentFilter intentFilter =new IntentFilter(UserManageReceiver.EVENT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiver,intentFilter);
+        userManageReceiverPoint=new UserManageReceiverPoint();
+        IntentFilter intentFilter2 =new IntentFilter(UserManageReceiverPoint.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiverPoint,intentFilter2);
     }
 
     @Override
@@ -201,7 +209,8 @@ public class UserManageFragment extends Fragment {
         tvPurseConvert=view.findViewById(R.id.tv_purse_convert);
         //转账操作
         tvPurseTransferAccounts=view.findViewById(R.id.tv_purse_transfer_accounts);
-
+        //聊天
+        tvChat=view.findViewById(R.id.tv_purse_chat);
         //去登陆按钮
         tvGoLogin=view.findViewById(R.id.tv_go_login);
         //去注册
@@ -218,6 +227,7 @@ public class UserManageFragment extends Fragment {
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
         tvUserLogoff=view.findViewById(R.id.tv_user_logoff);
         scrollView=view.findViewById(R.id.sv_purse);
+        tvPoint=view.findViewById(R.id.tv_user_manage_point);
 
         TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
@@ -231,6 +241,7 @@ public class UserManageFragment extends Fragment {
         tvGoRegister.setOnClickListener(onCLickListener);
         tvBorrow.setOnClickListener(onCLickListener);
         tvPueseTypes.setOnClickListener(onCLickListener);
+        tvChat.setOnClickListener(onCLickListener);
 
     }
     public static void sendBroadcast(Context context,Double total,String coin){
@@ -256,6 +267,36 @@ public class UserManageFragment extends Fragment {
             }else if(want==2) {
                 fillIn();
             }
+        }
+    }
+    public void setPoint(int point) {
+        if(point==0){
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.GONE);
+        }else {
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiverPoint);
+    }
+
+    public static void sendBroadcastPoint(Context context, int num){
+        Intent intent=new Intent(UserManageReceiverPoint.EVENT);
+        intent.putExtra("num",num);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    private class UserManageReceiverPoint extends BroadcastReceiver {
+        public static final String EVENT = "UserManageReceiverPoint";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int num=intent.getIntExtra("num",0);
+            setPoint(num);
         }
     }
     /**
@@ -308,6 +349,11 @@ public class UserManageFragment extends Fragment {
                     //观察
                     Intent backup=new Intent(getActivity(), LookActivity.class);
                     getActivity().startActivity(backup);
+                    break;
+                case R.id.tv_purse_chat:
+                    //聊天
+//                    Intent chat=new Intent(getActivity(), LookActivity.class);
+//                    getActivity().startActivity(chat);
                     break;
                 case R.id.tv_user_logoff:
                     AppDialog appDialog=new AppDialog(getActivity());

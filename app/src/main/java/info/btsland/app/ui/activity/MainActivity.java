@@ -404,19 +404,18 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     protected void onStart() {
         super.onStart();
     }
-    public static void sendBroadcast(Context context){
+    public static void sendBroadcast(Context context,int num){
         Intent intent=new Intent(MainReceiver.EVENT);
+        intent.putExtra("num",num);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
     public class MainReceiver extends BroadcastReceiver{
         public static final String EVENT="MainReceiver";
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(BtslandApplication.dealerHavingNotes!=null) {
-                setPoint(BtslandApplication.dealerHavingNotes.size());
-            }else {
-                setPoint(0);
-            }
+            int num=intent.getIntExtra("num",0);
+            setPoint(num);
+
         }
     }
 

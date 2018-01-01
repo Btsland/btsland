@@ -1,6 +1,7 @@
 package info.btsland.app.Adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -108,7 +109,30 @@ public class DealerListAdapter extends BaseAdapter {
 
         if(dealerData.user.userInfo!=null){
             tvAccountNo.setText(dealerData.user.getDealerId());
-            tvLevel.setText(""+dealerData.user.userInfo.getLevel());
+            Double level = dealerData.user.userInfo.getLevel();
+            int a = (int) (level/20);
+            Drawable drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level2);
+            switch (a){
+                case 0:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level1);
+                    break;
+                case 1:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level2);
+                    break;
+                case 2:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level3);
+                    break;
+                case 3:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level4);
+                    break;
+                case 4:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level5);
+                    break;
+                case 5:
+                    drawable=BtslandApplication.getInstance().getDrawable(R.mipmap.level5);
+                    break;
+            }
+            tvLevel.setBackground(drawable);
         }else {
             tvAccountNo.setText("");
             tvLevel.setText(""+0.0);

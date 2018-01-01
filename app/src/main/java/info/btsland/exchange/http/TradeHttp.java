@@ -80,4 +80,18 @@ public class TradeHttp extends C2CHttp {
         paramMap.put("stat", String.valueOf(stat));
         post(action,paramMap,callback);
     }
+
+    /**
+     * 更新备注
+     * @param noteNo
+     * @param depict
+     * @param callback
+     */
+    public static void updateNoteDepict(String noteNo,String depict,Callback callback){
+        String action="/trade/updateNoteStat";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("noteNo",noteNo);
+        paramMap.put("depict",depict);
+        post(action,paramMap,callback);
+    }
 }

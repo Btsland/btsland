@@ -1,5 +1,8 @@
 package info.btsland.app.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -144,7 +148,10 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                 tvCodeCopy.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                        ClipData mClipData = ClipData.newPlainText("Label", tvCode.getText().toString());
+                        cm.setPrimaryClip(mClipData);
+                        Toast.makeText(DealerExchangeDetailedActivity.this,"已复制到剪贴板",Toast.LENGTH_SHORT).show();
                     }
                 });
             }

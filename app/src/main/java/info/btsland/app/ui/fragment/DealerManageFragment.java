@@ -63,9 +63,12 @@ public class DealerManageFragment extends Fragment {
     private TextView tvZFB;
     private TextView tvYH;
     private ImageView ivPho;
+    private TextView tvPoint;
+
     private NumberProgressBar progressBar;
 
     private DealerManageReceiver dealerManageReceiver;
+    private DealerManageReceiverPoint dealerManageReceiverPoint;
 
     public DealerManageFragment() {
 
@@ -84,6 +87,9 @@ public class DealerManageFragment extends Fragment {
         IntentFilter intentFilter =new IntentFilter(DealerManageReceiver.EVENT) ;
         dealerManageReceiver=new DealerManageReceiver() ;
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(dealerManageReceiver,intentFilter);
+        IntentFilter intentFilter2 =new IntentFilter(DealerManageReceiverPoint.EVENT) ;
+        dealerManageReceiverPoint=new DealerManageReceiverPoint() ;
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(dealerManageReceiverPoint,intentFilter2);
         if (getArguments() != null) {
         }
     }
@@ -125,7 +131,20 @@ public class DealerManageFragment extends Fragment {
         tvClinch=view.findViewById(R.id.tv_dealer_clinch);
         tvHelp=view.findViewById(R.id.tv_dealer_help);
         tvUser=view.findViewById(R.id.tv_dealer_user);
+
+        tvPoint=view.findViewById(R.id.tv_dealer_manage_point);
     }
+    public void setPoint(int point) {
+        if(point==0){
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.GONE);
+        }else {
+            tvPoint.setText(""+point);
+            tvPoint.setVisibility(View.VISIBLE);
+        }
+    }
+
+
     private void fillInTop(){
         switch (BtslandApplication.dealer.getStat()){
             case UserStatCode.ONLINE:
@@ -308,8 +327,21 @@ public class DealerManageFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(dealerManageReceiver);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(dealerManageReceiverPoint);
     }
-
+    public static void sendBroadcastPoint(Context context, int num){
+        Intent intent=new Intent(DealerManageReceiverPoint.EVENT);
+        intent.putExtra("num",num);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    private class DealerManageReceiverPoint extends BroadcastReceiver {
+        public static final String EVENT = "DealerManageReceiverPoint";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int num=intent.getIntExtra("num",0);
+            setPoint(num);
+        }
+    }
     public static void sendBroadcast(Context context){
         Intent intent=new Intent(DealerManageReceiver.EVENT);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);

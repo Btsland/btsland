@@ -112,7 +112,7 @@ public class PurseFragment extends Fragment {
         Intent intent=new Intent(PurseReceiver.EVENT);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
-    public class PurseReceiver extends BroadcastReceiver{
+    private class PurseReceiver extends BroadcastReceiver{
         public static final String EVENT="PurseReceiver";
         @Override
         public void onReceive(Context context, Intent intent) {

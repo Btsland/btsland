@@ -234,28 +234,22 @@ public class MarketStat {
         public synchronized void run() {
             Looper.prepare();
             final Stat stat = new Stat();
-            int a=0;
-            int i=-1;
+            int i=0;
             while (true) {
-                if(a<2) {
-                    stat.nRet = mWebsocketApi.connect();
-                    Log.e(TAG, "run: "+stat.nRet );
-                    if(stat.nRet==0){
-                        listener.onMarketStatUpdate(stat);
-                        break;
-                    }
-                    a++;
-                    continue;
+                stat.nRet = mWebsocketApi.connect();
+                Log.e(TAG, "run: "+stat.nRet );
+                if(stat.nRet==0){
+                    listener.onMarketStatUpdate(stat);
+                    break;
                 }
-                i++;
                 if(i>BtslandApplication.mListNode.size()){
                     AppDialog appDialog=new AppDialog(BtslandApplication.getInstance());
                     appDialog.setMsg("目前的节点都无法连接！");
                     appDialog.show();
                     break;
                 }
+                i++;
                 BtslandApplication.strServer=BtslandApplication.mListNode.get(i);
-                a=0;
                 try {
                     Thread.sleep(256);
                 } catch (InterruptedException e) {

@@ -36,7 +36,7 @@ public class User {
 
     public UserRecord userRecord;
 
-    public List<Note> havingNotes;
+    public List<Note> havingNotes=new ArrayList<>();
 
     public List<Chat> helpOldChatList=new ArrayList<>();
 

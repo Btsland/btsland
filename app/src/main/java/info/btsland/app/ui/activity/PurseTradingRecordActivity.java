@@ -61,19 +61,21 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
         Thread thread=new Thread(new Runnable() {
             @Override
             public void run() {
+
                 try {
                     listHistoryObject = BtslandApplication.getWalletApi().get_account_history(
                             BtslandApplication.accountObject.id,
                             new object_id<operation_history_object>(0, operation_history_object.class),
-                            100
+                            40
                     );
                     if(listHistoryObject!=null){
                         handler.sendEmptyMessage(1);
                     }else {
-                        handler.sendEmptyMessage(-1);
+                        handler.sendEmptyMessage(0);
                     }
                 } catch (NetworkStatusException e) {
                     e.printStackTrace();
+                    handler.sendEmptyMessage(-1);
                 }
             }
         });
@@ -100,8 +102,10 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
             if(msg.what==1){
                 rlvOperationAdapter.setList(listHistoryObject);
                 rlvOperationAdapter.notifyDataSetChanged();
-            }else {
+            }else if(msg.what==0) {
                 Toast.makeText(PurseTradingRecordActivity.this,"您的帐号目前没有记录",Toast.LENGTH_SHORT).show();
+            }else if(msg.what==-1){
+                Toast.makeText(PurseTradingRecordActivity.this,"数据获取失败",Toast.LENGTH_SHORT).show();
             }
         }
     };

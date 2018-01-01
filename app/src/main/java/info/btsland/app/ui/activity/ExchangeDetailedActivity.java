@@ -1,5 +1,8 @@
 package info.btsland.app.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -10,8 +13,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -67,9 +72,9 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
     private TextView tvStartTime;
     private TextView tvAccountReTime;
     private TextView tvEndTime;
-    private TextView tvDepict;
+    private EditText edDepict;
     private TextView tvStat;
-
+    private TextView tvCodeCopy;
     private TextView tvNumTab;
     private TextView tvRemarkCodeTab;
 
@@ -81,6 +86,8 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
 
     private RealAsset real;
     private String TAG="ExchangeDetailedActivity";
+
+    private String depict="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +119,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         tvStartTime=findViewById(R.id.tv_excDet_startTime);
         tvAccountReTime=findViewById(R.id.tv_excDet_accountReTime);
         tvEndTime=findViewById(R.id.tv_excDet_endTime);
-        tvDepict=findViewById(R.id.tv_excDet_depict);
+        edDepict=findViewById(R.id.ed_excDet_depict);
         tvStat=findViewById(R.id.tv_excDet_stat);
         tvNumTab=findViewById(R.id.tv_excDet_num_tab);
         tvRemarkCodeTab=findViewById(R.id.tv_excDet_remarkCode_tab);
@@ -122,6 +129,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         tvOutNoTab=findViewById(R.id.tv_excDet_outNo_tab);
         viewPager=findViewById(R.id.vp_excDet_types);
         llTable=findViewById(R.id.ll_excDet_types_table);
+        tvCodeCopy=findViewById(R.id.tv_excDet_codeCopy);
         if(type==IN){
             dealerTypesAdaper=new DealerTypesAdaper(ExchangeDetailedActivity.this);
             viewPager.setAdapter(dealerTypesAdaper);
@@ -163,6 +171,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         Log.e(TAG, "fillNote: json:"+json );
         Log.e(TAG, "fillNote: note:"+note );
         Log.e(TAG, "fillNote: note.getDealerId():"+note.getDealerId() );
+        depict=note.getDepict();
         if(type==IN){
             new Thread(new Runnable() {
                 @Override
@@ -214,8 +223,12 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
             }else{
                 depict="("+note.getRealDepict()+")";
             }
-            tvInNo.setText(note.getRealNo()+depict);
-            tvOutNo.setText(note.getAccount());
+            if(note.getRealNo()!=null){
+                tvInNo.setText(note.getRealNo()+depict);
+            }
+            if(note.getAccount()!=null){
+                tvOutNo.setText(note.getAccount());
+            }
             final SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd/HH:mm");
             if(note.getStartTime()!=null) {
                 tvStartTime.setText(format.format(note.getStartTime()));
@@ -227,15 +240,34 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
                 tvEndTime.setText(format.format(note.getEndTime()));
             }
             tvStat.setText(NoteStatCode.getTabAccount(note.getStatNo()));
+
             tvBtn.setVisibility(View.GONE);
             tvCancel.setVisibility(View.GONE);
             if(type==IN){
                 if(note.getStatNo()==NoteStatCode.ACCOUNT_TRANSFERRING||note.getStatNo()==NoteStatCode.ACCOUNT_FILLING){
                     tvBtn.setVisibility(View.VISIBLE);
                     tvBtn.setText("确认已转账");
+                    final String finalDepict = depict;
                     tvBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
+                            String newDepict=edDepict.getText().toString();
+                            if(newDepict!=null&& !finalDepict.equals(newDepict)){
+                                TradeHttp.updateNoteDepict(noteNo, newDepict, new Callback() {
+                                    @Override
+                                    public void onFailure(Call call, IOException e) {
+
+                                    }
+
+                                    @Override
+                                    public void onResponse(Call call, Response response) throws IOException {
+                                        String json = response.body().string();
+                                        if (json.indexOf("error") != -1) {
+                                            BtslandApplication.sendBroadcastDialog(ExchangeDetailedActivity.this,json);
+                                        } 
+                                    }
+                                });
+                            }
                             if(note.getRealNo()!=null&&!note.getRealNo().equals("")) {
                                 TradeHttp.updateNoteStat(noteNo, NoteStatCode.ACCOUNT_CONFIRMED, new Callback() {
                                     @Override
@@ -363,7 +395,9 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
                     }
                 });
             }
-            tvDepict.setText(note.getDepict());
+            if(note.getDepict()!=null) {
+                edDepict.setText((note.getDepict()));
+            }
             tvNum.setText(note.getAssetNum()+note.getAssetCoin());
             tvRemarkCode.setText(note.getRemarkCode());
             if(type==IN){
@@ -377,8 +411,18 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
                 tvInNoTab.setText("付币账号");
                 tvOutNoTab.setText("收款账号");
             }
+            tvCodeCopy.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData mClipData = ClipData.newPlainText("Label", tvRemarkCode.getText().toString());
+                    cm.setPrimaryClip(mClipData);
+                    Toast.makeText(ExchangeDetailedActivity.this,"已复制到剪贴板",Toast.LENGTH_SHORT).show();
+                }
+            });
             if(note.getStatNo()!=NoteStatCode.ACCOUNT_FILLING&&note.getStatNo()!=NoteStatCode.ACCOUNT_TRANSFERRING){
                 tvInNoBtn.setVisibility(View.GONE);
+                tvCodeCopy.setVisibility(View.GONE);
             }
             tvInNoBtn.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -45,6 +45,7 @@ import okio.ByteString;
 
 import static info.btsland.app.BtslandApplication._nDatabaseId;
 import static info.btsland.app.BtslandApplication._nHistoryId;
+import static info.btsland.app.BtslandApplication._nBroadcastId;
 
 public class Websocket_api extends WebSocketListener {
     public static final int WEBSOCKET_CONNECT_NO_NETWORK =-2 ;
@@ -176,9 +177,6 @@ public class Websocket_api extends WebSocketListener {
 
     public synchronized int connect() {
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
-        if (mnConnectStatus == WEBSOCKET_ALL_READY) {
-            return 0;
-        }
         if (StringUtils.isEmpty(BtslandApplication.strServer)) {
             return -9;
         }
@@ -271,7 +269,7 @@ public class Websocket_api extends WebSocketListener {
             if (bLogin == true) {
                 _nDatabaseId = get_websocket_bitshares_api_id("database");
                 _nHistoryId = get_websocket_bitshares_api_id("history");
-                BtslandApplication._nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
+                _nBroadcastId = get_websocket_bitshares_api_id("network_broadcast");
             } else {
                 nRet = -9;
             }
@@ -792,7 +790,7 @@ public class Websocket_api extends WebSocketListener {
                 }
             }
             try {
-                replyObjectProcess.wait(5000);
+                replyObjectProcess.wait(10000);
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
                 String strError = replyObjectProcess.getError();
                 if (TextUtils.isEmpty(strError) == false) {
@@ -854,6 +852,7 @@ public class Websocket_api extends WebSocketListener {
             try {
                 //Log.i(TAG, "processTextToObject: ");
                 Gson gson = global_config_object.getInstance().getGsonBuilder().create();
+                Log.w(TAG, "processTextToObject: "+ strText);
                 mT = gson.fromJson(strText, mType);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();

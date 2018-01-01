@@ -101,7 +101,7 @@ public class DealerListFragment extends Fragment {
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(allDealersReceiver);
     }
 
-    private void fillInUser(){
+    private synchronized void fillInUser(){
         if(BtslandApplication.dealers!=null) {
             synchronized (BtslandApplication.dealers) {
                 for (int i = 0; i < BtslandApplication.dealers.size(); i++) {

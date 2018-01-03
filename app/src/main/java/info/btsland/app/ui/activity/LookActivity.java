@@ -9,15 +9,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.kaopiz.kprogresshud.KProgressHUD;
-
-import junit.framework.Assert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,10 +30,7 @@ import info.btsland.app.api.object_id;
 import info.btsland.app.api.operation_history_object;
 import info.btsland.app.exception.NetworkStatusException;
 
-import info.btsland.app.ui.fragment.ForeignInformationFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
-import info.btsland.app.ui.fragment.HotNewsFragment;
-import info.btsland.app.ui.fragment.LatestNewsFragment;
 import info.btsland.app.ui.fragment.LookAccountAssetFragment;
 import info.btsland.app.ui.fragment.LookAccountOrderFragment;
 import info.btsland.app.ui.view.AppDialog;

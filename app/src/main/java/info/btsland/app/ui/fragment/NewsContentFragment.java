@@ -31,17 +31,17 @@ public class NewsContentFragment extends Fragment {
     }
 
     //点赞按钮
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        Button button = (Button) getActivity().findViewById(R.id.news_like);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-//                Toast.makeText(getActivity(),"Clicked",Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//    @Override
+//    public void onActivityCreated(Bundle savedInstanceState) {
+//        super.onActivityCreated(savedInstanceState);
+//        Button button = (Button) getActivity().findViewById(R.id.news_like);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                Toast.makeText(getActivity(),"Clicked",Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
 
 

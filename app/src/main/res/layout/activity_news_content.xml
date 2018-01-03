@@ -90,20 +90,20 @@
                 android:textColor="#000000"
                 android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/news_like"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal"
-                android:background="@drawable/btn_red"
-                android:drawableLeft="@drawable/pointtheicon"
-                android:paddingBottom="10dp"
-                android:paddingLeft="16dp"
-                android:paddingRight="20dp"
-                android:paddingTop="10dp"
-                android:textColor="#FFFFFF"
-                android:onClick="likeButton"
-                android:text="赞"/>
+            <!--<Button-->
+                <!--android:id="@+id/news_like"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_gravity="center_horizontal"-->
+                <!--android:background="@drawable/btn_red"-->
+                <!--android:drawableLeft="@drawable/pointtheicon"-->
+                <!--android:paddingBottom="10dp"-->
+                <!--android:paddingLeft="16dp"-->
+                <!--android:paddingRight="20dp"-->
+                <!--android:paddingTop="10dp"-->
+                <!--android:textColor="#FFFFFF"-->
+                <!--android:onClick="likeButton"-->
+                <!--android:text="赞"/>-->
 
             <TextView
                 android:layout_width="match_parent"
@@ -124,21 +124,21 @@
             android:focusableInTouchMode="true" android:layout_width="0px"
             android:layout_height="0px" />
 
-        <EditText
-            android:id="@+id/news_edi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/edit_text"
-            android:layout_gravity="bottom"
-            android:paddingBottom="10dp"
-            android:paddingLeft="30dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            android:hint="写评论"
-            android:imeOptions="actionSend"
-            android:textColor="#cccccc"
-            android:textColorHint="#BDBDBD" />
+        <!--<EditText-->
+            <!--android:id="@+id/news_edi"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_weight="1"-->
+            <!--android:background="@drawable/edit_text"-->
+            <!--android:layout_gravity="bottom"-->
+            <!--android:paddingBottom="10dp"-->
+            <!--android:paddingLeft="30dp"-->
+            <!--android:paddingRight="20dp"-->
+            <!--android:paddingTop="10dp"-->
+            <!--android:hint="写评论"-->
+            <!--android:imeOptions="actionSend"-->
+            <!--android:textColor="#cccccc"-->
+            <!--android:textColorHint="#BDBDBD" />-->
 
         <!--android:cursorVisible="false"-->
         <!--android:focusable="true"-->

@@ -15,7 +15,7 @@ public class NewsHttp extends NewsConnectionUtil{
      * @param callback
      */
     public static void queryBtsland(Callback callback){
-        String action="/TypeQuery/Btsland";
+        String action="/news/TypeQuery/Btsland";
         get(action,callback);
     }
     /**
@@ -23,7 +23,7 @@ public class NewsHttp extends NewsConnectionUtil{
      * @param callback
      */
     public static void queryIFAST(Callback callback){
-        String action="/TypeQuery/IFAST";
+        String action="/news/TypeQuery/IFAST";
         get(action,callback);
     }
 

@@ -23,6 +23,8 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -45,12 +47,13 @@ import okhttp3.Response;
 
 public class LatestNewsFragment extends Fragment implements AdapterView.OnItemClickListener{
     private ListView newsTitleListView;
-    private NewsAdapter adapter =new NewsAdapter();
+    private NewsAdapter adapter;
     private boolean isTwoPane;
     private  BitNew news;
     private BaseThread queryLatestNews;
     List<BitNew> newsList1=new ArrayList<>();
     private String TAG="LatestNewsFragment";
+
 
 //    @Override
 //    public void onAttach(Activity activity) {
@@ -64,12 +67,13 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         queryLatestNews=new QueryNews();
-        queryLatestNews.setTime(60);
+        queryLatestNews.setTime(600);
         queryLatestNews.start();
         //加载fragment_latest_news.xml 布局
         View view = inflater.inflate(R.layout.fragment_latest_news, container, false);
         //得到ListView的实例
         newsTitleListView = (ListView) view.findViewById(R.id.news_latest_view);
+        Collections.reverse(newsList1);
         adapter = new NewsAdapter(getActivity(), newsList1);
         //启动ListView的适配器，这样ListView就能与适配器的数据相关联了
         newsTitleListView.setAdapter(adapter);
@@ -107,16 +111,21 @@ public class LatestNewsFragment extends Fragment implements AdapterView.OnItemCl
     }
 
 
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
+    private Handler handler;
 
-            if(msg.what==1){
-                adapter.setNewsList(newsList1);
-                adapter.notifyDataSetChanged();
+    {
+        handler = new Handler() {
+            @Override
+            public void handleMessage(Message msg) {
+
+                if (msg.what == 1) {
+                    Collections.reverse(newsList1);
+                    adapter.setNewsList(newsList1);
+                    adapter.notifyDataSetChanged();
+                }
             }
-        }
-    };
+        };
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

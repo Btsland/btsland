@@ -27,6 +27,7 @@ import java.util.List;
 import info.btsland.app.Adapter.NewsAdapter;
 import info.btsland.app.R;
 import info.btsland.app.model.BitNew;
+import info.btsland.app.model.News;
 import info.btsland.app.ui.activity.NewsContentActivity;
 import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.NewsHttp;
@@ -35,27 +36,27 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemClickListener {
-    private static final String TAG = "BtslandNewsFragment";
+public class IFASTFragment extends Fragment implements AdapterView.OnItemClickListener {
+    private static final String TAG = "IFASTFragment";
     private ListView newsTitleListView;
     private List<BitNew> newsList1=new ArrayList<>();
     private NewsAdapter adapter;
-    private BaseThread QueryBtslandNews;
     private boolean isTwoPane;
+    private BaseThread QueryIFAST;
 
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        QueryBtslandNews=new QueryBtslandNews();
-        QueryBtslandNews.setTime(600);
-        QueryBtslandNews.start();
+        QueryIFAST=new QueryIFAST();
+        QueryIFAST.setTime(600);
+        QueryIFAST.start();
         //加载fragment_newstitle.xml 布局
-        View view = inflater.inflate(R.layout.fragment_domestic_information, container, false);
+        View view = inflater.inflate(R.layout.fragment_foreign_information, container, false);
         //得到ListView的实例
-        newsTitleListView = (ListView) view.findViewById(R.id.news_domestic_view);
+        newsTitleListView = (ListView) view.findViewById(R.id.news_foreign_view);
         Collections.reverse(newsList1);
-        adapter = new NewsAdapter(getActivity(),newsList1);
+        adapter = new NewsAdapter(getActivity(), newsList1);
         //启动ListView的适配器，这样ListView就能与适配器的数据相关联了
         newsTitleListView.setAdapter(adapter);
         //为ListView中的子项设置监听器
@@ -68,8 +69,6 @@ public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemC
                 getActivity().startActivity(intent);    //标记位置
             }
         });
-
-
         return view;
     }
 
@@ -78,9 +77,9 @@ public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         BitNew news = newsList1.get(position);
         //如果是单页模式（手机），就启动一个新的活动去显示新闻内容。
-        Intent intent3 = new Intent(getActivity(), NewsContentActivity.class);
-        intent3.putExtra("news", news);
-        getActivity().startActivity(intent3);
+        Intent intent2 = new Intent(getActivity(), NewsContentActivity.class);
+        intent2.putExtra("news", news);
+        getActivity().startActivity(intent2);
     }
 
     private void fillInNews(String json){
@@ -90,7 +89,7 @@ public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemC
         Type type = new TypeToken<ArrayList<BitNew>>() {}.getType();
 
         newsList1= gson.fromJson(json,type);
-        Log.e(TAG, "fillInNews: "+newsList1.size());
+        Log.e(TAG, "fillInNews: "+newsList1.size() );
 //        news= gson.fromJson(json,News.class);
 
         if(newsList1!=null){
@@ -113,10 +112,10 @@ public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemC
 
 
 
-    class QueryBtslandNews extends BaseThread {
+    class QueryIFAST extends BaseThread {
         @Override
         public void execute() {
-            NewsHttp.queryBtsland(new Callback() {
+            NewsHttp.queryIFAST(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
 
@@ -133,6 +132,5 @@ public class BtslandNewsFragment extends Fragment implements AdapterView.OnItemC
         }
 
     }
-
-
+  
 }

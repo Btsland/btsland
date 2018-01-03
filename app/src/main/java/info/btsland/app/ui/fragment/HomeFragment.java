@@ -60,10 +60,10 @@ public class HomeFragment extends Fragment {
         LatestNewsFragment latestNewsFragment=new LatestNewsFragment();
         //热点资讯
         HotNewsFragment hotNewsFragment=new HotNewsFragment();
-        //国内资讯
+        //Btsland
         BtslandNewsFragment btslandNewsFragment=new BtslandNewsFragment();
-        //国外资讯
-        ForeignInformationFragment foreignInformationFragment=new ForeignInformationFragment();
+        //IFAST
+        IFASTFragment foreignInformationFragment=new IFASTFragment();
 
         fragments.add(latestNewsFragment);
         fragments.add(hotNewsFragment);

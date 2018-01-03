@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="info.btsland.app.ui.fragment.ForeignInformationFragment">
+    tools:context="info.btsland.app.ui.fragment.IFASTFragment">
 
     <ListView
         android:id="@+id/news_foreign_view"

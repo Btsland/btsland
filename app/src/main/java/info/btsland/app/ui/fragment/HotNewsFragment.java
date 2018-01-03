@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -56,12 +57,13 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         QueryHotNews=new QueryHotNews();
-        QueryHotNews.setTime(60);
+        QueryHotNews.setTime(600);
         QueryHotNews.start();
         //加载fragment_newstitle.xml 布局
         View view = inflater.inflate(R.layout.fragment_hot_news, container, false);
         //得到ListView的实例
         newsTitleListView1 = (ListView) view.findViewById(R.id.news_hot_view);
+        Collections.reverse(newsList1);
         adapter = new NewsAdapter(getActivity(), newsList1);
         //启动ListView的适配器，这样ListView就能与适配器的数据相关联了
         newsTitleListView1.setAdapter(adapter);
@@ -110,6 +112,7 @@ public class HotNewsFragment extends Fragment implements AdapterView.OnItemClick
         public void handleMessage(Message msg) {
 
             if(msg.what==1){
+                Collections.reverse(newsList1);
                 adapter.setNewsList(newsList1);
                 adapter.notifyDataSetChanged();
             }

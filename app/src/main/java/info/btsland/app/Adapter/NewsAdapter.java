@@ -25,9 +25,9 @@ import info.btsland.app.model.News;
 
 public class NewsAdapter extends BaseAdapter {
 
-    private List<BitNew> newsList;
+    private List<BitNew> newsList=new ArrayList<>();
     private LayoutInflater inflater;
-
+    private List<View>  viewList= new ArrayList<>();
     private String baseUrl="http://123.1.154.214:8880/upload/";
     private onItemClickListener onItemClickListener;
 
@@ -47,6 +47,7 @@ public class NewsAdapter extends BaseAdapter {
     }
     public void setNewsList(List<BitNew> newsList) {
         this.newsList = newsList;
+        viewList.clear();
     }
 
     @Override
@@ -67,9 +68,15 @@ public class NewsAdapter extends BaseAdapter {
     @Override
     //重写父类ArrayAdapter的getView方法
     public View getView(int position, View view, ViewGroup parent) {
-        if(view==null){
-            view=inflater.inflate(R.layout.activity_newsitem, null);
+        if (position<viewList.size()){
+            if(viewList.get(position)!=null){
+                return viewList.get(position);
+            }
         }
+
+
+            view=inflater.inflate(R.layout.activity_newsitem, null);
+
 
         if(newsList==null||newsList.get(position)==null){
             return null;
@@ -109,7 +116,7 @@ public class NewsAdapter extends BaseAdapter {
                 }
             }
         });
-
+        viewList.add(view);
         return view;
     }
 

@@ -55,6 +55,7 @@ public class PurseAccessRecordActivity extends AppCompatActivity{
         DetailedFragmentAdapter adapter = new DetailedFragmentAdapter(getSupportFragmentManager(), fragments, titles);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(index);
+        adapter.notifyDataSetChanged();
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(new OnPage());
     }

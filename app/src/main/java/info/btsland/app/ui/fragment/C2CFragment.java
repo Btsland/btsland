@@ -59,6 +59,7 @@ public class C2CFragment extends Fragment {
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments,titles);
         PagerSlidingTabStrip tabStrip = view.findViewById(R.id.psts_c2c_title1);
         viewPager1.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         viewPager1.setCurrentItem(index);
         tabStrip.setViewPager(viewPager1);
         tabStrip.setOnPageChangeListener(new OnPage());

@@ -146,10 +146,9 @@ public class Websocket_api extends WebSocketListener {
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         //Log.i(TAG, "onFailure: ");
         mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
+        Log.e(TAG, "onFailure: " );
         MarketStat marketStat = BtslandApplication.getMarketStat();
-        MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
-        connect.start();
-
+        marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
     }
 
     private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
@@ -752,8 +751,7 @@ public class Websocket_api extends WebSocketListener {
         //Log.i(TAG, "sendForReply: ");
         if (mWebsocket == null || mnConnectStatus != WEBSOCKET_CONNECT_SUCCESS) {
             MarketStat marketStat = BtslandApplication.getMarketStat();
-            MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
-            connect.start();
+            marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
         }
 
         return sendForReplyImpl(callObject, replyObjectProcess);
@@ -779,8 +777,7 @@ public class Websocket_api extends WebSocketListener {
                     bRet = BtslandApplication.mWebsocket.send(strMessage);
                 }else {
                     MarketStat marketStat = BtslandApplication.getMarketStat();
-                    MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
-                    connect.start();
+                    marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
                 }
 
                 if (bRet==false) {

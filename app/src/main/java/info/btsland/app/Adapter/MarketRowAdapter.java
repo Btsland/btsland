@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,10 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
 
 /**
@@ -178,6 +175,7 @@ public class MarketRowAdapter extends BaseAdapter {
                     message.setData(bundle);
                     handler.sendMessage(message);
                 }else{//单击事件
+                    Toast.makeText(context,"双击可进入详情界面",Toast.LENGTH_SHORT).show();
                     Bundle bundle=new Bundle();
                     bundle.putInt("result",1);
                     bundle.putInt("index",index);

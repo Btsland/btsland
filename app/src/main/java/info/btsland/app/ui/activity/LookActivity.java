@@ -1,12 +1,12 @@
 package info.btsland.app.ui.activity;
 
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -29,7 +29,6 @@ import info.btsland.app.api.asset;
 import info.btsland.app.api.object_id;
 import info.btsland.app.api.operation_history_object;
 import info.btsland.app.exception.NetworkStatusException;
-
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.LookAccountAssetFragment;
 import info.btsland.app.ui.fragment.LookAccountOrderFragment;
@@ -69,6 +68,7 @@ public class LookActivity extends AppCompatActivity {
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
+        adapter.notifyDataSetChanged();
         pstTitle.setViewPager(viewPager);
         assetRe=assetFragment;
         orderRe=orderFragment;

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/back_dialog"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_dialog_title"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:text="创建聊天"
+        android:textColor="@color/color_black"
+        android:layout_height="40dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:background="@drawable/border_dialog"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tv_dialog_msg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/color_black"
+            android:text="请输入对方的用户名"
+            android:textSize="16sp"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp">
+            <WebView
+                android:id="@+id/wb_account_pho"
+                android:layout_width="40dp"
+                android:layout_height="match_parent">
+            </WebView>
+            <EditText
+                android:id="@+id/editTextAccount"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:hint="@string/login_password"
+                android:background="@drawable/edit_text"
+                android:inputType="textPassword"
+                android:paddingLeft="20dp"
+                android:textColor="@color/color_black"
+                android:lines="1"/>
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/tv_dialog_point"
+            android:layout_width="match_parent"
+            android:layout_height="16dp"
+            android:text="@string/password_invalid"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/red"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:visibility="invisible"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_dialog_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:background="@drawable/select_dialog_btn"
+            android:textColor="@color/color_darkGrey"
+            android:textSize="16sp" />
+        <TextView
+            android:layout_width="1dp"
+            android:background="@color/color_frenchGrey"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:id="@+id/tv_dialog_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:background="@drawable/select_dialog_btn"
+            android:textColor="@color/color_darkGrey"
+            android:textSize="16sp" />
+    </LinearLayout>
+</LinearLayout>

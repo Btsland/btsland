@@ -73,6 +73,7 @@ public class HomeFragment extends Fragment {
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getChildFragmentManager(),fragments,titles);
         PagerSlidingTabStrip tabStrip = view.findViewById(R.id.psts_detailed_title1);
         viewPager1.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         viewPager1.setCurrentItem(0);
         tabStrip.setViewPager(viewPager1);
         tabStrip.setOnPageChangeListener(new OnPage());

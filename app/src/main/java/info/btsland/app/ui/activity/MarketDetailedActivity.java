@@ -79,6 +79,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         }
         dataKey= KeyUtil.constructingDateKKey(market.base,market.quote,DetailedKFragment.range,DetailedKFragment.ago);
         orderKey=KeyUtil.constructingOrderBooksKey(market.base,market.quote);
+        title=MarketDetailedActivity.market.quote+":"+MarketDetailedActivity.market.base;
         fillInHead();
         init();
     }
@@ -98,6 +99,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
     @Override
     protected void onStart() {
         super.onStart();
+        headFragment.setTitleName(title);
     }
 
     @Override
@@ -131,6 +133,7 @@ public class MarketDetailedActivity extends AppCompatActivity{
         PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.psts_detailed_title);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(index);
+        adapter.notifyDataSetChanged();
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(new OnPage());
     }
@@ -144,7 +147,6 @@ public class MarketDetailedActivity extends AppCompatActivity{
             transaction.add(R.id.fra_detailed_head,headFragment);
         }
         transaction.commit();
-        headFragment.setTitleName(title);
         headFragment.setSelectListener(new HeadFragment.OnSelectOnClickListener() {
             @Override
             public void onClick(View view) {

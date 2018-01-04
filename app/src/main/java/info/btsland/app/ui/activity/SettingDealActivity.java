@@ -41,6 +41,7 @@ public class SettingDealActivity extends AppCompatActivity {
         fillInHead();
         init();
         fillIn();
+
     }
 
     @Override
@@ -82,6 +83,7 @@ public class SettingDealActivity extends AppCompatActivity {
         }
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles.toArray(new String[]{}));
         viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         viewPager.setCurrentItem(0);
         viewPager.setOffscreenPageLimit(4);
         pstTitle.setViewPager(viewPager);

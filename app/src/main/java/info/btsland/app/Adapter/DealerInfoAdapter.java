@@ -90,10 +90,16 @@ public class DealerInfoAdapter extends BaseAdapter {
             tvNum.setVisibility(View.VISIBLE);
         }
         if(user.havingNotes!=null){
-            havingTime=user.havingNotes.get(user.havingNotes.size()-1).getDealerReTime();
+            int a = user.havingNotes.size()-1;
+            if(a>=0&&user.havingNotes.size()>0) {
+                havingTime = user.havingNotes.get(a).getDealerReTime();
+            }
         }
         if(user.helpNewChatList!=null&&user.helpNewChatList.size()>0){
-            chatTime=user.helpNewChatList.get(user.helpNewChatList.size()-1).getTime();
+            int a=user.helpNewChatList.size()-1;
+            if(a>=0&&user.helpNewChatList.size()>0) {
+                chatTime = user.helpNewChatList.get(a).getTime();
+            }
         }
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("hh:mm:ss");
         if(havingTime!=null&&chatTime!=null){

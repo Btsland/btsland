@@ -93,7 +93,7 @@ public class PurseFragment extends Fragment {
         }
 
         adapter.setFragmentList(fragments);
-        handler.sendEmptyMessage(1);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

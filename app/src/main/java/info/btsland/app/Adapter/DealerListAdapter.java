@@ -48,7 +48,7 @@ public class DealerListAdapter extends BaseAdapter {
     }
 
     public void setDataList(List<DealerData> dataList) {
-        Log.e(TAG, "setDataList: " );
+        Log.e(TAG, "setDataList: "+dataList.size() );
         this.dataList = dataList;
         for(int i=0;i<dataList.size();i++){
             fillInViews(i);

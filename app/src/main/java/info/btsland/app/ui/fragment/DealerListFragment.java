@@ -35,7 +35,7 @@ public class DealerListFragment extends Fragment {
     public static final int OUT=2;//出（提现）
     private ListView listView;
     private DealerListAdapter dealerListAdapter;
-    private List<DealerListAdapter.DealerData> dataList;
+    private List<DealerListAdapter.DealerData> dataList=new ArrayList<>();
     private AllDealersReceiver allDealersReceiver;
 
     public DealerListFragment() {
@@ -72,7 +72,6 @@ public class DealerListFragment extends Fragment {
     }
 
     private void fillIn() {
-        dataList=new ArrayList<>();
         dealerListAdapter=new DealerListAdapter(getActivity());
         dealerListAdapter.setType(type);
         listView.setAdapter(dealerListAdapter);
@@ -104,16 +103,13 @@ public class DealerListFragment extends Fragment {
     private synchronized void fillInUser(){
         if(BtslandApplication.dealers!=null) {
             synchronized (BtslandApplication.dealers) {
+                dataList.clear();
                 for (int i = 0; i < BtslandApplication.dealers.size(); i++) {
                     DealerListAdapter.DealerData dealerData = new DealerListAdapter.DealerData();
                     User user = BtslandApplication.dealers.get(i);
                     if (user.getType() == 3) {
                         dealerData.user = user;
-                        if (dataList.size() > i && dataList.get(i) != null) {
-                            dataList.get(i).replce(dealerData);
-                        } else {
-                            dataList.add(dealerData);
-                        }
+                        dataList.add(dealerData);
                     }
                 }
                 handler.sendEmptyMessage(1);
@@ -130,7 +126,6 @@ public class DealerListFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             Log.e(TAG, "onReceive: " );
             fillInUser();
-
         }
     }
     private Handler handler=new Handler(){

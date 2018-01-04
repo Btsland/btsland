@@ -4,7 +4,6 @@ package info.btsland.app.api;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.os.Message;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -26,7 +25,6 @@ import info.btsland.app.model.MarketTrade;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
-import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.KeyUtil;
 
@@ -48,8 +46,6 @@ public class MarketStat {
     public Websocket_api mWebsocketApi=new Websocket_api();
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
-    public  HashMap<String, Connect> connectHashMap = new HashMap<>();
-    private static boolean isDeserializerRegistered = false;
     
     private String[] quotes;
     private String[] bases;
@@ -78,10 +74,15 @@ public class MarketStat {
             subscriptionHashMap.put(makeMarketName(base, quotes[j],stats), subscription);
         }
     }
-    public Connect connect(int stats,
+    private Connect connect;
+    public void connect(int stats,
                           OnMarketStatUpdateListener l) {
-        Connect connect = new Connect(stats, l);
-        return connect;
+        if(connect==null||connect.isStop){
+            connect = new Connect(stats, l);
+            connect.start();
+        }
+
+
     }
     public void subscribe(String base, String quote, int stats,long intervalMillis,
                           OnMarketStatUpdateListener l) {
@@ -219,8 +220,8 @@ public class MarketStat {
     public interface OnMarketStatUpdateListener {
         void onMarketStatUpdate(Stat stat);
     }
-
-    public class Connect extends Thread {
+    private class Connect extends Thread {
+        public boolean isStop=false;
         private int stats;
         private OnMarketStatUpdateListener listener;
         public HandlerThread statThread;
@@ -232,7 +233,7 @@ public class MarketStat {
 
         @Override
         public synchronized void run() {
-            Looper.prepare();
+            Log.e("Connect", "run: " );
             final Stat stat = new Stat();
             int i=0;
             while (true) {
@@ -240,20 +241,24 @@ public class MarketStat {
                 Log.e(TAG, "run: "+stat.nRet );
                 if(stat.nRet==0){
                     listener.onMarketStatUpdate(stat);
-                    break;
+                    isStop=true;
+                    return;
                 }
                 if(i>BtslandApplication.mListNode.size()){
-                    AppDialog appDialog=new AppDialog(BtslandApplication.getInstance());
-                    appDialog.setMsg("目前的节点都无法连接！");
-                    appDialog.show();
-                    break;
+                    isStop=true;
+                    return;
                 }
                 i++;
+                if(i>=BtslandApplication.mListNode.size()){
+                    i=0;
+                }
                 BtslandApplication.strServer=BtslandApplication.mListNode.get(i);
                 try {
                     Thread.sleep(256);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
+                    isStop=true;
+                    return;
                 }
             }
         }

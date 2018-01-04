@@ -86,7 +86,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
                             if (json.indexOf("error") != -1) {
-                                BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this, json);
+//                                BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this, json);
                             } else {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("want", "register");

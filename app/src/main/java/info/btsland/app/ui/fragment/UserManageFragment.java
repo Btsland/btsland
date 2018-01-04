@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.activity.AccountC2CTypesActivity;
 import info.btsland.app.ui.activity.BorrowActivity;
+import info.btsland.app.ui.activity.ChatAccountListActivity;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.LookActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
@@ -251,6 +253,7 @@ public class UserManageFragment extends Fragment {
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
     public static void sendBroadcast(Context context,int want){
+        Log.e("UserManageReceiver", "sendBroadcast: " );
         Intent intent=new Intent(UserManageReceiver.EVENT);
         intent.putExtra("want",want);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -352,8 +355,8 @@ public class UserManageFragment extends Fragment {
                     break;
                 case R.id.tv_purse_chat:
                     //聊天
-//                    Intent chat=new Intent(getActivity(), LookActivity.class);
-//                    getActivity().startActivity(chat);
+                    Intent chat=new Intent(getActivity(), ChatAccountListActivity.class);
+                    getActivity().startActivity(chat);
                     break;
                 case R.id.tv_user_logoff:
                     AppDialog appDialog=new AppDialog(getActivity());
@@ -365,8 +368,10 @@ public class UserManageFragment extends Fragment {
                             BtslandApplication.isLogin=false;
                             BtslandApplication.accountObject=null;
                             BtslandApplication.clearUser();
+                            BtslandApplication.dealer=null;
                             fillIn();
                             yesOrNoLogin();
+                            PurseFragment.sendBroadcast(getActivity());
                         }
 
                         @Override

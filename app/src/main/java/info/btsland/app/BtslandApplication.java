@@ -60,6 +60,7 @@ import info.btsland.exchange.http.ChatHttp;
 import info.btsland.exchange.http.HelpHttp;
 import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.http.UserHttp;
+import info.btsland.exchange.scoket.ChatWebScoket;
 import info.btsland.exchange.utils.GsonDateAdapter;
 import info.btsland.exchange.utils.UserTypeCode;
 import okhttp3.Call;
@@ -87,6 +88,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<Note> dealerClinchNotes=new ArrayList<>();
     public static List<Note> userHavingInNotes=new ArrayList<>();
     public static List<Note> userHavingOutNotes=new ArrayList<>();
+    public static Map<String,List<Chat>> chatListMap=new LinkedHashMap<>();
     public static List<User> dealers;
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
@@ -98,6 +100,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static MarketStat marketStat;
     public static WebSocket mWebsocket;
     private static Wallet_api walletApi;
+    public static ChatWebScoket chatWebScoket;
     public static int nRet= Websocket_api.WEBSOCKET_CONNECT_INVALID;
     public static Map<String,List<MarketStat.HistoryPrice>> dataKMap=new LinkedHashMap<>();
     public static Map<String,OrderBook> orderBookMap=new LinkedHashMap<>();
@@ -143,8 +146,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private DialogReceiver dialogReceiver ;
 
     public static void setFluctuationType(){
-
-
         if(BtslandApplication.fluctuationType==1){
             goUp=getInstance().getResources().getColor(R.color.color_green);
             goDown=getInstance().getResources().getColor(R.color.color_font_red);
@@ -221,7 +222,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
-        queryAllDealer.setTime(10);
+        queryAllDealer.setTime(15);
         queryAllDealer.start();
 
     }
@@ -261,9 +262,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     if(dealer.getType()==UserTypeCode.HELP){
                         int a=0;
                         for(String name : helpUserMap.keySet()){
-                            a = helpUserMap.get(name).havingNotes.size();
+                            a+= helpUserMap.get(name).havingNotes.size();
                         }
-                        MainActivity.sendBroadcast(BtslandApplication.getInstance(),a+userHavingOutNotes.size()+userHavingInNotes.size());
+                        MainActivity.sendBroadcast(getInstance(),a+userHavingOutNotes.size()+userHavingInNotes.size());
                     }
                     NoteHttp.queryAllHavingNoteByAccount(dealer.getDealerId(),"CNY", new Callback() {
                         @Override
@@ -421,7 +422,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
 
     }
-
+    private boolean isQueryAount=false;
     @Override
     public void onMarketStatUpdate(MarketStat.Stat stat) {
         if(stat!=null){
@@ -430,7 +431,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             this.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
         }
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
-        queryAccount(account,handler);
+        Log.e(TAG, "onMarketStatUpdate: " );
+        if(!isQueryAount){
+            queryAccount(account,handler);
+            isQueryAount=true;
+        }
+
     }
     public static Double getAssetTotalByName(String name){
         synchronized (BtslandApplication.iAssets) {
@@ -450,8 +456,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         if(InternetUtil.isConnected(BtslandApplication.getInstance())){
             MarketStat marketStat = getMarketStat();
-            MarketStat.Connect connect = marketStat.connect(MarketStat.STAT_COUNECT,getListener());
-            connect.start();
+            marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
         }else {
             Toast.makeText(BtslandApplication.getInstance(), "无法连接网络", Toast.LENGTH_LONG).show();
             WelcomeActivity.sendBroadcast(getInstance(),Websocket_api.WEBSOCKET_CONNECT_NO_NETWORK);
@@ -517,29 +522,31 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static class QueryDealer extends BaseThread{
         @Override
         public void execute() {
-            UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
-                @Override
-                public void onFailure(Call call, IOException e) {
+            if (dealer != null) {
+                UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
 
-                }
+                    }
 
-                @Override
-                public void onResponse(Call call, Response response) throws IOException {
-                    GsonBuilder gsonBuilder = new GsonBuilder();
-                    gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
-                    Gson gson = gsonBuilder.create();
-                    String json = response.body().string();
-                    if(json.indexOf("error")!=-1){
-                        sendBroadcastDialog(BtslandApplication.getInstance(),json);
-                    }else {
-                        dealer = gson.fromJson(json, User.class);
-                        if (dealer != null) {
-                            DealerManageFragment.sendBroadcast(getInstance());
-                            AccountC2CTypesActivity.sendBroadcast(getInstance());
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        GsonBuilder gsonBuilder = new GsonBuilder();
+                        gsonBuilder.registerTypeAdapter(Date.class, new GsonDateAdapter());
+                        Gson gson = gsonBuilder.create();
+                        String json = response.body().string();
+                        if (json.indexOf("error") != -1) {
+                            sendBroadcastDialog(BtslandApplication.getInstance(), json);
+                        } else {
+                            dealer = gson.fromJson(json, User.class);
+                            if (dealer != null) {
+                                DealerManageFragment.sendBroadcast(getInstance());
+                                AccountC2CTypesActivity.sendBroadcast(getInstance());
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
         }
     }
     /**
@@ -547,7 +554,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
      *
      */
     private static class QueryAccountThread extends Thread{
-        private String name;
+        private String name="";
         private Handler handler;
 
         public QueryAccountThread(String name,Handler handler) {
@@ -584,7 +591,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             sendBroadcastDialog(BtslandApplication.getInstance(),json);
                         }else {
                             dealer=gson.fromJson(json,User.class);
+                            if(dealer==null){
+                                return;
+                            }
                             PurseFragment.sendBroadcast(getInstance());
+                            chatWebScoket = ChatWebScoket.createWebScoket(dealer.getAccount());
+                            chatWebScoket.connect();
                             if(dealer!=null) {
                                 if(!queryDealer.isDead()) {
                                     if (!queryDealer.isStart()) {
@@ -715,7 +727,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
         }
     }
-    private static   AssetThread assetThread;
+    private static  AssetThread assetThread;
     /**
      * 查询用余额线程外部调用方法
      */
@@ -740,6 +752,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
         @Override
         public void execute() {
+            Log.e("AssetThread", "execute: " );
             if (account!= null && !account.equals("")) {
                 Double totalCNY=0.0;
                 Double totalBTS=0.0;

@@ -65,6 +65,7 @@ public class DealerNoteListActivity extends AppCompatActivity {
         DetailedFragmentAdapter adapter=new DetailedFragmentAdapter(getSupportFragmentManager(),fragments,titles);
         PagerSlidingTabStrip tabStrip =findViewById(R.id.psts_dealerHaving_title);
         viewPager.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
         viewPager.setCurrentItem(index);
         tabStrip.setViewPager(viewPager);
         tabStrip.setOnPageChangeListener(new OnPage());

@@ -55,29 +55,47 @@ public class DealerInfoActivity extends AppCompatActivity {
 
     private void fillIn() {
         edDealerName.getEditableText().clear();
-        edDealerName.getEditableText().insert(0,BtslandApplication.dealer.getDealerName());
+        if(BtslandApplication.dealer.getDealerName()!=null) {
+            edDealerName.getEditableText().insert(0, BtslandApplication.dealer.getDealerName());
+        }
         edAccount.getEditableText().clear();
-        edAccount.getEditableText().insert(0,BtslandApplication.dealer.getAccount());
+        if(BtslandApplication.dealer.getAccount()!=null){
+            edAccount.getEditableText().insert(0,BtslandApplication.dealer.getAccount());
+        }
         edAccount.setFocusable(false);
         edAccount.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
         edAccount.setClickable(false);
         edDealer.getEditableText().clear();
-        edDealer.getEditableText().insert(0,BtslandApplication.dealer.getDealerId());
+        if(BtslandApplication.dealer.getDealerId()!=null) {
+            edDealer.getEditableText().insert(0, BtslandApplication.dealer.getDealerId());
+        }
         edDealer.setFocusable(false);
         edDealer.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
         edDealer.setClickable(false);
         edDepict.getEditableText().clear();
-        edDepict.getEditableText().insert(0,BtslandApplication.dealer.getDepict());
+        if(BtslandApplication.dealer.getDepict()!=null){
+            edDepict.getEditableText().insert(0,BtslandApplication.dealer.getDepict());
+        }
         edInBro.getEditableText().clear();
-        edInBro.getEditableText().insert(0,""+(BtslandApplication.dealer.getBrokerageIn()*100));
+        if(BtslandApplication.dealer.getBrokerageIn()!=null) {
+            edInBro.getEditableText().insert(0, "" + (BtslandApplication.dealer.getBrokerageIn() * 100));
+        }
         edOutBro.getEditableText().clear();
-        edOutBro.getEditableText().insert(0,""+(BtslandApplication.dealer.getBrokerageOut()*100));
+        if(BtslandApplication.dealer.getBrokerageOut()!=null) {
+            edOutBro.getEditableText().insert(0, "" + (BtslandApplication.dealer.getBrokerageOut() * 100));
+        }
         edLowIn.getEditableText().clear();
-        edLowIn.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitIn());
+        if(BtslandApplication.dealer.getLowerLimitIn()!=null){
+            edLowIn.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitIn());
+        }
         edLowOut.getEditableText().clear();
-        edLowOut.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitOut());
+        if(BtslandApplication.dealer.getLowerLimitOut()!=null){
+            edLowOut.getEditableText().insert(0,""+BtslandApplication.dealer.getLowerLimitOut());
+        }
         edUpOut.getEditableText().clear();
-        edUpOut.getEditableText().insert(0,""+BtslandApplication.dealer.getUpperLimitOut());
+        if(BtslandApplication.dealer.getUpperLimitOut()!=null) {
+            edUpOut.getEditableText().insert(0, "" + BtslandApplication.dealer.getUpperLimitOut());
+        }
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

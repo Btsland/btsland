@@ -269,8 +269,9 @@
             <TextView
                 android:id="@+id/tv_user_logoff"
                 android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:text="@string/logoff"
+                android:textSize="10sp"
                 android:gravity="center"
                 android:layout_margin="8dp"
                 android:layout_marginBottom="10dp"
@@ -278,7 +279,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:textColor="@color/color_font_red"
-                app:layout_constraintTop_toTopOf="@+id/iv_user_pho"
+                app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
+                app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
                 app:layout_constraintRight_toRightOf="@+id/v_purse_back"
                 />
 

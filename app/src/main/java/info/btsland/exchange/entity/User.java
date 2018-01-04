@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private Integer id=0;
+    private Integer id;
 
     private String dealerId;
 

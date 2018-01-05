@@ -3,9 +3,9 @@ package info.btsland.exchange.entity;
 public class Help {
     private Integer id;
 
-    private String helpid;
+    private String helpid="";
 
-    private String dealerid;
+    private String dealerid="";
 
     public Integer getId() {
         return id;

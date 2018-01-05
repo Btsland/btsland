@@ -5,7 +5,7 @@ public class StatUser {
 
     private Integer statNo;
 
-    private String depict;
+    private String depict="";
 
     public Integer getId() {
         return id;

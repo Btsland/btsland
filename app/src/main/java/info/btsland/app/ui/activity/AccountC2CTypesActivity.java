@@ -86,7 +86,13 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
                             if (json.indexOf("error") != -1) {
-//                                BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this, json);
+                                BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this, json);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("want", "hud");
+                                Message msg = Message.obtain();
+                                msg.setData(bundle);
+                                msg.what=2;
+                                registerHandler.sendMessage(msg);
                             } else {
                                 Bundle bundle = new Bundle();
                                 bundle.putString("want", "register");
@@ -201,6 +207,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
         }
     }
     private void updateRealAsset(RealAsset realAsset){
+        Log.e(TAG, "updateRealAsset: "+ realAsset);
         AccountTpyeDialog accountTpyeDialog=new AccountTpyeDialog(AccountC2CTypesActivity.this,realAsset);
         accountTpyeDialog.setListener(new AccountTpyeDialog.OnDialogInterationListener() {
             @Override
@@ -210,7 +217,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         Log.e(TAG, "run: "+BtslandApplication.dealer );
-                        RealAssetHttp.updateRealAsset(BtslandApplication.dealer.getDealerId(), BtslandApplication.dealer.getAccount(),realAsset, new Callback() {
+                        RealAssetHttp.updateRealAsset(BtslandApplication.dealer.getDealerId(),realAsset, new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
 
@@ -221,6 +228,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                                 String json = response.body().string();
                                 if(json.indexOf("error")!=-1){
                                     BtslandApplication.sendBroadcastDialog(AccountC2CTypesActivity.this,json);
+                                    AccountHandler.sendEmptyMessage(-1);
                                 }else {
                                     int a= Integer.parseInt(json);
                                     if (a > 0) {
@@ -246,6 +254,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             if (BtslandApplication.dealer != null) {
+                Log.e(TAG, "onClick: " );
                 RealAsset realAsset=new RealAsset();
                 realAsset.setType(type);
                 updateRealAsset(realAsset);
@@ -327,7 +336,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                     hud.dismiss();
                 }
                 AppDialog appDialog=new AppDialog(AccountC2CTypesActivity.this);
-                appDialog.setMsg("更新失败！");
+                appDialog.setMsg("更新失败,请确认添加了重复数据");
                 appDialog.show();
             }else if(msg.what==5){
                 if(hud!=null&&hud.isShowing()){
@@ -335,6 +344,13 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                 }
                 AppDialog appDialog=new AppDialog(AccountC2CTypesActivity.this);
                 appDialog.setMsg("密码错误！");
+                appDialog.show();
+            }else if(msg.what==-1){
+                if(hud!=null&&hud.isShowing()){
+                    hud.dismiss();
+                }
+                AppDialog appDialog=new AppDialog(AccountC2CTypesActivity.this);
+                appDialog.setMsg("更新失败！");
                 appDialog.show();
             }
         }
@@ -368,6 +384,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                     }
                     if(hud!=null&&hud.isShowing()){
                         hud.dismiss();
+                        hud=null;
                     }
                     Toast.makeText(AccountC2CTypesActivity.this,"第一次使用注册成功",Toast.LENGTH_SHORT).show();
                     Intent types=new Intent(AccountC2CTypesActivity.this, AccountC2CTypesActivity.class);
@@ -376,6 +393,7 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                 }else {
                     if(hud!=null&&hud.isShowing()){
                         hud.dismiss();
+                        hud=null;
                     }
                     Toast.makeText(AccountC2CTypesActivity.this,"注册失败",Toast.LENGTH_SHORT).show();
                 }
@@ -386,6 +404,11 @@ public class AccountC2CTypesActivity extends AppCompatActivity {
                     }
                     hud.setLabel("请稍等。。。");
                     hud.show();
+                }else {
+                    if(hud!=null&&hud.isShowing()){
+                        hud.dismiss();
+                        hud=null;
+                    }
                 }
 
             }

@@ -536,7 +536,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         Gson gson = gsonBuilder.create();
                         String json = response.body().string();
                         if (json.indexOf("error") != -1) {
-                            sendBroadcastDialog(BtslandApplication.getInstance(), json);
+                            //sendBroadcastDialog(BtslandApplication.getInstance(), json);
                         } else {
                             dealer = gson.fromJson(json, User.class);
                             if (dealer != null) {

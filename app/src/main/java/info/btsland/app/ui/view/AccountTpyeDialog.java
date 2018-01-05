@@ -90,8 +90,13 @@ public class AccountTpyeDialog {
         spType.setAdapter(adapter);
 
         if(realAsset!=null){
-            if(realAsset.getRealAssetType()!=null){
-                spType.setSelection(Integer.parseInt(realAsset.getRealAssetType())-1);
+            if(realAsset.getRealAssetType()!=null&&!realAsset.getRealAssetType().equals("")){
+                try {
+                    spType.setSelection(Integer.parseInt(realAsset.getRealAssetType())-1);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+
             }else {
                 spType.setSelection(0);
             }
@@ -193,7 +198,7 @@ public class AccountTpyeDialog {
                         realAsset.setType(0);
                     }
                     if(name.equals("")||no.equals("")){
-
+                        return;
                     }else {
                         realAsset.setName(name);
                         realAsset.setRealAssetNo(no);

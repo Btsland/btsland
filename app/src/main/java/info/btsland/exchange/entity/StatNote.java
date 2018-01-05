@@ -5,9 +5,9 @@ public class StatNote {
 
     private Integer statNo;
 
-    private String depict;
+    private String depict="";
 
-    private String tab;
+    private String tab="";
 
     public Integer getId() {
         return id;

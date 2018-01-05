@@ -6,19 +6,19 @@ import java.util.List;
 public class User {
     private Integer id;
 
-    private String dealerId;
+    private String dealerId="";
 
-    private String dealerName;
+    private String dealerName="";
 
-    private String password;
+    private String password="";
 
-    private String account;
+    private String account="";
 
     private Double brokerageIn;
 
     private Double brokerageOut;
 
-    private String depict;
+    private String depict="";
 
     private Integer stat;
 

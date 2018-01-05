@@ -16,12 +16,10 @@ import okhttp3.Callback;
 
 public class RealAssetHttp extends C2CHttp {
     private static final String TAG="RealAssetHttp";
-    public static void updateRealAsset(String dealerId,
-                                String account, RealAsset realAsset1, Callback callback){
+    public static void updateRealAsset(String dealerId, RealAsset realAsset1, Callback callback){
         String action="/realAsset/updateRealAsset";
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("dealerId",dealerId);
-        paramMap.put("account",account);
         Gson gson=new Gson();
         String realAsset=gson.toJson(realAsset1);
         paramMap.put("realAsset",realAsset);

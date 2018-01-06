@@ -95,7 +95,9 @@
         <activity android:name=".ui.activity.AccountC2CTypesActivity" />
         <activity android:name=".ui.activity.ChatAccountListActivity" />
         <activity android:name=".ui.activity.ChatActivity" />
-        <activity android:name=".ui.activity.CourseActivity"></activity>
+        <activity android:name=".ui.activity.CourseActivity"
+            android:screenOrientation="portrait"
+           />
     </application>
 
 </manifest>

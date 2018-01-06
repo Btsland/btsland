@@ -182,6 +182,8 @@ public class SettingActivity extends BaseActivity{
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        Intent intent=new Intent(SettingActivity.this,CourseActivity.class);
+                        SettingActivity.this.startActivity(intent);
                     }
                 },
                 null

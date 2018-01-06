@@ -54,7 +54,7 @@ public class HomeFragment extends Fragment {
     private void init(View view){
         Log.e(TAG, "init: ");
         ViewPager viewPager1= view.findViewById(R.id.vp_detailed);
-        String[] titles={"最新资讯","热点资讯","BTSLAND","IFAST"};
+        String[] titles={"最新资讯","快点资讯","BTSLAND","教程"};
         List<Fragment> fragments=new ArrayList<Fragment>();
         //最新资讯
         LatestNewsFragment latestNewsFragment=new LatestNewsFragment();

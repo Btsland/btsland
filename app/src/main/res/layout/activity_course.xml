@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="info.btsland.app.ui.activity.CourseActivity">
+    <!--顶部导航栏-->
+    <FrameLayout
+        android:id="@+id/fra_course_head"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/fra_main_body">
+
+    </FrameLayout>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_course01"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="当您下载好我们的Btsland钱包并打开时，您首先看到的是最新交易信息的浏览界面如下图所示："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course01"
+                />
+
+            <TextView
+                android:id="@+id/tv_course02"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="点击钱包图标，进入钱包界面，此时您还尚未登陆，钱包界面显示如下图："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course02"
+                />
+
+            <TextView
+                android:id="@+id/tv_course03"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="如果您还没有内盘账户，请点击“去注册”按钮，进入注册界面,注册时用户名必须以字母开头并且包含数字，不能含特殊字符（如@，*，#等），长度不能低于6位，如下图："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course03"
+                />
+
+            <TextView
+                android:id="@+id/tv_course04"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="如果您已有账户，请点击“去登陆按钮”，进入登陆界面，如下图所示："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course04"
+                />
+            <TextView
+                android:id="@+id/tv_course05"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="注册或登陆成功后，则进入用户界面，如下图所示："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course05"
+                />
+
+            <TextView
+                android:id="@+id/tv_course06"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="点击查看全部资产，如下图所示："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course06"
+                />
+
+            <TextView
+                android:id="@+id/tv_course07"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="在交易界面双击进入详情界面后，最的新交易记录和详细精准可拉伸的K图助您更好的了解最新的最全面的交易信息，让您对最近发生的交易了如指掌。界面如下图："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course07"
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course08"
+                />
+
+            <TextView
+                android:id="@+id/tv_course09"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="点击右上角的齿轮，进入设置界面，如图："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course09"
+                />
+
+            <TextView
+                android:id="@+id/tv_course10"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="点击U2U，显示如下界面："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course10"
+                />
+            <TextView
+                android:id="@+id/tv_course11"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="U2U详情界面显示如下："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course11"
+                />
+
+            <TextView
+                android:id="@+id/tv_course12"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                android:text="填写完数据，点击确认并输入密码后，界面显示如下："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="900px"
+                android:layout_gravity="center"
+                android:background="@mipmap/course12"
+                />
+
+
+
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+</android.support.constraint.ConstraintLayout>

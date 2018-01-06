@@ -94,7 +94,8 @@
         <activity android:name=".ui.activity.DealerInfoActivity" />
         <activity android:name=".ui.activity.AccountC2CTypesActivity" />
         <activity android:name=".ui.activity.ChatAccountListActivity" />
-        <activity android:name=".ui.activity.ChatActivity"></activity>
+        <activity android:name=".ui.activity.ChatActivity" />
+        <activity android:name=".ui.activity.CourseActivity"></activity>
     </application>
 
 </manifest>

@@ -47,7 +47,7 @@ public class NewsAdapter extends BaseAdapter {
     }
     public void setNewsList(List<BitNew> newsList) {
         this.newsList = newsList;
-        viewList.clear();
+//        viewList.clear();
     }
 
     @Override
@@ -68,16 +68,16 @@ public class NewsAdapter extends BaseAdapter {
     @Override
     //重写父类ArrayAdapter的getView方法
     public View getView(int position, View view, ViewGroup parent) {
-        if (position<viewList.size()){
-            if(viewList.get(position)!=null){
-                return viewList.get(position);
+//        if (position<viewList.size()){
+//            if(viewList.get(position)!=null){
+//                return viewList.get(position);
+//            }
+//        }
+
+            if(view==null) {
+                view = inflater.inflate(R.layout.activity_newsitem, null);
+
             }
-        }
-
-
-            view=inflater.inflate(R.layout.activity_newsitem, null);
-
-
         if(newsList==null||newsList.get(position)==null){
             return null;
         }
@@ -116,7 +116,7 @@ public class NewsAdapter extends BaseAdapter {
                 }
             }
         });
-        viewList.add(view);
+//        viewList.add(view);
         return view;
     }
 

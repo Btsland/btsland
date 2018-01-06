@@ -162,7 +162,7 @@
                 android:id="@+id/tv_course12"
                 android:layout_width="match_parent"
                 android:layout_height="20dp"
-                android:text="填写完数据，点击确认并输入密码后，界面显示如下："
+                android:text="填写完数据,选择付款账户，点击确认并输入密码后，界面显示如下："
                 />
             <ImageView
                 android:layout_width="600px"

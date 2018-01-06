@@ -160,7 +160,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
                             if(json.indexOf("error")!=-1){
-                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                                //BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
                             }else {
                                 fillInNote(json);
                                 a[0]++;
@@ -191,7 +191,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
                         public void onResponse(Call call, Response response) throws IOException {
                             String json = response.body().string();
                             if(json.indexOf("error")!=-1){
-                                BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
+                                //BtslandApplication.sendBroadcastDialog(C2CExchangeActivity.this,json);
                             }else {
                                 fillInUser(json);
                                 a[0]++;

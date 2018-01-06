@@ -157,13 +157,34 @@ public class DealerManageFragment extends Fragment {
                 tvStatText.setText("离线");
                 break;
         }
-        tvName.setText(BtslandApplication.dealer.getDealerName());
-        tvDealerId.setText(BtslandApplication.dealer.getDealerId());
-        tvInLowNum.setText(""+BtslandApplication.dealer.getLowerLimitIn());
-        tvOutLowNum.setText(""+BtslandApplication.dealer.getLowerLimitOut());
-        tvInBro.setText(""+BtslandApplication.dealer.getBrokerageIn()*100+"%");
-        tvOutBro.setText(""+BtslandApplication.dealer.getBrokerageOut()*100+"%");
-        tvDepict.setText(BtslandApplication.dealer.getDepict());
+        if(BtslandApplication.dealer.getDealerName()!=null){
+            tvName.setText(BtslandApplication.dealer.getDealerName());
+        }
+
+        if(BtslandApplication.dealer.getDealerId()!=null){
+            tvDealerId.setText(BtslandApplication.dealer.getDealerId());
+        }
+
+        if(BtslandApplication.dealer.getLowerLimitIn()!=null){
+            tvInLowNum.setText(""+BtslandApplication.dealer.getLowerLimitIn());
+        }
+
+        if(BtslandApplication.dealer.getLowerLimitOut()!=null){
+            tvOutLowNum.setText(""+BtslandApplication.dealer.getLowerLimitOut());
+        }
+
+        if(BtslandApplication.dealer.getBrokerageIn()!=null){
+            tvInBro.setText(""+BtslandApplication.dealer.getBrokerageIn()*100+"%");
+        }
+
+        if(BtslandApplication.dealer.getBrokerageOut()!=null){
+            tvOutBro.setText(""+BtslandApplication.dealer.getBrokerageOut()*100+"%");
+        }
+
+        if(BtslandApplication.dealer.getDepict()!=null){
+            tvDepict.setText(BtslandApplication.dealer.getDepict());
+        }
+
         progressBar.setMax(2000);
         if(BtslandApplication.dealer.userInfo!=null){
             Double level = BtslandApplication.dealer.userInfo.getLevel();

@@ -5,7 +5,7 @@ public class TypeUser {
 
     private Integer typeNo;
 
-    private String depict;
+    private String depict="";
 
     public Integer getId() {
         return id;

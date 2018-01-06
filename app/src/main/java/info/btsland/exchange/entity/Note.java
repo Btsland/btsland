@@ -6,23 +6,23 @@ import java.util.Date;
 public class Note implements Serializable {
     private Integer id;
 
-    private String dealerId;
+    private String dealerId="";
 
-    private String noteNo;
+    private String noteNo="";
 
     private Double assetNum;
 
-    private String assetCoin;
+    private String assetCoin="";
 
     private Double brokerage;
 
-    private String account;
+    private String account="";
 
-    private String realNo;
+    private String realNo="";
 
     private String realType;
 
-    private String realDepict;
+    private String realDepict="";
 
     private Date startTime;
 

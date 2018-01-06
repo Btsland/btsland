@@ -3,7 +3,7 @@ package info.btsland.exchange.entity;
 public class UserRecord {
     private Integer id;
 
-    private String dealerId;
+    private String dealerId="";
 
     private Integer inClinchCount;
 

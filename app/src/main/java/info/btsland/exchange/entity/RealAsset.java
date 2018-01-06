@@ -3,17 +3,17 @@ package info.btsland.exchange.entity;
 public class RealAsset {
     private Integer id;
 
-    private String dealerId;
+    private String dealerId="";
 
-    private String realAssetNo;
+    private String realAssetNo="";
 
-    private String realAssetType;
+    private String realAssetType="";
 
     private Integer isAvailable;
 
-    private String depict;
+    private String depict="";
 
-    private String name;
+    private String name="";
 
     private Integer type;
 

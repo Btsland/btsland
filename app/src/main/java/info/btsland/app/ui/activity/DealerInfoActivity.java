@@ -42,7 +42,7 @@ public class DealerInfoActivity extends AppCompatActivity {
     private TextView tvCancel;
     private KProgressHUD hud;
     private String TAG="DealerInfoActivity";
-    private User user=new User();
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,6 +106,7 @@ public class DealerInfoActivity extends AppCompatActivity {
         tvConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                user=new User();
                 String inBro=edInBro.getEditableText().toString();
                 String outBro=edOutBro.getEditableText().toString();
                 String dealerName=edDealerName.getEditableText().toString();
@@ -113,15 +114,44 @@ public class DealerInfoActivity extends AppCompatActivity {
                 String lowIn=edLowIn.getEditableText().toString();
                 String lowOut=edLowOut.getEditableText().toString();
                 String upOut=edUpOut.getEditableText().toString();
+                if(BtslandApplication.dealer==null) {
+                    return;
+                }
+                if(BtslandApplication.dealer.getDealerId()!=null){
+                    user.setDealerId(BtslandApplication.dealer.getDealerId());
+                }else {
+                    user.setDealerId("");
+                }
 
-                user.setDealerId(BtslandApplication.dealer.getDealerId());
                 user.setDealerName(dealerName);
-                user.setBrokerageIn(Double.valueOf(inBro)/100);
-                user.setBrokerageOut(Double.valueOf(outBro)/100);
+                if(inBro!=null&&!inBro.equals("")){
+                    user.setBrokerageIn(Double.valueOf(inBro)/100);
+                }else {
+                    user.setBrokerageIn(0.0);
+                }
+                if(outBro!=null&&!outBro.equals("")){
+                    user.setBrokerageOut(Double.valueOf(outBro)/100);
+                }else {
+                    user.setBrokerageOut(0.0);
+                }
+
                 user.setDepict(depict);
-                user.setLowerLimitIn(Double.valueOf(lowIn));
-                user.setLowerLimitOut(Double.valueOf(lowOut));
-                user.setUpperLimitOut(Double.valueOf(upOut));
+                if(lowIn!=null&&!lowIn.equals("")){
+                    user.setLowerLimitIn(Double.valueOf(lowIn));
+                }else {
+                    user.setLowerLimitIn(0.0);
+                }
+                if(lowOut!=null&&!lowOut.equals("")){
+                    user.setLowerLimitOut(Double.valueOf(lowOut));
+                }else {
+                    user.setLowerLimitOut(0.0);
+                }
+                if(upOut!=null&&!upOut.equals("")){
+                    user.setUpperLimitOut(Double.valueOf(upOut));
+                }else {
+                    user.setUpperLimitOut(0.0);
+                }
+
                 Log.e(TAG, "onClick: "+BtslandApplication.dealer );
                 PasswordDialog passwordDialog=new PasswordDialog(DealerInfoActivity.this);
                 passwordDialog.setMsg("请输入密码");
@@ -139,7 +169,7 @@ public class DealerInfoActivity extends AppCompatActivity {
                                 try {
                                     account_object accountObject=BtslandApplication.getWalletApi().import_account_password(BtslandApplication.accountObject.name,passwordString);
                                     if(accountObject!=null){
-                                        UserHttp.updateUser(BtslandApplication.dealer.getDealerId(),user, new Callback() {
+                                        UserHttp.updateUser(user.getDealerId(),user, new Callback() {
                                             @Override
                                             public void onFailure(Call call, IOException e) {
 
@@ -150,6 +180,7 @@ public class DealerInfoActivity extends AppCompatActivity {
                                                 String json= response.body().string();
                                                 if(json.indexOf("error")!=-1){
                                                     BtslandApplication.sendBroadcastDialog(DealerInfoActivity.this,json);
+                                                    handler.sendEmptyMessage(0);
                                                 }else {
                                                     int a= Integer.parseInt(json);
                                                     handler.sendEmptyMessage(a);
@@ -161,6 +192,7 @@ public class DealerInfoActivity extends AppCompatActivity {
                                     }
                                 } catch (NetworkStatusException e) {
                                     e.printStackTrace();
+                                    handler.sendEmptyMessage(0);
                                 }
 
                             }

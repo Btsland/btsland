@@ -3,13 +3,13 @@ package info.btsland.exchange.entity;
 public class Allege {
     private Integer id;
 
-    private String account;
+    private String account="";
 
-    private String dealerId;
+    private String dealerId="";
 
-    private String depict;
+    private String depict="";
 
-    private String noteNo;
+    private String noteNo="";
 
     private Integer statNo;
 

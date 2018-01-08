@@ -59,9 +59,15 @@ public class HeadFragment extends Fragment {
     private TextView titleTextView;
     private TextView selectTextView;
     private ProgressBar pBarWait;
-
+    private Drawable background;
     private Drawable drawable;
 
+    public void setBackground(Drawable background) {
+        this.background = background;
+        if (view!=null){
+            view.setBackground(background);
+        }
+    }
 
     public HeadFragment() {
         super();
@@ -204,12 +210,12 @@ public class HeadFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
     }
-
+    private View view;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_head, container, false);
+        view = inflater.inflate(R.layout.fragment_head, container, false);
         type=getArguments().getInt("type");
         String titleName=getArguments().getString("titleName");
         if(titleName!=null&&!titleName.equals("")){

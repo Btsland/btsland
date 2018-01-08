@@ -1,17 +1,22 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 
 import info.btsland.app.R;
+import info.btsland.app.ui.activity.MainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,7 +30,7 @@ import info.btsland.app.R;
  * 新闻碎片
  *
  */
-public class NewsFragment extends Fragment {
+public class NewsFragment extends Fragment implements MainActivity.OnKeyDown {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1="param1";
@@ -35,8 +40,10 @@ public class NewsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private WebView webView;
+    private ProgressBar progressBar;
     private String url = "http://www.fastchain.info/index.php";
     private String Tag = "MQL";
+    public boolean isShow=false;
 
 //    private OnFragmentInteractionListener mListener;
 
@@ -77,17 +84,14 @@ public class NewsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view=inflater.inflate(R.layout.fragment_news, container, false);
         initView(view);
-
         return view;
-
     }
 
     private void initView(View view){
 //        webView = (WebView)findViewById(R.id.wv_news);
         webView = view.findViewById(R.id.wv_news);
-
+        progressBar=view.findViewById(R.id.pBar_news);
         //支持javascript
-
         webView.getSettings().setJavaScriptEnabled(true);
         // 设置可以支持缩放
         webView.getSettings().setSupportZoom(true);
@@ -98,10 +102,22 @@ public class NewsFragment extends Fragment {
         //自适应屏幕
         webView.getSettings().setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
         webView.getSettings().setLoadWithOverviewMode(true);
-
-
+        //可以设置进度条和页面进度
+        webView.setWebChromeClient(new WebChromeClient(){
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if(newProgress==100){
+                    progressBar.setVisibility(View.GONE);
+                }else {
+                    progressBar.setVisibility(View.VISIBLE);
+                    progressBar.setProgress(newProgress);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
+        });
         //如果不设置WebViewClient，请求会跳转系统浏览器
         webView.setWebViewClient(new WebViewClient() {
+
 
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -132,18 +148,47 @@ public class NewsFragment extends Fragment {
                 return false;
             }
 
+//            //设置返回键动作（防止按返回键直接退出程序)
+//            @Override
+//            public boolean onKeyDown(int keyCode, KeyEvent event) {
+//                if(keyCode==KeyEvent.KEYCODE_BACK) {
+//                    if(webView.canGoBack()) {//当webview不是处于第一页面时，返回上一个页面
+//                        webView.goBack();
+//                        return true;
+//                    }
+//                    else {//当webview处于第一页面时,直接退出程序
+//                        System.exit(0);
+//                    }
+//
+//
+//                }
+//                return super.onKeyDown(keyCode, event);
+//            }
+
         });
         webView.loadUrl(url);
     }
 
+    @Override
+    public void onKeyDown() {
+        if(webView.canGoBack()) {//当webview不是处于第一页面时，返回上一个页面
+            webView.goBack();
+        }
+    }
 
+    @Override
+    public void onResume() {
+        isShow=true;
+        super.onResume();
 
+    }
 
-
-
-
-
-//
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        isShow=false;
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+    //
 //    // TODO: Rename method, update argument and hook method into UI event
 //    public void onButtonPressed(Uri uri) {
 //        if (mListener != null) {

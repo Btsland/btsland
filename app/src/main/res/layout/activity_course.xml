@@ -3,178 +3,359 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="info.btsland.app.ui.activity.CourseActivity">
+    android:layout_height="match_parent">
     <!--顶部导航栏-->
     <FrameLayout
         android:id="@+id/fra_course_head"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/fra_main_body">
+        app:layout_constraintRight_toRightOf="parent">
 
     </FrameLayout>
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:id="@+id/sv_course"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/fra_course_head"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/aaa"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_course_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="Btsland使用教程"
+                    android:textSize="30dp"
+
+                    />
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/tv_course01"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="当您下载好我们的Btsland钱包并打开时，您首先看到的是最新交易信息的浏览界面如下图所示："
-                />
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="当您在www.btsland.info下载好我们的Btsland APP钱包并打开时，您首先看到的是最新交易信息的浏览界面，如下图所示：" />
+
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course01"
+                android:background="@mipmap/image5" />
+
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="950px"
+                android:background="@mipmap/image2" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text=" 第一部份注册模块"
+                android:textSize="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
                 />
 
             <TextView
                 android:id="@+id/tv_course02"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:text="点击钱包图标，进入钱包界面，此时您还尚未登陆，钱包界面显示如下图："
                 />
+
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course02"
-                />
+                android:background="@mipmap/image3" />
+
 
             <TextView
                 android:id="@+id/tv_course03"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="如果您还没有内盘账户，请点击“去注册”按钮，进入注册界面,注册时用户名必须以字母开头并且包含数字，不能含特殊字符（如@，*，#等），长度不能低于6位，如下图："
-                />
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="如果您还没有内盘账户，请点击“去注册”按钮，进入注册界面,注册时用户名必须以字母开头并且包含数字，不能含特殊字符（如@，*，#等），长度不能低于6位,例如：Li1234,密码可以包含大小写字母及数字和特殊字符,并且不能低于12位，例如：Mima123456789，如下图：" />
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course03"
+                android:background="@mipmap/image4"
                 />
 
             <TextView
                 android:id="@+id/tv_course04"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:text="如果您已有账户，请点击“去登陆按钮”，进入登陆界面，如下图所示："
                 />
-            <ImageView
-                android:layout_width="600px"
-                android:layout_height="900px"
-                android:layout_gravity="center"
-                android:background="@mipmap/course04"
-                />
+
+            <TextView
+                android:id="@+id/tv_course_title2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp"
+                android:text="第二部分钱包模块"  />
+
             <TextView
                 android:id="@+id/tv_course05"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="注册或登陆成功后，则进入用户界面，如下图所示："
-                />
-            <ImageView
-                android:layout_width="600px"
-                android:layout_height="900px"
-                android:layout_gravity="center"
-                android:background="@mipmap/course05"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="注册或登陆成功后，则进入用户界面，如下图所示：\n每个人的帐户由三部份组成：ID账户名，图案和#编号，#编号是你在内盘里的注册排名同时也和ID账户名对应，转帐时需要同时比对确定二个以上识别。"
                 />
 
             <TextView
                 android:id="@+id/tv_course06"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:text="点击查看全部资产，如下图所示："
+                />
+
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image6" />
+
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image7"
+                />
+            <TextView
+                android:id="@+id/tv_course_title3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp"
+                android:text="第三部分转账功能模块"
+                />
+            <TextView
+                android:id="@+id/tv_course_title4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="15dp"
+                android:textColor="@color/color_font_red"
+                android:text="转帐和交易都需要消耗掉BTS，请保证你的账户里有1个以上的BTS，否则交易无法进行（系统将提示广播失败）"
                 />
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course06"
+                android:background="@mipmap/image8"
+                />
+
+            <TextView
+                android:id="@+id/tv_course_07"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="转账可以将你的内盘资产转到其他用户名下，对方的账户名就是钱包地址如li1234,转账时请确认三码合一，如果误将资产转入了陌生人的账户，基本没有找回的可能，程序设定转账时间为10秒，从9秒倒记时，如有不对，请点取消按钮撤回转账，以免损失。" />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image9"
                 />
 
             <TextView
                 android:id="@+id/tv_course07"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
                 android:text="在交易界面双击进入详情界面后，最的新交易记录和详细精准可拉伸的K图助您更好的了解最新的最全面的交易信息，让您对最近发生的交易了如指掌。界面如下图："
                 />
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course07"
-                />
-            <ImageView
-                android:layout_width="600px"
-                android:layout_height="900px"
-                android:layout_gravity="center"
-                android:background="@mipmap/course08"
+                android:background="@mipmap/image10"
                 />
 
             <TextView
-                android:id="@+id/tv_course09"
+                android:id="@+id/tv_course8"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="点击右上角的齿轮，进入设置界面，如图："
-                />
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="买入卖出功能显示当前交易对账户可用资产，点击买一或者卖一自动选定购入或者卖出价格，当选定价格后，可以输入想购入或者卖出的总金额，程序会自动计算成交数量。" />
+            <TextView
+                android:id="@+id/tv_course9"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/color_font_red"
+                android:text="买入和卖出都将使用BTS作为手续费，请保证账户内有不少余1个以上的BTS。"/>
+
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course09"
+                android:background="@mipmap/image11"
                 />
 
             <TextView
                 android:id="@+id/tv_course10"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="点击U2U，显示如下界面："
-                />
+                android:gravity="left"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="在交易详情页的进行中页面可以撤消买入或者卖出的委单。" />
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course10"
+                android:background="@mipmap/image12"
                 />
+
+            <TextView
+                android:id="@+id/tv_course09"
+                android:layout_width="match_parent"
+                android:gravity="left"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="点击右上角的齿轮，可进入设置界面，在这里，您可以选择是否开启自动刷新功能，设置涨跌幅的颜色样式，选择您偏好的节点，更改计量货币的单位，如图：" />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image13"
+                />
+
+
             <TextView
                 android:id="@+id/tv_course11"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="U2U详情界面显示如下："
-                />
-            <ImageView
-                android:layout_width="600px"
-                android:layout_height="900px"
-                android:layout_gravity="center"
-                android:background="@mipmap/course11"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="5dp"
+                android:textSize="20dp"
+                android:text="第四部份U2U兑换模块"
                 />
 
             <TextView
                 android:id="@+id/tv_course12"
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
-                android:text="填写完数据,选择付款账户，点击确认并输入密码后，界面显示如下："
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="返回主界面，点击下方U2U，显示如下界面："
+                />
+
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image14"
+                />
+            <TextView
+                android:id="@+id/tv_course13"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:text="选择您心仪的承兑商，点击进入U2U详情界面，显示如下："
                 />
             <ImageView
                 android:layout_width="600px"
-                android:layout_height="900px"
+                android:layout_height="960px"
                 android:layout_gravity="center"
-                android:background="@mipmap/course12"
+                android:background="@mipmap/image15"
                 />
 
+            <TextView
+                android:id="@+id/tv_course"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="left"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="@color/color_font_red"
+                android:text="注意:bitCNY在比特股大陆APP内简写成CNY,1CNY=1RMB" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="1:确认订单后需用户线下将同等额度的人民币转到兑换者提供的收款账户，平台不提供转账途径。\n2：确认订单后务必在30分钟内完成线下转账并在我的充值页面确认转账，如过期则视超时处理。\n3：线下转账时务必将充值码做为备注进行转账，充值码将做为承兑商核对线下来款的依据，也是发生纠纷的有效依据。\n4：如按规范完成操作时承兑商无法完成转账，平台代承兑商完成转账。\n5：交易为线下交易，平台除代币流通手续费外不收取任何手续费 。"
+                />
 
-
-
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="当您填写完订单后，点击确认并输入密码后，出现如下界面，请复制充值码，并在转账时备注（这是您这笔订单的唯一凭证，切记复制并备注），线下完成转账后，请回到平台，选择付款账户，并确认转账，承兑商才会给您转账，界面显示如下："
+                />
+            <ImageView
+                android:layout_width="600px"
+                android:layout_height="960px"
+                android:layout_gravity="center"
+                android:background="@mipmap/image16"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="比特股大陆开发团队是一群石墨烯技术的爱好者,主创人员有来自币圈的老人,也有来自GOOGLE,SPLUCK大型企业的顶级程序员,最后感谢大家使用比特股大陆APP交易软件,我们的成长离不开大家支持.\n比特股大陆官方网址:  https://www.btsland.info\nIFAST公链官方网址:https://www.ifast.pro\n官方资讯唯一发布网站:https://www.fastchain.info\n官方邮箱: btslands@yahoo.com"/>
         </LinearLayout>
 
     </ScrollView>

@@ -20,27 +20,29 @@
 
 
     <TextView
+        android:id="@+id/tv_about"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/color_black"
         android:textStyle="bold"
-        android:text="比特股 -- 去中心化的工业级数字资产交易中心"
+        android:text="比特股大陆
+https://www.btsland.info"
         android:layout_marginTop="10dp" />
+
+    <!--<TextView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:textColor="@color/color_black"-->
+        <!--android:textStyle="bold"-->
+        <!--android:text="技术特色"-->
+        <!--android:layout_marginTop="10dp" />-->
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textColor="@color/color_black"
-        android:textStyle="bold"
-        android:text="技术特色"
-        android:layout_marginTop="10dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
+        android:gravity="left"
         android:textStyle="bold"
         android:text="基于石墨烯技术的区块链平台, 提供符合国人习惯的数字资产交易中心。"
         android:textColor="@color/color_black"/>
@@ -49,16 +51,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/tv_about_official_website"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web"
-            android:text="官网地址：https://www.btsland.info/"
-            android:textSize="20dp"
-            android:textColor="@color/color_black"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10dp" />
+        <!--<TextView-->
+            <!--android:id="@+id/tv_about_official_website"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:autoLink="web"-->
+            <!--android:text="：https://www.btsland.info/"-->
+            <!--android:textSize="20dp"-->
+            <!--android:textColor="@color/color_black"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginLeft="10dp" />-->
     </RelativeLayout>
 </LinearLayout>
 

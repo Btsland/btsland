@@ -26,6 +26,7 @@ import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.fragment.HomeFragment;
 import info.btsland.app.ui.fragment.MarketFragment;
+import info.btsland.app.ui.fragment.NewsFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.util.PreferenceUtil;
 
@@ -42,7 +43,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     private TextView tvNavPurse;
     private TextView tvNavC2C;
     private Fragment marketFragment;
-    private Fragment homeFragment;
+    private NewsFragment homeFragment;
     private Fragment purseFragment;
     private HeadFragment headFragment;
     private TextView tvNavPursePoint;
@@ -52,6 +53,8 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     private Fragment c2cFragment;
     private MainReceiver mainReceiver;
     private int point;
+
+
 
     public void setPoint(int point) {
         this.point = point;
@@ -79,7 +82,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         setContentView(R.layout.activity_main);
         if (savedInstanceState != null) {
             index = savedInstanceState.getInt("index", 1);
-            homeFragment = manager.findFragmentByTag("home");
+            homeFragment = (NewsFragment) manager.findFragmentByTag("home");
             marketFragment = manager.findFragmentByTag("market");
             purseFragment = manager.findFragmentByTag("purse");
             c2cFragment = manager.findFragmentByTag("c2c");
@@ -150,7 +153,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         //初始化fra_main_body
         FragmentTransaction transaction = manager.beginTransaction();
         if (homeFragment == null) {
-            homeFragment = new HomeFragment();
+            homeFragment = new NewsFragment();
         }
         if (marketFragment == null) {
             marketFragment = new MarketFragment();
@@ -374,7 +377,12 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            exit();
+            if (homeFragment.isHidden()){
+                exit();
+            }else {
+                homeFragment.onKeyDown();
+            }
+
             return false;
         } else {
             return super.onKeyDown(keyCode, event);
@@ -426,6 +434,10 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
             isExit = false;
         }
     };
+
+   public  interface  OnKeyDown{
+      void onKeyDown();
+   }
 
 
 }

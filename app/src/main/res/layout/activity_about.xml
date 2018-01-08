@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/about"
+    >
+    <FrameLayout
+        android:id="@+id/about_head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        >
+    </FrameLayout>
+    <LinearLayout
+        android:id="@+id/ll_about"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="80dp"
+                android:layout_height="79dp"
+                android:background="@drawable/aaa"
+                android:gravity="center"
+                android:layout_marginRight="10dp"/>
+            <ImageView
+                android:layout_marginLeft="10dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:background="@drawable/ifast"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:padding="10dp"
+                android:id="@+id/tv_about_btsland"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center"
+                android:text="比特股大陆开发团队是一群石墨烯技术的爱好者,主创人员有来自币圈的老人,也有来自GOOGLE,SPLUCK大型企业的顶级程序员,最后感谢大家使用比特股大陆APP交易软件,我们的成长离不开大家支持.
+\n比特股大陆官方网址:https://www.btsland.info
+\nIFAST公链官方网址:https://www.ifast.pro
+\n官方资讯唯一发布网站:https://www.fastchain.info
+\n官方邮箱:btslands@yahoo.com"
+                android:textColor="@color/black"
+                android:textSize="15dp" />
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

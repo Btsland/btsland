@@ -170,10 +170,13 @@ public class NewsFragment extends Fragment implements MainActivity.OnKeyDown {
     }
 
     @Override
-    public void onKeyDown() {
+    public boolean onKeyDown() {
         if(webView.canGoBack()) {//当webview不是处于第一页面时，返回上一个页面
             webView.goBack();
-        }
+            return  false;
+        } else {//当webview处于第一页面时,直接退出程序
+                        return true;
+                    }
     }
 
     @Override

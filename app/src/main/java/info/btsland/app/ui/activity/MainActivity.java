@@ -380,7 +380,10 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
             if (homeFragment.isHidden()){
                 exit();
             }else {
-                homeFragment.onKeyDown();
+              boolean result=  homeFragment.onKeyDown();
+              if (result){
+                  exit();
+              }
             }
 
             return false;
@@ -436,7 +439,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     };
 
    public  interface  OnKeyDown{
-      void onKeyDown();
+      boolean onKeyDown();
    }
 
 

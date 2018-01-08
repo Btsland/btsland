@@ -23,7 +23,7 @@
         android:layout_height="2dp"
         android:visibility="gone"
         style="?android:attr/progressBarStyleHorizontal"
-        android:progressDrawable="@color/color_font_red"
+        android:progressDrawable="@color/green"
         android:background="@color/color_white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

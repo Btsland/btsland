@@ -35,6 +35,7 @@ import info.btsland.app.ui.activity.PurseTradingRecordActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.MyConstraintLayout;
+import info.btsland.app.util.BaseThread;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -369,6 +370,16 @@ public class UserManageFragment extends Fragment {
                             BtslandApplication.accountObject=null;
                             BtslandApplication.clearUser();
                             BtslandApplication.dealer=null;
+                            BtslandApplication.userHavingInNotes.clear();
+                            BtslandApplication.userHavingOutNotes.clear();
+                            BtslandApplication.dealerHavingNotes.clear();
+                            BtslandApplication.dealerClinchNotes.clear();
+                            BtslandApplication.helpUserMap.clear();
+                            for (String name : BtslandApplication.helpQueryThreadMap.keySet()){
+                                 BaseThread baseThread = BtslandApplication.helpQueryThreadMap.get(name);
+                                 baseThread.kill();
+                            }
+                            BtslandApplication.helpQueryThreadMap.clear();
                             fillIn();
                             yesOrNoLogin();
                             PurseFragment.sendBroadcast(getActivity());

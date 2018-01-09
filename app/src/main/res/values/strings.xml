@@ -194,7 +194,8 @@
     <string name="str_balance">余额：</string>
     <string name="str_remarks">备注：</string>
     <string name="str_confirm">确定</string>
-    <string name="c2c">C2C</string>
+    <string name="c2cTitle">U2U兑换</string>
+    <string name="c2c">U2U</string>
     <string name="look">观察</string>
     <string name="borrow">抵押</string>
 </resources>

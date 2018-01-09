@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
@@ -14,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,12 @@ public class DealerListFragment extends Fragment {
     public static final int IN=1;//进（充值）
     public static final int OUT=2;//出（提现）
     private ListView listView;
+    private Spinner spOrder;
     private DealerListAdapter dealerListAdapter;
-    private List<DealerListAdapter.DealerData> dataList=new ArrayList<>();
+    public static List<DealerListAdapter.DealerData> dataList=new ArrayList<>();
     private AllDealersReceiver allDealersReceiver;
+    private int inOrder=0;
+    private int outOrder=0;
 
     public DealerListFragment() {
     }
@@ -69,19 +72,46 @@ public class DealerListFragment extends Fragment {
 
     private void init(View view){
         listView=view.findViewById(R.id.lv_c2c_list);
+        spOrder=view.findViewById(R.id.sp_c2c_list_order);
+        List<String> list =new ArrayList<>();
+        list.add("成交总额排序");
+        list.add("成交总单数排序");
+        list.add("手续费排序");
+        list.add("完成时间排序");
+        list.add("等级排序");
+        list.add("承兑下限排序");
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>(getActivity(),R.layout.coin_item,R.id.tv_transfer_coinName,list);
+        spOrder.setAdapter(adapter);
+        spOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(type==IN){
+                    inOrder=i;
+                }else if(type==OUT) {
+                    outOrder=i;
+                }
+                BtslandApplication.orderDealer(type,i);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
     }
 
     private void fillIn() {
         dealerListAdapter=new DealerListAdapter(getActivity());
         dealerListAdapter.setType(type);
         listView.setAdapter(dealerListAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                DealerListAdapter.DealerData dealerData = dataList.get(i);
-                toExchange(dealerData.user);
-            }
-        });
+        dealerListAdapter.setClickListener(
+                new DealerListAdapter.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(User user) {
+                        toExchange(user);
+                    }
+                }
+        );
 
     }
     private void toExchange(User user){
@@ -101,18 +131,17 @@ public class DealerListFragment extends Fragment {
     }
 
     private synchronized void fillInUser(){
-        if(BtslandApplication.dealers!=null) {
-            synchronized (BtslandApplication.dealers) {
-                dataList.clear();
-                for (int i = 0; i < BtslandApplication.dealers.size(); i++) {
-                    DealerListAdapter.DealerData dealerData = new DealerListAdapter.DealerData();
-                    User user = BtslandApplication.dealers.get(i);
-                    if (user.getType() == 3) {
-                        dealerData.user = user;
-                        dataList.add(dealerData);
-                    }
-                }
-                handler.sendEmptyMessage(1);
+        if(type==IN) {
+            if (BtslandApplication.inDataList != null && BtslandApplication.inDataList.size() > 0) {
+                BtslandApplication.orderDealer(type,inOrder);
+                dealerListAdapter.setDataList(BtslandApplication.inDataList);
+                dealerListAdapter.notifyDataSetChanged();
+            }
+        }else if(type==OUT){
+            if (BtslandApplication.outDataList != null && BtslandApplication.outDataList.size() > 0) {
+                BtslandApplication.orderDealer(type,outOrder);
+                dealerListAdapter.setDataList(BtslandApplication.outDataList);
+                dealerListAdapter.notifyDataSetChanged();
             }
         }
     }
@@ -128,11 +157,4 @@ public class DealerListFragment extends Fragment {
             fillInUser();
         }
     }
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            dealerListAdapter.setDataList(dataList);
-            dealerListAdapter.notifyDataSetChanged();
-        }
-    };
 }

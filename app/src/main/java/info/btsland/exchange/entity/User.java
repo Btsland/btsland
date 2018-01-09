@@ -1,6 +1,7 @@
 package info.btsland.exchange.entity;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class User {
@@ -35,6 +36,12 @@ public class User {
     public List<RealAsset> realAssets;
 
     public UserRecord userRecord;
+
+    public Integer chatPoint=0;
+
+    public Date chatDate;
+
+    public Chat chat;
 
     public List<Note> havingNotes=new ArrayList<>();
 

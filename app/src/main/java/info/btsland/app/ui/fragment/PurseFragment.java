@@ -79,6 +79,7 @@ public class PurseFragment extends Fragment {
         UserManageFragment userManageFragment=new UserManageFragment();
         fragments.add(userManageFragment);
         if(BtslandApplication.dealer!=null){
+            Log.e(TAG, "fillIn: "+BtslandApplication.dealer );
             if(BtslandApplication.dealer.getType()== UserTypeCode.HELP){
                 Log.e(TAG, "fillIn: help" );
                 HelpManageFragment helpManageFragment=new HelpManageFragment();

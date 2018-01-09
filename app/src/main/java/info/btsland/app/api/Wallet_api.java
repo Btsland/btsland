@@ -126,7 +126,7 @@ public class Wallet_api {
                                             String strPassword) throws NetworkStatusException, CreateAccountException {
         Log.i(TAG, "create_account_with_password: ");
         String[] strAddress = {"https://faucet.btsland.info/api/v1/accounts", "https://openledger.io/api/v1/accounts"};
-
+//        , "https://openledger.io/api/v1/accounts"
 
         int nRet = -1;
         for (int i = 0; i < strAddress.length; ++i) {
@@ -311,7 +311,7 @@ public class Wallet_api {
         HostnameVerifier hostnameVerifier = new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
-                Log.i(TAG, "hostname: " + String.valueOf(hostname));
+                Log.i(TAG, "hostname: " + String.valueOf(hostname));//|| hostname.equals(OPENLEDGER_FAUCET)
                 if (hostname.equals(BTSLAND_FAUCET) || hostname.equals(OPENLEDGER_FAUCET)) {
                     return true;
                 }

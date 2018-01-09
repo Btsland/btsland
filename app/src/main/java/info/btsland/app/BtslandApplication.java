@@ -23,12 +23,17 @@ import java.io.IOException;
 import java.security.Security;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import info.btsland.app.Adapter.DealerListAdapter;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.api.Wallet_api;
 import info.btsland.app.api.Websocket_api;
@@ -41,6 +46,8 @@ import info.btsland.app.model.IAsset;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.AccountC2CTypesActivity;
+import info.btsland.app.ui.activity.ChatAccountListActivity;
+import info.btsland.app.ui.activity.ChatActivity;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
 import info.btsland.app.ui.activity.TransferActivity;
@@ -48,6 +55,7 @@ import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.DealerNoteListFragment;
+import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.app.util.BaseThread;
@@ -89,12 +97,17 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<Note> userHavingInNotes=new ArrayList<>();
     public static List<Note> userHavingOutNotes=new ArrayList<>();
     public static Map<String,List<Chat>> chatListMap=new LinkedHashMap<>();
-    public static List<User> dealers;
+    public static List<User> dealers=new ArrayList<>();
+    public static List<DealerListAdapter.DealerData> inDataList=new ArrayList<>();
+    public static List<DealerListAdapter.DealerData> outDataList=new ArrayList<>();
+    public static List<String> chatAccounts=new LinkedList<>();
+    public static Map<String,User> chatUsers=new LinkedHashMap<>();
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryChatDealer> helpQueryChatDealerThreadMap=new LinkedHashMap<>();
     public static List<IAsset> iAssets=new ArrayList<>();
+    public static List<asset> assets=new ArrayList<>();
     private static SharedPreferences sharedPreferences;
 
     private static MarketStat marketStat;
@@ -117,6 +130,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static boolean isRefurbish=true;//是否自动刷新
     public static int fluctuationType=1;//涨跌颜色类型
     public static String strServer="wss://www.btsland.info/ws";//节点
+    public static String ipServer="123.1.154.214";
+//    public static String ipServer="192.168.1.100";
     public static String chargeUnit="CNY";//计价单位
     public static String Language="zh";//语言
     public static int goUp=0;
@@ -191,6 +206,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         //Fabric.with(this, new Crashlytics());
         Security.insertProviderAt(new BouncyCastleProvider(), 1);
         init();
+        initChat();
         IntentFilter intentFilter = new IntentFilter(QueryReceiver.EVENT);
         queryReceiver=new QueryReceiver();
         LocalBroadcastManager.getInstance(getInstance()).registerReceiver(queryReceiver,intentFilter);
@@ -198,6 +214,256 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         dialogReceiver=new DialogReceiver();
         LocalBroadcastManager.getInstance(getInstance()).registerReceiver(dialogReceiver,dialogFilter);
         ConnectThread();
+
+    }
+    private void initChat(){
+        readChatAccounts();
+        //获取服务器的聊天列表
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                ChatHttp.queryDealer(account, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String json = response.body().string();
+                        if(json.indexOf("error")!=-1){
+
+                        }else {
+                            Gson gson=new Gson();
+                            List<String> strings=gson.fromJson(json,new TypeToken<List<String>>(){}.getType());
+                            if(strings!=null&&strings.size()>0){
+                                if(chatAccounts==null){
+                                    chatAccounts=new LinkedList<>();
+                                }
+                                Log.e(TAG, "onResponse: strings.size():"+strings.size() );
+                                chatAccounts.addAll(strings);
+                                chatAccounts=new ArrayList<>(new LinkedHashSet<>(chatAccounts));
+                                Log.e(TAG, "onResponse: chatAccounts.size():"+chatAccounts.size() );
+                                saveChatAccounts();
+                            }
+                            if(chatAccounts!=null) {
+                                for (int i = 0; i < chatAccounts.size(); i++) {
+                                    Log.e(TAG, "onResponse: " + chatAccounts.get(i));
+                                    String account = chatAccounts.get(i);
+                                    queryAccountChat(account);
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }).start();
+
+    }
+
+    private void queryAccountChat(String account){
+        new QueryAccountChatThread(account).start();
+    }
+    class QueryAccountChatThread extends Thread{
+        private String user;
+
+        public QueryAccountChatThread(String account) {
+            this.user = account;
+        }
+
+        @Override
+        public void run() {
+            ChatHttp.queryChat(account, user, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String json=response.body().string();
+                    if(json.indexOf("error")!=-1){
+
+                    }else {
+                        GsonBuilder gsonBuilder=new GsonBuilder();
+                        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+                        final Gson gson = gsonBuilder.create();
+                        List<Chat> chats=gson.fromJson(json,new TypeToken<List<Chat>>(){}.getType());
+                        if(chats==null||chats.size()==0){
+                            return;
+                        }
+                        if(chatListMap==null){
+                            chatListMap=new LinkedHashMap<>();
+                        }
+                        if(chatListMap.get(user)==null){
+                            chatListMap.put(user,chats);
+                        }else {
+                            chatListMap.get(user).addAll(chats);
+                        }
+                        final Chat chat=chats.get(chats.size()-1);
+                        if(BtslandApplication.chatUsers.get(chat.getFromUser())==null&&BtslandApplication.chatUsers.get(chat.getToUser())==null){
+                            String newAccount="";
+                            if(!chat.getFromUser().equals(account)) {
+                                newAccount=chat.getFromUser();
+                            }else {
+                                newAccount=chat.getToUser();
+                            }
+                            final String finalNewAccount = newAccount;
+                            UserHttp.queryAccount(newAccount, new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    String json=response.body().string();
+                                    if(json.indexOf("error")!=-1){
+
+                                    }else {
+                                        User user=gson.fromJson(json,User.class);
+                                        user.chatPoint=1;
+                                        user.chatDate=chat.getTime();
+                                        user.chat=chat;
+                                        BtslandApplication.chatUsers.put(finalNewAccount,user);
+                                        ChatActivity.sendBroadcast(getInstance());
+                                        ChatAccountListActivity.sendBroadcast(getInstance());
+                                    }
+                                }
+                            });
+
+                        }else {
+                            if(!chat.getFromUser().equals(account)) {
+                                BtslandApplication.chatUsers.get(chat.getFromUser()).chatPoint += chats.size();
+                                BtslandApplication.chatUsers.get(chat.getFromUser()).chatDate = chat.getTime();
+                                BtslandApplication.chatUsers.get(chat.getFromUser()).chat = chat;
+                            }else {
+                                BtslandApplication.chatUsers.get(chat.getToUser()).chatPoint += chats.size();
+                                BtslandApplication.chatUsers.get(chat.getToUser()).chatDate = chat.getTime();
+                                BtslandApplication.chatUsers.get(chat.getToUser()).chat = chat;
+                            }
+                            ChatActivity.sendBroadcast(getInstance());
+                            ChatAccountListActivity.sendBroadcast(getInstance());
+                        }
+
+
+                    }
+                }
+            });
+        }
+    }
+
+
+
+    public static class ReceiveChatThread extends Thread{
+        private String message;
+
+        public ReceiveChatThread(String message) {
+            this.message = message;
+        }
+
+        @Override
+        public synchronized void run() {
+            GsonBuilder gsonBuilder=new GsonBuilder();
+            gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
+            final Gson gson=gsonBuilder.create();
+            final Chat chat=gson.fromJson(message,Chat.class);
+            if (chat.getTime()==null){
+                chat.setTime(new Date());
+            }
+            if(BtslandApplication.chatListMap.get(chat.getFromUser())==null&&BtslandApplication.chatListMap.get(chat.getToUser())==null) {
+                List<Chat> chats = new ArrayList<>();
+                chats.add(chat);
+                if(!chat.getFromUser().equals(account)){
+                    BtslandApplication.chatListMap.put(chat.getFromUser(), chats);
+                }else {
+                    BtslandApplication.chatListMap.put(chat.getToUser(), chats);
+                }
+
+            }else {
+                if(!chat.getFromUser().equals(account)) {
+                    if(BtslandApplication.chatListMap.get(chat.getFromUser())==null){
+                        List<Chat> chats=new ArrayList<>();
+                        chats.add(chat);
+                    }
+                    BtslandApplication.chatListMap.get(chat.getFromUser()).add(chat);
+
+                }else {
+                    if(BtslandApplication.chatListMap.get(chat.getToUser())==null){
+                        List<Chat> chats=new ArrayList<>();
+                        BtslandApplication.chatListMap.put(chat.getToUser(),chats);
+                    }
+                    BtslandApplication.chatListMap.get(chat.getToUser()).add(chat);
+
+                }
+            }
+            if(!isIn(chat.getFromUser())&&!isIn(chat.getToUser())){
+                if(BtslandApplication.chatAccounts==null) {
+                    BtslandApplication.chatAccounts=new ArrayList<>();
+                }
+                if(!chat.getFromUser().equals(account)) {
+                    BtslandApplication.chatAccounts.add(chat.getFromUser());
+                }else {
+                    BtslandApplication.chatAccounts.add(chat.getToUser());
+                }
+                BtslandApplication.saveChatAccounts();
+            }
+            if(BtslandApplication.chatUsers.get(chat.getFromUser())==null&&BtslandApplication.chatUsers.get(chat.getToUser())==null){
+                String newAccount="";
+                if(!chat.getFromUser().equals(account)) {
+                    newAccount=chat.getFromUser();
+                }else {
+                    newAccount=chat.getToUser();
+                }
+                final String finalNewAccount = newAccount;
+                UserHttp.queryAccount(newAccount, new Callback() {
+                    @Override
+                    public void onFailure(Call call, IOException e) {
+
+                    }
+
+                    @Override
+                    public void onResponse(Call call, Response response) throws IOException {
+                        String json=response.body().string();
+                        if(json.indexOf("error")!=-1){
+
+                        }else {
+                            User user=gson.fromJson(json,User.class);
+                            user.chatPoint=1;
+                            user.chatDate=new Date();
+                            user.chat=chat;
+                            BtslandApplication.chatUsers.put(finalNewAccount,user);
+                            ChatActivity.sendBroadcast(getInstance());
+                            ChatAccountListActivity.sendBroadcast(getInstance());
+                        }
+                    }
+                });
+
+            }else {
+                if(!chat.getFromUser().equals(account)) {
+                    BtslandApplication.chatUsers.get(chat.getFromUser()).chatPoint += 1;
+                    BtslandApplication.chatUsers.get(chat.getFromUser()).chatDate = chat.getTime();
+                    BtslandApplication.chatUsers.get(chat.getFromUser()).chat = chat;
+                }else {
+                    BtslandApplication.chatUsers.get(chat.getToUser()).chatPoint += 1;
+                    BtslandApplication.chatUsers.get(chat.getToUser()).chatDate = chat.getTime();
+                    BtslandApplication.chatUsers.get(chat.getToUser()).chat = chat;
+                }
+                ChatActivity.sendBroadcast(getInstance());
+                ChatAccountListActivity.sendBroadcast(getInstance());
+            }
+
+        }
+        private boolean isIn(String name){
+            if(BtslandApplication.chatAccounts!=null) {
+                for (int i = 0; i < BtslandApplication.chatAccounts.size(); i++) {
+                    if (BtslandApplication.chatAccounts.get(i).equals(name)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
     private BaseThread queryAllHaving;
     private BaseThread queryAllClinch;
@@ -222,11 +488,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
-        queryAllDealer.setTime(15);
+        queryAllDealer.setTime(10);
         queryAllDealer.start();
 
     }
     private Gson gson;
+    public static int pointNum=0;
     class QueryAllHaving extends BaseThread{
         @Override
         public void execute() {
@@ -251,7 +518,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                     dealerHavingNotes = gson.fromJson(json, new TypeToken<List<Note>>() {
                                     }.getType());
                                     if (dealerHavingNotes != null) {
-                                        MainActivity.sendBroadcast(getInstance(),dealerHavingNotes.size()+userHavingOutNotes.size()+userHavingInNotes.size());
                                         DealerManageFragment.sendBroadcastPoint(getInstance(),dealerHavingNotes.size());
                                         DealerNoteListFragment.sendBroadcast(getInstance(), 1);
                                     }
@@ -259,12 +525,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             }
                         });
                     }
+                    int a=0;
                     if(dealer.getType()==UserTypeCode.HELP){
-                        int a=0;
                         for(String name : helpUserMap.keySet()){
                             a+= helpUserMap.get(name).havingNotes.size();
                         }
-                        MainActivity.sendBroadcast(getInstance(),a+userHavingOutNotes.size()+userHavingInNotes.size());
                     }
                     NoteHttp.queryAllHavingNoteByAccount(dealer.getDealerId(),"CNY", new Callback() {
                         @Override
@@ -281,7 +546,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                 }.getType());
                                 if (userHavingInNotes != null) {
                                     UserManageFragment.sendBroadcastPoint(BtslandApplication.getInstance(),userHavingInNotes.size()+userHavingOutNotes.size());
-                                    MainActivity.sendBroadcast(getInstance(),dealerHavingNotes.size()+userHavingOutNotes.size()+userHavingInNotes.size());
                                     DealerNoteListFragment.sendBroadcast(getInstance(), 1);
                                 }
                             }
@@ -302,12 +566,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                 }.getType());
                                 if (userHavingOutNotes != null) {
                                     UserManageFragment.sendBroadcastPoint(BtslandApplication.getInstance(),userHavingOutNotes.size()+userHavingInNotes.size());
-                                    MainActivity.sendBroadcast(getInstance(),dealerHavingNotes.size()+userHavingOutNotes.size()+userHavingInNotes.size());
                                     DealerNoteListFragment.sendBroadcast(getInstance(), 1);
                                 }
                             }
                         }
                     });
+                    pointNum=a+userHavingOutNotes.size()+ userHavingInNotes.size()+ dealerHavingNotes.size();
+                    MainActivity.sendBroadcast(getInstance(),pointNum);
 
                 }
             }
@@ -430,6 +695,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }else {
             this.nRet=Websocket_api.WEBSOCKET_CONNECT_INVALID;
         }
+
         WelcomeActivity.sendBroadcast(getInstance(),this.nRet);
         Log.e(TAG, "onMarketStatUpdate: " );
         if(!isQueryAount){
@@ -439,13 +705,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     }
     public static Double getAssetTotalByName(String name){
-        synchronized (BtslandApplication.iAssets) {
-            if (BtslandApplication.iAssets != null) {
-                synchronized (BtslandApplication.iAssets) {
-                    for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
-                        if (BtslandApplication.iAssets.get(i).coinName != null && BtslandApplication.iAssets.get(i).coinName.equals(name)) {
-                            return BtslandApplication.iAssets.get(i).total;
-                        }
+        if (iAssets != null) {
+            synchronized (iAssets) {
+                for (int i = 0; i < iAssets.size(); i++) {
+                    if (iAssets.get(i).coinName.equals(name)) {
+                        return iAssets.get(i).total;
                     }
                 }
             }
@@ -523,31 +787,35 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         @Override
         public void execute() {
             if (dealer != null) {
-                UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {
-
-                    }
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        GsonBuilder gsonBuilder = new GsonBuilder();
-                        gsonBuilder.registerTypeAdapter(Date.class, new GsonDateAdapter());
-                        Gson gson = gsonBuilder.create();
-                        String json = response.body().string();
-                        if (json.indexOf("error") != -1) {
-                            //sendBroadcastDialog(BtslandApplication.getInstance(), json);
-                        } else {
-                            dealer = gson.fromJson(json, User.class);
-                            if (dealer != null) {
-                                DealerManageFragment.sendBroadcast(getInstance());
-                                AccountC2CTypesActivity.sendBroadcast(getInstance());
-                            }
-                        }
-                    }
-                });
+                queryDealer();
             }
         }
+    }
+
+    public static void queryDealer(){
+        UserHttp.queryDealer(dealer.getDealerId(), new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                GsonBuilder gsonBuilder = new GsonBuilder();
+                gsonBuilder.registerTypeAdapter(Date.class, new GsonDateAdapter());
+                Gson gson = gsonBuilder.create();
+                String json = response.body().string();
+                if (json.indexOf("error") != -1) {
+                    sendBroadcastDialog(BtslandApplication.getInstance(), json);
+                } else {
+                    dealer = gson.fromJson(json, User.class);
+                    if (dealer != null) {
+                        DealerManageFragment.sendBroadcast(getInstance());
+                        AccountC2CTypesActivity.sendBroadcast(getInstance());
+                    }
+                }
+            }
+        });
     }
     /**
      * 查询账户线程
@@ -574,85 +842,107 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 accountObject = getMarketStat().mWebsocketApi.get_account_by_name(name);
                 if(accountObject!=null){
                     account=accountObject.name;
+                    queryC2CAccount(account);
                     UserManageFragment.sendBroadcast(getInstance(),2);
                     if(handler!=null){
 
                         handler.sendEmptyMessage(1);
                     }
                 }
-                UserHttp.queryAccount(name, new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {}
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        final Gson gson=new Gson();
-                        String json=response.body().string();
-                        if(json.indexOf("error")!=-1){
-                            sendBroadcastDialog(BtslandApplication.getInstance(),json);
-                        }else {
-                            dealer=gson.fromJson(json,User.class);
-                            if(dealer==null){
-                                return;
-                            }
-                            PurseFragment.sendBroadcast(getInstance());
-                            chatWebScoket = ChatWebScoket.createWebScoket(dealer.getAccount());
-                            chatWebScoket.connect();
-                            if(dealer!=null) {
-                                if(!queryDealer.isDead()) {
-                                    if (!queryDealer.isStart()) {
-                                        queryDealer.start();
-                                    } else if (queryDealer.isRun()) {
-                                        queryDealer.reStart();
-                                    }
-                                }
-                                switch (dealer.getType()) {
-                                    case UserTypeCode.ACCOUNT:
-                                        break;
-                                    case UserTypeCode.DEALER:
-                                        break;
-                                    case UserTypeCode.HELP:
-                                        HelpHttp.queryDealer(dealer.getDealerId(), new Callback() {
-                                            @Override
-                                            public void onFailure(Call call, IOException e) {
-                                            }
 
-                                            @Override
-                                            public void onResponse(Call call, Response response) throws IOException {
-                                                String json = response.body().string();
-                                                if (json.indexOf("error") != -1) {
-                                                    sendBroadcastDialog(BtslandApplication.getInstance(),json);
-                                                } else {
-                                                    Log.e(TAG, "onResponse: " + json);
-                                                    List<User> users = gson.fromJson(json, new TypeToken<List<User>>() {
-                                                    }.getType());
-                                                    if (users != null && users.size() > 0) {
-                                                        for (int i = 0; i < users.size(); i++) {
-                                                            helpUserMap.put(users.get(i).getDealerId(), users.get(i));
-                                                            HelpQueryDealer helpQueryDealer = new HelpQueryDealer(users.get(i).getDealerId());
-                                                            helpQueryDealer.setTime(6);
-                                                            helpQueryDealer.start();
-                                                            helpQueryThreadMap.put(users.get(i).getDealerId(), helpQueryDealer);
-                                                            HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
-                                                            helpQueryChatDealer.setTime(3);
-                                                            helpQueryChatDealer.start();
-                                                            helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(), helpQueryChatDealer);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        });
-                                        break;
-                                    case UserTypeCode.ADMIN:
-                                        break;
-                                }
-                            }
-                        }
-                    }
-                });
                 //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
             }
+        }
+    }
+    public static void queryC2CAccount(String name){
+            QueryC2CAccountThread queryC2CAccountThread = new QueryC2CAccountThread(name);
+            queryC2CAccountThread.start();
+    }
+    static class QueryC2CAccountThread extends Thread{
+        private String name;
+
+        public QueryC2CAccountThread(String name) {
+            this.name = name;
+        }
+
+        @Override
+        public void run() {
+            UserHttp.queryAccount(name, new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {}
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    final Gson gson=new Gson();
+                    String json=response.body().string();
+                    if(json.indexOf("error")!=-1){
+                        sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                    }else {
+                        dealer=gson.fromJson(json,User.class);
+                        PurseFragment.sendBroadcast(getInstance());
+                        chatWebScoket = ChatWebScoket.createWebScoket(dealer.getAccount());
+                        chatWebScoket.setChatOnMessageListener(new ChatWebScoket.ChatOnMessageListener() {
+                            @Override
+                            public void onMessage(String message) {
+                                Log.e(TAG, "onMessage: "+message );
+                                new ReceiveChatThread(message).start();
+                            }
+                        });
+                        chatWebScoket.connect();
+                        if(dealer!=null) {
+                            if(!queryDealer.isDead()) {
+                                if (!queryDealer.isStart()) {
+                                    queryDealer.start();
+                                } else if (queryDealer.isRun()) {
+                                    queryDealer.reStart();
+                                }
+                            }
+                            switch (dealer.getType()) {
+                                case UserTypeCode.ACCOUNT:
+                                    break;
+                                case UserTypeCode.DEALER:
+                                    break;
+                                case UserTypeCode.HELP:
+                                    HelpHttp.queryDealer(dealer.getDealerId(), new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            String json = response.body().string();
+                                            if (json.indexOf("error") != -1) {
+                                                sendBroadcastDialog(BtslandApplication.getInstance(),json);
+                                            } else {
+                                                Log.e(TAG, "onResponse: " + json);
+                                                List<User> users = gson.fromJson(json, new TypeToken<List<User>>() {
+                                                }.getType());
+                                                if (users != null && users.size() > 0) {
+                                                    for (int i = 0; i < users.size(); i++) {
+                                                        helpUserMap.put(users.get(i).getDealerId(), users.get(i));
+                                                        HelpQueryDealer helpQueryDealer = new HelpQueryDealer(users.get(i).getDealerId());
+                                                        helpQueryDealer.setTime(6);
+                                                        helpQueryDealer.start();
+                                                        helpQueryThreadMap.put(users.get(i).getDealerId(), helpQueryDealer);
+                                                        HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
+                                                        helpQueryChatDealer.setTime(3);
+                                                        helpQueryChatDealer.start();
+                                                        helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(), helpQueryChatDealer);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    break;
+                                case UserTypeCode.ADMIN:
+                                    break;
+                            }
+                        }
+                    }
+                }
+            });
+
         }
     }
     static class HelpQueryDealer extends BaseThread{
@@ -757,7 +1047,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 Double totalCNY=0.0;
                 Double totalBTS=0.0;
                 try {
-                    List<asset> assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
+                    assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
                     synchronized (iAssets) {
                         iAssets.clear();
                         if (assets == null || assets.size() == 0) {
@@ -781,7 +1071,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                             Double price = NumericUtil.parseDouble(ticker.latest);
                                             if (price != null) {
                                                 asset.totalCNY = asset.total * price;
-                                                totalCNY += asset.totalCNY;
 
                                             }
                                         } catch (NetworkStatusException e) {
@@ -803,7 +1092,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                             Double price = NumericUtil.parseDouble(ticker.latest);
                                             if (price != null) {
                                                 asset.totalBTS = asset.total * price;
-                                                totalBTS += asset.totalBTS;
                                             }
                                         } catch (NetworkStatusException e) {
                                             e.printStackTrace();
@@ -811,7 +1099,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                     }
                                     iAssets.add(asset);
                                 }
+                                totalBTS += asset.totalBTS;
+                                totalCNY += asset.totalCNY;
                             }
+                            DetailedBuyAndSellFragment.sendBroadcast(getInstance());
                             TransferActivity.sendBroadcast(getInstance());
                             PurseAssetActivity.sendBroadcast(getInstance());
                         }
@@ -846,12 +1137,247 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         if (json != null && !json.equals("")) {
                             Gson gson=new Gson();
                             dealers = gson.fromJson(json,new TypeToken<List<User>>() {}.getType());
-                            DealerListFragment.sendBroadcast(getInstance());
+                            synchronized (inDataList) {
+                                synchronized (outDataList) {
+                                    inDataList.clear();
+                                    outDataList.clear();
+                                    for (int i = 0; i < BtslandApplication.dealers.size(); i++) {
+                                        DealerListAdapter.DealerData dealerData = new DealerListAdapter.DealerData();
+                                        User user = BtslandApplication.dealers.get(i);
+                                        if (user.getType() == 3) {
+                                            dealerData.user = user;
+                                            dealerData.maxCNY = getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(user.getDealerId(), "CNY");
+                                            dealerData.usableCNY = dealerData.maxCNY - dealerData.user.userRecord.getInHavingTotal();
+                                            inDataList.add(dealerData);
+                                            outDataList.add(dealerData);
+                                        }
+                                    }
+                                    DealerListFragment.sendBroadcast(getInstance());
+                                }
+
+                            }
+
                         }
                     }
                 }
             });
         }
+    }
+    public static void orderDealer(int type,int order){
+
+        if(type==1){
+            switch (order){
+                case 0:
+                    orderByTotalIn(inDataList);
+                    break;
+                case 1:
+                    orderByCount(inDataList);
+                    break;
+                case 2:
+                    orderByBroIn(inDataList);
+                    break;
+                case 3:
+                    orderByTime(inDataList);
+                    break;
+                case 4:
+                    orderByLevel(inDataList);
+                    break;
+                case 5:
+                    orderByLowIn(inDataList);
+                    break;
+            }
+        }else if(type==2){
+            switch (order){
+                case 0:
+                    orderByTotalOut(outDataList);
+                    break;
+                case 1:
+                    orderByCount(outDataList);
+                    break;
+                case 2:
+                    orderByBroOut(outDataList);
+                    break;
+                case 3:
+                    orderByTime(outDataList);
+                    break;
+                case 4:
+                    orderByLevel(outDataList);
+                    break;
+                case 5:
+                    orderByLowOut(outDataList);
+                    break;
+            }
+        }
+    }
+
+
+    /**
+     * 根据完成时间排序
+     * @param dataList
+     */
+    private static void orderByTime(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) ((t0.user.userRecord.getTime()*10)-(t1.user.userRecord.getTime()*10));
+                if(a>0){
+                    return 1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        });
+    }
+
+    /**
+     * 根据等级排序
+     * @param dataList
+     */
+    private static void orderByLevel(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) ((t0.user.userInfo.getLevel()*10)-(t1.user.userInfo.getLevel()*10));
+                if(a>0){
+                    return -1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+        });
+    }
+
+    /**
+     * 根据完成单数排序
+     * @param dataList
+     */
+    private static void orderByCount(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a=(t0.user.userRecord.getInClinchCount()+t0.user.userRecord.getOutClinchCount())-(t1.user.userRecord.getInClinchCount()+t1.user.userRecord.getOutClinchCount());
+                if(a>0){
+                    return -1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+        });
+    }
+
+    /**
+     *  根据充值总额排序
+     */
+    private static void orderByTotalIn(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) (t0.user.userRecord.getInClinchTotal()-t1.user.userRecord.getInClinchTotal());
+                if(a>0){
+                    return -1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+        });
+    }
+    /**
+     *  根据提现总额排序
+     */
+    private static void orderByTotalOut(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) (t0.user.userRecord.getOutClinchTotal()-t1.user.userRecord.getOutClinchTotal());
+                if(a>0){
+                    return -1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return 1;
+                }
+            }
+        });
+    }
+    /**
+     *  根据充值手续费
+     */
+    private static void orderByBroIn(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) ((t0.user.getBrokerageIn()*1000)-(t1.user.getBrokerageIn()*1000));
+                if(a>0){
+                    return 1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        });
+    }
+    /**
+     *  根据提现手续费
+     */
+    private static void orderByBroOut(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) ((t0.user.getBrokerageOut()*1000)-(t1.user.getBrokerageOut()*1000));
+                if(a>0){
+                    return 1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        });
+    }
+    /**
+     *  根据提现下限
+     */
+    public static void orderByLowIn(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) (t0.user.getLowerLimitIn()-t1.user.getLowerLimitIn());
+                if(a>0){
+                    return 1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        });
+    }
+    /**
+     *  根据提现下限
+     */
+    private static void orderByLowOut(List<DealerListAdapter.DealerData> dataList){
+        Collections.sort(dataList, new Comparator<DealerListAdapter.DealerData>() {
+            @Override
+            public int compare(DealerListAdapter.DealerData t0, DealerListAdapter.DealerData t1) {
+                int a= (int) (t0.user.getLowerLimitOut()-t1.user.getLowerLimitOut());
+                if(a>0){
+                    return 1;
+                }else if(a==0) {
+                    return 0;
+                }else{
+                    return -1;
+                }
+            }
+        });
     }
     private Handler handler=new Handler(){
         @Override
@@ -861,10 +1387,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             }
         }
     };
-
+    public static boolean saveChatAccounts(){
+        SharedPreferences.Editor editor=sharedPreferences.edit();
+        Gson gson=new Gson();
+        String strChatAccounts=gson.toJson(chatAccounts);
+        editor.putString(account,strChatAccounts);
+        return editor.commit();
+    }
 
     public static boolean saveListMap(){
-
         SharedPreferences.Editor editor=sharedPreferences.edit();
         Gson gson=new Gson();
         String strListMap=gson.toJson(listMap);
@@ -897,11 +1428,20 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         return editor.commit();
     }
     public static boolean saveLanguage(){
-
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("Language",Language);
         return editor.commit();
     }
+    public static List<String> readChatAccounts(){
+        Gson gson=new Gson();
+        String strChatAccounts=sharedPreferences.getString(account,"");
+        chatAccounts=gson.fromJson(strChatAccounts,chatAccounts.getClass());
+        if(chatAccounts!=null) {
+            chatAccounts=new ArrayList<>(new LinkedHashSet<>(chatAccounts));//去除重复
+        }
+        return chatAccounts;
+    }
+
     public static String readLanguage(){
         return sharedPreferences.getString("Language",Language);
     }

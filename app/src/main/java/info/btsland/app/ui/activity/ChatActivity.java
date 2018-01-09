@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,9 +16,7 @@ import android.widget.TextView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import info.btsland.app.Adapter.ChatAdapter;
 import info.btsland.app.BtslandApplication;
@@ -41,7 +37,6 @@ public class ChatActivity extends AppCompatActivity {
     private ChatReceiver chatReceiver;
     private String TAG="ChatActivity";
     private Gson gson;
-    private List<Chat> chatList=new ArrayList<>();
     private String from;
 
     @Override
@@ -57,12 +52,16 @@ public class ChatActivity extends AppCompatActivity {
         if(getIntent()!=null){
             account = getIntent().getStringExtra("account");
         }
-        from=BtslandApplication.accountObject.name;
+        from=BtslandApplication.account;
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         gson=gsonBuilder.create();
         fillInHead();
         init();
+        if(BtslandApplication.chatWebScoket==null||BtslandApplication.chatWebScoket.mnConnectStatus!=ChatWebScoket.SUCCESS){
+            BtslandApplication.chatWebScoket= ChatWebScoket.createWebScoket(BtslandApplication.accountObject.name);
+            BtslandApplication.chatWebScoket.connect();
+        }
         fillIn();
     }
 
@@ -70,11 +69,6 @@ public class ChatActivity extends AppCompatActivity {
         listView=findViewById(R.id.lv_chat_list);
         edText=findViewById(R.id.ed_chat_text);
         tvBtn=findViewById(R.id.tv_chat_btn);
-    }
-    private void fillIn(){
-        chatAdapter=new ChatAdapter(ChatActivity.this,from,account);
-        chatAdapter.setAsset(chatList);
-        listView.setAdapter(chatAdapter);
         tvBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -87,17 +81,25 @@ public class ChatActivity extends AppCompatActivity {
                 gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
                 Gson gson=gsonBuilder.create();
                 String message=gson.toJson(chat);
+                new BtslandApplication.ReceiveChatThread(message).start();
                 Log.e(TAG, "onClick: "+message );
                 if(BtslandApplication.chatWebScoket==null||BtslandApplication.chatWebScoket.mnConnectStatus!=ChatWebScoket.SUCCESS){
                     BtslandApplication.chatWebScoket= ChatWebScoket.createWebScoket(BtslandApplication.accountObject.name);
                     BtslandApplication.chatWebScoket.connect();
                 }
-                if(BtslandApplication.chatWebScoket.mnConnectStatus==ChatWebScoket.SUCCESS) {
-                    BtslandApplication.chatWebScoket.setChatOnMessageListener(new IChatListener());
-                    BtslandApplication.chatWebScoket.sendMsg(message);
-                }
+                BtslandApplication.chatWebScoket.sendMsg(message);
             }
         });
+        chatAdapter=new ChatAdapter(ChatActivity.this,from,account);
+        listView.setAdapter(chatAdapter);
+    }
+    private void fillIn(){
+        chatAdapter.setChats(BtslandApplication.chatListMap.get(account));
+        if(BtslandApplication.chatUsers.get(account)!=null){
+            BtslandApplication.chatUsers.get(account).chatPoint=0;
+        }
+        ChatAccountListActivity.sendBroadcast(ChatActivity.this);
+        chatAdapter.notifyDataSetChanged();
     }
 
 
@@ -130,46 +132,17 @@ public class ChatActivity extends AppCompatActivity {
         }
         transaction.commit();
     }
-    class IChatListener implements ChatWebScoket.ChatOnMessageListener {
-        @Override
-        public void onMessage(String message) {
-            ProcessingMessages messages=new ProcessingMessages(message);
-            messages.start();
-        }
+
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(ChatReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
-    class ProcessingMessages extends Thread{
-        private String message;
-
-        public ProcessingMessages(String message) {
-            this.message = message;
-        }
-
-        @Override
-        public void run() {
-            Chat chat=gson.fromJson(message,Chat.class);
-            if(chat!=null){
-                chatList.add(chat);
-                handler.sendEmptyMessage(1);
-            }
-        }
-    }
-
-
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            Log.e(TAG, "handleMessage: "+chatList.size() );
-            chatAdapter.notifyDataSetChanged();
-            listView.setSelection(listView.getBottom());
-            edText.getEditableText().clear();
-        }
-    };
 
     class ChatReceiver extends BroadcastReceiver {
-        public static final String EVENT="Chat";
+        public static final String EVENT="ChatReceiver";
         @Override
         public void onReceive(Context context, Intent intent) {
-
+            fillIn();
         }
     }
 }

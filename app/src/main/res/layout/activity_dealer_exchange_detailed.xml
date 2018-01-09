@@ -28,20 +28,78 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="收款帐号："
+                    android:text="承兑类型："
                     android:gravity="center"/>
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="right">
                     <TextView
+                        android:id="@+id/tv_dealer_excDet_item_type"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/green"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/row_bottom_border"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="承兑商帐号："
+                    android:gravity="center"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/tv_dealer_excDet_item_dealerId"
+                        android:layout_width="wrap_content"
+                        android:gravity="center"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:textColor="@color/color_font_blue"
+                        android:layout_height="match_parent" />
+                </LinearLayout>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@drawable/row_bottom_border"
+                android:orientation="horizontal"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="用户帐号："
+                    android:gravity="center"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center|right">
+                    <TextView
                         android:id="@+id/tv_dealer_excDet_item_account"
                         android:layout_width="wrap_content"
                         android:gravity="center"
                         android:textStyle="bold"
                         android:textSize="20sp"
+                        android:layout_marginRight="10dp"
                         android:textColor="@color/color_font_red"
                         android:layout_height="match_parent" />
+                    <WebView
+                        android:id="@+id/wb_dealer_excDet_item_account_pho"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp">
+                    </WebView>
                 </LinearLayout>
             </LinearLayout>
             <LinearLayout

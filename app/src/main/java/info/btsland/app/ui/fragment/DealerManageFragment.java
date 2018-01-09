@@ -229,10 +229,10 @@ public class DealerManageFragment extends Fragment {
         for(int i=0;i<BtslandApplication.dealer.realAssets.size();i++) {
             switch (BtslandApplication.dealer.realAssets.get(i).getRealAssetType()) {
                 case "1":
-                    tvWX.setVisibility(View.VISIBLE);
+                    tvZFB.setVisibility(View.VISIBLE);
                     break;
                 case "2":
-                    tvZFB.setVisibility(View.VISIBLE);
+                    tvWX.setVisibility(View.VISIBLE);
                     break;
                 case "3":
                     tvYH.setVisibility(View.VISIBLE);

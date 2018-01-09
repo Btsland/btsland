@@ -117,12 +117,15 @@ public class AccountTypeListDialog {
             final RealAsset realAsset = list.get(i);
             TextView tvText = view.findViewById(R.id.tv_account_type_list_item_text);
             TextView tvImg = view.findViewById(R.id.tv_account_type_list_item_img);
-            int a = realAsset.getDepict().indexOf("(");
-            String depict;
-            if (a != -1) {
-                depict = "(" + realAsset.getDepict().substring(0, a) + ")";
-            } else {
-                depict = "("+ realAsset.getDepict()+ ")";
+            String depict="未知";
+            if(realAsset.getDepict()!=null&&!realAsset.getDepict().equals("")) {
+                int a = realAsset.getDepict().indexOf("(");
+
+                if (a != -1) {
+                    depict = "(" + realAsset.getDepict().substring(0, a) + ")";
+                } else {
+                    depict = "(" + realAsset.getDepict() + ")";
+                }
             }
             final String text = realAsset.getRealAssetNo() + depict;
             tvText.setText(text);

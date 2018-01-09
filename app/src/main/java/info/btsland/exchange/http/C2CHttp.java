@@ -2,6 +2,7 @@ package info.btsland.exchange.http;
 
 import java.util.Map;
 
+import info.btsland.app.BtslandApplication;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -13,18 +14,12 @@ import okhttp3.Request;
  */
 
 public class C2CHttp {
-    protected static String url="http://123.1.154.214:8080/";
-    protected static String sckUrl="ws://123.1.154.214:8080/";
-//    protected static String url="http://192.168.0.100:8080/";
-//    protected static String url="http://172.25.234.1:8080/";
-//    protected static String url="http://192.168.1.102:8080/";
-//    protected static String url="http://192.168.43.112:8080/";
-//    protected static String url="http://192.168.1.112:8080/";
     protected static OkHttpClient client = new OkHttpClient();
 
     private static String TAG="C2CHttp";
 
     protected static void get(String action,Callback callback){
+        String url="http://"+ BtslandApplication.ipServer+":8080/";
         Request request = new Request.Builder().url(url+action).build();
         Call call=client.newCall(request);
         if(callback!=null) {
@@ -33,6 +28,7 @@ public class C2CHttp {
     }
 
     protected static void post(String action, Map<String,String> paramMap, Callback callback){
+        String url="http://"+ BtslandApplication.ipServer+":8080/";
         FormBody.Builder builder=new FormBody.Builder();
         for(String name : paramMap.keySet()){
             String value=paramMap.get(name);

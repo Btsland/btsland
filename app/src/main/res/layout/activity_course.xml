@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!--顶部导航栏-->
@@ -12,7 +11,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
-
     </FrameLayout>
     <ScrollView
         android:id="@+id/sv_course"
@@ -107,7 +105,7 @@
                 android:gravity="left"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
-                android:text="如果您还没有内盘账户，请点击“去注册”按钮，进入注册界面,注册时用户名必须以字母开头并且包含数字，不能含特殊字符（如@，*，#等），长度不能低于6位,例如：Li1234,密码可以包含大小写字母及数字和特殊字符,并且不能低于12位，例如：Mima123456789，如下图：" />
+                android:text="如果您还没有内盘账户，请点击“去注册”按钮，进入注册界面,注册时用户名必须以字母开头并且包含数字，不能含特殊字符（如@，*，#等），长度不能低于6位,用户名推荐使用小写字母加数字组合,例如：li1234,密码可以包含大小写字母及数字和特殊字符,并且不能低于12位，例如：Mima123456789，如下图：" />
             <ImageView
                 android:layout_width="600px"
                 android:layout_height="960px"

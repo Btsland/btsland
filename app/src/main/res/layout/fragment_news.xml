@@ -20,7 +20,7 @@
     <ProgressBar
         android:id="@+id/pBar_news"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="4dp"
         android:visibility="gone"
         style="?android:attr/progressBarStyleHorizontal"
         android:progressDrawable="@color/green"

@@ -71,6 +71,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
     private LinearLayout llTypes;
 
     private TextView tvConfirm;
+    private TextView tvCancel;
     private String TAG ="C2CExchangeActivity";
     private int spPaysIndex;
 
@@ -119,6 +120,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
         tvAspect=findViewById(R.id.tv_exchange_aspect);
 //        tvPays=findViewById(R.id.tv_exchange_pay_text);
         llTypes=findViewById(R.id.ll_exchange_type);
+        tvCancel=findViewById(R.id.tv_c2c_cancel);
         if(type==IN){
             tvConfirm.setText("确认充值");
         }else if(type==OUT){
@@ -450,6 +452,16 @@ public class C2CExchangeActivity extends AppCompatActivity {
                 });
                 passwordDialog.show();
 
+            }
+        });
+        tvCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(dealer!=null&&dealer.getAccount()!=null) {
+                    Intent intent = new Intent(C2CExchangeActivity.this, ChatActivity.class);
+                    intent.putExtra("account", dealer.getAccount());
+                    startActivity(intent);
+                }
             }
         });
     }

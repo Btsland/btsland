@@ -60,7 +60,7 @@
             android:id="@+id/tv_bestAsk"
             android:text="@string/ask"
             android:textSize="12sp"
-            android:textColor="@color/color_Grey1"
+            android:textColor="@color/color_lightGrey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/tv_back"
@@ -70,17 +70,17 @@
             android:id="@+id/tv_bestBid"
             android:text="@string/bid"
             android:textSize="12sp"
-            android:textColor="@color/color_Grey1"
+            android:textColor="@color/color_lightGrey"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_bestAsk"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_back"
+            app:layout_constraintBottom_toTopOf="@+id/tv_vol"
             app:layout_constraintRight_toLeftOf="@+id/tv_bestBidNum"/>
         <TextView
             android:id="@+id/tv_bestAskNum"
             android:maxLength="8"
             android:textSize="12sp"
-            android:textColor="@color/color_lightGrey"
+            android:textColor="@color/color_Grey1"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@+id/tv_back"
@@ -90,12 +90,32 @@
             android:id="@+id/tv_bestBidNum"
             android:maxLength="8"
             android:textSize="12sp"
-            android:textColor="@color/color_lightGrey"
+            android:textColor="@color/color_Grey1"
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toBottomOf="@+id/tv_bestAskNum"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_back"
+            app:layout_constraintBottom_toTopOf="@+id/tv_volNum"
             app:layout_constraintRight_toRightOf="@+id/tv_back" />
+        <TextView
+            android:id="@+id/tv_vol"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="日成交量："
+            android:textColor="@color/color_lightGrey"
+            android:textSize="12sp"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bestBid"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_back"
+            app:layout_constraintRight_toLeftOf="@+id/tv_volNum"/>
+        <TextView
+            android:id="@+id/tv_volNum"
+            android:layout_width="wrap_content"
+            android:minWidth="60dp"
+            android:textSize="12sp"
+            android:textColor="@color/color_Grey1"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/tv_bestBidNum"
+            app:layout_constraintRight_toRightOf="@+id/tv_back"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_back"/>
 
     </android.support.constraint.ConstraintLayout>
 

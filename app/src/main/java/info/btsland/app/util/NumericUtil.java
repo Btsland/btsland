@@ -3,6 +3,8 @@ package info.btsland.app.util;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
+import java.text.DecimalFormat;
+
 /**
  * <pre>
  * 数值相关工具类
@@ -47,5 +49,21 @@ public final class NumericUtil {
             e.printStackTrace();
         }
         return defaultVal;
+    }
+
+    public static String doubleToString(double n){
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        double b=0.0;
+        String str="";
+        if(n < 1000) {
+            str = decimalFormat.format(n);
+        } else if(n >=1000 && n < 1000000){
+            b = n/1000;
+            str=decimalFormat.format(b)+"K";
+        }else if(n >=1000000){
+            b = n/1000000;
+            str = decimalFormat.format(b)+"M";
+        }
+        return str;
     }
 }

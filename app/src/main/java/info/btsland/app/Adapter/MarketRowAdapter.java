@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.fragment.MarketSimpleKFragment;
+import info.btsland.app.util.NumericUtil;
 
 /**
  * Created by Administrator on 2017/10/16.
@@ -90,6 +92,8 @@ public class MarketRowAdapter extends BaseAdapter {
         TextView tvBestBidNum = convertView.findViewById(R.id.tv_bestBidNum);
         ConstraintLayout clBack=convertView.findViewById(R.id.cl_back);
         TextView tvAdd=convertView.findViewById(R.id.tv_add);
+        TextView tvVol=convertView.findViewById(R.id.tv_volNum);
+
         if(i>=markets.size()){
             tvAdd.setVisibility(View.VISIBLE);
             clBack.setVisibility(View.GONE);
@@ -105,6 +109,7 @@ public class MarketRowAdapter extends BaseAdapter {
             String fluctuation = String.valueOf(dfFluc.format(market.percent_change)) + "%";
             //Log.e("getView", "fluctuation: "+ fluctuation);
             tvFluctuation.setText(fluctuation);
+            tvVol.setText(Html.fromHtml(NumericUtil.doubleToString(market.base_volume)));
             if (market.latest == null) {
                 tvNewPrice.setText("");
             } else if (market.latest.length() < 9) {

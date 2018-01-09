@@ -3,6 +3,7 @@ package info.btsland.app.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -79,6 +80,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
     private TextView tvRemarkCodeTab;
 
     private TextView tvBtn;
+    private TextView tvBtn0;
     private TextView tvCancel;
     private ViewPager viewPager;
     private LinearLayout llTable;
@@ -124,6 +126,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         tvNumTab=findViewById(R.id.tv_excDet_num_tab);
         tvRemarkCodeTab=findViewById(R.id.tv_excDet_remarkCode_tab);
         tvBtn=findViewById(R.id.tv_excDet_btn);
+        tvBtn0=findViewById(R.id.tv_excDet_btn0);
         tvCancel=findViewById(R.id.tv_excDet_cancel);
         tvInNoTab=findViewById(R.id.tv_excDet_inNo_tab);
         tvOutNoTab=findViewById(R.id.tv_excDet_outNo_tab);
@@ -258,6 +261,14 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
 
             tvBtn.setVisibility(View.GONE);
             tvCancel.setVisibility(View.GONE);
+            tvBtn0.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intent=new Intent(ExchangeDetailedActivity.this,ChatActivity.class);
+                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                    startActivity(intent);
+                }
+            });
             if(type==IN){
                 if(note.getStatNo()==NoteStatCode.ACCOUNT_TRANSFERRING||note.getStatNo()==NoteStatCode.ACCOUNT_FILLING){
                     tvBtn.setVisibility(View.VISIBLE);

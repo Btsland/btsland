@@ -62,6 +62,7 @@ import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
 import info.btsland.exchange.entity.Chat;
+import info.btsland.exchange.entity.Help;
 import info.btsland.exchange.entity.Note;
 import info.btsland.exchange.entity.User;
 import info.btsland.exchange.http.ChatHttp;
@@ -98,10 +99,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<Note> userHavingOutNotes=new ArrayList<>();
     public static Map<String,List<Chat>> chatListMap=new LinkedHashMap<>();
     public static List<User> dealers=new ArrayList<>();
+    public static Map<String,User> stringDealers=new HashMap<>();
     public static List<DealerListAdapter.DealerData> inDataList=new ArrayList<>();
     public static List<DealerListAdapter.DealerData> outDataList=new ArrayList<>();
     public static List<String> chatAccounts=new LinkedList<>();
     public static Map<String,User> chatUsers=new LinkedHashMap<>();
+    public static Map<String,String> dealerHelpMap=new LinkedHashMap<>();
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
@@ -131,7 +134,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int fluctuationType=1;//涨跌颜色类型
     public static String strServer="wss://www.btsland.info/ws";//节点
     public static String ipServer="123.1.154.214";
-//    public static String ipServer="192.168.1.100";
+//    public static String ipServer="172.25.234.1";
     public static String chargeUnit="CNY";//计价单位
     public static String Language="zh";//语言
     public static int goUp=0;
@@ -216,7 +219,16 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         ConnectThread();
 
     }
-    private void initChat(){
+    public static void initChat(){
+        if(chatAccounts!=null) {
+            chatAccounts.clear();
+        }
+        if(chatUsers!=null){
+            chatUsers.clear();
+        }
+        if(chatListMap!=null){
+            chatListMap.clear();
+        }
         readChatAccounts();
         //获取服务器的聊天列表
         new Thread(new Runnable() {
@@ -260,11 +272,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }).start();
 
     }
-
-    private void queryAccountChat(String account){
+    private static void queryAccountChat(String account){
         new QueryAccountChatThread(account).start();
     }
-    class QueryAccountChatThread extends Thread{
+    static class QueryAccountChatThread extends Thread{
         private String user;
 
         public QueryAccountChatThread(String account) {
@@ -468,6 +479,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private BaseThread queryAllHaving;
     private BaseThread queryAllClinch;
     private BaseThread queryAllDealer;
+    private Thread queryAllHelp;
     private void init(){
         instance=getApplicationContext();
         application=this;
@@ -485,11 +497,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         queryAllClinch=new QueryAllClinch();
         queryAllHaving=new QueryAllHaving();
         queryAllDealer=new QueryAllDealer();
+        queryAllHelp=new QueryAllHaving();
         Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
         queryAllDealer.setTime(10);
         queryAllDealer.start();
+        queryAllHelp.start();
 
     }
     private Gson gson;
@@ -1145,6 +1159,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                         DealerListAdapter.DealerData dealerData = new DealerListAdapter.DealerData();
                                         User user = BtslandApplication.dealers.get(i);
                                         if (user.getType() == 3) {
+                                            stringDealers.put(user.getDealerId(),user);
                                             dealerData.user = user;
                                             dealerData.maxCNY = getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(user.getDealerId(), "CNY");
                                             dealerData.usableCNY = dealerData.maxCNY - dealerData.user.userRecord.getInHavingTotal();
@@ -1157,6 +1172,33 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                             }
 
+                        }
+                    }
+                }
+            });
+        }
+    }
+    class QueryAllHelp extends Thread{
+        @Override
+        public void run() {
+            HelpHttp.queryAllHelp(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    String json=response.body().string();
+                    if(json.indexOf("error")!=-1){
+
+                    }else {
+                        List<Help> helps=gson.fromJson(json,new TypeToken<List<Help>>(){}.getType());
+                        if(helps!=null&&helps.size()>0){
+                            for (int i = 0;i<helps.size();i++){
+                                Help help=helps.get(i);
+                                dealerHelpMap.put(help.getDealerid(),help.getHelpid());
+                            }
                         }
                     }
                 }
@@ -1435,7 +1477,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<String> readChatAccounts(){
         Gson gson=new Gson();
         String strChatAccounts=sharedPreferences.getString(account,"");
-        chatAccounts=gson.fromJson(strChatAccounts,chatAccounts.getClass());
+        chatAccounts=gson.fromJson(strChatAccounts,new TypeToken<List<String>>(){}.getType());
         if(chatAccounts!=null) {
             chatAccounts=new ArrayList<>(new LinkedHashSet<>(chatAccounts));//去除重复
         }

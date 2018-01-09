@@ -131,7 +131,7 @@ public class ChatAdapter extends BaseAdapter {
         }
 
         @Override
-        public void run() {
+        public synchronized void run() {
             UserHttp.queryAccount(account, callback);
         }
     }
@@ -207,28 +207,9 @@ public class ChatAdapter extends BaseAdapter {
             //右
             viewHolder.tvRightName.setText(from);
             createPortrait(viewHolder.wbRightPho,from);
-            if(fromUser.getType()==UserTypeCode.DEALER){
-                viewHolder.tvRightLevel.setVisibility(View.VISIBLE);
-            }else {
-                viewHolder.tvRightLevel.setVisibility(View.GONE);
-            }
-            viewHolder.tvRightLevel.setBackground(fromUser.userInfo==null||fromUser.userInfo.getLevel()==null||fromUser.userInfo.getLevel()==0.0? getLevelDrawable(-1.0) : getLevelDrawable(fromUser.userInfo.getLevel()));
             //左
             viewHolder.tvLeftName.setText(to);
             createPortrait(viewHolder.wbLeftPho,to);
-            if(toUser.getType()==UserTypeCode.DEALER){
-                viewHolder.tvLeftLevel.setVisibility(View.VISIBLE);
-            }else {
-                viewHolder.tvLeftLevel.setVisibility(View.GONE);
-            }
-            viewHolder.tvLeftLevel.setBackground(toUser.userInfo==null||toUser.userInfo.getLevel()==null||toUser.userInfo.getLevel()==0.0? getLevelDrawable(-1.0) : getLevelDrawable(toUser.userInfo.getLevel()));
-            if(chat.getFromUser()!=null&&chat.getFromUser().equals(from)) {
-                viewHolder.rightLayout.setVisibility(View.VISIBLE);
-                viewHolder.leftLayout.setVisibility(View.GONE);
-            }else if(chat.getFromUser()!=null&&chat.getFromUser().equals(to)) {
-                viewHolder.rightLayout.setVisibility(View.GONE);
-                viewHolder.leftLayout.setVisibility(View.VISIBLE);
-            }
             convertView.setTag(viewHolder);
         }else {
             Log.e(TAG, "getView: 复用convertView" );
@@ -248,6 +229,23 @@ public class ChatAdapter extends BaseAdapter {
             viewHolder.tvLeftTime.setText(chat.getContext()==null?"":simpleDateFormat.format(chat.getTime()));
 
         }
+        if(fromUser.getType()!=null){
+            if(fromUser.getType()==UserTypeCode.DEALER){
+                viewHolder.tvRightLevel.setVisibility(View.VISIBLE);
+            }else {
+                viewHolder.tvRightLevel.setVisibility(View.GONE);
+            }
+        }
+        viewHolder.tvRightLevel.setBackground(fromUser.userInfo==null||fromUser.userInfo.getLevel()==null||fromUser.userInfo.getLevel()==0.0? getLevelDrawable(-1.0) : getLevelDrawable(fromUser.userInfo.getLevel()));
+        if(toUser.getType()!=null){
+            if(toUser.getType()==UserTypeCode.DEALER){
+                viewHolder.tvLeftLevel.setVisibility(View.VISIBLE);
+            }else {
+                viewHolder.tvLeftLevel.setVisibility(View.GONE);
+            }
+        }
+        viewHolder.tvLeftLevel.setBackground(toUser.userInfo==null||toUser.userInfo.getLevel()==null||toUser.userInfo.getLevel()==0.0? getLevelDrawable(-1.0) : getLevelDrawable(toUser.userInfo.getLevel()));
+
         return convertView;
     }
 

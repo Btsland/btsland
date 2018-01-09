@@ -27,6 +27,8 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.ui.activity.AccountC2CTypesActivity;
+import info.btsland.app.ui.activity.ChatActivity;
+import info.btsland.app.ui.activity.DealerExchangeDetailedActivity;
 import info.btsland.app.ui.activity.DealerInfoActivity;
 import info.btsland.app.ui.activity.DealerNoteListActivity;
 import info.btsland.app.ui.view.AppDialog;
@@ -277,6 +279,20 @@ public class DealerManageFragment extends Fragment {
                 Intent intent=new Intent(getActivity(), DealerNoteListActivity.class);
                 intent.putExtra("type",2);
                 getActivity().startActivity(intent);
+            }
+        });
+        tvHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getActivity(),ChatActivity.class);
+                intent.putExtra("account",BtslandApplication.dealerHelpMap.get(BtslandApplication.dealer.getDealerId()));
+                startActivity(intent);
+            }
+        });
+        tvUser.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
             }
         });
     }

@@ -349,6 +349,7 @@ public class LoginActivity extends AppCompatActivity {
                         BtslandApplication.account=accountObject.name;
                         BtslandApplication.isLogin=true;
                         BtslandApplication.sendBroadcast(LoginActivity.this,BtslandApplication.account);
+                        BtslandApplication.initChat();
                     }
                     loginBundle.putString("login",loginRet);
                     Message loginMsg=Message.obtain();

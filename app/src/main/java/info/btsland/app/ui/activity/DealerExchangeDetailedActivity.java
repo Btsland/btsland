@@ -3,6 +3,7 @@ package info.btsland.app.ui.activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -31,6 +32,7 @@ import info.btsland.app.util.BaseThread;
 import info.btsland.exchange.entity.Note;
 import info.btsland.exchange.http.NoteHttp;
 import info.btsland.exchange.http.TradeHttp;
+import info.btsland.exchange.http.UserHttp;
 import info.btsland.exchange.utils.GsonDateAdapter;
 import info.btsland.exchange.utils.NoteStatCode;
 import info.btsland.exchange.utils.UserTypeCode;
@@ -119,6 +121,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         if(note!=null){
             handler.sendEmptyMessage(1);
         }
+
     }
     public void createPortrait(String name) {
         sha256_object.encoder encoder=new sha256_object.encoder();
@@ -247,7 +250,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.dealerHelpMap.get(note.getDealerId()));
+                                    startActivity(intent);
                                 }
                             });
                             break;
@@ -257,7 +262,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
                                 }
                             });
                             break;
@@ -290,7 +297,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
                                 }
                             });
                             break;
@@ -327,12 +336,22 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.dealerHelpMap.get(note.getDealerId()));
+                                    startActivity(intent);
                                 }
                             });
                             break;
                         case UserTypeCode.HELP:
                             tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
+                                }
+                            });
                             tvConfirm.setVisibility(View.GONE);
                             break;
                         case UserTypeCode.ADMIN:
@@ -364,7 +383,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
                                 }
                             });
                             break;
@@ -401,12 +422,22 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.dealerHelpMap.get(note.getDealerId()));
+                                    startActivity(intent);
                                 }
                             });
                             break;
                         case UserTypeCode.HELP:
                             tvRelationHelp.setText("联系承兑商");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
+                                }
+                            });
                             tvConfirm.setVisibility(View.GONE);
                             break;
                         case UserTypeCode.ADMIN:
@@ -438,7 +469,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
                                 }
                             });
                             break;
@@ -448,6 +481,14 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                     switch (BtslandApplication.dealer.getType()){
                         case UserTypeCode.DEALER:
                             tvRelationHelp.setText("联系客服");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.dealerHelpMap.get(note.getDealerId()));
+                                    startActivity(intent);
+                                }
+                            });
                             tvConfirm.setVisibility(View.GONE);
                             break;
                         case UserTypeCode.HELP:
@@ -479,12 +520,22 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             tvRelationHelp.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
-
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.stringDealers.get(note.getDealerId()).getAccount());
+                                    startActivity(intent);
                                 }
                             });
                             break;
                         case UserTypeCode.ADMIN:
                             tvRelationHelp.setText("联系客服");
+                            tvRelationHelp.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View view) {
+                                    Intent intent=new Intent(DealerExchangeDetailedActivity.this,ChatActivity.class);
+                                    intent.putExtra("account",BtslandApplication.dealerHelpMap.get(note.getDealerId()));
+                                    startActivity(intent);
+                                }
+                            });
                             tvConfirm.setVisibility(View.GONE);
                             break;
                     }

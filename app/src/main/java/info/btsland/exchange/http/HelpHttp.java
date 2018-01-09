@@ -16,4 +16,9 @@ public class HelpHttp extends C2CHttp {
         paramMap.put("helpId",helpId);
         post(action,paramMap,callback);
     }
+    public static void queryAllHelp(Callback callback){
+        String action="/help/queryAllHelp";
+        Map<String,String> paramMap=new HashMap<>();
+        post(action,paramMap,callback);
+    }
 }

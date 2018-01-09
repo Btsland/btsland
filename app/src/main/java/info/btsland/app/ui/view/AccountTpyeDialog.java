@@ -110,7 +110,7 @@ public class AccountTpyeDialog {
             }else {
                 edNo.getEditableText().insert(0,"");
             }
-            if(realAsset.getDepict()!=null){
+            if(realAsset.getDepict()!=null&&!realAsset.getDepict().equals("")){
                 int a =realAsset.getDepict().indexOf("(");
                 if(a!=-1){
                     edTypeText.getEditableText().insert(0,realAsset.getDepict().substring(0,a));
@@ -187,7 +187,7 @@ public class AccountTpyeDialog {
                     String name=edName.getEditableText().toString();
                     String no=edNo.getEditableText().toString();
                     int type=spType.getSelectedItemPosition();
-                    String depict="";
+                    String depict="未知";
                     if(type==2){
                         depict=edTypeText.getEditableText().toString()+"("+edDepict.getEditableText().toString()+")";
                     }else {
@@ -205,7 +205,11 @@ public class AccountTpyeDialog {
                         realAsset.setDepict(depict);
                         realAsset.setRealAssetType("" + (type + 1));
                         realAsset.setIsAvailable(1);
-                        realAsset.setDealerId(BtslandApplication.dealer.getDealerId());
+                        if(BtslandApplication.dealer!=null){
+                            realAsset.setDealerId(BtslandApplication.dealer.getDealerId());
+                        }else {
+                            realAsset.setDealerId(BtslandApplication.accountObject.name);
+                        }
                         mDialog.dismiss();
                         mListener.onConfirm(realAsset);
                     }

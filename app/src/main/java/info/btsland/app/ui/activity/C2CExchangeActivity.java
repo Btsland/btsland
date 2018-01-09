@@ -276,11 +276,13 @@ public class C2CExchangeActivity extends AppCompatActivity {
         if(dealer.realAssets!=null&&dealer.realAssets.size()>0) {
             String[] strings = new String[dealer.realAssets.size()];
             for (int i = 0; i < dealer.realAssets.size(); i++) {
-                int a = dealer.realAssets.get(i).getDepict().indexOf("(");
-                if(a==-1){
-                    strings[i] = dealer.realAssets.get(i).getRealAssetNo()+"("+dealer.realAssets.get(i).getDepict()+")";
-                }else {
-                    strings[i] = dealer.realAssets.get(i).getRealAssetNo()+"("+dealer.realAssets.get(i).getDepict().substring(0,a)+")";
+                if(dealer.realAssets.get(i).getDepict()!=null&&!dealer.realAssets.get(i).getDepict().equals("")){
+                    int a = dealer.realAssets.get(i).getDepict().indexOf("(");
+                    if(a==-1){
+                        strings[i] = dealer.realAssets.get(i).getRealAssetNo()+"("+dealer.realAssets.get(i).getDepict()+")";
+                    }else {
+                        strings[i] = dealer.realAssets.get(i).getRealAssetNo()+"("+dealer.realAssets.get(i).getDepict().substring(0,a)+")";
+                    }
                 }
             }
             Log.e(TAG, "fillInBody:dealer:"+strings.length );
@@ -292,11 +294,13 @@ public class C2CExchangeActivity extends AppCompatActivity {
         if(BtslandApplication.dealer.realAssets!=null&&BtslandApplication.dealer.realAssets.size()>0) {
             String[] strings = new String[BtslandApplication.dealer.realAssets.size()];
             for (int i = 0; i < BtslandApplication.dealer.realAssets.size(); i++) {
-                int a = BtslandApplication.dealer.realAssets.get(i).getDepict().indexOf("(");
-                if(a==-1){
-                    strings[i] = BtslandApplication.dealer.realAssets.get(i).getRealAssetNo()+"("+BtslandApplication.dealer.realAssets.get(i).getDepict()+")";
-                }else {
-                    strings[i] = BtslandApplication.dealer.realAssets.get(i).getRealAssetNo()+"("+BtslandApplication.dealer.realAssets.get(i).getDepict().substring(0,a)+")";
+                if(BtslandApplication.dealer.realAssets.get(i).getDepict()!=null&&!BtslandApplication.dealer.realAssets.get(i).getDepict().equals("")) {
+                    int a = BtslandApplication.dealer.realAssets.get(i).getDepict().indexOf("(");
+                    if (a == -1) {
+                        strings[i] = BtslandApplication.dealer.realAssets.get(i).getRealAssetNo() + "(" + BtslandApplication.dealer.realAssets.get(i).getDepict() + ")";
+                    } else {
+                        strings[i] = BtslandApplication.dealer.realAssets.get(i).getRealAssetNo() + "(" + BtslandApplication.dealer.realAssets.get(i).getDepict().substring(0, a) + ")";
+                    }
                 }
             }
             Log.e(TAG, "fillInBody: user:"+strings.toString() );

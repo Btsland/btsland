@@ -74,7 +74,7 @@ public class HorizontalListViewAdapter extends BaseAdapter {
         TextView tvName=convertView.findViewById(R.id.tv_dealer_type_item_name);
         tvNo.setText(realAsset.getRealAssetNo());
         int a=realAsset.getDepict().indexOf("(");
-        String depict="";
+        String depict="未知";
         if(a!=-1){
             depict=realAsset.getDepict().substring(0,a);
         }else {

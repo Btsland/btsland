@@ -32,7 +32,7 @@ public class DealerListAdapter extends BaseAdapter {
     private List<DealerData> dataList;
     private Context context;
     private LayoutInflater inflater;
-
+    private OnItemClickListener clickListener;
     private List<View> views=new ArrayList<>();
     private String TAG="DealerListAdapter";
     private int type;
@@ -47,12 +47,17 @@ public class DealerListAdapter extends BaseAdapter {
         this.inflater=LayoutInflater.from(context);
     }
 
+    public void setClickListener(OnItemClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     public void setDataList(List<DealerData> dataList) {
         Log.e(TAG, "setDataList: "+dataList.size() );
         this.dataList = dataList;
-        for(int i=0;i<dataList.size();i++){
-            fillInViews(i);
-            queryTotal(i);
+        synchronized (dataList) {
+            for (int i = 0; i < dataList.size(); i++) {
+                fillInViews(i);
+            }
         }
     }
     public void setType(int type) {
@@ -63,7 +68,7 @@ public class DealerListAdapter extends BaseAdapter {
         if(dataList.get(i)==null){
             return ;
         }
-        DealerData dealerData=dataList.get(i);
+        final DealerData dealerData=dataList.get(i);
         TextView tvName=view.findViewById(R.id.tv_c2c_item_name);//昵称
         TextView tvDepict=view.findViewById(R.id.tv_c2c_item_depict);//描述
         TextView tvBrokerage=view.findViewById(R.id.tv_c2c_item_brokerage_num);//手续费
@@ -83,17 +88,18 @@ public class DealerListAdapter extends BaseAdapter {
         TextView tvYH=view.findViewById(R.id.tv_c2c_item_yh);//银行图标
         tvName.setText(dealerData.user.getDealerName());
         tvDepict.setText(dealerData.user.getDepict());
-        tvBrokerage.setText(dealerData.user.getBrokerageIn()*100+"%");
         tvContact.setOnClickListener(dealerData.constactOnClickListener);
         tvStat.setText(""+ UserStatUtil.getUserStat(dealerData.user.getStat()));
         if(type== DealerListFragment.IN) {
             tvMax.setText("" + dealerData.maxCNY);
             tvUsable.setText("" + dealerData.usableCNY);
             tvLower.setText("" + dealerData.user.getLowerLimitIn());
+            tvBrokerage.setText(dealerData.user.getBrokerageIn()*100+"%");
         }else if(type== DealerListFragment.OUT){
             if(dealerData.user!=null){
                 tvMax.setText("" + dealerData.user.getUpperLimitOut());
                 tvLower.setText("" + dealerData.user.getLowerLimitOut());
+                tvBrokerage.setText(dealerData.user.getBrokerageOut()*100+"%");
                 if(dealerData.user.userRecord!=null){
                     tvUsable.setText("" + (dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount()));
                 }else {
@@ -103,6 +109,7 @@ public class DealerListAdapter extends BaseAdapter {
                 tvMax.setText("");
                 tvLower.setText("");
                 tvUsable.setText("");
+                tvBrokerage.setText("");
             }
 
         }
@@ -177,6 +184,12 @@ public class DealerListAdapter extends BaseAdapter {
             }
 
         }
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                clickListener.onItemClick(dealerData.user);
+            }
+        });
         if(views.size()>0&&views.size()>i&&views.get(i)!=null){
             views.remove(i);
             views.add(i,view);
@@ -260,5 +273,9 @@ public class DealerListAdapter extends BaseAdapter {
             notifyDataSetChanged();
         }
     };
+
+    public interface OnItemClickListener{
+        void onItemClick(User user);
+    }
 
 }

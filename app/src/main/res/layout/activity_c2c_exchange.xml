@@ -246,23 +246,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="注意\n1：CNY:RMB为1:1(1CNY=1元)，确认订单后需用户线下将同等额度的人民币转到承兑商提供的收款账户，平台不提供转账途径。"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="2：确认订单后务必在30分钟内完成先下转账并在我的充值页面确认转账，如过期则视超时处理。"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="3：线下转账时务必将充值码做为备注进行转账，充值码将做为承兑商核对线下来款的依据，也是发生纠纷的唯一依据。"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="4：如按规范完成操作时承兑商无法完成转账，平台代承兑商完成转账。"/>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="5：交易为线下交易，平台除代币流通手续费外不收取任何手续费。"/>
+                android:text="注意\n1：CNY:RMB为1:1(1CNY=1元)，确认订单后需用户线下将同等额度的人民币转到承兑商提供的收款账户，平台不提供转账途径。\n2：确认订单后务必在30分钟内完成线下转账并在我的充值页面确认转账，如过期则视超时处理。\n3：线下转账时务必将充值码做为备注进行转账，充值码将做为承兑商核对线下来款的依据，也是发生纠纷的唯一依据。\n4：如按规范完成操作时承兑商无法完成转账，平台将代承兑商完成转账。\n5：交易为线下交易，平台除代币流通手续费外不收取任何手续费。"/>
         </LinearLayout>
 
     </ScrollView>

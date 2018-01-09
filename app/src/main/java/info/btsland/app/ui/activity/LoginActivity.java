@@ -376,7 +376,7 @@ public class LoginActivity extends AppCompatActivity {
                     Message registerMsg=Message.obtain();
                     if(registerNRet==0){
                         registerBundle.putString("register","success");
-
+                        BtslandApplication.queryC2CAccount(name);
                     }else {
                         registerBundle.putString("register","fail");
                     }
@@ -407,7 +407,7 @@ public class LoginActivity extends AppCompatActivity {
                 AccountThread accountThread=new AccountThread(registerUser,registerPwd,AccountThread.LOGIN_BY_PASSWORD);
                 accountThread.start();
             }else if(bundle.getString("register")!=null&&bundle.getString("register").equals("fail")){
-                AppDialog appDialog=new AppDialog(LoginActivity.this,"提示","注册失败！");
+                AppDialog appDialog=new AppDialog(LoginActivity.this,"提示","注册失败，可能原因为频繁注册，请5分钟再注册");
                 appDialog.show();
             }
             if(bundle.getString("login")!=null&&bundle.getString("login").equals("success")){

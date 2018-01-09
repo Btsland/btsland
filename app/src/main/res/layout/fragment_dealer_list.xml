@@ -2,10 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp">
+    android:padding="5dp"
+    android:orientation="vertical">
     <ListView
-    android:id="@+id/lv_c2c_list"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+        android:id="@+id/lv_c2c_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
     </ListView>
+    <Spinner
+        android:id="@+id/sp_c2c_list_order"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+    </Spinner>
 </LinearLayout>

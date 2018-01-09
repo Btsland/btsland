@@ -9,17 +9,19 @@ import org.java_websocket.handshake.ServerHandshake;
 import java.net.URI;
 import java.nio.channels.NotYetConnectedException;
 
+import info.btsland.app.BtslandApplication;
+
 /**
  * Created by Administrator on 2018/1/3 0003.
  */
 
 public class ChatWebScoket extends WebSocketClient {
-    private static String url="ws://123.1.154.214:8080/ws/";
     public int mnConnectStatus;
     public static int SUCCESS=1;
     public static int CLOSED=2;
     public static int ERROR=3;
     private String TAG="ChatWebScoket";
+    private boolean isShop=false;
 
     private ChatOnMessageListener chatOnMessageListener;
 
@@ -28,6 +30,7 @@ public class ChatWebScoket extends WebSocketClient {
     }
 
     public static ChatWebScoket createWebScoket(String name){
+        String url="ws://"+ BtslandApplication.ipServer+":8080/ws/";
         URI uri=URI.create(url+name);
         ChatWebScoket chatWebScoket=new ChatWebScoket(uri);
         return chatWebScoket;
@@ -45,6 +48,7 @@ public class ChatWebScoket extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshakedata) {
         mnConnectStatus = SUCCESS;
+        isShop=true;
         Log.e(TAG, "onOpen: " );
     }
 
@@ -56,13 +60,49 @@ public class ChatWebScoket extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         mnConnectStatus = CLOSED;
+        while (true) {
+            if (isShop) {
+                try {
+                    connect();
+                } catch (IllegalStateException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                isShop = false;
+                break;
+            }
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         Log.e(TAG, "onClose: " );
     }
 
     @Override
     public void onError(Exception ex) {
         mnConnectStatus = ERROR;
-        Log.e(TAG, "onError: " );
+        while (true) {
+            if (isShop) {
+                try {
+                    connect();
+                }catch (IllegalStateException e){
+                    e.printStackTrace();
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                isShop=false;
+                break;
+            }
+
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         ex.printStackTrace();
     }
 

@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
                     break;
                 case R.id.tv_nav_c2c:
                     index = 3;
-                    headFragment.setTitleName(getString(R.string.c2c));
+                    headFragment.setTitleName(getString(R.string.c2cTitle));
                     touchColor(tvNavC2C, tvNavPurse, tvNavHome, tvNavMarket);//控件特效
                     touchImage(tvNavC2C);
                     showFragment(tvNavC2C);

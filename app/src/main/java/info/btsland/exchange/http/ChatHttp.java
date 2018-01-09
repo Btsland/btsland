@@ -17,7 +17,12 @@ public class ChatHttp extends C2CHttp {
         paramMap.put("to",to);
         post(action,paramMap,callback);
     }
-
+    public static void queryDealer(String account,Callback callback){
+        String action="/chat/queryDealer";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("account",account);
+        post(action,paramMap,callback);
+    }
     public static void sendChat(String from,String context,String to,Callback callback){
         String action="/chat/sendChat";
         Map<String,String> paramMap=new HashMap<>();
@@ -31,6 +36,20 @@ public class ChatHttp extends C2CHttp {
         Map<String,String> paramMap=new HashMap<>();
         paramMap.put("from",from);
         paramMap.put("time",time);
+        paramMap.put("to",to);
+        post(action,paramMap,callback);
+    }
+
+    public void queryDealerIdByFrom(String from,Callback callback){
+        String action="/chat/queryDealerIdByFrom";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("from",from);
+        post(action,paramMap,callback);
+    }
+
+    public void queryDealerIdByTo(String to,Callback callback){
+        String action="/chat/queryDealerIdByTo";
+        Map<String,String> paramMap=new HashMap<>();
         paramMap.put("to",to);
         post(action,paramMap,callback);
     }

@@ -87,7 +87,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
     private RealAsset real;
     private String TAG="ExchangeDetailedActivity";
 
-    private String depict="";
+    private String depict="未知";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +133,15 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         if(type==IN){
             dealerTypesAdaper=new DealerTypesAdaper(ExchangeDetailedActivity.this);
             viewPager.setAdapter(dealerTypesAdaper);
+            dealerTypesAdaper.setClickListener(new DealerTypesAdaper.OnItemOnClickListener() {
+                @Override
+                public void onItemOnClick(String no) {
+                    ClipboardManager cm = (ClipboardManager)getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData mClipData = ClipData.newPlainText("Label", no);
+                    cm.setPrimaryClip(mClipData);
+                    Toast.makeText(ExchangeDetailedActivity.this,"已复制到剪贴板",Toast.LENGTH_SHORT).show();
+                }
+            });
         }else if(type==OUT) {
         }
 
@@ -200,6 +209,9 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
     }
     private List<RealAsset> realAssets=new ArrayList<>();
     private void fillRealAssets(String json) {
+        if(json.equals("")){
+            return;
+        }
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson=gsonBuilder.create();
@@ -216,12 +228,15 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
             }else {
                 tvBrokerage.setText("0.0");
             }
-            int a=note.getDepict().indexOf("(");
-            String depict="";
-            if(a!=-1){
-                depict="("+note.getRealDepict().substring(0,a)+")";
-            }else{
-                depict="("+note.getRealDepict()+")";
+
+            String depict="未知";
+            if(note.getRealDepict()!=null&&!note.getRealDepict().equals("")){
+                int a=note.getRealDepict().indexOf("(");
+                if(a!=-1){
+                    depict="("+note.getRealDepict().substring(0,a)+")";
+                }else{
+                    depict="("+note.getRealDepict()+")";
+                }
             }
             if(note.getRealNo()!=null){
                 tvInNo.setText(note.getRealNo()+depict);
@@ -570,7 +585,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             String text=msg.getData().getString("type");
-            tvInNo.setText("text");
+            tvInNo.setText(text);
         }
     } ;
 
@@ -606,7 +621,6 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
             views.add(view);
             llTable.addView(view);
         }
-
         dealerTypesAdaper.notifyDataSetChanged();
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

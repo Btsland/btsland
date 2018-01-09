@@ -59,13 +59,6 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:text="当您在www.btsland.info下载好我们的Btsland APP钱包并打开时，您首先看到的是最新交易信息的浏览界面，如下图所示：" />
-
-            <ImageView
-                android:layout_width="600px"
-                android:layout_height="960px"
-                android:layout_gravity="center"
-                android:background="@mipmap/image5" />
-
             <ImageView
                 android:layout_width="600px"
                 android:layout_height="950px"

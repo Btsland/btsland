@@ -1,10 +1,14 @@
 package info.btsland.app.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -92,7 +96,7 @@ public class DetailedBuyAndSellFragment extends Fragment
 
     TransactionSellBuyRecyclerViewAdapter rlvBuyAdapter;
     TransactionSellBuyRecyclerViewAdapter rlvSellAdapter;
-
+    private BuyAndSellReceiver buyAndSellReceiver;
 
     public DetailedBuyAndSellFragment() {
         // Required empty public constructor
@@ -112,6 +116,9 @@ public class DetailedBuyAndSellFragment extends Fragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        IntentFilter intentFilter=new IntentFilter(BuyAndSellReceiver.EVENT);
+        buyAndSellReceiver=new BuyAndSellReceiver();
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(buyAndSellReceiver,intentFilter);
     }
 
     @Override
@@ -193,10 +200,13 @@ public class DetailedBuyAndSellFragment extends Fragment
         }
         return str;
     }
-    private void fillIn(){
+    private void fillInBtnNum(){
         tvBuyHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.base)));
-        tvBuyHintCoin.setText(MarketDetailedActivity.market.base);
         tvSellHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.quote)));
+    }
+    private void fillIn(){
+        fillInBtnNum();
+        tvBuyHintCoin.setText(MarketDetailedActivity.market.base);
         tvSellHintCoin.setText(MarketDetailedActivity.market.quote);
         tvNewPrice.setText(MarketDetailedActivity.market.latest);
         tvNewPrice.setOnClickListener(new View.OnClickListener() {
@@ -679,6 +689,26 @@ public class DetailedBuyAndSellFragment extends Fragment
             if(edVol.getEditableText().toString()==null){
                 edVol.getEditableText().append("1");
             }
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(buyAndSellReceiver);
+    }
+
+    public static void sendBroadcast(Context context){
+        Intent intent=new Intent(BuyAndSellReceiver.EVENT);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    class BuyAndSellReceiver extends BroadcastReceiver{
+        public static final String EVENT="BuyAndSellReceiver";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.e(TAG, "onReceive: " );
+            fillInBtnNum();
         }
     }
 

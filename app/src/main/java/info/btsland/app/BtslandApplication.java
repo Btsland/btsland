@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,12 +52,14 @@ import info.btsland.app.ui.activity.ChatAccountListActivity;
 import info.btsland.app.ui.activity.ChatActivity;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.PurseAssetActivity;
+import info.btsland.app.ui.activity.RingActivity;
 import info.btsland.app.ui.activity.TransferActivity;
 import info.btsland.app.ui.activity.WelcomeActivity;
 import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.DealerNoteListFragment;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
+import info.btsland.app.ui.fragment.HelpManageFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.app.util.BaseThread;
@@ -108,10 +112,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
-    public static Map<String,HelpQueryChatDealer> helpQueryChatDealerThreadMap=new LinkedHashMap<>();
     public static List<IAsset> iAssets=new ArrayList<>();
     public static List<asset> assets=new ArrayList<>();
-    private static SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
+    public static SharedPreferences.Editor editor;
 
     private static MarketStat marketStat;
     public static WebSocket mWebsocket;
@@ -137,9 +141,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 //    public static String ipServer="172.25.234.1";
     public static String chargeUnit="CNY";//计价单位
     public static String Language="zh";//语言
+    public static int chatRing=-1;//聊天铃声
+    public static int noteRing=-1;//订单铃声
     public static int goUp=0;
     public static int goDown=0;
     public static int suspend=0;
+
+    public static String chatAccount="";
 
     public static List<String> mListNode = Arrays.asList(
             "wss://www.btsland.info/ws",
@@ -219,6 +227,48 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         ConnectThread();
 
     }
+    public static void playChatRing(String account){
+        if(account.equals(chatAccount)){
+            return;
+        }
+        Log.e(TAG, "playRing: " );
+        if (chatRing==-1) {
+            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(
+                    getInstance(), RingtoneManager.TYPE_NOTIFICATION);
+            RingtoneManager.getRingtone(getInstance(), uri).play();
+        }else {
+                /*判断位置不为0则播放的条目为position-1*/
+            try {
+
+                RingtoneManager rm = new RingtoneManager(getInstance());
+                rm.setType(RingtoneManager.TYPE_NOTIFICATION);
+                rm.getCursor();
+                rm.getRingtone(chatRing).play();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void playNoteRing(){
+        if (noteRing==-1) {
+            Uri uri = RingtoneManager.getActualDefaultRingtoneUri(
+                    getInstance(), RingtoneManager.TYPE_NOTIFICATION);
+            RingtoneManager.getRingtone(getInstance(), uri).play();
+        }else {
+                /*判断位置不为0则播放的条目为position-1*/
+            try {
+
+                RingtoneManager rm = new RingtoneManager(getInstance());
+                rm.setType(RingtoneManager.TYPE_NOTIFICATION);
+                rm.getCursor();
+                rm.getRingtone(noteRing).play();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
     public static void initChat(){
         if(chatAccounts!=null) {
             chatAccounts.clear();
@@ -272,6 +322,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }).start();
 
     }
+    public static int totalChatNum=0;
+
     private static void queryAccountChat(String account){
         new QueryAccountChatThread(account).start();
     }
@@ -299,7 +351,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         GsonBuilder gsonBuilder=new GsonBuilder();
                         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
                         final Gson gson = gsonBuilder.create();
-                        List<Chat> chats=gson.fromJson(json,new TypeToken<List<Chat>>(){}.getType());
+                        final List<Chat> chats=gson.fromJson(json,new TypeToken<List<Chat>>(){}.getType());
                         if(chats==null||chats.size()==0){
                             return;
                         }
@@ -333,7 +385,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                                     }else {
                                         User user=gson.fromJson(json,User.class);
-                                        user.chatPoint=1;
+                                        user.chatPoint=chats.size();
                                         user.chatDate=chat.getTime();
                                         user.chat=chat;
                                         BtslandApplication.chatUsers.put(finalNewAccount,user);
@@ -353,6 +405,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                 BtslandApplication.chatUsers.get(chat.getToUser()).chatDate = chat.getTime();
                                 BtslandApplication.chatUsers.get(chat.getToUser()).chat = chat;
                             }
+
                             ChatActivity.sendBroadcast(getInstance());
                             ChatAccountListActivity.sendBroadcast(getInstance());
                         }
@@ -363,8 +416,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             });
         }
     }
+    private void totalChatNum(){
 
-
+    }
 
     public static class ReceiveChatThread extends Thread{
         private String message;
@@ -441,9 +495,11 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         }else {
                             User user=gson.fromJson(json,User.class);
                             user.chatPoint=1;
+                            totalChatNum+=1;
                             user.chatDate=new Date();
                             user.chat=chat;
                             BtslandApplication.chatUsers.put(finalNewAccount,user);
+                            UserManageFragment.sendBroadcastChatPoint(getInstance(),BtslandApplication.totalChatNum);
                             ChatActivity.sendBroadcast(getInstance());
                             ChatAccountListActivity.sendBroadcast(getInstance());
                         }
@@ -460,6 +516,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     BtslandApplication.chatUsers.get(chat.getToUser()).chatDate = chat.getTime();
                     BtslandApplication.chatUsers.get(chat.getToUser()).chat = chat;
                 }
+                totalChatNum+=1;
+                UserManageFragment.sendBroadcastChatPoint(getInstance(),BtslandApplication.totalChatNum);
                 ChatActivity.sendBroadcast(getInstance());
                 ChatAccountListActivity.sendBroadcast(getInstance());
             }
@@ -483,7 +541,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private void init(){
         instance=getApplicationContext();
         application=this;
-        sharedPreferences=getInstance().getSharedPreferences("appConfigure", Context.MODE_PRIVATE);
+        this.sharedPreferences=getInstance().getSharedPreferences("appConfigure", Context.MODE_PRIVATE);
+        this.editor=this.sharedPreferences.edit();
         chargeUnit = readChargeUnit();
         fluctuationType = readFluctuationType();
         isRefurbish = readIsRefurbish();
@@ -491,13 +550,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         Language = readLanguage();
         strListMap = readListMap();
         account = readUser();
+        chatRing = readChatRing();
+        noteRing = readNoteRing();
         setFluctuationType();
         fillInListMap();
         fillInMarketMap();
         queryAllClinch=new QueryAllClinch();
         queryAllHaving=new QueryAllHaving();
         queryAllDealer=new QueryAllDealer();
-        queryAllHelp=new QueryAllHaving();
+        queryAllHelp=new QueryAllHelp();
         Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
@@ -585,7 +646,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             }
                         }
                     });
-                    pointNum=a+userHavingOutNotes.size()+ userHavingInNotes.size()+ dealerHavingNotes.size();
+                    int newPointNum=a+userHavingOutNotes.size()+ userHavingInNotes.size()+ dealerHavingNotes.size();
+                    if(newPointNum>pointNum){
+                        Log.e(TAG, "queryAllHaving: " );
+                        playNoteRing();
+                    }
+                    pointNum=newPointNum;
                     MainActivity.sendBroadcast(getInstance(),pointNum);
 
                 }
@@ -900,7 +966,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             @Override
                             public void onMessage(String message) {
                                 Log.e(TAG, "onMessage: "+message );
+                                Chat chat=gson.fromJson(message,Chat.class);
                                 new ReceiveChatThread(message).start();
+                                BtslandApplication.playChatRing(chat.getFromUser());
                             }
                         });
                         chatWebScoket.connect();
@@ -939,10 +1007,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                                         helpQueryDealer.setTime(6);
                                                         helpQueryDealer.start();
                                                         helpQueryThreadMap.put(users.get(i).getDealerId(), helpQueryDealer);
-                                                        HelpQueryChatDealer helpQueryChatDealer = new HelpQueryChatDealer(users.get(i).getDealerId());
-                                                        helpQueryChatDealer.setTime(3);
-                                                        helpQueryChatDealer.start();
-                                                        helpQueryChatDealerThreadMap.put(users.get(i).getDealerId(), helpQueryChatDealer);
                                                     }
                                                 }
                                             }
@@ -986,45 +1050,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                             List<Note> notes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
                             if (notes != null && notes.size() > 0) {
                                 helpUserMap.get(name).havingNotes = notes;
+                                HelpManageFragment.sendBroadcast(getInstance());
                             }
-                        }
-                    }
-                });
-            }
-        }
-    }
-
-    static class HelpQueryChatDealer extends BaseThread{
-        private String to;
-
-        public HelpQueryChatDealer(String to) {
-            this.to = to;
-        }
-
-        @Override
-        public void execute() {
-            if (helpUserMap.get(to)!=null){
-                ChatHttp.queryChat(account,helpUserMap.get(to).getAccount(),new Callback() {
-                    @Override
-                    public void onFailure(Call call, IOException e) {}
-
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        GsonBuilder gsonBuilder=new GsonBuilder() ;
-                        gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
-                        Gson gson = gsonBuilder.create();
-                        if(helpUserMap.get(to).helpNewChatList==null){
-                            helpUserMap.get(to).helpNewChatList=new ArrayList<>();
-                        }
-                        String json = response.body().string();
-                        if (json.indexOf("error") != -1) {
-                            sendBroadcastDialog(BtslandApplication.getInstance(),json);
-                        } else {
-                            List<Chat> chats = gson.fromJson(json, new TypeToken<List<Chat>>() {}.getType());
-                            if(chats!=null){
-                                helpUserMap.get(to).helpNewChatList.addAll(chats);
-                            }
-
                         }
                     }
                 });
@@ -1430,7 +1457,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         }
     };
     public static boolean saveChatAccounts(){
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         Gson gson=new Gson();
         String strChatAccounts=gson.toJson(chatAccounts);
         editor.putString(account,strChatAccounts);
@@ -1438,7 +1464,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
 
     public static boolean saveListMap(){
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         Gson gson=new Gson();
         String strListMap=gson.toJson(listMap);
         editor.putString("listMap",strListMap);
@@ -1446,31 +1471,22 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     }
 
     public static boolean saveIsRefurbish(){
-
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putBoolean("IsRefurbish",isRefurbish);
         return editor.commit();
     }
     public static boolean saveFluctuationType(){
-
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putInt("fluctuationType",fluctuationType);
         return editor.commit();
     }
     public static boolean saveStrServer(){
-
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("strServer",strServer);
         return editor.commit();
     }
     public static boolean saveChargeUnit(){
-
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("chargeUnit",chargeUnit);
         return editor.commit();
     }
     public static boolean saveLanguage(){
-        SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("Language",Language);
         return editor.commit();
     }
@@ -1481,9 +1497,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         if(chatAccounts!=null) {
             chatAccounts=new ArrayList<>(new LinkedHashSet<>(chatAccounts));//去除重复
         }
+        Log.e(TAG, "readChatAccounts: "+ chatAccounts);
         return chatAccounts;
     }
-
+    public static int readChatRing(){
+        return sharedPreferences.getInt("chatRing",chatRing);
+    }
+    public static int readNoteRing(){
+        return sharedPreferences.getInt("noteRing",noteRing);
+    }
     public static String readLanguage(){
         return sharedPreferences.getString("Language",Language);
     }

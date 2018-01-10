@@ -180,9 +180,9 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
         Gson gson=gsonBuilder.create();
         note=gson.fromJson(json,Note.class);
-        Log.e(TAG, "fillNote: json:"+json );
-        Log.e(TAG, "fillNote: note:"+note );
-        Log.e(TAG, "fillNote: note.getDealerId():"+note.getDealerId() );
+        if(note==null){
+
+        }
         depict=note.getDepict();
         if(type==IN){
             new Thread(new Runnable() {

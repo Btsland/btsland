@@ -96,6 +96,56 @@ public class SettingActivity extends BaseActivity{
                 null
         );
         rowItemDataList.add(languageItemData);
+        RowAdapter.RowItemData chatRingItemData=new RowAdapter.RowItemData("",
+                "聊天通知铃声",
+                "选择您偏好的聊天通知铃声",
+                BtslandApplication.isRefurbish,
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(SettingActivity.this,RingActivity.class);
+                        intent.putExtra("type",1);
+                        startActivity(intent);
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(chatRingItemData);
+        RowAdapter.RowItemData noteRingItemData=new RowAdapter.RowItemData("",
+                "承兑订单通知铃声",
+                "选择您偏好的承兑订单通知铃声",
+                BtslandApplication.isRefurbish,
+                false,
+                false,
+                true,
+                true,
+                false,
+                new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    }
+                },
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent=new Intent(SettingActivity.this,RingActivity.class);
+                        intent.putExtra("type",2);
+                        startActivity(intent);
+                    }
+                },
+                null
+        );
+        rowItemDataList.add(noteRingItemData);
         RowAdapter.RowItemData changeItemData=new RowAdapter.RowItemData("",
                 getString(R.string.price_limit),
                 getString(R.string.set_preference_color),

@@ -91,6 +91,7 @@ public class NewsFragment extends Fragment implements MainActivity.OnKeyDown {
 //        webView = (WebView)findViewById(R.id.wv_news);
         webView = view.findViewById(R.id.wv_news);
         progressBar=view.findViewById(R.id.pBar_news);
+        progressBar.setMax(100);
         //支持javascript
         webView.getSettings().setJavaScriptEnabled(true);
         // 设置可以支持缩放
@@ -112,7 +113,6 @@ public class NewsFragment extends Fragment implements MainActivity.OnKeyDown {
                     progressBar.setVisibility(View.VISIBLE);
                     progressBar.setProgress(newProgress);
                 }
-                super.onProgressChanged(view, newProgress);
             }
         });
         //如果不设置WebViewClient，请求会跳转系统浏览器

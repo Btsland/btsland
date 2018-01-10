@@ -52,12 +52,10 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
     private int index = 1;
     private Fragment c2cFragment;
     private MainReceiver mainReceiver;
-    private int point;
 
 
 
     public void setPoint(int point) {
-        this.point = point;
         if(point==0){
             tvNavPursePoint.setText(""+point);
             tvNavPursePoint.setVisibility(View.GONE);

@@ -89,11 +89,13 @@ public class UserManageFragment extends Fragment {
     private TextView tvGoRegister;
 
     private TextView tvPoint;
+    private TextView tvPoint2;
 
     private ScrollView scrollView;
     private MyConstraintLayout clPurse;
     private UserManageReceiver userManageReceiver ;
     private UserManageReceiverPoint userManageReceiverPoint ;
+    private UserManageReceiverChatPoint userManageReceiverChatPoint;
 
     public UserManageFragment() {
         // Required empty public constructor
@@ -109,6 +111,9 @@ public class UserManageFragment extends Fragment {
         userManageReceiverPoint=new UserManageReceiverPoint();
         IntentFilter intentFilter2 =new IntentFilter(UserManageReceiverPoint.EVENT);
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiverPoint,intentFilter2);
+        userManageReceiverChatPoint=new UserManageReceiverChatPoint();
+        IntentFilter intentFilter3 =new IntentFilter(UserManageReceiverChatPoint.EVENT);
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(userManageReceiverChatPoint,intentFilter3);
     }
 
     @Override
@@ -231,7 +236,7 @@ public class UserManageFragment extends Fragment {
         tvUserLogoff=view.findViewById(R.id.tv_user_logoff);
         scrollView=view.findViewById(R.id.sv_purse);
         tvPoint=view.findViewById(R.id.tv_user_manage_point);
-
+        tvPoint2=view.findViewById(R.id.tv_user_manage_point2);
         TextViewOnCLickListener onCLickListener=new TextViewOnCLickListener();
         tvPurseAllAsset.setOnClickListener(onCLickListener);
         tvPurseDeal.setOnClickListener(onCLickListener);
@@ -282,12 +287,21 @@ public class UserManageFragment extends Fragment {
             tvPoint.setVisibility(View.VISIBLE);
         }
     }
-
+    public void setPoint2(int point) {
+        if(point==0){
+            tvPoint2.setText(""+point);
+            tvPoint2.setVisibility(View.GONE);
+        }else {
+            tvPoint2.setText(""+point);
+            tvPoint2.setVisibility(View.VISIBLE);
+        }
+    }
     @Override
     public void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiver);
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiverPoint);
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(userManageReceiverChatPoint);
     }
 
     public static void sendBroadcastPoint(Context context, int num){
@@ -301,6 +315,19 @@ public class UserManageFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             int num=intent.getIntExtra("num",0);
             setPoint(num);
+        }
+    }
+    public static void sendBroadcastChatPoint(Context context, int num){
+        Intent intent=new Intent(UserManageReceiverChatPoint.EVENT);
+        intent.putExtra("num",num);
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+    private class UserManageReceiverChatPoint extends BroadcastReceiver {
+        public static final String EVENT = "UserManageReceiverChatPoint";
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int num=intent.getIntExtra("num",0);
+            setPoint2(num);
         }
     }
     /**

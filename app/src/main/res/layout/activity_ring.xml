@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <FrameLayout
+        android:id="@+id/fra_ring_head"
+        android:layout_width="match_parent"
+        android:layout_height="50dp">
+    </FrameLayout>
+
+    <ListView
+        android:id="@+id/ring_lv"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:cacheColorHint="#00000000" >
+    </ListView>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:cacheColorHint="#00000000">
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:layout_height="40dp"
+            android:text="返回"
+            android:background="@drawable/btn_transparent"/>
+        <Button
+            android:id="@+id/sure_btn"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:layout_height="40dp"
+            android:text="保存"
+            android:background="@drawable/btn_green"/>
+    </LinearLayout>
+</LinearLayout>

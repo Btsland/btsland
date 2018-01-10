@@ -22,6 +22,7 @@ import info.btsland.app.Adapter.ChatAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.exchange.entity.Chat;
 import info.btsland.exchange.scoket.ChatWebScoket;
 import info.btsland.exchange.utils.GsonDateAdapter;
@@ -52,6 +53,7 @@ public class ChatActivity extends AppCompatActivity {
         if(getIntent()!=null){
             account = getIntent().getStringExtra("account");
         }
+        BtslandApplication.chatAccount=account;
         from=BtslandApplication.account;
         GsonBuilder gsonBuilder=new GsonBuilder();
         gsonBuilder.registerTypeAdapter(Date.class,new GsonDateAdapter());
@@ -96,6 +98,10 @@ public class ChatActivity extends AppCompatActivity {
     private void fillIn(){
         chatAdapter.setChats(BtslandApplication.chatListMap.get(account));
         if(BtslandApplication.chatUsers.get(account)!=null){
+            if(BtslandApplication.totalChatNum>0) {
+                BtslandApplication.totalChatNum -= BtslandApplication.chatUsers.get(account).chatPoint;
+                UserManageFragment.sendBroadcastChatPoint(ChatActivity.this, BtslandApplication.totalChatNum);
+            }
             BtslandApplication.chatUsers.get(account).chatPoint=0;
         }
         ChatAccountListActivity.sendBroadcast(ChatActivity.this);
@@ -113,6 +119,7 @@ public class ChatActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         LocalBroadcastManager.getInstance(ChatActivity.this).unregisterReceiver(chatReceiver);
+        BtslandApplication.chatAccount="";
     }
 
     @Override

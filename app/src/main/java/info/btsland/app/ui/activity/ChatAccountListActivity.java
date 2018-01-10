@@ -10,9 +10,11 @@ import android.os.Message;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,6 +25,7 @@ import info.btsland.app.Adapter.ChatAccountListAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.ui.fragment.HeadFragment;
+import info.btsland.app.ui.fragment.UserManageFragment;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.CreateChatDialog;
 import info.btsland.exchange.entity.User;
@@ -38,6 +41,8 @@ public class ChatAccountListActivity extends AppCompatActivity {
     private TextView tvBtn;
     private ChatAccountListAdapter listAdapter;
     private ChatAccountReceiver chatAccountReceiver;
+    private String TAG="ChatAccountListActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,9 +50,7 @@ public class ChatAccountListActivity extends AppCompatActivity {
         chatAccountReceiver=new ChatAccountReceiver();
         IntentFilter intentFilter=new IntentFilter(ChatAccountReceiver.EVENT);
         LocalBroadcastManager.getInstance(ChatAccountListActivity.this).registerReceiver(chatAccountReceiver,intentFilter);
-        listAdapter=new ChatAccountListAdapter(ChatAccountListActivity.this);
 
-        listAdapter.setUsers(toList(BtslandApplication.chatUsers));
         fillInHead();
         init();
         fillIn();
@@ -61,7 +64,11 @@ public class ChatAccountListActivity extends AppCompatActivity {
     }
     private void init(){
         listView=findViewById(R.id.lv_chat_account_list);
+        listAdapter=new ChatAccountListAdapter(ChatAccountListActivity.this);
         listView.setAdapter(listAdapter);
+        Log.e(TAG, "init: "+BtslandApplication.chatUsers.size() );
+        listAdapter.setUsers(toList(BtslandApplication.chatUsers));
+        listAdapter.notifyDataSetChanged();
         tvBtn=findViewById(R.id.tv_chat_account_btn);
         tvBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,29 +77,9 @@ public class ChatAccountListActivity extends AppCompatActivity {
                 createChatDialog.setListener(new CreateChatDialog.OnDialogInterationListener() {
                     @Override
                     public void onConfirm(AlertDialog dialog, final String account) {
-                        UserHttp.queryAccount(account, new Callback() {
-                            @Override
-                            public void onFailure(Call call, IOException e) {
-
-                            }
-
-                            @Override
-                            public void onResponse(Call call, Response response) throws IOException {
-                                String json = response.body().string();
-                                int a=json.indexOf("error");
-                                if(a!=-1){
-//                                    Toast.makeText(ChatAccountListActivity.this,json,Toast.LENGTH_LONG).show();
-                                }else if(json==null||json.equals("")||json.equals("null")) {
-                                    AppDialog appDialog=new AppDialog(ChatAccountListActivity.this);
-                                    appDialog.setMsg("该用户未使用过承兑系统，承兑系统未记录该用户的信息，无法创建聊天");
-                                    appDialog.show();
-                                }else {
-                                    Intent intent=new Intent(ChatAccountListActivity.this,ChatActivity.class);
-                                    intent.putExtra("account",account);
-                                    startActivity(intent);
-                                }
-                            }
-                        });
+                        Intent intent=new Intent(ChatAccountListActivity.this,ChatActivity.class);
+                        intent.putExtra("account",account);
+                        startActivity(intent);
                     }
 
                     @Override
@@ -135,7 +122,7 @@ public class ChatAccountListActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(ChatAccountListActivity.this).unregisterReceiver(chatAccountReceiver);
     }
 
-    public static void sendBroadcast(Context context){
+    public static void sendBroadcast(final Context context){
         Intent intent=new Intent(ChatAccountReceiver.EVENT);
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
@@ -144,6 +131,7 @@ public class ChatAccountListActivity extends AppCompatActivity {
         public static final String EVENT="ChatAccountReceiver";
         @Override
         public void onReceive(Context context, Intent intent) {
+
             handler.sendEmptyMessage(1);
         }
     }

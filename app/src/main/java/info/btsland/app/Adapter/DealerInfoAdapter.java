@@ -78,27 +78,14 @@ public class DealerInfoAdapter extends BaseAdapter {
         tvHint.setVisibility(View.INVISIBLE);
         tvNum.setVisibility(View.INVISIBLE);
         tvTime.setVisibility(View.INVISIBLE);
-        if(user.havingNotes!=null&&user.helpNewChatList!=null){
-            Log.e(TAG, "getView: "+user.havingNotes.size()+"////"+ user.helpNewChatList.size());
-            tvNum.setText(""+(user.havingNotes.size()+user.helpNewChatList.size()));
-            tvNum.setVisibility(View.VISIBLE);
-        }else if(user.havingNotes!=null&&user.helpNewChatList==null) {
+        if(user.havingNotes!=null){
             tvNum.setText(""+(user.havingNotes.size()));
-            tvNum.setVisibility(View.VISIBLE);
-        }else if(user.helpNewChatList!=null&&user.havingNotes==null) {
-            tvNum.setText(""+(user.helpNewChatList.size()));
             tvNum.setVisibility(View.VISIBLE);
         }
         if(user.havingNotes!=null){
             int a = user.havingNotes.size()-1;
             if(a>=0&&user.havingNotes.size()>0) {
                 havingTime = user.havingNotes.get(a).getDealerReTime();
-            }
-        }
-        if(user.helpNewChatList!=null&&user.helpNewChatList.size()>0){
-            int a=user.helpNewChatList.size()-1;
-            if(a>=0&&user.helpNewChatList.size()>0) {
-                chatTime = user.helpNewChatList.get(a).getTime();
             }
         }
         SimpleDateFormat simpleDateFormat =new SimpleDateFormat("hh:mm:ss");

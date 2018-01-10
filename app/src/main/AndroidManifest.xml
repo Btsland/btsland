@@ -98,7 +98,8 @@
         <activity
             android:name=".ui.activity.CourseActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".ui.activity.AboutActivity"></activity>
+        <activity android:name=".ui.activity.AboutActivity" />
+        <activity android:name=".ui.activity.RingActivity"></activity>
     </application>
 
 </manifest>

@@ -45,9 +45,6 @@ public class User {
 
     public List<Note> havingNotes=new ArrayList<>();
 
-    public List<Chat> helpOldChatList=new ArrayList<>();
-
-    public List<Chat> helpNewChatList=new ArrayList<>();
 
     public Integer getId() {
         return id;

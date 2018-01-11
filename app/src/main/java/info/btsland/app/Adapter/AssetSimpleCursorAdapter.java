@@ -56,7 +56,7 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.asset_item, null);
         }
-        if(assets.size()>0&&assets.get(position)==null){
+        if(assets.size()>0&&position<assets.size()&&assets.get(position)==null){
             return convertView;
         }
         TextView tvAssetCoin=convertView.findViewById(R.id.tv_asset_coin);

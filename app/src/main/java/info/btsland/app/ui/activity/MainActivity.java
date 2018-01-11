@@ -1,9 +1,13 @@
 package info.btsland.app.ui.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -65,6 +69,20 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         }
     }
 
+    private void sendSimpleNotify(String title,String message){
+        Intent intent=new Intent(this,MainActivity.class);
+        PendingIntent intent1=PendingIntent.getActivity(this,R.string.app_name,intent,PendingIntent.FLAG_CANCEL_CURRENT);
+        Notification.Builder builder=new Notification.Builder(this);
+        builder.setContentIntent(intent1);
+        builder.setAutoCancel(true).setSmallIcon(R.mipmap.ic_btsland)
+                .setTicker("新消息").setWhen(System.currentTimeMillis())
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_btsland))
+                .setContentTitle(title).setContentText(message);
+        Notification notification=builder.build();
+        NotificationManager notificationManager= (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(R.string.app_name,notification);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +109,7 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         }
         init();
         showFragment(index);
+        sendSimpleNotify(Integer.toString(1),Integer.toString(1));
 
     }
 

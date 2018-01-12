@@ -42,8 +42,6 @@ import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.DataK;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.service.Impl.MarketServiceImpl;
-import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MainActivity;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.util.KeyUtil;

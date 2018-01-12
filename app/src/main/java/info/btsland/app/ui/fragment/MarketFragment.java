@@ -33,7 +33,6 @@ import info.btsland.app.R;
 import info.btsland.app.api.MarketStat;
 import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
-import info.btsland.app.service.MarketService;
 import info.btsland.app.ui.activity.MarketDetailedActivity;
 import info.btsland.app.ui.activity.SettingDealActivity;
 import info.btsland.app.util.ArrayUtils;
@@ -41,7 +40,6 @@ import info.btsland.app.util.InternetUtil;
 
 public class MarketFragment extends Fragment implements MarketStat.OnMarketStatUpdateListener {
     private String TAG="MarketFragment";
-    private MarketService marketService;
     private MarketSimpleKFragment simpleKFragment;
 //    private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;

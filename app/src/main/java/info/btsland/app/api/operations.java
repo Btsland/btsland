@@ -694,30 +694,30 @@ public class operations {
         }
     }
     public static class borrow_asset_operation implements base_operation{
-        class fee_parameters_type {
-            long fee       = 0;
-        }
-//        String borrower_name;
+            class fee_parameters_type {
+                long fee       = 0;
+            }
+            //        String borrower_name;
 //        String amount_to_borrow;
 //        String asset_symbol;
 //        String amount_of_collateral;
 //        String broadcast;
-        public asset fee;
-        public object_id<account_object> account;
-        public asset borrow;
-        public asset collateral;
-        public Set<types.void_t> extensions;
-        @Override
-        public List<authority> get_required_authorities() {
-            return new ArrayList<>();
-        }
+            public asset fee;
+            public object_id<account_object> account;
+            public asset borrow;
+            public asset collateral;
+            public Set<types.void_t> extensions;
+            @Override
+            public List<authority> get_required_authorities() {
+                return new ArrayList<>();
+            }
 
-        @Override
-        public List<object_id<account_object>> get_required_active_authorities() {
-            List<object_id<account_object>> activeList = new ArrayList<>();
-            activeList.add(fee_payer());
-            return activeList;
-        }
+            @Override
+            public List<object_id<account_object>> get_required_active_authorities() {
+                List<object_id<account_object>> activeList = new ArrayList<>();
+                activeList.add(fee_payer());
+                return activeList;
+            }
 
         @Override
         public List<object_id<account_object>> get_required_owner_authorities() {

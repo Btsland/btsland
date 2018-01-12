@@ -4,13 +4,16 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
+import info.btsland.app.service.ExchangeService;
 import info.btsland.app.ui.fragment.C2CFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.HeadFragment;
@@ -110,9 +114,23 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         init();
         showFragment(index);
         sendSimpleNotify(Integer.toString(1),Integer.toString(1));
-
+        Intent intent=new Intent(this, ExchangeService.class);
+        intent.putExtra("account","xjh1009");
+        startService(intent);
+        bindService(intent,mFirstConn,Context.BIND_AUTO_CREATE);
     }
+    private ExchangeService exchangeService;
+    private ServiceConnection mFirstConn=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            exchangeService=((ExchangeService.LocalBinder) iBinder).getService();
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+            exchangeService=null;
+        }
+    };
 
     /**
      * 初始化

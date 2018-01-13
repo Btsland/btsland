@@ -90,6 +90,7 @@ public class ChatActivity extends AppCompatActivity {
                     BtslandApplication.chatWebScoket.connect();
                 }
                 BtslandApplication.chatWebScoket.sendMsg(message);
+                edText.getText().clear();
             }
         });
         chatAdapter=new ChatAdapter(ChatActivity.this,from,account);

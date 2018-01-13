@@ -208,6 +208,7 @@
                 <EditText
                     android:id="@+id/ed_exchange_aspect_text"
                     android:layout_weight="6"
+                    android:inputType="numberDecimal"
                     android:layout_width="0dp"
                     android:layout_height="36dp"
                     android:gravity="center"

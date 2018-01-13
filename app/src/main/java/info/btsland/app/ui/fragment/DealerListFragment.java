@@ -107,20 +107,25 @@ public class DealerListFragment extends Fragment {
         dealerListAdapter.setClickListener(
                 new DealerListAdapter.OnItemClickListener() {
                     @Override
-                    public void onItemClick(User user) {
-                        toExchange(user);
+                    public void onItemClick(DealerListAdapter.DealerData dealerData) {
+                        toExchange(dealerData);
                     }
                 }
         );
 
     }
-    private void toExchange(User user){
+    private void toExchange(DealerListAdapter.DealerData dealerData){
         if(BtslandApplication.accountObject==null){
             AppDialog appDialog=new AppDialog(getActivity());
             appDialog.setMsg("您未登录，请先登录！");
             appDialog.show();
         }else {
-            C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name, type, user.getDealerId());
+            if(type==IN){
+                C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name,dealerData.usableCNY, type, dealerData.user.getDealerId());
+            }else if(type==OUT) {
+                C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name,dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount(), type, dealerData.user.getDealerId());
+            }
+
         }
     }
 

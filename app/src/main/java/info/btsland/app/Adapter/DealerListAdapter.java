@@ -187,7 +187,7 @@ public class DealerListAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                clickListener.onItemClick(dealerData.user);
+                clickListener.onItemClick(dealerData);
             }
         });
         if(views.size()>0&&views.size()>i&&views.get(i)!=null){
@@ -275,7 +275,7 @@ public class DealerListAdapter extends BaseAdapter {
     };
 
     public interface OnItemClickListener{
-        void onItemClick(User user);
+        void onItemClick(DealerData dealerData);
     }
 
 }

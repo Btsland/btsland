@@ -26,6 +26,7 @@ import com.kaopiz.kprogresshud.KProgressHUD;
 
 import java.io.IOException;
 
+import info.btsland.app.Adapter.DealerListAdapter;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.account_object;
@@ -78,10 +79,11 @@ public class C2CExchangeActivity extends AppCompatActivity {
     public C2CExchangeActivity() {
     }
 
-    public static void startAction(Context context,String account, int type, String dealerId) {
+    public static void startAction(Context context,String account,Double max, int type, String dealerId) {
         Intent intent=new Intent(context,C2CExchangeActivity.class);
         intent.putExtra("type",type);
         intent.putExtra("account",account);
+        intent.putExtra("max",max);
         intent.putExtra("dealerId",dealerId);
         context.startActivity(intent);
     }
@@ -93,6 +95,7 @@ public class C2CExchangeActivity extends AppCompatActivity {
         type = getIntent().getIntExtra("type",type);
         account = getIntent().getStringExtra("account");
         dealerId = getIntent().getStringExtra("dealerId");
+        max=getIntent().getDoubleExtra("max",0.0);
         fillInHead();
         init();
         fillIn();
@@ -360,23 +363,37 @@ public class C2CExchangeActivity extends AppCompatActivity {
                     });
                     appDialog.show();
                     return;
-                }Double iNum= Double.valueOf(num);
+                }
+                Double iNum= Double.valueOf(num);
                 if(type==IN){
                     if(iNum<dealer.getLowerLimitIn()){
                         AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
-                        appDialog.setMsg("充值额度不能低于额度"+dealer.getLowerLimitIn());
+                        appDialog.setMsg("充值额度不能低于充值下限"+dealer.getLowerLimitIn());
                         appDialog.show();
                         return;
+                    }
+                    synchronized (BtslandApplication.inDataList) {
+                        for (int i = 0; i < BtslandApplication.inDataList.size(); i++) {
+                            DealerListAdapter.DealerData dealerData = BtslandApplication.inDataList.get(i);
+                            if (dealerData.user.getDealerId().equals(dealerId)) {
+                                if (iNum > dealerData.usableCNY) {
+                                    AppDialog appDialog = new AppDialog(C2CExchangeActivity.this);
+                                    appDialog.setMsg("充值额度不能高于可兑额度" + dealerData.usableCNY);
+                                    appDialog.show();
+                                    return;
+                                }
+                            }
+                        }
                     }
                 }else if(type==OUT){
                     if(iNum<dealer.getLowerLimitOut()){
                         AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
-                        appDialog.setMsg("充值额度不能低于额度"+dealer.getLowerLimitOut());
+                        appDialog.setMsg("充值额度不能低于提现下限"+dealer.getLowerLimitOut());
                         appDialog.show();
                         return;
                     }else if(iNum>dealer.getUpperLimitOut()) {
                         AppDialog appDialog=new AppDialog(C2CExchangeActivity.this);
-                        appDialog.setMsg("充值额度不能大于额度"+dealer.getLowerLimitOut());
+                        appDialog.setMsg("充值额度不能大于可提额度"+dealer.getUpperLimitOut());
                         appDialog.show();
                         return;
                     }

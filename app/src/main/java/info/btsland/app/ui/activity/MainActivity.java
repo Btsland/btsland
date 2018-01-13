@@ -113,11 +113,11 @@ public class MainActivity extends BaseActivity implements DealerManageFragment.S
         }
         init();
         showFragment(index);
-        sendSimpleNotify(Integer.toString(1),Integer.toString(1));
-        Intent intent=new Intent(this, ExchangeService.class);
-        intent.putExtra("account","xjh1009");
-        startService(intent);
-        bindService(intent,mFirstConn,Context.BIND_AUTO_CREATE);
+//        sendSimpleNotify(Integer.toString(1),Integer.toString(1));
+//        Intent intent=new Intent(this, ExchangeService.class);
+//        intent.putExtra("account","xjh1009");
+//        startService(intent);
+//        bindService(intent,mFirstConn,Context.BIND_AUTO_CREATE);
     }
     private ExchangeService exchangeService;
     private ServiceConnection mFirstConn=new ServiceConnection() {

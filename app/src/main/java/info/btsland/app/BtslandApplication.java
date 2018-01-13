@@ -138,7 +138,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static int fluctuationType=1;//涨跌颜色类型
     public static String strServer="wss://www.btsland.info/ws";//节点
     public static String ipServer="123.1.154.214";
-//    public static String ipServer="172.25.234.1";
+//    public static String ipServer="192.168.1.108";
     public static String chargeUnit="CNY";//计价单位
     public static String Language="zh";//语言
     public static int chatRing=-1;//聊天铃声
@@ -385,6 +385,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                                     }else {
                                         User user=gson.fromJson(json,User.class);
+                                        if(user==null){
+                                            return;
+                                        }
                                         user.chatPoint=chats.size();
                                         user.chatDate=chat.getTime();
                                         user.chat=chat;
@@ -494,6 +497,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
                         }else {
                             User user=gson.fromJson(json,User.class);
+                            if (user==null){
+                                return;
+                            }
                             user.chatPoint=1;
                             totalChatNum+=1;
                             user.chatDate=new Date();
@@ -961,18 +967,19 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     }else {
                         dealer=gson.fromJson(json,User.class);
                         PurseFragment.sendBroadcast(getInstance());
-                        chatWebScoket = ChatWebScoket.createWebScoket(dealer.getAccount());
-                        chatWebScoket.setChatOnMessageListener(new ChatWebScoket.ChatOnMessageListener() {
-                            @Override
-                            public void onMessage(String message) {
-                                Log.e(TAG, "onMessage: "+message );
-                                Chat chat=gson.fromJson(message,Chat.class);
-                                new ReceiveChatThread(message).start();
-                                BtslandApplication.playChatRing(chat.getFromUser());
-                            }
-                        });
-                        chatWebScoket.connect();
+
                         if(dealer!=null) {
+                            chatWebScoket = ChatWebScoket.createWebScoket(dealer.getAccount());
+                            chatWebScoket.setChatOnMessageListener(new ChatWebScoket.ChatOnMessageListener() {
+                                @Override
+                                public void onMessage(String message) {
+                                    Log.e(TAG, "onMessage: "+message );
+                                    Chat chat=gson.fromJson(message,Chat.class);
+                                    new ReceiveChatThread(message).start();
+                                    BtslandApplication.playChatRing(chat.getFromUser());
+                                }
+                            });
+                            chatWebScoket.connect();
                             if(!queryDealer.isDead()) {
                                 if (!queryDealer.isStart()) {
                                     queryDealer.start();
@@ -1016,6 +1023,33 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                                 case UserTypeCode.ADMIN:
                                     break;
                             }
+                        }else {
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    UserHttp.registerAccount(BtslandApplication.accountObject.name, "", new Callback() {
+                                        @Override
+                                        public void onFailure(Call call, IOException e) {
+
+                                        }
+
+                                        @Override
+                                        public void onResponse(Call call, Response response) throws IOException {
+                                            String json = response.body().string();
+                                            if (json.indexOf("error") != -1) {
+
+                                            } else {
+                                                try {
+                                                    Thread.sleep(3000);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                queryC2CAccount(name);
+                                            }
+                                        }
+                                    });
+                                }
+                            }).start();
                         }
                     }
                 }

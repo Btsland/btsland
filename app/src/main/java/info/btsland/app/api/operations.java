@@ -703,9 +703,9 @@ public class operations {
 //        String amount_of_collateral;
 //        String broadcast;
             public asset fee;
-            public object_id<account_object> account;
-            public asset borrow;
-            public asset collateral;
+            public object_id<account_object> funding_account;
+            public asset delta_debt;
+            public asset delta_collateral;
             public Set<types.void_t> extensions;
             @Override
             public List<authority> get_required_authorities() {
@@ -733,15 +733,15 @@ public class operations {
             rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(fee.asset_id.get_instance()));
 
             // borrower_name
-            rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(account.get_instance()));
+            rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(funding_account.get_instance()));
 
             // amount_to_borrow
-            baseEncoder.write(rawObject.get_byte_array(borrow.amount));
+            baseEncoder.write(rawObject.get_byte_array(delta_debt.amount));
             rawObject.pack(baseEncoder,
-                    UnsignedInteger.fromIntBits(borrow.asset_id.get_instance()));
+                    UnsignedInteger.fromIntBits(delta_debt.asset_id.get_instance()));
 
             // amount_of_collateral
-            baseEncoder.write(rawObject.get_byte_array(collateral.amount));
+            baseEncoder.write(rawObject.get_byte_array(delta_collateral.amount));
 
             // extensions
             rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(extensions.size()));
@@ -761,13 +761,12 @@ public class operations {
 
         @Override
         public object_id<account_object> fee_payer() {
-            return account;
+            return funding_account;
         }
-
         @Override
         public List<object_id<account_object>> get_account_id_list() {
             List<object_id<account_object>> listAccountId = new ArrayList<>();
-            listAccountId.add(account);
+            listAccountId.add(funding_account);
             return listAccountId;
         }
 

@@ -514,10 +514,10 @@ public class Wallet_api {
         // 抵押的帐号
         account_object accountObject = BtslandApplication.accountObject;
         operations.borrow_asset_operation op = new operations.borrow_asset_operation();  //1
-        op.account=accountObject.id;//设置用户
+        op.funding_account=accountObject.id;//设置用户
         asset asset=mWebsocketApi.lookup_asset_symbols(asset_symbol).amount_from_string(amount_to_borrow);
-        op.borrow=asset;
-        op.collateral=mWebsocketApi.lookup_asset_symbols("BTS").amount_from_string(amount_of_collateral);//设置用于的抵押的货币名称（BTS）和金额
+        op.delta_debt=asset;
+        op.delta_collateral=mWebsocketApi.lookup_asset_symbols("BTS").amount_from_string(amount_of_collateral);//设置用于的抵押的货币名称（BTS）和金额
         op.extensions = new HashSet<>();
 
         operations.operation_type operationType = new operations.operation_type();  //2

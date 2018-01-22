@@ -7,6 +7,15 @@ import okhttp3.Callback;
 
 
 public class UserInfoHttp extends C2CHttp {
+
+    public void updateUserInfo(String dealerId,String userInfo,Callback callback) {
+        String action="/userInfo/updateUserInfo";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("dealerId",dealerId);
+        paramMap.put("userInfo",userInfo);
+        post(action,paramMap,callback);
+    }
+
     /**
      * 查询承兑商信息
      * @param dealerId

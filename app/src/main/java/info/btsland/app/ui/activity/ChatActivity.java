@@ -85,10 +85,6 @@ public class ChatActivity extends AppCompatActivity {
                 String message=gson.toJson(chat);
                 new BtslandApplication.ReceiveChatThread(message).start();
                 Log.e(TAG, "onClick: "+message );
-                if(BtslandApplication.chatWebScoket==null||BtslandApplication.chatWebScoket.mnConnectStatus!=ChatWebScoket.SUCCESS){
-                    BtslandApplication.chatWebScoket= ChatWebScoket.createWebScoket(BtslandApplication.accountObject.name);
-                    BtslandApplication.chatWebScoket.connect();
-                }
                 BtslandApplication.chatWebScoket.sendMsg(message);
                 edText.getText().clear();
             }

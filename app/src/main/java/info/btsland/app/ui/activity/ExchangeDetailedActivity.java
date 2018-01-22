@@ -382,7 +382,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
                 }
             }
 
-            if(NoteStatCode.getTabAccount(note.getStatNo()).equals(NoteStatCode.TRANSFER)||NoteStatCode.getTabAccount(note.getStatNo()).equals(NoteStatCode.TRADING)){
+            if(NoteStatCode.getTabAccount(note.getStatNo()).equals(NoteStatCode.TRANSFER)){
                 tvCancel.setVisibility(View.VISIBLE);
                 tvCancel.setOnClickListener(new View.OnClickListener() {
                     @Override

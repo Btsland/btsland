@@ -23,6 +23,7 @@ import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.account_object;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.model.IAsset;
 import info.btsland.app.ui.fragment.HeadFragment;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.app.ui.view.PasswordDialog;
@@ -103,6 +104,30 @@ public class BorrowActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter=new ArrayAdapter<String>(BorrowActivity.this,R.layout.coin_item,R.id.tv_transfer_coinName,list);
         spType.setAdapter(adapter);
         spType.setSelection(0);
+        String coin = (String) spType.getItemAtPosition(0);
+        tvBalancCoin.setText(coin);
+        synchronized (BtslandApplication.iAssets) {
+            if(BtslandApplication.iAssets!=null){
+                int a=0;
+                for (int i = 0; i < BtslandApplication.iAssets.size(); i++) {
+                    IAsset iAsset = BtslandApplication.iAssets.get(i);
+                    if (iAsset.coinName.equals(coin)) {
+                        tvBalancNum.setText(String.valueOf(iAsset.total));
+                        a++;
+                        if(a==2){
+                            break;
+                        }
+                    }
+                    if (iAsset.coinName.equals("BTS")) {
+                        a++;
+                        tvBTSBalance.setText(String.valueOf(iAsset.total));
+                        if(a==2){
+                            break;
+                        }
+                    }
+                }
+            }
+        }
         edNum1.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

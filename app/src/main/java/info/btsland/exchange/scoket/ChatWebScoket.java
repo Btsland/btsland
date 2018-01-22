@@ -20,7 +20,7 @@ public class ChatWebScoket extends WebSocketClient {
     public static int SUCCESS=1;
     public static int CLOSED=2;
     public static int ERROR=3;
-    private String TAG="ChatWebScoket";
+    private static String TAG="ChatWebScoket";
     private boolean isShop=false;
 
     private ChatOnMessageListener chatOnMessageListener;
@@ -30,6 +30,7 @@ public class ChatWebScoket extends WebSocketClient {
     }
 
     public static ChatWebScoket createWebScoket(String name){
+        Log.e(TAG, "createWebScoket: " );
         String url="ws://"+ BtslandApplication.ipServer+":8080/ws/";
         URI uri=URI.create(url+name);
         ChatWebScoket chatWebScoket=new ChatWebScoket(uri);
@@ -41,8 +42,9 @@ public class ChatWebScoket extends WebSocketClient {
     }
 
     public void sendMsg(String text) throws NotYetConnectedException {
-        //write a message
         send(text);
+        //write a message
+
     }
 
     @Override

@@ -25,6 +25,7 @@ import info.btsland.app.R;
 import info.btsland.app.ui.activity.C2CExchangeActivity;
 import info.btsland.app.ui.view.AppDialog;
 import info.btsland.exchange.entity.User;
+import info.btsland.exchange.utils.UserStatCode;
 
 public class DealerListFragment extends Fragment {
     private static String TAG="DealerListFragment";
@@ -120,11 +121,18 @@ public class DealerListFragment extends Fragment {
             appDialog.setMsg("您未登录，请先登录！");
             appDialog.show();
         }else {
-            if(type==IN){
-                C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name,dealerData.usableCNY, type, dealerData.user.getDealerId());
-            }else if(type==OUT) {
-                C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name,dealerData.user.getUpperLimitOut()-dealerData.user.userRecord.getOutHavingCount(), type, dealerData.user.getDealerId());
+            if(dealerData.user.getStat()!= UserStatCode.ONLINE){
+                AppDialog appDialog=new AppDialog(getActivity());
+                appDialog.setMsg("该承兑商不处于在线状态，请选择其他承兑商，谢谢合作！");
+                appDialog.show();
+            }else {
+                if (type == IN) {
+                    C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name, dealerData.usableCNY, type, dealerData.user.getDealerId());
+                } else if (type == OUT) {
+                    C2CExchangeActivity.startAction(getActivity(), BtslandApplication.accountObject.name, dealerData.user.getUpperLimitOut() - dealerData.user.userRecord.getOutHavingCount(), type, dealerData.user.getDealerId());
+                }
             }
+
 
         }
     }

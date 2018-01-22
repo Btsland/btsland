@@ -99,13 +99,15 @@
             android:name=".ui.activity.CourseActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".ui.activity.AboutActivity" />
-        <activity android:name=".ui.activity.RingActivity"></activity>
+        <activity android:name=".ui.activity.RingActivity" />
 
         <service android:name=".service.ExchangeService">
             <intent-filter>
                 <action android:name=".service.ExchangeService" />
             </intent-filter>
         </service>
+
+        <activity android:name=".ui.activity.UserPhoneActivity"></activity>
     </application>
 
 </manifest>

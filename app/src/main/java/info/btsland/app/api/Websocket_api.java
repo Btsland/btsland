@@ -203,7 +203,7 @@ public class Websocket_api extends WebSocketListener {
             @Override
             public X509Certificate[] getAcceptedIssuers() {
                 X509Certificate[] x509Certificates = new X509Certificate[0];
-                return x509Certificates;
+                return null;
             }
 
             @Override

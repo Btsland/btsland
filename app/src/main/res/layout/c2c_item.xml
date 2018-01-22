@@ -245,7 +245,7 @@
             android:id="@+id/tv_c2c_item_time"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
-            android:text="平均完成时间："
+            android:text="平均响应时间："
             android:gravity="center"
             android:textSize="12sp"
             app:layout_constraintHorizontal_chainStyle="packed"

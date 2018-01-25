@@ -141,29 +141,75 @@ public class websocket_api extends WebSocketListener {
     }
 
     public void get_ticker() {
-        String db = "{\"id\":2,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
+        String db = "{\"id\":4,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
         mWebsocket.send(db);
 
-        String history = "{\"id\":7,\"method\":\"call\",\"params\":[1,\"history\",[]]}";
+        String history = "{\"id\":5,\"method\":\"call\",\"params\":[1,\"history\",[]]}";
         mWebsocket.send(history);
 
-        String network_broadcast = "{\"id\":9,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
+        String network_broadcast = "{\"id\":6,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
         mWebsocket.send(network_broadcast);
-        String wallet = "{\"id\":8,\"method\":\"call\",\"params\":[1,\"wallet\",[]]}";
-        mWebsocket.send(wallet);
+//        String wallet = "{\"id\":8,\"method\":\"call\",\"params\":[1,\"wallet\",[]]}";
+//        mWebsocket.send(wallet);
+
+        /**
+         * 查询抵押仓库
+         * {"id":8,"jsonrpc":"2.0","result":[{"id":"1.8.37194","borrower":"1.2.462840","collateral":1030560,"debt":100000,"call_price":{"base":{"amount":25764,"asset_id":"1.3.0"},"quote":{"amount":4375,"asset_id":"1.3.113"}}}]}
+         */
+        String get_margin_positions="{\"id\":8,\"method\":\"call\",\"params\":[2,\"get_margin_positions\",[\"1.2.462840\"]]}";
+        mWebsocket.send(get_margin_positions);
+        /**
+         * 查询正在清算的订单（无价格）
+         * {"id":8,"jsonrpc":"2.0","result":[{"id":"1.4.4027","owner":"1.2.632792","balance":{"amount":30000000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T14:44:39"},{"id":"1.4.4029","owner":"1.2.441098","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T15:06:39"},{"id":"1.4.4030","owner":"1.2.441098","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T15:07:48"},{"id":"1.4.4031","owner":"1.2.602013","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T22:34:12"},{"id":"1.4.4032","owner":"1.2.478809","balance":{"amount":10000000,"asset_id":"1.3.113"},"settlement_date":"2018-01-24T02:18:21"}]}
+         */
+//        String get_settle_orders="{\"id\":8,\"method\":\"call\",\"params\":[2,\"get_settle_orders\",[\"1.3.113\",\"50\"]]}";
+//        mWebsocket.send(get_settle_orders);
+        /**
+         * 查询市场行情
+         */
+//        String query = "{\"id\":9,\"method\":\"call\",\"params\":[2,\"get_ticker\",[\"CNY\",\"BTS\"]]}";
+//        mWebsocket.send(query);
+
+        /**
+         * 获得货币信息
+         */
+//        String lookup_asset_symbols="{\"id\":10,\"method\":\"call\",\"params\":[2,\"lookup_asset_symbols\",[[\"1.3.0\"]]]}";
+//        mWebsocket.send(lookup_asset_symbols);
+        /**
+         * 抵押排行榜
+         */
+        String get_call_orders="{\"id\":11,\"method\":\"call\",\"params\":[2,\"get_call_orders\",[\"1.3.113\",\"50\"]]}";
+        mWebsocket.send(get_call_orders);
+//
+//        /**
+//         * 查询买单
+//         */
+//        String get_order_book="{\"id\":12,\"method\":\"call\",\"params\":[2,\"get_order_book\",[\"CNY\",\"BTS\",\"50\"]]}";
+//        mWebsocket.send(get_order_book);
+//        /**
+//         * 获得24小时的交易量
+//         */
+//        String get_24_volume="{\"id\":13,\"method\":\"call\",\"params\":[2,\"get_24_volume\",[\"CNY\",\"BTS\"]]}";
+//        mWebsocket.send(get_24_volume);
+//        String get_bitasset_data="{\"id\":14,\"method\":\"call\",\"params\":[4,\"get_bitasset_data\"]}";
+//        mWebsocket.send(get_bitasset_data);
+//        String get_bitasset_data2="{\"id\":15,\"method\":\"call\",\"params\":[4,\"get_bitasset_data\",[[\"1.3.113\"]]]}";
+//        mWebsocket.send(get_bitasset_data2);
+//        String borrow = "{\"id\":9,\"method\":\"call\",\"params\":[3,\"borrow_asset\",[\"1.2.462840\",\"10000\",\"1.3.121\",\"100000\",\"true\"]]}";
+//        mWebsocket.send(borrow);
 
 //        String query9="{\"id\":111111,\"method\":\"call\",\"params\":[1,\"get_account_balances\",[\"li-88888\"]]}";
 //        mWebsocket.send(query9);
 
-        String query20="{\"id\":666,\"method\":\"call\",\"params\":[2,\"get_proposed_transactions\",\"1.2.461356\"]}";
-        mWebsocket.send(query20);
+//        String query20="{\"id\":666,\"method\":\"call\",\"params\":[2,\"get_proposed_transactions\",\"1.2.461356\"]}";
+//        mWebsocket.send(query20);
 
 //        String query6 = "{\"id\":10,\"method\":\"call\",\"params\":[2,\"get_account_by_name\",[\"li-8888\"]]}";
 //        mWebsocket.send(query6);
 
 
-  /*      String query7 = "{\"id\":11,\"method\":\"call\",\"params\":[2,\"verify_account_authority\",[\"li-8888\",\"\"]]}";
-        mWebsocket.send(query7);*/
+//        String query7 = "{\"id\":11,\"method\":\"call\",\"params\":[2,\"verify_account_authority\",[\"li-8888\",\"\"]]}";
+//        mWebsocket.send(query7);
 
 
 //        String query2 = "{\"id\":52,\"method\":\"call\",\"params\":[3,\"get_market_history\",[\"CNY\",\"BTS\",300,\"Nov 2, 2017 12:54:23 AM\",\"Nov 3, 2017 5:34:23 PM\"]]}";

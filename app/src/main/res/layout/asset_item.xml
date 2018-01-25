@@ -1,200 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="125dp"
-    >
+    android:orientation="vertical"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:background="@color/color_white">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/tv_asset_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="CNY"
+            android:textColor="@color/black"
+            android:gravity="center" />
+        <TextView
+            android:id="@+id/tv_convert_num"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:text=""
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:gravity="center|right"
+            android:layout_marginRight="5dp"/>
+        <TextView
+            android:id="@+id/tv_convert_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textSize="16sp"
+            android:text="CNY"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_all_asset"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="总额："
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/tv_asset_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="0.0000"
+                    android:maxLines="1"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_usable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="可用："
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/tv_usable_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="0.0000"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-<TextView
-    android:id="@+id/view"
-    android:layout_width="match_parent"
-    android:layout_height="125dp"
-    android:background="#99ffffff"
-    android:layout_marginLeft="5dp"
-    android:layout_marginRight="5dp"
-    android:layout_marginBottom="3dp"
-    android:layout_marginTop="3dp"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintLeft_toLeftOf="parent"
-    app:layout_constraintRight_toRightOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent"/>
- <TextView
-     android:id="@+id/tv_asset_coin"
-     android:layout_width="0dp"
-     android:layout_height="40dp"
-     android:textSize="20sp"
-     android:textStyle="bold"
-     android:textColor="@color/black"
-     android:gravity="center"
-     app:layout_constraintTop_toTopOf="@+id/view"
-     app:layout_constraintLeft_toLeftOf="@+id/view"
-     app:layout_constraintRight_toRightOf="@+id/view"
-    />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_orders"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:text="挂单："
+                    android:textSize="16sp"
+                    android:gravity="center"
+                    />
+                <TextView
+                    android:id="@+id/tv_orders_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="0.0000"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"/>
+            </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:gravity="center">
+                <TextView
+                    android:id="@+id/tv_borrow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="抵押："
+                    android:textSize="16sp"/>
+                <TextView
+                    android:id="@+id/tv_borrow_num"
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:gravity="center"
+                    android:text="0.0000"
+                    android:textColor="@color/black"
+                    android:textSize="16sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 
-    <TextView
-        android:id="@+id/tv_all_asset"
-        android:layout_width="0dp"
-        android:layout_height="23dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="center"
-        android:text="@string/str_asset"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toLeftOf="@+id/view"
-        app:layout_constraintRight_toLeftOf="@+id/tv_asset_num"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
-        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_transfer"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:text="@string/str_transfer"
+            android:gravity="center"
+            android:textColor="@color/color_table_blue"
+            android:textSize="16dp"/>
 
-  <TextView
-      android:id="@+id/tv_asset_num"
-      android:layout_width="0dp"
-      android:layout_height="20dp"
-      android:gravity="center"
-      android:text="0.0000"
-      android:textColor="@color/black"
-      android:textSize="16sp"
-      app:layout_constraintLeft_toRightOf="@+id/tv_all_asset"
-      app:layout_constraintRight_toRightOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
-
-      />
-<!--
-
-    <TextView
-        android:id="@+id/tv_borrow"
-        android:layout_width="82dp"
-        android:layout_height="21dp"
-        android:gravity="right"
-        android:text=""
-        android:textColor="@color/color_table_blue"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@+id/tv_asset_num"
-        app:layout_constraintRight_toRightOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_coin"
-        />
--->
-
-
-
-    <TextView
-        android:id="@+id/tv_orders"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:text="@string/str_order"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        app:layout_constraintTop_toBottomOf="@+id/tv_all_asset"
-        app:layout_constraintLeft_toLeftOf="@+id/view"
-        app:layout_constraintRight_toLeftOf="@+id/tv_orders_num"
-        android:layout_marginLeft="10dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_orders_num"
-        android:layout_width="0dp"
-        android:layout_height="24dp"
-        android:gravity="center"
-        android:text="0.0000"
-        android:textColor="@color/black"
-        android:textSize="16sp"
-        app:layout_constraintLeft_toRightOf="@+id/tv_orders"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_asset_num"
-        />
-
-   <!-- <TextView
-        android:id="@+id/tv_orders_handle"
-        android:layout_width="80dp"
-        android:layout_height="20dp"
-        android:text=""
-        android:textSize="16sp"
-        android:textColor="@color/color_table_blue"
-        android:gravity="right"
-        app:layout_constraintTop_toBottomOf="@+id/tv_all_asset"
-        app:layout_constraintLeft_toRightOf="@+id/tv_orders_num"
-        app:layout_constraintRight_toRightOf="@+id/view"
-
-        />-->
-
-
-    <!--<TextView
-        android:id="@+id/tv_usable_asset"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:layout_marginLeft="10dp"
-        android:text="@string/str_usable"
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toLeftOf="@+id/view"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders"
-        app:layout_constraintRight_toLeftOf="@+id/tv_usable_asset_num"
-        />-->
-
-   <!-- <TextView
-        android:id="@+id/tv_usable_asset_num"
-        android:layout_width="0dp"
-        android:layout_height="20dp"
-        android:gravity="right"
-        android:text="0.0000"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        app:layout_constraintLeft_toRightOf="@+id/tv_usable_asset"
-        app:layout_constraintRight_toLeftOf="@+id/tv_recharge_withdrawals"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders_num"
-        />
--->
-    <!--<TextView
-        android:id="@+id/tv_recharge_withdrawals"
-        android:layout_width="80dp"
-        android:layout_height="20dp"
-        android:text=""
-        android:textSize="16sp"
-        android:gravity="center"
-        android:textColor="@color/color_table_blue"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders"
-        app:layout_constraintLeft_toRightOf="@+id/tv_usable_asset_num"
-        app:layout_constraintRight_toRightOf="@+id/view"
-        />
--->
-
-
-
-
-
-
-
-    <TextView
-        android:id="@+id/tv_transfer"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:text="@string/str_transfer"
-        android:gravity="center"
-        android:textColor="@color/color_table_blue"
-        android:textSize="16dp"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders"
-        app:layout_constraintLeft_toLeftOf="@+id/view"
-        app:layout_constraintRight_toLeftOf="@+id/tv_transaction"
-        android:layout_marginLeft="10dp"
-        />
-
-    <TextView
-        android:id="@+id/tv_transaction"
-        android:layout_width="0dp"
-        android:layout_height="35dp"
-        android:text="@string/str_transaction"
-        android:gravity="center"
-        android:textSize="16dp"
-        android:textColor="@color/color_table_blue"
-        app:layout_constraintTop_toBottomOf="@+id/tv_orders_num"
-        app:layout_constraintLeft_toRightOf="@+id/tv_transfer"
-        app:layout_constraintRight_toRightOf="@+id/view"
-
-        />
+        <TextView
+            android:id="@+id/tv_transaction"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="35dp"
+            android:text="@string/str_transaction"
+            android:gravity="center"
+            android:textColor="@color/color_green"
+            android:textSize="16dp"/>
+    </LinearLayout>
 
 
 
@@ -206,4 +186,14 @@
 
 
 
-</android.support.constraint.ConstraintLayout>
+
+
+
+
+
+
+
+
+
+
+</LinearLayout>

@@ -12,14 +12,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="85dp">
-        <WebView
-            android:id="@+id/wb_chat_item_pho_left"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            app:layout_constraintTop_toBottomOf="@id/tv_chat_item_level_left"
-            app:layout_constraintLeft_toLeftOf="parent"
-            tools:ignore="WebViewLayout">
-        </WebView>
         <TextView
             android:id="@+id/tv_chat_item_level_left"
             android:layout_width="40dp"
@@ -29,6 +21,15 @@
             app:layout_constraintRight_toRightOf="@+id/wb_chat_item_pho_left"
             app:layout_constraintLeft_toLeftOf="@+id/wb_chat_item_pho_left"
             app:layout_constraintBottom_toTopOf="@+id/wb_chat_item_pho_left"/>
+        <WebView
+            android:id="@+id/wb_chat_item_pho_left"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_chat_item_level_left"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:ignore="WebViewLayout">
+        </WebView>
+
         <TextView
             android:id="@+id/tv_chat_item_account_left"
             android:layout_width="wrap_content"

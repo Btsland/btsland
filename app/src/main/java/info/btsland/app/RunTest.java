@@ -18,8 +18,10 @@ public class RunTest {
 //        websocket_api wsapi =new websocket_api("wss://bitshares.dacplay.org/ws");
 //        wsapi.connect();
 //        wsapi.get_ticker();
-            websocket_api websocket_api=new websocket_api("wss://bitshares.dacplay.org/ws");
+            websocket_api websocket_api=new websocket_api("wss://bit.btsabc.org/ws");
+            System.out.print("connect");
             websocket_api.connect();
+            System.out.print("get_ticker");
             websocket_api.get_ticker();
 
     }

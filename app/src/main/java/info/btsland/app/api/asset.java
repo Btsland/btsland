@@ -4,7 +4,7 @@ package info.btsland.app.api;
 import java.math.BigInteger;
 
 
-public class asset {
+public class asset implements Cloneable {
     public long amount=0;
     public object_id<asset_object> asset_id;
 
@@ -14,6 +14,11 @@ public class asset {
     public asset(long lAmount, object_id<asset_object> assetObjectobjectId) {
         amount = lAmount;
         asset_id = assetObjectobjectId;
+    }
+
+    @Override
+    public asset clone() throws CloneNotSupportedException {
+        return (asset) super.clone();
     }
 
     public asset multipy(price priceObject) {

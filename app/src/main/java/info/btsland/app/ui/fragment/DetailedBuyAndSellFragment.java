@@ -201,8 +201,8 @@ public class DetailedBuyAndSellFragment extends Fragment
         return str;
     }
     private void fillInBtnNum(){
-        tvBuyHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.base)));
-        tvSellHintNum.setText(num(BtslandApplication.getAssetTotalByName(MarketDetailedActivity.market.quote)));
+        tvBuyHintNum.setText(num(BtslandApplication.getAssetUsableByName(MarketDetailedActivity.market.base)));
+        tvSellHintNum.setText(num(BtslandApplication.getAssetUsableByName(MarketDetailedActivity.market.quote)));
     }
     private void fillIn(){
         fillInBtnNum();

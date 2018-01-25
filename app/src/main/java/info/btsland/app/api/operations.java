@@ -28,7 +28,7 @@ public class operations {
     public static final int ID_UPDATE_LMMIT_ORDER_OPERATION = 3;//更新交易
     public static final int ID_FILL_LMMIT_ORDER_OPERATION = 4;//撮合
     public static final int ID_CREATE_ACCOUNT_OPERATION = 5;//创建用户borrow_asset
-    public static final int ID_CREATE_BORROW_ASSET_OPERATION=6;
+//    public static final int ID_CREATE_BORROW_ASSET_OPERATION=6;
 
     public static operation_id_map operations_map = new operation_id_map();
     public static class operation_id_map {
@@ -43,7 +43,7 @@ public class operations {
             mHashId2Operation.put(ID_FILL_LMMIT_ORDER_OPERATION, fill_order_operation.class);
             mHashId2Operation.put(ID_CREATE_ACCOUNT_OPERATION, account_create_operation.class);
 
-            mHashId2Operation.put(ID_CREATE_BORROW_ASSET_OPERATION, borrow_asset_operation.class);
+//            mHashId2Operation.put(ID_CREATE_BORROW_ASSET_OPERATION, call_order_update_operation.class);
 
             mHashId2OperationFee.put(ID_TRANSER_OPERATION, transfer_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_CREATE_LIMIT_ORDER_OPERATION, limit_order_create_operation.fee_parameters_type.class);
@@ -52,7 +52,7 @@ public class operations {
             mHashId2OperationFee.put(ID_FILL_LMMIT_ORDER_OPERATION, fill_order_operation.fee_parameters_type.class);
             mHashId2OperationFee.put(ID_CREATE_ACCOUNT_OPERATION, account_create_operation.fee_parameters_type.class);
 
-            mHashId2OperationFee.put(ID_CREATE_BORROW_ASSET_OPERATION, borrow_asset_operation.fee_parameters_type.class);
+//            mHashId2OperationFee.put(ID_CREATE_BORROW_ASSET_OPERATION, call_order_update_operation.fee_parameters_type.class);
         }
 
         public Type getOperationObjectById(int nId) {
@@ -452,80 +452,80 @@ public class operations {
                     '}';
         }
     }
-
-    public static class call_order_update_operation implements base_operation {
-        /** this is slightly more expensive than limit orders, this pricing impacts prediction markets */
-        class fee_parameters_type {
-            long fee = 20 * GRAPHENE_BLOCKCHAIN_PRECISION;
-        };
-
-        asset                     fee;
-        object_id<account_object> funding_account; ///< pays fee, collateral, and cover
-        asset                     delta_collateral; ///< the amount of collateral to add to the margin position
-        asset                     delta_debt; ///< the amount of the debt to be paid off, may be negative to issue new debt
-        Set<types.void_t>         extensions;
-
-        @Override
-        public List<authority> get_required_authorities() {
-            return null;
-        }
-
-        @Override
-        public List<object_id<account_object>> get_required_active_authorities() {
-            return null;
-        }
-
-        @Override
-        public List<object_id<account_object>> get_required_owner_authorities() {
-            return null;
-        }
-
-        @Override
-        public void write_to_encoder(base_encoder baseEncoder) {
-
-        }
-
-        @Override
-        public long calculate_fee(Object objectFeeParameter) {
-            return 0;
-        }
-
-        @Override
-        public void set_fee(asset fee) {
-
-        }
-
-        @Override
-        public object_id<account_object> fee_payer() {
-            return funding_account;
-        }
-
-        @Override
-        public List<object_id<account_object>> get_account_id_list() {
-            List<object_id<account_object>> listAccountId = new ArrayList<>();
-            listAccountId.add(funding_account);
-            return listAccountId;
-        }
-
-        @Override
-        public List<object_id<asset_object>> get_asset_id_list() {
-            List<object_id<asset_object>> listAssetId = new ArrayList<>();
-            listAssetId.add(delta_collateral.asset_id);
-            listAssetId.add(delta_debt.asset_id);
-            return listAssetId;
-        }
-
-        @Override
-        public String toString() {
-            return "call_order_update_operation{" +
-                    "fee=" + fee +
-                    ", funding_account=" + funding_account +
-                    ", delta_collateral=" + delta_collateral +
-                    ", delta_debt=" + delta_debt +
-                    ", extensions=" + extensions +
-                    '}';
-        }
-    }
+//
+//    public static class call_order_update_operation implements base_operation {
+//        /** this is slightly more expensive than limit orders, this pricing impacts prediction markets */
+//        class fee_parameters_type {
+//            long fee = 20 * GRAPHENE_BLOCKCHAIN_PRECISION;
+//        };
+//
+//        asset                     fee;
+//        object_id<account_object> funding_account; ///< pays fee, collateral, and cover
+//        asset                     delta_collateral; ///< the amount of collateral to add to the margin position
+//        asset                     delta_debt; ///< the amount of the debt to be paid off, may be negative to issue new debt
+//        Set<types.void_t>         extensions;
+//
+//        @Override
+//        public List<authority> get_required_authorities() {
+//            return null;
+//        }
+//
+//        @Override
+//        public List<object_id<account_object>> get_required_active_authorities() {
+//            return null;
+//        }
+//
+//        @Override
+//        public List<object_id<account_object>> get_required_owner_authorities() {
+//            return null;
+//        }
+//
+//        @Override
+//        public void write_to_encoder(base_encoder baseEncoder) {
+//
+//        }
+//
+//        @Override
+//        public long calculate_fee(Object objectFeeParameter) {
+//            return 0;
+//        }
+//
+//        @Override
+//        public void set_fee(asset fee) {
+//
+//        }
+//
+//        @Override
+//        public object_id<account_object> fee_payer() {
+//            return funding_account;
+//        }
+//
+//        @Override
+//        public List<object_id<account_object>> get_account_id_list() {
+//            List<object_id<account_object>> listAccountId = new ArrayList<>();
+//            listAccountId.add(funding_account);
+//            return listAccountId;
+//        }
+//
+//        @Override
+//        public List<object_id<asset_object>> get_asset_id_list() {
+//            List<object_id<asset_object>> listAssetId = new ArrayList<>();
+//            listAssetId.add(delta_collateral.asset_id);
+//            listAssetId.add(delta_debt.asset_id);
+//            return listAssetId;
+//        }
+//
+//        @Override
+//        public String toString() {
+//            return "call_order_update_operation{" +
+//                    "fee=" + fee +
+//                    ", funding_account=" + funding_account +
+//                    ", delta_collateral=" + delta_collateral +
+//                    ", delta_debt=" + delta_debt +
+//                    ", extensions=" + extensions +
+//                    '}';
+//        }
+//    }
 
     public static class fill_order_operation implements base_operation {
         class fee_parameters_type {
@@ -693,15 +693,10 @@ public class operations {
                     '}';
         }
     }
-    public static class borrow_asset_operation implements base_operation{
+    public static class call_order_update_operation implements base_operation{
             class fee_parameters_type {
-                long fee       = 0;
+                long fee = 20 * GRAPHENE_BLOCKCHAIN_PRECISION;
             }
-            //        String borrower_name;
-//        String amount_to_borrow;
-//        String asset_symbol;
-//        String amount_of_collateral;
-//        String broadcast;
             public asset fee;
             public object_id<account_object> funding_account;
             public asset delta_debt;
@@ -732,16 +727,18 @@ public class operations {
             baseEncoder.write(rawObject.get_byte_array(fee.amount));
             rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(fee.asset_id.get_instance()));
 
-            // borrower_name
+            // funding_account
             rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(funding_account.get_instance()));
 
-            // amount_to_borrow
+            // delta_debt
             baseEncoder.write(rawObject.get_byte_array(delta_debt.amount));
             rawObject.pack(baseEncoder,
                     UnsignedInteger.fromIntBits(delta_debt.asset_id.get_instance()));
 
-            // amount_of_collateral
+            // delta_collateral
             baseEncoder.write(rawObject.get_byte_array(delta_collateral.amount));
+            rawObject.pack(baseEncoder,
+                    UnsignedInteger.fromIntBits(delta_collateral.asset_id.get_instance()));
 
             // extensions
             rawObject.pack(baseEncoder, UnsignedInteger.fromIntBits(extensions.size()));
@@ -749,8 +746,8 @@ public class operations {
 
         @Override
         public long calculate_fee(Object objectFeeParameter) {
-            assert(borrow_asset_operation.fee_parameters_type.class.isInstance(objectFeeParameter));
-            borrow_asset_operation.fee_parameters_type feeParametersType = (borrow_asset_operation.fee_parameters_type)objectFeeParameter;
+            assert(call_order_update_operation.fee_parameters_type.class.isInstance(objectFeeParameter));
+            call_order_update_operation.fee_parameters_type feeParametersType = (call_order_update_operation.fee_parameters_type)objectFeeParameter;
             return feeParametersType.fee;
         }
 
@@ -773,7 +770,20 @@ public class operations {
         @Override
         public List<object_id<asset_object>> get_asset_id_list() {
             List<object_id<asset_object>> listAssetId = new ArrayList<>();
+            listAssetId.add(delta_debt.asset_id);
+            listAssetId.add(delta_collateral.asset_id);
             return listAssetId;
+        }
+
+        @Override
+        public String toString() {
+            return "call_order_update_operation{" +
+                    "fee=" + fee +
+                    ", funding_account=" + funding_account +
+                    ", delta_debt=" + delta_debt +
+                    ", delta_collateral=" + delta_collateral +
+                    ", extensions=" + extensions +
+                    '}';
         }
     }
 }

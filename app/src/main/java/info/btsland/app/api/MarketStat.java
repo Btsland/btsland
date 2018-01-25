@@ -20,11 +20,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.model.Borrow;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.util.AssetUtil;
 import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.KeyUtil;
 
@@ -43,6 +45,7 @@ public class MarketStat {
     public static final int STAT_MARKET_ALL = 0xffff;
     public static final int STAT_TICKERS_BASE = 0x10;
     public static final int STAT_ACCENTS = 1;
+    public static final int STAT_BORROW=2;
     public Websocket_api mWebsocketApi=new Websocket_api();
 
     public HashMap<String, Subscription> subscriptionHashMap = new HashMap<>();
@@ -98,6 +101,13 @@ public class MarketStat {
                 new Subscription(base, quote, bucketSize, ago,stats ,intervalMillis, l,handler);
         subscriptionHashMap.put(makeMarketName(base, quote,stats), subscription);
     }
+    public void subscribe(String base, int stats,long intervalMillis,
+                          OnMarketStatUpdateListener l) {
+        unsubscribe(base,stats);
+        Subscription subscription =
+                new Subscription(base,stats ,intervalMillis, l);
+        subscriptionHashMap.put(makeMarketName(base, "",stats), subscription);
+    }
     /*public void subscribe(List<String> name,String pwd, int stats,
                            OnMarketStatUpdateListener l) {
         //Log.e(TAG, "subscribe: name:"+name.get(0) );
@@ -122,6 +132,15 @@ public class MarketStat {
 
     public void unsubscribe(String base, String quote,int stats) {
         String market = makeMarketName(base, quote,stats);
+        Subscription subscription = subscriptionHashMap.get(market);
+        if (subscription != null) {
+            subscriptionHashMap.remove(market);
+            subscription.cancel();
+            subscription.close();
+        }
+    }
+    public void unsubscribe(String base,int stats) {
+        String market = makeMarketName(base, "",stats);
         Subscription subscription = subscriptionHashMap.get(market);
         if (subscription != null) {
             subscriptionHashMap.remove(market);
@@ -201,18 +220,23 @@ public class MarketStat {
         public MarketTicker MarketTicker;
         public account_object account_object;
         public int nRet;
+        public List<Borrow> borrows;
 
         @Override
         public String toString() {
             return "Stat{" +
-                    "prices=" + prices +
+                    "bucket=" + bucket +
+                    ", ago=" + ago +
+                    ", prices=" + prices +
                     ", ticker=" + ticker +
                     ", latestTradeDate=" + latestTradeDate +
                     ", orderBook=" + orderBook +
                     ", openOrders=" + openOrders +
                     ", MarketTickers=" + MarketTickers +
                     ", MarketTicker=" + MarketTicker +
+                    ", account_object=" + account_object +
                     ", nRet=" + nRet +
+                    ", borrows=" + borrows +
                     '}';
         }
     }
@@ -468,6 +492,15 @@ public class MarketStat {
                         e.printStackTrace();
                     }
                 }
+                if(stats==STAT_BORROW){
+                    try {
+                        this.baseAsset=mWebsocketApi.lookup_asset_symbols(base);
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                    List<Borrow> borrows = getBorrows(baseAsset.id);
+                    stat.borrows=borrows;
+                }
                 if ((stats & STAT_MARKET_ORDER_BOOK) != 0) {
 
                     stat.orderBook = getOrderBook();
@@ -605,7 +638,29 @@ public class MarketStat {
                 return null;
             }
         }
-
+        private List<Borrow> getBorrows(object_id<asset_object> id){
+            try {
+                List<call_order_object> call_order_objects = mWebsocketApi.get_call_orders(id,50);
+                List<Borrow> borrows=new ArrayList<>();
+                if(call_order_objects!=null&&call_order_objects.size()>0){
+                    List<object_id<account_object>> ids=new ArrayList<>();
+                    for (int i=0;i<call_order_objects.size();i++){
+                        call_order_object call_order_object=call_order_objects.get(i);
+                        ids.add(call_order_object.borrower);
+                        Borrow borrow=new Borrow(call_order_object);
+                        borrows.add(borrow);
+                    }
+                    List<account_object> accountObjects = mWebsocketApi.get_accounts(ids);
+                    for (int i=0;i<accountObjects.size();i++){
+                        borrows.get(i).borrower = accountObjects.get(i);
+                    }
+                }
+                return borrows;
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
 
         private HistoryPrice priceFromBucket(String base, String quote, bucket_object bucket) {
             HistoryPrice price = new HistoryPrice();

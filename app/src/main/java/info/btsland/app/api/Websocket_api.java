@@ -746,6 +746,43 @@ public class Websocket_api extends WebSocketListener {
         //Log.i(TAG, "get_ticker: "+reply.result);
         return reply.result;
     }
+    public List<call_order_object> get_call_orders(object_id<asset_object> id,int limit) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_call_orders");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(id);
+        listParams.add(limit);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<call_order_object>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<call_order_object>>>(){}.getType());
+        Reply<List<call_order_object>> reply = sendForReply(callObject, replyObject);
+        return reply.result;
+    }
+
+    public List<call_order_object> get_margin_positions(object_id<account_object> id) throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add("get_margin_positions");
+
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(id);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<call_order_object>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<call_order_object>>>(){}.getType());
+        Reply<List<call_order_object>> reply = sendForReply(callObject, replyObject);
+        return reply.result;
+    }
+
     private <T> Reply<T> sendForReply(Call callObject,
                                       ReplyObjectProcess<Reply<T>> replyObjectProcess) throws NetworkStatusException {
         //Log.i(TAG, "sendForReply: ");

@@ -25,6 +25,7 @@ import info.btsland.app.R;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.ui.activity.AccountC2CTypesActivity;
 import info.btsland.app.ui.activity.BorrowActivity;
+import info.btsland.app.ui.activity.BorrowsActivity;
 import info.btsland.app.ui.activity.ChatAccountListActivity;
 import info.btsland.app.ui.activity.LoginActivity;
 import info.btsland.app.ui.activity.LookActivity;
@@ -78,6 +79,8 @@ public class UserManageFragment extends Fragment {
     private TextView tvChat;
     //抵押
     private TextView tvBorrow;
+
+    private TextView tvBorrows;
 
     private TextView tvUserLogoff;
 
@@ -230,6 +233,8 @@ public class UserManageFragment extends Fragment {
 
         tvBorrow=view.findViewById(R.id.tv_purse_borrow);
 
+        tvBorrows=view.findViewById(R.id.tv_purse_borrows);
+
         portrait=view.findViewById(R.id.iv_user_pho);
         tvUserName=view.findViewById(R.id.tv_user_name);
         tvUserAnotherName=view.findViewById(R.id.tv_user_anotherName);
@@ -248,6 +253,7 @@ public class UserManageFragment extends Fragment {
         tvPurseTransferAccounts.setOnClickListener(onCLickListener);
         tvGoRegister.setOnClickListener(onCLickListener);
         tvBorrow.setOnClickListener(onCLickListener);
+        tvBorrows.setOnClickListener(onCLickListener);
         tvPueseTypes.setOnClickListener(onCLickListener);
         tvChat.setOnClickListener(onCLickListener);
 
@@ -443,6 +449,10 @@ public class UserManageFragment extends Fragment {
                 case R.id.tv_purse_borrow:
                     Intent iGoBorrow=new Intent(getActivity(), BorrowActivity.class);
                     getActivity().startActivity(iGoBorrow);
+                    break;
+                case R.id.tv_purse_borrows:
+                    Intent iGoBorrows=new Intent(getActivity(), BorrowsActivity.class);
+                    getActivity().startActivity(iGoBorrows);
                     break;
             }
         }

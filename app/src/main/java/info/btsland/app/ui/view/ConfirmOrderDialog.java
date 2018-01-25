@@ -116,7 +116,7 @@ public class ConfirmOrderDialog {
         if(confirmOrderData.want.equals(ConfirmOrderData.BUY)){
             tvWant.setText("买入");
             want=ConfirmOrderData.BUY;
-            if(NumericUtil.parseDouble(confirmOrderData.totalNum)<BtslandApplication.getAssetTotalByName(confirmOrderData.totalCoin)){
+            if(NumericUtil.parseDouble(confirmOrderData.totalNum)<BtslandApplication.getAssetUsableByName(confirmOrderData.totalCoin)){
                 setPoint("余额充足！",true);
                 isOK=true;
             }else {
@@ -126,7 +126,7 @@ public class ConfirmOrderDialog {
         }else if(confirmOrderData.want.equals(ConfirmOrderData.SELL)){
             want=ConfirmOrderData.SELL;
             tvWant.setText("卖出");
-            if(NumericUtil.parseDouble(confirmOrderData.volNum)<BtslandApplication.getAssetTotalByName(confirmOrderData.quoteCoin)){
+            if(NumericUtil.parseDouble(confirmOrderData.volNum)<BtslandApplication.getAssetUsableByName(confirmOrderData.quoteCoin)){
                 setPoint("余额充足！",true);
                 isOK=true;
             }else {

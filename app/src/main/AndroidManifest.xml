@@ -107,7 +107,8 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".ui.activity.UserPhoneActivity"></activity>
+        <activity android:name=".ui.activity.UserPhoneActivity" />
+        <activity android:name=".ui.activity.BorrowsActivity"></activity>
     </application>
 
 </manifest>

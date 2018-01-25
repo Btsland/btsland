@@ -42,12 +42,16 @@ import info.btsland.app.api.Websocket_api;
 import info.btsland.app.api.account_object;
 import info.btsland.app.api.asset;
 import info.btsland.app.api.asset_object;
+import info.btsland.app.api.call_order_object;
 import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.model.Borrow;
 import info.btsland.app.model.IAsset;
 import info.btsland.app.model.MarketTicker;
+import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.OrderBook;
 import info.btsland.app.ui.activity.AccountC2CTypesActivity;
+import info.btsland.app.ui.activity.BorrowsActivity;
 import info.btsland.app.ui.activity.ChatAccountListActivity;
 import info.btsland.app.ui.activity.ChatActivity;
 import info.btsland.app.ui.activity.MainActivity;
@@ -112,8 +116,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static Map<String,User> helpUserMap=new LinkedHashMap<>();
     public static Map<String,HelpQueryDealer> helpQueryThreadMap=new LinkedHashMap<>();
-    public static List<IAsset> iAssets=new ArrayList<>();
-    public static List<asset> assets=new ArrayList<>();
+    public static List<IAsset> iAssets=new ArrayList<>();//我的资产
+    public static List<IAsset> iAssetsClone=new ArrayList<>();
+    public static List<asset> assets=new ArrayList<>();//我的资产
+    public static List<Borrow> Iborrows=new ArrayList<>();//我的抵押仓库list
+    public static Map<object_id<asset_object>,Borrow> borrowMap=new LinkedHashMap<>();//我的抵押仓库map
+    public static List<OpenOrder> openOrders=new ArrayList<>();//我的挂单
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
 
@@ -126,6 +134,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static Map<String,OrderBook> orderBookMap=new LinkedHashMap<>();
 
     public static Map<String,Map<String,MarketTicker>> marketMap=new LinkedHashMap<>();
+    public static List<Borrow> borrows=new ArrayList<>();
 
 
     public static List<asset_object> allAsset=new ArrayList<>();
@@ -210,7 +219,17 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static BtslandApplication getListener() {
         return application;
     }
-
+    static class QueryOpenOrdersListener implements MarketStat.OnMarketStatUpdateListener{
+        @Override
+        public void onMarketStatUpdate(MarketStat.Stat stat) {
+            if(stat.openOrders!=null&&stat.openOrders.size()>0){
+                synchronized (openOrders) {
+                    openOrders.clear();
+                    openOrders.addAll(stat.openOrders);
+                }
+            }
+        }
+    }
     @Override
     public void onCreate() {
         super.onCreate();
@@ -225,7 +244,24 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         dialogReceiver=new DialogReceiver();
         LocalBroadcastManager.getInstance(getInstance()).registerReceiver(dialogReceiver,dialogFilter);
         ConnectThread();
-
+    }
+    class QueryBorrows extends Thread{
+        @Override
+        public void run() {
+            getMarketStat().subscribe("CNY",MarketStat.STAT_BORROW,10000,new BorrowsListener());
+        }
+    }
+    class BorrowsListener implements MarketStat.OnMarketStatUpdateListener{
+        @Override
+        public void onMarketStatUpdate(MarketStat.Stat stat) {
+            if(stat.borrows!=null){
+                synchronized (borrows) {
+                    borrows.clear();
+                    borrows.addAll(stat.borrows);
+                }
+                BorrowsActivity.sendBroadcast(getInstance());
+            }
+        }
     }
     public static void playChatRing(String account){
         if(account.equals(chatAccount)){
@@ -788,14 +824,15 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             queryAccount(account,handler);
             isQueryAount=true;
         }
+        new QueryBorrows().start();
 
     }
-    public static Double getAssetTotalByName(String name){
+    public static Double getAssetUsableByName(String name){
         if (iAssets != null) {
             synchronized (iAssets) {
                 for (int i = 0; i < iAssets.size(); i++) {
                     if (iAssets.get(i).coinName.equals(name)) {
-                        return iAssets.get(i).total;
+                        return iAssets.get(i).usable;
                     }
                 }
             }
@@ -1123,70 +1160,100 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 Double totalBTS=0.0;
                 try {
                     assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
+                    List<call_order_object> orderObjects=getMarketStat().mWebsocketApi.get_margin_positions(accountObject.id);
+                    Iborrows.clear();
+                    borrowMap.clear();
+                    synchronized (orderObjects) {
+                        if (orderObjects != null) {
+                            for (int i = 0; i < orderObjects.size(); i++) {
+                                Borrow borrow = new Borrow(orderObjects.get(i));
+                                borrow.borrower = accountObject;
+                                Iborrows.add(borrow);
+                                borrowMap.put(borrow.call_price.quote.asset_id, borrow);
+                            }
+                        }
+                    }
                     synchronized (iAssets) {
                         iAssets.clear();
-                        if (assets == null || assets.size() == 0) {
-                            iAssets.add(new IAsset(chargeUnit));
-                        } else {
-                            for (int i = 0; i < assets.size(); i++) {
-                                IAsset asset = new IAsset(assets.get(i));
-                                if (asset != null) {
-                                    if (asset.coinName != null && asset.coinName.equals("CNY")) {
-                                        if (asset != null) {
-                                            asset.totalCNY = asset.total;
-                                        } else {
-                                            asset.totalCNY = 0.0;
-                                        }
+                        for (int i = 0; i < assets.size(); i++) {
+                            IAsset asset = new IAsset(assets.get(i));
+                            if (asset != null) {
+                                //CNY计价方式
+                                if (asset.coinName != null && asset.coinName.equals("CNY")) {
+                                    //如果资产名称为CNY则直接计算总额
+                                    if (asset != null) {
+                                        asset.totalCNY = asset.total-asset.borrow;
                                     } else {
-                                        try {
-                                            MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("CNY", asset.coinName);
-                                            if (ticker == null) {
-                                                continue;
-                                            }
-                                            Double price = NumericUtil.parseDouble(ticker.latest);
-                                            if (price != null) {
-                                                asset.totalCNY = asset.total * price;
-
-                                            }
-                                        } catch (NetworkStatusException e) {
-                                            e.printStackTrace();
-                                        }
+                                        asset.totalCNY = 0.0;
                                     }
-                                    if (asset.coinName != null && asset.coinName.equals("BTS")) {
-                                        if (asset != null) {
-                                            asset.totalBTS = asset.total;
-                                        } else {
-                                            asset.totalBTS = 0.0;
+                                } else {
+                                    //否则需要乘以当前的市场价
+                                    try {
+                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("CNY", asset.coinName);
+                                        if (ticker == null) {
+                                            continue;
                                         }
-                                    } else {
-                                        try {
-                                            MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("BTS", asset.coinName);
-                                            if (ticker == null) {
-                                                continue;
-                                            }
-                                            Double price = NumericUtil.parseDouble(ticker.latest);
-                                            if (price != null) {
-                                                asset.totalBTS = asset.total * price;
-                                            }
-                                        } catch (NetworkStatusException e) {
-                                            e.printStackTrace();
+                                        Double price = NumericUtil.parseDouble(ticker.latest);
+                                        if (price != null) {
+                                            asset.totalCNY = asset.total* price;
                                         }
+                                    } catch (NetworkStatusException e) {
+                                        e.printStackTrace();
                                     }
-                                    iAssets.add(asset);
                                 }
-                                totalBTS += asset.totalBTS;
-                                totalCNY += asset.totalCNY;
+
+                                //BTS计价方式
+                                if (asset.coinName != null && asset.coinName.equals("BTS")) {
+                                    //如果资产名称为BTS则直接计算总额
+                                    if (asset != null) {
+                                        asset.totalBTS = asset.total;
+                                    } else {
+                                        asset.totalBTS = 0.0;
+                                    }
+                                } else {
+                                    //否则需要乘以当前的市场价
+                                    try {
+                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("BTS", asset.coinName);
+                                        if (ticker == null) {
+                                            continue;
+                                        }
+                                        Double price = NumericUtil.parseDouble(ticker.latest);
+                                        if (price != null) {
+                                            asset.totalBTS = asset.total * price;
+                                        }
+                                    } catch (NetworkStatusException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                                iAssets.add(asset);
                             }
-                            DetailedBuyAndSellFragment.sendBroadcast(getInstance());
-                            TransferActivity.sendBroadcast(getInstance());
-                            PurseAssetActivity.sendBroadcast(getInstance());
+                            totalBTS += asset.totalBTS;
+                            totalCNY += asset.totalCNY;
                         }
+                        DetailedBuyAndSellFragment.sendBroadcast(getInstance());
+                        TransferActivity.sendBroadcast(getInstance());
+                        iAssetsClone.clear();
+                        Log.e(TAG, "execute:iAssets.size: "+iAssets.size() );
+                        synchronized (iAssets) {
+                            for (int i = 0; i < iAssets.size(); i++) {
+                                try {
+                                    IAsset asset = iAssets.get(i).clone();
+                                    iAssetsClone.add(asset);
+                                } catch (CloneNotSupportedException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                        Log.e(TAG, "execute:iAssetsClone.size: "+iAssetsClone.size() );
+                        PurseAssetActivity.sendBroadcast(getInstance());
                     }
                 } catch (NetworkStatusException e) {
                     e.printStackTrace();
                 }
                 UserManageFragment.sendBroadcast(getInstance(),totalCNY,"CNY");
                 UserManageFragment.sendBroadcast(getInstance(),totalBTS,"BTS");
+                PurseAssetActivity.sendTotalBroadcast(getInstance(),totalCNY,"CNY");
+                PurseAssetActivity.sendTotalBroadcast(getInstance(),totalBTS,"BTS");
             }
         }
     }
@@ -1488,8 +1555,13 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             if(account!=null) {
                 queryAsset(account);
             }
+            queryOrders();
+
         }
     };
+    public static void queryOrders(){
+        BtslandApplication.getMarketStat().getFullAccounts(MarketStat.STAT_MARKET_OPEN_ORDER,MarketStat.DEFAULT_UPDATE_MARKE_SECS,new QueryOpenOrdersListener());
+    }
     public static boolean saveChatAccounts(){
         Gson gson=new Gson();
         String strChatAccounts=gson.toJson(chatAccounts);

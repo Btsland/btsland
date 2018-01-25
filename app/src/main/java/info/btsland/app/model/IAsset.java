@@ -15,10 +15,11 @@ import info.btsland.app.exception.NetworkStatusException;
  * 2017/11/15.
  */
 
-public class IAsset {
+public class IAsset implements Cloneable {
     public asset mAsset;
     public Double total=0.0;
     public Double usable=0.0;
+    public Double borrow=0.0;
     public Double orders=0.0;
     public String coinName;
     public Double totalCNY=0.0;
@@ -44,18 +45,14 @@ public class IAsset {
     public IAsset() {
     }
 
-//    public IAsset(asset mAsset, Double total, Double usable, Double orders, String coinName) {
-//        this.mAsset=mAsset;
-//        this.total=total;
-//        this.usable=usable;
-//        this.orders=orders;
-//        this.coinName=coinName;
-//    }
 
 
-
-
-
+    @Override
+    public IAsset clone() throws CloneNotSupportedException {
+        IAsset iAsset = (IAsset)super.clone();
+        iAsset.mAsset=mAsset.clone();
+        return iAsset;
+    }
 
     /**
      *
@@ -68,7 +65,35 @@ public class IAsset {
             if(assetObjects!=null){
                 asset_object objects = assetObjects.get(0);
                 coinName=objects.symbol;
-                total=mAsset.amount/Math.pow(10,objects.precision);
+                usable=mAsset.amount/Math.pow(10,objects.precision);//计算可用额
+                if(BtslandApplication.borrowMap!=null){
+                    if(coinName.equals("BTS")){
+                        for(int i=0;i<BtslandApplication.Iborrows.size();i++){
+                            Borrow borrow1=BtslandApplication.Iborrows.get(i);
+                            borrow+=borrow1.collateral;
+                        }
+                    }else {
+                        Borrow borrow1=BtslandApplication.borrowMap.get(mAsset.asset_id);
+                        if(borrow1!=null){
+                            if(mAsset.asset_id.equals(borrow1.call_price.quote.asset_id)){
+                                borrow=borrow1.debt;
+                            }
+                        }
+                    }
+                }
+                if(BtslandApplication.openOrders!=null){
+                    for(int i=0;i<BtslandApplication.openOrders.size();i++) {
+                        OpenOrder openOrder = BtslandApplication.openOrders.get(i);
+                        if(mAsset.asset_id.equals(openOrder.base.asset_id)){
+                            orders += openOrder.baseNum;
+                        }
+                    }
+                }
+                if(coinName.equals("BTS")){
+                    total=usable+orders+borrow;//如果该资产是BTS，那么总额为可用额加挂单额加抵押额
+                }else {
+                    total=usable+orders;//如果该资产不是BTS，那么总额为可用额加挂单额
+                }
                 return true;
             }else {
                 return false;

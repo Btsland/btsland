@@ -295,6 +295,19 @@
                         android:drawableLeft="@drawable/image_purse_backup"
                         android:drawablePadding="10dp"
                         />
+                    <TextView
+                        android:id="@+id/tv_purse_borrows"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:text="借入排行榜"
+                        android:paddingLeft="8dp"
+                        android:gravity="center_vertical"
+                        android:background="@drawable/select_row_white"
+                        android:textColor="@color/color_black"
+                        android:drawableRight="@drawable/image_arrow_right"
+                        android:drawableLeft="@drawable/image_purse_backup"
+                        android:drawablePadding="10dp"
+                        />
                 </LinearLayout>
 
 

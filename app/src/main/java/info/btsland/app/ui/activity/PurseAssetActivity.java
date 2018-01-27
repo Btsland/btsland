@@ -81,7 +81,7 @@ public class PurseAssetActivity extends AppCompatActivity {
             if(String.valueOf(total)==null){
                 tvTotal.setText("0.0");
             }else {
-                tvTotal.setText(String.valueOf(total));
+                tvTotal.setText(String.format("%.4f",total));
             }
             tvTotalCoin.setText(coin);
         }

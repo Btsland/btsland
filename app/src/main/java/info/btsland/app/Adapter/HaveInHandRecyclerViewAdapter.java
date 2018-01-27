@@ -100,8 +100,8 @@ public class HaveInHandRecyclerViewAdapter extends RecyclerView.Adapter<HaveInHa
             tvQuote.setText(String.valueOf(order.quoteNum));
             tvBaseCoin.setText(order.baseName);
             tvQuoteCoin.setText(order.quoteName);
-            tvPriceNum.setText(String.valueOf(order.price));
-            tvPriceCoin.setText(order.quoteName+"/"+order.baseName);
+            tvPriceNum.setText(String.format("%.6f",order.quoteNum/order.baseNum)+"  "+order.quoteName+"/"+order.baseName+"\n"
+                    +String.format("%.6f",order.baseNum/order.quoteNum)+"  "+order.baseName+"/"+order.quoteName);
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             tvTime.setText(df.format(order.limitOrder.expiration));
             tvCancel.setOnClickListener(new View.OnClickListener() {

@@ -173,7 +173,6 @@ public class DetailedHaveInHandFragment extends Fragment {
             if (msg.what==1){
                 AppDialog appDialog=new AppDialog(getActivity(),"提示","取消成功！");
                 appDialog.show();
-                hud.show();
                 BtslandApplication.queryOrders();
             }else if(msg.what==-1){
                 AppDialog appDialog=new AppDialog(getActivity(),"提示","取消失败！");

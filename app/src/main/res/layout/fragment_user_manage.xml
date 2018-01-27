@@ -13,110 +13,131 @@
             android:id="@+id/cl_purse"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <View
-                android:id="@+id/v_purse_back"
-                android:layout_width="0dp"
-                android:layout_height="200dp"
-                android:clickable="true"
-                android:background="@drawable/blue_red"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
 
-
-            <WebView
-                android:id="@+id/iv_user_pho"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_margin="30dp"
-                android:background="@color/transparent"
-                app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
-                app:layout_constraintTop_toTopOf="@+id/v_purse_back"
-                />
-
-            <TextView
-                android:id="@+id/tv_txt_purse_convert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/total_amount"
-                android:textColor="@color/color_Grey"
-                android:layout_marginTop="10dp"
-                android:textSize="16sp"
-                app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
-                app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
-                app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
-                />
-
-            <TextView
-                android:id="@+id/tv_purse_convert"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="0.0000CNY"
-                android:textColor="@color/color_Grey"
-                android:textSize="16sp"
-                android:maxLines="1"
-                app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
-                app:layout_constraintLeft_toRightOf="@+id/tv_txt_purse_convert"
-                />
-
-            <TextView
-                android:id="@+id/tv_purse_hang"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/color_white"
-                android:layout_marginTop="10dp"
-                android:textSize="18sp"
-                app:layout_constraintLeft_toLeftOf="@+id/tv_purse_convert"
-                app:layout_constraintTop_toBottomOf="@+id/tv_purse_convert"/>
-
-
-            <TextView
-                android:id="@+id/tv_user_name"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/username"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginLeft="20dp"
-                android:gravity="center_vertical"
-                android:textColor="@color/color_Grey"
-                app:layout_constraintLeft_toRightOf="@+id/iv_user_pho"
-                app:layout_constraintTop_toTopOf="@+id/iv_user_pho"
-                app:layout_constraintRight_toRightOf="@+id/v_purse_back"
-                app:layout_constraintBottom_toTopOf="@+id/tv_user_anotherName"
-                />
-
-            <TextView
-                android:id="@+id/tv_user_anotherName"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="@string/alias"
-                android:textSize="20dp"
-                android:gravity="center|left"
-                android:textColor="@color/color_Grey"
-                app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
-                app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
-                app:layout_constraintBottom_toBottomOf="@+id/iv_user_pho"
-                app:layout_constraintRight_toRightOf="@+id/tv_user_name"
-                />
 
             <ScrollView
                 android:id="@+id/sv_purse"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/v_purse_back"
+                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginBottom="10dp"
-                >
+                android:layout_marginBottom="10dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp">
+                        <View
+                            android:id="@+id/v_purse_back"
+                            android:layout_width="match_parent"
+                            android:layout_height="200dp"
+                            android:clickable="true"
+                            android:background="@drawable/blue_red"
+                            app:layout_constraintLeft_toLeftOf="parent"
+                            app:layout_constraintRight_toRightOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"/>
+
+
+                        <WebView
+                            android:id="@+id/iv_user_pho"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_margin="30dp"
+                            android:background="@color/transparent"
+                            app:layout_constraintLeft_toLeftOf="@+id/v_purse_back"
+                            app:layout_constraintTop_toTopOf="@+id/v_purse_back"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_txt_purse_convert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_amount"
+                            android:textColor="@color/color_Grey"
+                            android:layout_marginTop="10dp"
+                            android:textSize="16sp"
+                            app:layout_constraintLeft_toLeftOf="@+id/iv_user_pho"
+                            app:layout_constraintBottom_toBottomOf="@+id/v_purse_back"
+                            app:layout_constraintTop_toBottomOf="@+id/iv_user_pho"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_purse_convert"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="0.0000CNY"
+                            android:textColor="@color/color_Grey"
+                            android:textSize="16sp"
+                            android:maxLines="1"
+                            app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
+                            app:layout_constraintLeft_toRightOf="@+id/tv_txt_purse_convert"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_purse_hang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/color_white"
+                            android:layout_marginTop="10dp"
+                            android:textSize="18sp"
+                            app:layout_constraintLeft_toLeftOf="@+id/tv_purse_convert"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_purse_convert"/>
+
+
+                        <TextView
+                            android:id="@+id/tv_user_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/username"
+                            android:textSize="24sp"
+                            android:textStyle="bold"
+                            android:layout_marginLeft="20dp"
+                            android:gravity="center_vertical"
+                            android:textColor="@color/color_Grey"
+                            app:layout_constraintLeft_toRightOf="@+id/iv_user_pho"
+                            app:layout_constraintTop_toTopOf="@+id/iv_user_pho"
+                            app:layout_constraintRight_toRightOf="@+id/v_purse_back"
+                            app:layout_constraintBottom_toTopOf="@+id/tv_user_anotherName"
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_user_anotherName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:text="@string/alias"
+                            android:textSize="20dp"
+                            android:gravity="center|left"
+                            android:textColor="@color/color_Grey"
+                            app:layout_constraintTop_toBottomOf="@+id/tv_user_name"
+                            app:layout_constraintLeft_toLeftOf="@+id/tv_user_name"
+                            app:layout_constraintBottom_toBottomOf="@+id/iv_user_pho"
+                            app:layout_constraintRight_toRightOf="@+id/tv_user_name"
+                            />
+                        <TextView
+                            android:id="@+id/tv_user_logoff"
+                            android:layout_width="wrap_content"
+                            android:layout_height="30dp"
+                            android:text="@string/logoff"
+                            android:textSize="10sp"
+                            android:gravity="center"
+                            android:layout_margin="8dp"
+                            android:layout_marginBottom="10dp"
+                            android:background="@drawable/btn_transparent66"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp"
+                            android:textColor="@color/color_font_red"
+                            app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
+                            app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
+                            app:layout_constraintRight_toRightOf="@+id/v_purse_back"
+                            />
+                    </android.support.constraint.ConstraintLayout>
+
                     <TextView
                         android:id="@+id/tv_purse_allAsset"
                         android:layout_width="match_parent"
@@ -314,23 +335,7 @@
 
             </ScrollView>
 
-            <TextView
-                android:id="@+id/tv_user_logoff"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:text="@string/logoff"
-                android:textSize="10sp"
-                android:gravity="center"
-                android:layout_margin="8dp"
-                android:layout_marginBottom="10dp"
-                android:background="@drawable/btn_transparent66"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:textColor="@color/color_font_red"
-                app:layout_constraintTop_toTopOf="@+id/tv_txt_purse_convert"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_txt_purse_convert"
-                app:layout_constraintRight_toRightOf="@+id/v_purse_back"
-                />
+
 
 
         </info.btsland.app.ui.view.MyConstraintLayout>

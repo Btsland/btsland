@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.icu.util.TimeUnit;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -171,12 +172,12 @@ public class DetailedBuyAndSellFragment extends Fragment
         tvSellHintCoin=view.findViewById(R.id.tv_detailed_sell_hint_coin);
 
         rlvBuy.setLayoutManager(new LinearLayoutManager(getContext()));
-        rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice);
+        rlvBuyAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice,1);
         rlvBuy.setAdapter(rlvBuyAdapter);
         rlvBuy.setItemAnimator(null);
 
         rlvSell.setLayoutManager(new LinearLayoutManager(getContext()));
-        rlvSellAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice);
+        rlvSellAdapter = new TransactionSellBuyRecyclerViewAdapter(edPrice,2);
         rlvSell.setAdapter(rlvSellAdapter);
         rlvSell.setItemAnimator(null);
 
@@ -449,7 +450,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                 MarketDetailedActivity.market.base,
                 MarketDetailedActivity.market.quote,
                 MarketStat.STAT_MARKET_ORDER_BOOK,
-                MarketStat.DEFAULT_UPDATE_MARKE_SECS,
+                java.util.concurrent.TimeUnit.SECONDS.toMillis(5),
                 getListener());
     }
     @Override
@@ -479,12 +480,26 @@ public class DetailedBuyAndSellFragment extends Fragment
                 if (BtslandApplication.orderBookMap.get(MarketDetailedActivity.orderKey) != null ) {
                     OrderBook orderBook=BtslandApplication.orderBookMap.get(MarketDetailedActivity.orderKey);
                     int maxBids=15;
+                    Double maxNum=0.0;
+                    for(int i=0;i<orderBook.bids.size();i++){
+                        Order order=orderBook.bids.get(i);
+                        if(order.quote>maxNum){
+                            maxNum=order.quote;
+                        }
+                    }
+                    for(int i=0;i<orderBook.asks.size();i++){
+                        Order order=orderBook.asks.get(i);
+                        if(order.quote>maxNum){
+                            maxNum=order.quote;
+                        }
+                    }
                     if(orderBook.bids!=null&&orderBook.bids.size()!=0){
                         if(orderBook.bids.size()<15){
                             maxBids=orderBook.bids.size();
                         }
                         rlvBuyAdapter.setList(orderBook.bids.subList(0, maxBids));
                         highBuyPrice = orderBook.bids.get(0).price;
+                        rlvBuyAdapter.setMaxNum(maxNum);
                         rlvBuyAdapter.notifyDataSetChanged();
                     }
                     if(orderBook.asks!=null&&orderBook.asks.size()!=0){
@@ -494,6 +509,7 @@ public class DetailedBuyAndSellFragment extends Fragment
                         }
                         rlvSellAdapter.setList(orderBook.asks.subList(0, maxAsks));
                         lowSellPrice = orderBook.asks.get(0).price;
+                        rlvSellAdapter.setMaxNum(maxNum);
                         rlvSellAdapter.notifyDataSetChanged();
                     }
                     fillIn();

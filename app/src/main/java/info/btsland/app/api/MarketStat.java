@@ -718,7 +718,7 @@ public class MarketStat {
             getAssets();
             try {
                 List<limit_order_object> orders =
-                        mWebsocketApi.get_limit_orders(baseAsset.id, quoteAsset.id, 50);
+                        mWebsocketApi.get_limit_orders(baseAsset.id, quoteAsset.id, 15);
                 if (orders != null) {
                     OrderBook orderBook = new OrderBook();
                     orderBook.base = baseAsset.symbol;
@@ -729,6 +729,7 @@ public class MarketStat {
                         limit_order_object o = orders.get(i);
                         if (o.sell_price.base.asset_id.equals(baseAsset.id)) {
                             Order ord = new Order();
+                            ord.seller=o.seller;
                             ord.price = priceToReal(o.sell_price);
                             ord.quote = ((double)o.for_sale * (double)o.sell_price.quote.amount)
                                     / (double)o.sell_price.base.amount
@@ -737,6 +738,7 @@ public class MarketStat {
                             orderBook.bids.add(ord);
                         } else {
                             Order ord = new Order();
+                            ord.seller=o.seller;
                             ord.price = priceToReal(o.sell_price);
                             ord.quote = o.for_sale / Math.pow(10, quoteAsset.precision);
                             ord.base = (double)o.for_sale * (double)o.sell_price.quote.amount

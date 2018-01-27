@@ -3,15 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="85dp">
+    android:layout_height="80dp">
     <View
         android:id="@+id/v_back"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginRight="5dp"
-        android:background="#77ffffff"
+        android:background="#ffffff"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -33,7 +30,8 @@
             android:textStyle="bold"
             android:layout_marginRight="20dp"
             app:layout_constraintTop_toTopOf="@+id/tv_hIH_expenseNum"
-            app:layout_constraintRight_toLeftOf="@+id/v_to"/>
+            app:layout_constraintRight_toLeftOf="@+id/v_to"
+            app:layout_constraintBottom_toBottomOf="@+id/v_to"/>
         <TextView
             android:id="@+id/tv_hIH_expenseNum"
             android:layout_width="wrap_content"
@@ -41,16 +39,16 @@
             android:text="112"
             android:layout_marginRight="3dp"
             android:textColor="@color/color_Grey"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/v_to"
             app:layout_constraintRight_toLeftOf="@+id/tv_hIH_expenseCoin"
-            app:layout_constraintBottom_toTopOf="@+id/tv_hIH_price"/>
+            app:layout_constraintBottom_toBottomOf="@+id/v_to"/>
         <View
             android:id="@+id/v_to"
-            android:layout_width="50dp"
+            android:layout_width="30dp"
             android:layout_height="20dp"
             android:background="@drawable/image_right"
-            app:layout_constraintTop_toTopOf="@+id/tv_hIH_expenseCoin"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hIH_expenseCoin"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/tv_hIH_priceNum"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>
         <TextView
@@ -63,7 +61,7 @@
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@+id/tv_hIH_expenseNum"
             app:layout_constraintLeft_toRightOf="@+id/tv_hIH_gainNum"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hIH_expenseNum"/>
+            app:layout_constraintBottom_toBottomOf="@+id/v_to"/>
         <TextView
             android:id="@+id/tv_hIH_gainNum"
             android:layout_width="wrap_content"
@@ -73,19 +71,18 @@
             android:layout_marginLeft="20dp"
             app:layout_constraintTop_toTopOf="@+id/tv_hIH_expenseNum"
             app:layout_constraintLeft_toRightOf="@+id/v_to"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_hIH_expenseNum"/>
+            app:layout_constraintBottom_toBottomOf="@+id/v_to"/>
 
         <TextView
             android:id="@+id/tv_hIH_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="@string/str_price"
-            android:textColor="@color/color_Grey"
             android:gravity="center|right"
             app:layout_constraintRight_toRightOf="@+id/tv_hIH_expiration"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hIH_expenseNum"
+            app:layout_constraintTop_toTopOf="@+id/tv_hIH_priceNum"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintBottom_toTopOf="@+id/tv_hIH_expiration"/>
+            app:layout_constraintBottom_toBottomOf="@+id/tv_hIH_priceNum"/>
         <TextView
             android:id="@+id/tv_hIH_priceNum"
             android:layout_width="wrap_content"
@@ -93,29 +90,28 @@
             android:text="112"
             android:textColor="@color/color_black"
             android:gravity="center|left"
+            android:textStyle="bold"
             android:layout_marginLeft="10dp"
-            app:layout_constraintTop_toTopOf="@+id/tv_hIH_price"
-            app:layout_constraintLeft_toRightOf="@+id/tv_hIH_price"/>
+            app:layout_constraintTop_toBottomOf="@+id/v_to"
+            app:layout_constraintLeft_toRightOf="@+id/tv_hIH_price"
+            app:layout_constraintBottom_toTopOf="@+id/tv_hIH_expirationTime"/>
         <TextView
             android:id="@+id/tv_hIH_priceNumCoin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="BTS/CNY"
             android:textColor="@color/color_Grey"
-            android:textStyle="bold"
             android:layout_marginLeft="3dp"
             app:layout_constraintTop_toTopOf="@+id/tv_hIH_priceNum"
-            app:layout_constraintLeft_toRightOf="@+id/tv_hIH_priceNum"/>
+            app:layout_constraintLeft_toRightOf="@+id/tv_hIH_priceNum" />
         <TextView
             android:id="@+id/tv_hIH_expiration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/str_expiration_time"
-            android:textColor="@color/color_Grey"
             android:gravity="center|right"
             android:layout_marginLeft="10dp"
-            app:layout_constraintTop_toBottomOf="@+id/tv_hIH_price"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_hIH_expirationTime"
+            app:layout_constraintBottom_toBottomOf="@id/tv_hIH_expirationTime"
             app:layout_constraintLeft_toLeftOf="parent" />
         <TextView
             android:id="@+id/tv_hIH_expirationTime"
@@ -125,7 +121,8 @@
             android:textColor="@color/color_black"
             android:gravity="center|left"
             android:layout_marginLeft="10dp"
-            app:layout_constraintTop_toTopOf="@+id/tv_hIH_expiration"
+            app:layout_constraintTop_toBottomOf="@+id/tv_hIH_priceNum"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@+id/tv_hIH_expiration"/>
     </android.support.constraint.ConstraintLayout>
 

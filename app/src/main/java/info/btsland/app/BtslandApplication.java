@@ -63,6 +63,7 @@ import info.btsland.app.ui.fragment.DealerListFragment;
 import info.btsland.app.ui.fragment.DealerManageFragment;
 import info.btsland.app.ui.fragment.DealerNoteListFragment;
 import info.btsland.app.ui.fragment.DetailedBuyAndSellFragment;
+import info.btsland.app.ui.fragment.DetailedHaveInHandFragment;
 import info.btsland.app.ui.fragment.HelpManageFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.fragment.UserManageFragment;
@@ -226,6 +227,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 synchronized (openOrders) {
                     openOrders.clear();
                     openOrders.addAll(stat.openOrders);
+                    DetailedHaveInHandFragment.sendBroadcast(getInstance());
                 }
             }
         }

@@ -114,21 +114,21 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
             }
         });
         if(!asset.coinName.equals("")){
-            viewHolder.tvAssetCoin.setText(String.valueOf(asset.coinName));
+            viewHolder.tvAssetCoin.setText(asset.coinName);
         }else{
             viewHolder.tvAssetCoin.setText("");
         }
         if(asset.total!=null){
-            viewHolder.tvAssetNum.setText(String.valueOf(asset.total));
+            viewHolder.tvAssetNum.setText(String.format("%.4f",asset.total));
         }else{
             viewHolder.tvAssetNum.setText("0.0");
         }
         if(!asset.coinName.equals("CNY")) {
             if (BtslandApplication.chargeUnit.equals("CNY")) {
-                viewHolder.tvConvertNum.setText("≈"+String.valueOf(asset.totalCNY));
+                viewHolder.tvConvertNum.setText("≈"+String.format("%.4f",asset.totalCNY));
                 viewHolder.tvConvertCoin.setText("CNY");
             } else if (BtslandApplication.chargeUnit.equals("BTS")) {
-                viewHolder.tvConvertNum.setText("≈"+String.valueOf(asset.totalBTS));
+                viewHolder.tvConvertNum.setText("≈"+String.format("%.4f",asset.totalBTS));
                 viewHolder.tvConvertCoin.setText("BTS");
             }
         }else {
@@ -137,16 +137,16 @@ public class AssetSimpleCursorAdapter extends BaseAdapter {
         }
         if(asset.coinName.equals("BTS")){
             viewHolder.tvBorrow.setText("抵押：");
-            viewHolder.tvBorrowNum.setText(String.valueOf(asset.borrow));
+            viewHolder.tvBorrowNum.setText(String.format("%.4f",asset.borrow));
         }else if(asset.borrow>0.0) {
             viewHolder.tvBorrow.setText("负债：");
-            viewHolder.tvBorrowNum.setText(String.valueOf(asset.borrow));
+            viewHolder.tvBorrowNum.setText(String.format("%.4f",asset.borrow));
         }else{
             viewHolder.tvBorrow.setText("");
             viewHolder.tvBorrowNum.setText("");
         }
-        viewHolder.tvUsableNum.setText(String.valueOf(asset.usable));
-        viewHolder.tvOrdersNum.setText(String.valueOf(asset.orders));
+        viewHolder.tvUsableNum.setText(String.format("%.4f",asset.usable));
+        viewHolder.tvOrdersNum.setText(String.format("%.4f",asset.orders));
         return convertView;
     }
 }

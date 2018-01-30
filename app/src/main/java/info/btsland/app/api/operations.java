@@ -770,8 +770,8 @@ public class operations {
         @Override
         public List<object_id<asset_object>> get_asset_id_list() {
             List<object_id<asset_object>> listAssetId = new ArrayList<>();
-            listAssetId.add(delta_debt.asset_id);
             listAssetId.add(delta_collateral.asset_id);
+            listAssetId.add(delta_debt.asset_id);
             return listAssetId;
         }
 

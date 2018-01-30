@@ -50,7 +50,9 @@ public class IAsset implements Cloneable {
     @Override
     public IAsset clone() throws CloneNotSupportedException {
         IAsset iAsset = (IAsset)super.clone();
-        iAsset.mAsset=mAsset.clone();
+        if(mAsset!=null){
+            iAsset.mAsset=mAsset.clone();
+        }
         return iAsset;
     }
 

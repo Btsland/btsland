@@ -26,6 +26,8 @@ import info.btsland.app.model.MarketTrade;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.Order;
 import info.btsland.app.model.OrderBook;
+import info.btsland.app.ui.activity.MarketDetailedActivity;
+import info.btsland.app.ui.fragment.MarketFragment;
 import info.btsland.app.util.AssetUtil;
 import info.btsland.app.util.IDateUitl;
 import info.btsland.app.util.KeyUtil;
@@ -257,12 +259,10 @@ public class MarketStat {
 
         @Override
         public synchronized void run() {
-            Log.e("Connect", "run: " );
             final Stat stat = new Stat();
             int i=0;
             while (true) {
                 stat.nRet = mWebsocketApi.connect();
-                Log.e(TAG, "run: "+stat.nRet );
                 if(stat.nRet==0){
                     listener.onMarketStatUpdate(stat);
                     isStop=true;
@@ -407,16 +407,15 @@ public class MarketStat {
                 final Stat stat = new Stat();
                 if ((stats & STAT_TICKERS_BASE) != 0){
                     try {
-                        //Log.e(TAG, "run: base:"+base+"quotes[i]:"+quote );
-                        stat.MarketTicker = mWebsocketApi.get_ticker(base,quote);
-                        //new dataHandling(listener,stat).start();//新开线程出现问题，当交易对为CNY/BTS和BTS/USD的时候数据丢失
-                        listener.onMarketStatUpdate(stat);
+                        if(base.equals(MarketFragment.base)){
+                            stat.MarketTicker = mWebsocketApi.get_ticker(base,quote);
+                            listener.onMarketStatUpdate(stat);
+                        }
                     } catch (NetworkStatusException e) {
                         this.updateImmediately();//定时刷新
                         e.printStackTrace();
                     }
                     this.updateImmediately();
-                    return;
                 }
                 if ((stats & STAT_MARKET_HISTORY) != 0) {
                     //Log.e(TAG, "run: ago:"+ago);
@@ -502,8 +501,9 @@ public class MarketStat {
                     stat.borrows=borrows;
                 }
                 if ((stats & STAT_MARKET_ORDER_BOOK) != 0) {
-
-                    stat.orderBook = getOrderBook();
+                    if(base.equals(MarketDetailedActivity.market.base)&&quote.equals(MarketDetailedActivity.market.quote)){
+                        stat.orderBook = getOrderBook();
+                    }
                 }
                 if ((stats & STAT_MARKET_OPEN_ORDER) != 0) {
                     stat.openOrders = getOpenOrders();

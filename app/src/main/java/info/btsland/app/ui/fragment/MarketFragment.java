@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import info.btsland.app.Adapter.CoinsAdapter;
 import info.btsland.app.Adapter.MarketRowAdapter;
@@ -43,10 +44,10 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private MarketSimpleKFragment simpleKFragment;
 //    private TextView tvMarketLeftCoin_5;
     private ListView lvMarketInfo;
+    public static String base ="CNY";
 
     private ListView lvMarketCoin;
 
-    private String coin="CNY";
     private MarketStat marketStat;
 
     private MarketRowAdapter rowAdapter;
@@ -83,7 +84,6 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
                 message.obj=base;
             }
         }
-        mHandler.sendMessage(message);
     }
 
     public boolean replaceMarket(Map<String,MarketTicker> oldMarkets, MarketTicker newMarket){
@@ -101,10 +101,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
     private Handler mHandler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            if(msg.obj.equals(coin)){
-                List<MarketTicker> tickers= new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(coin).values());
-                rowAdapter.setMarkets(tickers);
-            }
+            rowAdapter.notifyDataSetChanged();
         }
     };
 
@@ -123,7 +120,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
             String[] bases = BtslandApplication.listMap.keySet().toArray(new String[]{});
             for(String base : bases){
                 String[] quotes= BtslandApplication.listMap.get(base).toArray(new String[]{});
-                marketStat.subscribe(base,quotes,MarketStat.STAT_TICKERS_BASE,MarketStat.DEFAULT_UPDATE_MARKE_SECS,this);
+                marketStat.subscribe(base,quotes,MarketStat.STAT_TICKERS_BASE, TimeUnit.SECONDS.toMillis(5),this);
             }
 
         }
@@ -154,7 +151,7 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         coinsAdapter=new CoinsAdapter(view.getContext());
         lvMarketCoin.setAdapter(coinsAdapter);
         coinsAdapter.setCoins(new ArrayList<String>(BtslandApplication.listMap.keySet()));
-        coinsAdapter.setSelectorItem(coin);//设置默认
+        coinsAdapter.setSelectorItem(base);//设置默认
         lvMarketCoin.setOnItemClickListener(new CoinItemClickListener());
 
         rowAdapter=new MarketRowAdapter(simpleKFragment,view.getContext());
@@ -162,6 +159,19 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         List<MarketTicker> tickers =new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(BtslandApplication.baseList.get(0)).values());
         rowAdapter.setMarkets(tickers);//设置默认
         rowAdapter.setMarketItemClickListener(new IMarketItemClickListener());
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    mHandler.sendEmptyMessage(1);
+                    try {
+                        Thread.sleep(3000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 
     /**
@@ -171,12 +181,13 @@ public class MarketFragment extends Fragment implements MarketStat.OnMarketStatU
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             coinsAdapter.setSelectorItem(i);//设置选定的特效
-            coin=new ArrayList<String>(BtslandApplication.listMap.keySet()).get(i);
-            Log.e(TAG, "onItemClick:coin: "+coin );
-            List<MarketTicker> tickers = new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(coin).values());
-            Log.e(TAG, "onItemClick: marketMap: "+BtslandApplication.marketMap.get(coin).values().size() );
+            base=new ArrayList<String>(BtslandApplication.listMap.keySet()).get(i);
+            Log.e(TAG, "onItemClick:coin: "+base );
+            List<MarketTicker> tickers = new ArrayList<MarketTicker>(BtslandApplication.marketMap.get(base).values());
+            Log.e(TAG, "onItemClick: marketMap: "+BtslandApplication.marketMap.get(base).values().size() );
             Log.e(TAG, "onItemClick: tickers:"+tickers.size() );
             rowAdapter.setMarkets(tickers);
+            rowAdapter.notifyDataSetChanged();
         }
     }
 

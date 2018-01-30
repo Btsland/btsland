@@ -157,7 +157,6 @@ public class DetailedHaveInHandFragment extends Fragment {
         });
         rlv.setAdapter(adapter);
         adapter.setList(BtslandApplication.openOrders);
-        rlv.setItemAnimator(null);
     }
 
     private void init(View view) {

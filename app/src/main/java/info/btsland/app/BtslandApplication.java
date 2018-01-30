@@ -44,9 +44,11 @@ import info.btsland.app.api.asset;
 import info.btsland.app.api.asset_object;
 import info.btsland.app.api.call_order_object;
 import info.btsland.app.api.object_id;
+import info.btsland.app.api.price;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.Borrow;
 import info.btsland.app.model.IAsset;
+import info.btsland.app.model.Market;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.OpenOrder;
 import info.btsland.app.model.OrderBook;
@@ -67,6 +69,7 @@ import info.btsland.app.ui.fragment.DetailedHaveInHandFragment;
 import info.btsland.app.ui.fragment.HelpManageFragment;
 import info.btsland.app.ui.fragment.PurseFragment;
 import info.btsland.app.ui.fragment.UserManageFragment;
+import info.btsland.app.util.AssetUtil;
 import info.btsland.app.util.BaseThread;
 import info.btsland.app.util.InternetUtil;
 import info.btsland.app.util.NumericUtil;
@@ -123,6 +126,8 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static List<Borrow> Iborrows=new ArrayList<>();//我的抵押仓库list
     public static Map<object_id<asset_object>,Borrow> borrowMap=new LinkedHashMap<>();//我的抵押仓库map
     public static List<OpenOrder> openOrders=new ArrayList<>();//我的挂单
+    public static Map<object_id<asset_object>,price> feedMap=new LinkedHashMap<>();
+    public static Map<object_id<asset_object>,Double> feedDoubleMap=new LinkedHashMap<>();
     public static SharedPreferences sharedPreferences;
     public static SharedPreferences.Editor editor;
 
@@ -171,10 +176,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
 
     public static Map<String,List<String>> listMap=new LinkedHashMap<>();
 
-    private static String strListMap="{\"CNY\":[\"BTS\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
-            ",\"BTS\":[\"CNY\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
-            ",\"USD\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IPFS\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]" +
-            ",\"BTC\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"HPB\",\"OPEN.OMG\",\"IMIAO\"]}";
+    private static String strListMap="{\"CNY\":[\"BTS\",\"OPEN.EOS\",\"IPFS\",\"IFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"BTS\":[\"CNY\",\"OPEN.EOS\",\"IPFS\",\"IFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"USD\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IFS\",\"IPFS\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"OPEN.OMG\",\"IMIAO\"]" +
+            ",\"BTC\":[\"CNY\",\"BTS\",\"OPEN.EOS\",\"IFS\",\"IPFS\",\"USD\",\"OPEN.BTC\",\"OPEN.ETH\",\"YOYOW\",\"OCT\",\"OPEN.LTC\",\"OPEN.STEEM\",\"OPEN.DASH\",\"OPEN.OMG\",\"IMIAO\"]}";
     public static List<MarketTicker> tickerList=new ArrayList<>();
 
     //public static List<String> quoteList=Arrays.asList("CNY","BTS","OPEN.EOS","IPFS", "USD", "OPEN.BTC", "OPEN.ETH", "YOYOW", "OCT", "OPEN.LTC", "OPEN.STEEM", "OPEN.DASH", "HPB", "OPEN.OMG", "IMIAO");
@@ -197,6 +202,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         if(walletApi==null){
             walletApi=new Wallet_api();
         }
+        walletApi.mWebsocketApi=getMarketStat().mWebsocketApi;
         return walletApi;
     }
     public static MarketStat getMarketStat() {
@@ -223,12 +229,12 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     static class QueryOpenOrdersListener implements MarketStat.OnMarketStatUpdateListener{
         @Override
         public void onMarketStatUpdate(MarketStat.Stat stat) {
-            if(stat.openOrders!=null&&stat.openOrders.size()>0){
-                synchronized (openOrders) {
-                    openOrders.clear();
+            synchronized (openOrders) {
+                openOrders.clear();
+                if(stat.openOrders!=null&&stat.openOrders.size()>0){
                     openOrders.addAll(stat.openOrders);
-                    DetailedHaveInHandFragment.sendBroadcast(getInstance());
                 }
+                DetailedHaveInHandFragment.sendBroadcast(getInstance());
             }
         }
     }
@@ -251,6 +257,25 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         @Override
         public void run() {
             getMarketStat().subscribe("CNY",MarketStat.STAT_BORROW,10000,new BorrowsListener());
+        }
+    }
+    class QueryFeed extends BaseThread{
+        @Override
+        public void run() {
+            List<String> strings=new ArrayList<>();
+            strings.add("2.4.13");
+            try {
+                List<FeedResult> feedResult = getMarketStat().mWebsocketApi.get_objects(strings);
+                for(int i=0;i<feedResult.size();i++){
+                    price price=feedResult.get(i).current_feed.settlement_price;
+                    object_id<asset_object> key=feedResult.get(i).current_feed.settlement_price.base.asset_id;
+                    feedMap.put(key,price);
+                    double feed=AssetUtil.assetToReal(price.base)/AssetUtil.assetToReal(price.quote);
+                    feedDoubleMap.put(key,feed);
+                }
+            } catch (NetworkStatusException e) {
+                e.printStackTrace();
+            }
         }
     }
     class BorrowsListener implements MarketStat.OnMarketStatUpdateListener{
@@ -797,7 +822,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     private static void fillInMarketMap() {
 
         for(String base : listMap.keySet()){
-            Map<String,MarketTicker> tickers=new HashMap<>();
+            Map<String,MarketTicker> tickers=new LinkedHashMap<>();
             for(int i=0;i<listMap.get(base).size();i++){
                 String quote=listMap.get(base).get(i);
                 if(quote.equals(base)){
@@ -827,6 +852,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
             isQueryAount=true;
         }
         new QueryBorrows().start();
+        new QueryFeed().start();
 
     }
     public static Double getAssetUsableByName(String name){
@@ -975,7 +1001,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                     }
                 }
 
-                //List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
+//                List<asset>  assets =getMarketStat().mWebsocketApi.list_account_balances(accountObject.id);
             } catch (NetworkStatusException e) {
                 e.printStackTrace();
             }
@@ -1162,6 +1188,9 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 Double totalBTS=0.0;
                 try {
                     assets = getMarketStat().mWebsocketApi.list_account_balances_by_name(account);
+                    if(accountObject==null) {
+                        return;
+                    }
                     List<call_order_object> orderObjects=getMarketStat().mWebsocketApi.get_margin_positions(accountObject.id);
                     Iborrows.clear();
                     borrowMap.clear();
@@ -1558,7 +1587,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                 queryAsset(account);
             }
             queryOrders();
-
         }
     };
     public static void queryOrders(){
@@ -1574,7 +1602,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
     public static boolean saveListMap(){
         Gson gson=new Gson();
         String strListMap=gson.toJson(listMap);
-        editor.putString("listMap",strListMap);
+        editor.putString("strListMarket",strListMap);
         return editor.commit();
     }
 
@@ -1618,7 +1646,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         return sharedPreferences.getString("Language",Language);
     }
     public static String readListMap(){
-        return sharedPreferences.getString("listMap",strListMap);
+        return sharedPreferences.getString("strListMarket",strListMap);
     }
     public static boolean readIsRefurbish(){
 

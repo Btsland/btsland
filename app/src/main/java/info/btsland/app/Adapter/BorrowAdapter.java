@@ -26,6 +26,7 @@ import java.util.List;
 import info.btsland.app.BtslandApplication;
 import info.btsland.app.R;
 import info.btsland.app.api.asset_object;
+import info.btsland.app.api.price;
 import info.btsland.app.api.sha256_object;
 import info.btsland.app.model.Borrow;
 import info.btsland.app.util.AssetUtil;
@@ -128,16 +129,20 @@ public class BorrowAdapter extends BaseAdapter {
         }else {
             viewHolder= (ViewHolder) convertView.getTag();
         }
+
         createPortrait(viewHolder.webView,borrow.borrower.name);
         viewHolder.tvName.setText(borrow.borrower.name);
-        viewHolder.tvDebtNum.setText(String.valueOf(borrow.debt));
+        viewHolder.tvDebtNum.setText(String.format("%.4f",borrow.debt));
         asset_object quote= AssetUtil.assetToAssetObject(borrow.call_price.quote.asset_id);
-        viewHolder.tvDebtCoin.setText(String.valueOf(quote.symbol));
-        viewHolder.tvCollateralNum.setText(String.valueOf(borrow.collateral));
+        viewHolder.tvDebtCoin.setText(quote.symbol);
+        viewHolder.tvCollateralNum.setText(String.format("%.4f",borrow.collateral));
         asset_object base= AssetUtil.assetToAssetObject(borrow.call_price.base.asset_id);
-        viewHolder.tvCollateralCoin.setText(String.valueOf(base.symbol));
-        viewHolder.tvPriceNum.setText(String.valueOf(borrow.price));
+        viewHolder.tvCollateralCoin.setText(base.symbol);
+        viewHolder.tvPriceNum.setText(String.format("%.4f",borrow.price));
         viewHolder.tvPriceCoin.setText(quote.symbol+"/"+base.symbol);
+        Double price = BtslandApplication.feedDoubleMap.get(quote.id);
+        Double ratio = borrow.collateral/(borrow.debt/price);
+        viewHolder.tvRatio.setText(String.format("%.0f",ratio*100)+"%");
         return convertView;
     }
 
@@ -147,7 +152,7 @@ public class BorrowAdapter extends BaseAdapter {
     private void createPortrait(WebView webView,String name) {
         sha256_object.encoder encoder=new sha256_object.encoder();
         encoder.write(name.getBytes());
-        String htmlShareAccountName="<html><head><style>body,html { margin:0; padding:0; text-align:center;}</style><meta name=viewport content=width=" + 60 + ",user-scalable=no/></head><body><canvas width=" + 60 + " height=" + 60 + " data-jdenticon-hash=" + encoder.result().toString() + "></canvas><script src=https://cdn.jsdelivr.net/jdenticon/1.3.2/jdenticon.min.js async></script></body></html>";
+        String htmlShareAccountName="<html><head><style>body,html { margin:0; padding:0; text-align:center;}</style><meta name=viewport content=width=" + 50 + ",user-scalable=no/></head><body><canvas width=" + 50 + " height=" + 50 + " data-jdenticon-hash=" + encoder.result().toString() + "></canvas><script src=https://cdn.jsdelivr.net/jdenticon/1.3.2/jdenticon.min.js async></script></body></html>";
         WebSettings webSettings=webView.getSettings();
         webSettings.setJavaScriptEnabled(true);
         webView.loadData(htmlShareAccountName, "text/html", "UTF-8");

@@ -153,7 +153,31 @@ public class BorrowActivity extends AppCompatActivity {
                 num1= Double.valueOf(str);
             }
         });
+        edNum2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String str=s.toString();
+                if(str.indexOf(".")==0){
+                    StringBuilder sb=new StringBuilder(str);
+                    sb.insert(0,"0");
+                }
+                if(str.equals("")){
+                    num2=0.0;
+                    return;
+                }
+                num2= Double.valueOf(str);
+            }
+        });
         sbScale.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -161,9 +185,9 @@ public class BorrowActivity extends AppCompatActivity {
                 DecimalFormat df = new DecimalFormat("#.####");
                 scale= num/100;
                 tvScale.setText(""+scale);
-                num2=num1/feedPrice*scale;
-                edNum2.getText().clear();
-                edNum2.getText().insert(0,df.format(num2));
+//                num2=num1/feedPrice*scale;
+//                edNum2.getText().clear();
+//                edNum2.getText().insert(0,df.format(num2));
                 triggerPrice=num1/(num2/1.75);
                 tvTriggerPrice.setText(df.format(triggerPrice));
                 if(scale>1.75&&scale<2.5){
@@ -228,7 +252,7 @@ public class BorrowActivity extends AppCompatActivity {
         Log.e(TAG, "borrow: ");
         if (BtslandApplication.getWalletApi().unlock(password) == 0) {
             try {
-                if (BtslandApplication.getWalletApi().borrow_asset(num1.toString(), "CNY", num2.toString()) != null) {
+                if (BtslandApplication.getWalletApi().borrow_asset(BtslandApplication.accountObject.id,num1.toString(), "CNY", num2.toString()) != null) {
                     handler.sendEmptyMessage(1);
 
                 } else {

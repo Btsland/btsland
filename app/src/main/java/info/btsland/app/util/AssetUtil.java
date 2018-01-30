@@ -25,7 +25,10 @@ public class AssetUtil {
     public static double assetToReal(asset a, long p) {
         return assetToReal(a.amount,p);
     }
-
+    public static double assetToReal(asset a) {
+        asset_object baseOb= assetToAssetObject(a.asset_id);
+        return assetToReal(a.amount,baseOb.precision);
+    }
     public static double assetToReal(long a, long p) {
         return (double)a / Math.pow(10, p);
     }

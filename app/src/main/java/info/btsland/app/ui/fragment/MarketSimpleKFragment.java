@@ -330,7 +330,7 @@ public class MarketSimpleKFragment extends Fragment implements MarketStat.OnMark
         @Override
         public String getFormattedValue(float value, AxisBase axis) {
             int nValue = (int)value;
-            if (nValue < mListPrices.size()) {
+            if (nValue < mListPrices.size()&&nValue>0 ) {
                 Date date = mListPrices.get(nValue).date;
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd");
 

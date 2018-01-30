@@ -61,7 +61,7 @@ public class Wallet_api {
     private static final String BTSLAND_FAUCET = "faucet.btsland.info";
     private static final String OPENLEDGER_FAUCET = "openledger.io";
 
-    private Websocket_api mWebsocketApi;
+    public Websocket_api mWebsocketApi;
     private sha512_object mCheckSum = new sha512_object();
     private wallet_object mWalletObject;
     private HashMap<types.public_key_type, types.private_key_type> mHashMapPub2Priv = new HashMap<>();
@@ -91,7 +91,6 @@ public class Wallet_api {
         }
     }
     public Wallet_api() {
-        mWebsocketApi = BtslandApplication.getMarketStat().mWebsocketApi;
         initialize();
     }
     public int initialize() {
@@ -209,6 +208,9 @@ public class Wallet_api {
     public signed_transaction cancel_order(object_id<limit_order_object> id)
             throws NetworkStatusException {
         operations.limit_order_cancel_operation op = new operations.limit_order_cancel_operation();
+        if(mWebsocketApi.get_limit_order(id)==null){
+            return null;
+        }
         op.fee_paying_account = mWebsocketApi.get_limit_order(id).seller;
         op.order = id;
         op.extensions = new HashSet<>();
@@ -510,11 +512,10 @@ public class Wallet_api {
      * @return
      * @throws NetworkStatusException
      */
-    public signed_transaction borrow_asset( String amount_to_borrow, String asset_symbol, String amount_of_collateral) throws NetworkStatusException {
+    public signed_transaction borrow_asset(object_id<account_object> accountId, String amount_to_borrow, String asset_symbol, String amount_of_collateral) throws NetworkStatusException {
         // 抵押的帐号
-        account_object accountObject = BtslandApplication.accountObject;
         operations.call_order_update_operation op = new operations.call_order_update_operation();  //1
-        op.funding_account=accountObject.id;//设置用户
+        op.funding_account=accountId;//设置用户
         asset delta_debt=mWebsocketApi.lookup_asset_symbols(asset_symbol).amount_from_string(amount_to_borrow);
         op.delta_debt=delta_debt;//设置抵押想要获得的货币
         asset delta_collateral=mWebsocketApi.lookup_asset_symbols("BTS").amount_from_string(amount_of_collateral);
@@ -548,7 +549,8 @@ public class Wallet_api {
         op.min_to_receive =mWebsocketApi.lookup_asset_symbols(symbolToReceive).amount_from_string(minToReceive);
         if (timeoutSecs > 0) {
             op.expiration = new Date(
-                    System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSecs));
+                    System.currentTimeMillis() + TimeUnit.SECONDS.toMillis(timeoutSecs)
+            );
         } else {
             op.expiration = new Date(System.currentTimeMillis() + TimeUnit.DAYS.toMillis(365));
         }

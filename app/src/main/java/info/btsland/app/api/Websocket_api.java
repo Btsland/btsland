@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -33,6 +34,7 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import info.btsland.app.BtslandApplication;
+import info.btsland.app.FeedResult;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.MarketTicker;
 import info.btsland.app.model.MarketTrade;
@@ -78,6 +80,7 @@ public class Websocket_api extends WebSocketListener {
      */
     @Override
     public void onOpen(WebSocket webSocket, Response response) {
+        System.out.println("onOpen");
         synchronized (mWebsocket) {
             mnConnectStatus = WEBSOCKET_CONNECT_SUCCESS;
             //Log.i(TAG, "onOpen: ");
@@ -89,7 +92,7 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onMessage(WebSocket webSocket, String text) {
         try {
-            Log.i(TAG, "onMessage: text:"+text);
+            System.out.println(text);
             Gson gson = global_config_object.getInstance().getGsonBuilder().create();
             int id = Integer.parseInt(new JSONObject(text).getString("id"));
             //Log.i(TAG, "onMessage: id:"+id);
@@ -125,6 +128,7 @@ public class Websocket_api extends WebSocketListener {
     public void onClosing(WebSocket webSocket, int code, String reason) {
         mnConnectStatus = WEBSOCKET_CONNECT_CLOSING;
         //Log.i(TAG, "onClosing: ");
+        System.out.println("onClosing");
     }
 
     /**
@@ -135,6 +139,7 @@ public class Websocket_api extends WebSocketListener {
     public void onClosed(WebSocket webSocket, int code, String reason) {
         mnConnectStatus = WEBSOCKET_CONNECT_CLOSED;
         //Log.i(TAG, "onClosed: ");
+        System.out.println("onClosed");
     }
 
     /**
@@ -145,10 +150,10 @@ public class Websocket_api extends WebSocketListener {
     @Override
     public void onFailure(WebSocket webSocket, Throwable t, Response response) {
         //Log.i(TAG, "onFailure: ");
-        mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
-        Log.e(TAG, "onFailure: " );
-        MarketStat marketStat = BtslandApplication.getMarketStat();
-        marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
+        System.out.println("onFailure");
+//        mnConnectStatus = WEBSOCKET_CONNECT_FAILURE;
+//        MarketStat marketStat = BtslandApplication.getMarketStat();
+//        marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
     }
 
     private boolean login(String strUserName, String strPassword) throws NetworkStatusException {
@@ -175,7 +180,6 @@ public class Websocket_api extends WebSocketListener {
     }
 
     public synchronized int connect() {
-        Gson gson = global_config_object.getInstance().getGsonBuilder().create();
         if (StringUtils.isEmpty(BtslandApplication.strServer)) {
             return -9;
         }
@@ -190,32 +194,28 @@ public class Websocket_api extends WebSocketListener {
             @Override
             public void checkServerTrusted(final X509Certificate[] chain,
                                            final String authType) throws CertificateException {
-                Log.i(TAG, "authType: " + String.valueOf(authType));
             }
 
             @Override
             public void checkClientTrusted(final X509Certificate[] chain,
                                            final String authType) throws CertificateException {
-                Log.i(TAG, "authType: " + String.valueOf(authType));
             }
         }};
         X509TrustManager x509TrustManager = new X509TrustManager() {
             @Override
             public X509Certificate[] getAcceptedIssuers() {
                 X509Certificate[] x509Certificates = new X509Certificate[0];
-                return null;
+                return x509Certificates;
             }
 
             @Override
             public void checkServerTrusted(final X509Certificate[] chain,
                                            final String authType) throws CertificateException {
-                Log.i(TAG, "authType: " + String.valueOf(authType));
             }
 
             @Override
             public void checkClientTrusted(final X509Certificate[] chain,
                                            final String authType) throws CertificateException {
-                Log.i(TAG, "authType: " + String.valueOf(authType));
             }
         };
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
@@ -234,23 +234,20 @@ public class Websocket_api extends WebSocketListener {
         HostnameVerifier hostnameVerifier = new HostnameVerifier() {
             @Override
             public boolean verify(String hostname, SSLSession session) {
-//                Log.i(TAG, "hostname: " + String.valueOf(hostname));
-//                if (hostname.equals("www.btsland.info")) {
-//                    return true;
-//                }
-//                return false;
-             return true;
+                if (hostname.equals("www.btsland.info")) {
+                    return true;
+                }
+                return false;
             }
         };
 
         okHttpClientBuilder.hostnameVerifier(hostnameVerifier);
-        OkHttpClient okHttpClient = okHttpClientBuilder.build();
+        mOkHttpClient = okHttpClientBuilder.build();
         Request request = new Request.Builder().url(BtslandApplication.strServer).build();
-        mWebsocket = okHttpClient.newWebSocket(request, this);
+        mWebsocket = mOkHttpClient.newWebSocket(request, this);
         synchronized (mWebsocket) {
             if (mnConnectStatus == WEBSOCKET_CONNECT_INVALID) {
                 try {
-                    Log.e(TAG, "connect: 11111111111111111" );
                     mWebsocket.wait(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -670,7 +667,25 @@ public class Websocket_api extends WebSocketListener {
         return reply.result;
     }
 
+    public List<FeedResult> get_objects(List<String> ids)
+            throws NetworkStatusException {
+        Call callObject = new Call();
+        callObject.id = mnCallId.getAndIncrement();
+        callObject.method = "call";
+        callObject.params = new ArrayList<>();
+        callObject.params.add(_nDatabaseId);
+        callObject.params.add("get_objects");
 
+        List<Object> listParams = new ArrayList<>();
+        listParams.add(ids);
+        callObject.params.add(listParams);
+
+        ReplyObjectProcess<Reply<List<FeedResult>>> replyObject =
+                new ReplyObjectProcess<>(new TypeToken<Reply<List<FeedResult>>>(){}.getType());
+        Reply<List<FeedResult>> reply = sendForReply(callObject, replyObject);
+
+        return reply.result;
+    }
 
 
 
@@ -799,7 +814,7 @@ public class Websocket_api extends WebSocketListener {
         //Log.i(TAG, "sendForReplyImpl: ");
         Gson gson = global_config_object.getInstance().getGsonBuilder().create();
         String strMessage = gson.toJson(callObject);
-        Log.i(TAG, "sendForReplyImpl: strMessage:"+strMessage );
+        System.out.println(strMessage);
         synchronized (mHashMapIdToProcess) {
             mHashMapIdToProcess.put(callObject.id, replyObjectProcess);
         }
@@ -817,9 +832,7 @@ public class Websocket_api extends WebSocketListener {
                     marketStat.connect(MarketStat.STAT_COUNECT,BtslandApplication.getListener());
                 }
 
-                if (bRet==false) {
-
-                }else {
+                if (bRet==true) {
                     break;
                 }
             }
@@ -827,6 +840,7 @@ public class Websocket_api extends WebSocketListener {
                 replyObjectProcess.wait(10000);
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
                 String strError = replyObjectProcess.getError();
+                System.out.println("strError:"+strError);
                 if (TextUtils.isEmpty(strError) == false) {
                     throw new NetworkStatusException(strError);
                 } else if (replyObjectProcess.getException() != null) {

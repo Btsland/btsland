@@ -4,15 +4,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="5dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
     tools:ignore="WebViewLayout">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <WebView
             android:id="@+id/webView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginRight="5dp"
             android:layout_gravity="center">
         </WebView>
@@ -28,9 +31,9 @@
                 android:minHeight="30dp"
                 android:maxWidth="100dp"
                 android:text="xjh1009"
+                android:textSize="16sp"
                 android:textColor="@color/black"
                 android:textStyle="bold"
-                android:textSize="18sp"
                 android:gravity="center"/>
 
         </LinearLayout>
@@ -44,13 +47,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|right"
-                android:minHeight="30dp">
+                android:minHeight="25dp">
                 <TextView
                     android:id="@+id/tv_debt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="借入："
-                    android:textSize="16sp"/>
+                    android:text="借入："/>
                 <TextView
                     android:id="@+id/tv_debt_num"
                     android:layout_width="wrap_content"
@@ -60,25 +62,23 @@
                     android:text="50000000.2222"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/tv_debt_coin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CNY"
-                    android:textSize="16sp"/>
+                    android:text="CNY"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center|right"
-                android:minHeight="30dp">
+                android:minHeight="25dp">
                 <TextView
                     android:id="@+id/tv_collateral"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="抵押："
-                    android:textSize="16sp"/>
+                    android:text="抵押："/>
                 <TextView
                     android:id="@+id/tv_collateral_num"
                     android:layout_width="wrap_content"
@@ -88,13 +88,12 @@
                     android:text="50000000.322"
                     android:layout_marginLeft="5dp"
                     android:layout_marginRight="5dp"
-                    android:textSize="16sp"/>
+                    android:textSize="14sp"/>
                 <TextView
                     android:id="@+id/tv_collateral_coin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BTS"
-                    android:textSize="16sp"/>
+                    android:text="BTS"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -109,11 +108,10 @@
             android:id="@+id/tv_ratio"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minHeight="30dp"
             android:text=""
             android:textColor="@color/red"
             android:textStyle="bold"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:gravity="center"/>
         <LinearLayout
             android:layout_width="0dp"
@@ -124,8 +122,7 @@
                 android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="强平触发价："
-                android:textSize="16sp"/>
+                android:text="强平触发价："/>
             <TextView
                 android:id="@+id/tv_price_num"
                 android:layout_width="wrap_content"
@@ -136,13 +133,12 @@
                 android:maxLines="1"
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"
-                android:textSize="16sp"/>
+                android:textSize="14sp"/>
             <TextView
                 android:id="@+id/tv_price_coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="CNY/BTS"
-                android:textSize="16sp"/>
+                android:text="CNY/BTS"/>
         </LinearLayout>
     </LinearLayout>
 

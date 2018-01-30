@@ -12,7 +12,7 @@ import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
 import okio.ByteString;
 
-public class websocket_api extends WebSocketListener {
+public class           websocket_api extends WebSocketListener {
     private int _nDatabaseId = -1;
     private int _nHistoryId = -1;
     private int _nBroadcastId = -1;
@@ -141,14 +141,38 @@ public class websocket_api extends WebSocketListener {
     }
 
     public void get_ticker() {
-        String db = "{\"id\":4,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
-        mWebsocket.send(db);
-
-        String history = "{\"id\":5,\"method\":\"call\",\"params\":[1,\"history\",[]]}";
-        mWebsocket.send(history);
-
-        String network_broadcast = "{\"id\":6,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
+        /**
+         * ["asset", 7],
+         ["block", 1],
+         ["crypto", 6],
+         ["database", 3],
+         ["debug", 8],
+         ["history", 4],
+         ["login", 0],
+         ["network_broadcast", 2],
+         ["network_node", 5]
+         */
+        String block="{\"id\":1,\"method\":\"call\",\"params\":[1,\"wallet\",[]]}";
+        mWebsocket.send(block);
+        String network_broadcast = "{\"id\":2,\"method\":\"call\",\"params\":[1,\"network_broadcast\",[]]}";
         mWebsocket.send(network_broadcast);
+        String db = "{\"id\":3,\"method\":\"call\",\"params\":[1,\"database\",[]]}";
+        mWebsocket.send(db);
+        String history = "{\"id\":4,\"method\":\"call\",\"params\":[1,\"history\",[]]}";
+        mWebsocket.send(history);
+        String network_node = "{\"id\":5,\"method\":\"call\",\"params\":[1,\"network_node\",[]]}";
+        mWebsocket.send(network_node);
+        String crypto = "{\"id\":6,\"method\":\"call\",\"params\":[1,\"crypto\",[]]}";
+        mWebsocket.send(crypto);
+        String asset = "{\"id\":7,\"method\":\"call\",\"params\":[1,\"asset\",[]]}";
+        mWebsocket.send(asset);
+        String debug = "{\"id\":8,\"method\":\"call\",\"params\":[1,\"debug\",[]]}";
+        mWebsocket.send(debug);
+
+
+
+
+
 //        String wallet = "{\"id\":8,\"method\":\"call\",\"params\":[1,\"wallet\",[]]}";
 //        mWebsocket.send(wallet);
 
@@ -156,8 +180,8 @@ public class websocket_api extends WebSocketListener {
          * 查询抵押仓库
          * {"id":8,"jsonrpc":"2.0","result":[{"id":"1.8.37194","borrower":"1.2.462840","collateral":1030560,"debt":100000,"call_price":{"base":{"amount":25764,"asset_id":"1.3.0"},"quote":{"amount":4375,"asset_id":"1.3.113"}}}]}
          */
-        String get_margin_positions="{\"id\":8,\"method\":\"call\",\"params\":[2,\"get_margin_positions\",[\"1.2.462840\"]]}";
-        mWebsocket.send(get_margin_positions);
+//        String get_margin_positions="{\"id\":8,\"method\":\"call\",\"params\":[2,\"get_margin_positions\",[\"1.2.462840\"]]}";
+//        mWebsocket.send(get_margin_positions);
         /**
          * 查询正在清算的订单（无价格）
          * {"id":8,"jsonrpc":"2.0","result":[{"id":"1.4.4027","owner":"1.2.632792","balance":{"amount":30000000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T14:44:39"},{"id":"1.4.4029","owner":"1.2.441098","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T15:06:39"},{"id":"1.4.4030","owner":"1.2.441098","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T15:07:48"},{"id":"1.4.4031","owner":"1.2.602013","balance":{"amount":10000,"asset_id":"1.3.113"},"settlement_date":"2018-01-23T22:34:12"},{"id":"1.4.4032","owner":"1.2.478809","balance":{"amount":10000000,"asset_id":"1.3.113"},"settlement_date":"2018-01-24T02:18:21"}]}
@@ -178,8 +202,8 @@ public class websocket_api extends WebSocketListener {
         /**
          * 抵押排行榜
          */
-        String get_call_orders="{\"id\":11,\"method\":\"call\",\"params\":[2,\"get_call_orders\",[\"1.3.113\",\"50\"]]}";
-        mWebsocket.send(get_call_orders);
+//        String get_call_orders="{\"id\":11,\"method\":\"call\",\"params\":[2,\"get_call_orders\",[\"1.3.113\",\"50\"]]}";
+//        mWebsocket.send(get_call_orders);
 //
 //        /**
 //         * 查询买单
@@ -193,8 +217,11 @@ public class websocket_api extends WebSocketListener {
 //        mWebsocket.send(get_24_volume);
 //        String get_bitasset_data="{\"id\":14,\"method\":\"call\",\"params\":[4,\"get_bitasset_data\"]}";
 //        mWebsocket.send(get_bitasset_data);
-//        String get_bitasset_data2="{\"id\":15,\"method\":\"call\",\"params\":[4,\"get_bitasset_data\",[[\"1.3.113\"]]]}";
-//        mWebsocket.send(get_bitasset_data2);
+
+        String get_asset="{\"id\":14,\"method\":\"call\",\"params\":[3,\"get_asset\",[]]}";
+        mWebsocket.send(get_asset);
+        String get_bitasset_data2="{\"id\":15,\"method\":\"call\",\"params\":[3,\"get_objects\",[[\"2.4.13\"]]]}";
+        mWebsocket.send(get_bitasset_data2);
 //        String borrow = "{\"id\":9,\"method\":\"call\",\"params\":[3,\"borrow_asset\",[\"1.2.462840\",\"10000\",\"1.3.121\",\"100000\",\"true\"]]}";
 //        mWebsocket.send(borrow);
 

@@ -32,15 +32,10 @@ public class RunTest {
         /**
          * 抵押测试
          */
-        Websocket_api websocket_api=new Websocket_api();
-        if(websocket_api.mnConnectStatus!=Websocket_api.WEBSOCKET_CONNECT_SUCCESS){
-            websocket_api.connect();
-        }
         Wallet_api wallet_api=new Wallet_api();
-        wallet_api.mWebsocketApi=websocket_api;
         String account="xjh1010";
         String password="18606628602Xx";
-        account_object accountObject=websocket_api.get_account_by_name(account);//获得用户
+        account_object accountObject=wallet_api.import_account_password(account,password);//获得用户
         Double amount_to_borrow=1.0;//抵押出的数量
         String asset_symbol="CNY";//抵押出资产的名称
         Double amount_of_collateral=1.0;//需要的BTS数量

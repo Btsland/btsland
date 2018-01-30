@@ -91,6 +91,9 @@ public class Wallet_api {
         }
     }
     public Wallet_api() {
+        if(mWebsocketApi==null) {
+            mWebsocketApi = new Websocket_api();
+        }
         initialize();
     }
     public int initialize() {

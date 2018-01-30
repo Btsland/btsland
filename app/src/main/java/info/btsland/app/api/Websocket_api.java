@@ -94,14 +94,14 @@ public class Websocket_api extends WebSocketListener {
         try {
             System.out.println(text);
             Gson gson = global_config_object.getInstance().getGsonBuilder().create();
-            int id = Integer.parseInt(new JSONObject(text).getString("id"));
+//            int id = Integer.parseInt(new JSONObject(text).getString("id"));
             //Log.i(TAG, "onMessage: id:"+id);
-//            ReplyBase replyObjectBase = gson.fromJson(text, ReplyBase.class);
-//            //Log.i(TAG, "onMessage: replyObjectBase:" +replyObjectBase);
+            ReplyBase replyObjectBase = gson.fromJson(text, new TypeToken<ReplyBase>(){}.getType());
+            //Log.i(TAG, "onMessage: replyObjectBase:" +replyObjectBase);
             IReplyObjectProcess iReplyObjectProcess = null;
             synchronized (mHashMapIdToProcess) {
-                if (mHashMapIdToProcess.containsKey(id)) {
-                    iReplyObjectProcess = mHashMapIdToProcess.get(id);
+                if (mHashMapIdToProcess.containsKey(replyObjectBase.id)) {
+                    iReplyObjectProcess = mHashMapIdToProcess.get(replyObjectBase.id);
                 }
             }
 
@@ -109,8 +109,6 @@ public class Websocket_api extends WebSocketListener {
                 iReplyObjectProcess.processTextToObject(text);
             }
         } catch (JsonSyntaxException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
             e.printStackTrace();
         }
     }
@@ -445,7 +443,6 @@ public class Websocket_api extends WebSocketListener {
         List<Object> listTransaction = new ArrayList<>();
         listTransaction.add(tx);
         callObject.params.add(listTransaction);
-        Log.e(TAG, "broadcast_transaction: 1111111111111111111111111111111111111111111111111111111111111111" );
         ReplyObjectProcess<Reply<Object>> replyObjectProcess =
                 new ReplyObjectProcess<>(new TypeToken<Reply<Integer>>(){}.getType());
         Reply<Object> replyObject = sendForReply(callObject, replyObjectProcess);
@@ -841,7 +838,7 @@ public class Websocket_api extends WebSocketListener {
                 Reply<T> replyObject = replyObjectProcess.getReplyObject();
                 String strError = replyObjectProcess.getError();
                 System.out.println("strError:"+strError);
-                if (TextUtils.isEmpty(strError) == false) {
+                if (strError!=null&&strError.length()>0) {
                     throw new NetworkStatusException(strError);
                 } else if (replyObjectProcess.getException() != null) {
                     throw new NetworkStatusException(replyObjectProcess.getException());
@@ -900,7 +897,7 @@ public class Websocket_api extends WebSocketListener {
             try {
                 //Log.i(TAG, "processTextToObject: ");
                 Gson gson = global_config_object.getInstance().getGsonBuilder().create();
-                Log.w(TAG, "processTextToObject: "+ strText);
+                System.out.println("processTextToObject:"+strText);
                 mT = gson.fromJson(strText, mType);
             } catch (JsonSyntaxException e) {
                 e.printStackTrace();
@@ -960,7 +957,7 @@ public class Websocket_api extends WebSocketListener {
     class ReplyBase {
         int id;
         String jsonrpc;
-        String result;
+        Object result;
 
         @Override
         public String toString() {

@@ -21,6 +21,7 @@ import info.btsland.app.api.operations;
 import info.btsland.app.api.utils;
 import info.btsland.app.exception.NetworkStatusException;
 import info.btsland.app.model.Order;
+import info.btsland.app.util.AssetUtil;
 
 /**
  * Created by Administrator on 2017/11/14.
@@ -94,7 +95,6 @@ public class OperationRecyclerViewAdapter extends RecyclerView.Adapter<Operation
                         }
                     }
                     tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_num)+" "+utils.get_asset_amount(operTranser.amount.amount,asset)+asset.symbol);
-
                     List<object_id<account_object>> ids=new ArrayList<>();
                     ids.add(operTranser.from);
                     ids.add(operTranser.to);
@@ -107,7 +107,7 @@ public class OperationRecyclerViewAdapter extends RecyclerView.Adapter<Operation
                         }
                         asset_object assetobject = BtslandApplication.assetObjectMap.get(operTranser.amount.asset_id);
 
-                        tvContent.setText(accounts.get(0).name+" " +BtslandApplication.getInstance().getString(R.string.str_pay)+" " +accounts.get(1).name+" " +BtslandApplication.getInstance().getString(R.string.str_transfers)+" "+ assetobject.symbol);
+                        tvContent.setText(BtslandApplication.getInstance().getString(R.string.str_pay)+" " +accounts.get(1).name+" " +BtslandApplication.getInstance().getString(R.string.str_transfers)+" "+ assetobject.symbol);
 
                     } catch (NetworkStatusException e) {
                         e.printStackTrace();
@@ -143,29 +143,46 @@ public class OperationRecyclerViewAdapter extends RecyclerView.Adapter<Operation
                             e.printStackTrace();
                         }
                     }
-                    tvContent.setText(payCreateLimit.symbol+"→"+receivesCreateLimit.symbol);
-                    tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_price)+utils.get_asset_price(operCreateLimit.min_to_receive.amount,receivesCreateLimit,operCreateLimit.amount_to_sell.amount,payCreateLimit)+payCreateLimit.symbol+"/"+receivesCreateLimit.symbol);
+                    tvContent.setText("发布了使用"+AssetUtil.assetToReal(operCreateLimit.amount_to_sell)+payCreateLimit.symbol+"去购买"+AssetUtil.assetToReal(operCreateLimit.min_to_receive)+receivesCreateLimit.symbol+"的订单");
+
+                    tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_price)+utils.get_asset_price(operCreateLimit.min_to_receive.amount,receivesCreateLimit,operCreateLimit.amount_to_sell.amount,payCreateLimit)+receivesCreateLimit.symbol+"/"+payCreateLimit.symbol);
                     tvTime.setText("");
                     break;
                 case operations.ID_CANCEL_LMMIT_ORDER_OPERATION:
-                    tvType.setText(BtslandApplication.getInstance().getString(R.string.str_cancel));
+                    tvType.setText(BtslandApplication.getInstance().getString(R.string.str_cancel_the_order));
                     operations.limit_order_cancel_operation operCacaelLimit = (operations.limit_order_cancel_operation) oper.op.operationContent;
-                    List<object_id<account_object>> idAccount=new ArrayList<>();
-                    idAccount.add(operCacaelLimit.fee_paying_account);
-                    try {
-                        List<account_object> accounts = BtslandApplication.getMarketStat().mWebsocketApi.get_accounts(idAccount);
-
-
-                        tvContent.setText(accounts.get(0).name+" " +BtslandApplication.getInstance().getString(R.string.str_cancel_the_order) );
-                        tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_order_number)+operCacaelLimit.order.get_instance());
-                    } catch (NetworkStatusException e) {
-                        e.printStackTrace();
-                    }
+                    tvContent.setText("成功取消了一条订单");
+                    tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_order_number)+operCacaelLimit.order.get_instance());
                     tvTime.setText("");
                     break;
                 case operations.ID_UPDATE_LMMIT_ORDER_OPERATION:
                     tvType.setText(BtslandApplication.getInstance().getString(R.string.str_update));
-                    //strResult = process_call_order_update_operation(holder, object.operationHistoryObject.op);
+                    operations.call_order_update_operation operUpdate=(operations.call_order_update_operation) oper.op.operationContent;
+                    try {
+                        asset_object debtAsset=null;
+                        if(BtslandApplication.assetObjectMap.get(operUpdate.delta_debt.asset_id)!=null){
+                            debtAsset=BtslandApplication.assetObjectMap.get(operUpdate.delta_debt.asset_id);
+                        }else {
+                            List<object_id<asset_object>> object_ids=new ArrayList <>();
+                            object_ids.add(operUpdate.delta_debt.asset_id);
+                            List<asset_object> objects=BtslandApplication.getMarketStat().mWebsocketApi.get_assets(object_ids);
+                            debtAsset=objects.get(0);
+                        }
+                        asset_object collateralAsset=null;
+                        if(BtslandApplication.assetObjectMap.get(operUpdate.delta_collateral.asset_id)!=null){
+                            collateralAsset=BtslandApplication.assetObjectMap.get(operUpdate.delta_collateral.asset_id);
+                        }else {
+                            List<object_id<asset_object>> object_ids=new ArrayList <>();
+                            object_ids.add(operUpdate.delta_collateral.asset_id);
+                            List<asset_object> objects=BtslandApplication.getMarketStat().mWebsocketApi.get_assets(object_ids);
+                            collateralAsset=objects.get(0);
+                        }
+                        tvContent.setText("更新了抵押仓库");
+                        tvPrice.setText("负债："+AssetUtil.assetToReal(operUpdate.delta_debt)+debtAsset.symbol+"\n抵押："+AssetUtil.assetToReal(operUpdate.delta_collateral)+collateralAsset.symbol);
+                        tvTime.setText("");
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
                     break;
                 case operations.ID_FILL_LMMIT_ORDER_OPERATION:
                     tvType.setText(BtslandApplication.getInstance().getString(R.string.str_strike_a_bargain));
@@ -198,7 +215,7 @@ public class OperationRecyclerViewAdapter extends RecyclerView.Adapter<Operation
                     }
 
 
-                    tvContent.setText(Html.fromHtml(BtslandApplication.getInstance().getString(R.string.str_successful_use)+utils.get_asset_amount(operFill.pays.amount,payFill) +BtslandApplication.getInstance().getString(R.string.str_ge)+payFill.symbol+BtslandApplication.getInstance().getString(R.string.str_byte_shop)+" "+utils.get_asset_amount(operFill.receives.amount,receivesFill)+BtslandApplication.getInstance().getString(R.string.str_ge)+receivesFill.symbol));
+                    tvContent.setText(Html.fromHtml(BtslandApplication.getInstance().getString(R.string.str_successful_use)+utils.get_asset_amount(operFill.pays.amount,payFill)+payFill.symbol+BtslandApplication.getInstance().getString(R.string.str_byte_shop)+" "+utils.get_asset_amount(operFill.receives.amount,receivesFill)+receivesFill.symbol));
                     tvPrice.setText(BtslandApplication.getInstance().getString(R.string.str_price)+utils.get_asset_price(operFill.pays.amount,payFill,operFill.receives.amount,receivesFill)+payFill.symbol+"/"+receivesFill.symbol);
                     tvTime.setText("");
                     break;

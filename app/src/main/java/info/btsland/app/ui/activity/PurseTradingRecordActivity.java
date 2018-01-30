@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
@@ -49,7 +50,7 @@ public class PurseTradingRecordActivity extends AppCompatActivity {
         rlvOperation.setLayoutManager(new LinearLayoutManager(this));
         rlvOperationAdapter = new OperationRecyclerViewAdapter();
         rlvOperation.setAdapter(rlvOperationAdapter);
-        rlvOperation.setItemAnimator(null);
+        rlvOperation.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL));
         fillIn();
 
     }

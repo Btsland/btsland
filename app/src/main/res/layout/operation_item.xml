@@ -3,20 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/txt_white"
-    android:paddingLeft="5dp"
-    android:paddingRight="5dp"
-    android:layout_marginBottom="5dp"
+    android:background="@color/color_white"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
     >
 
     <TextView
         android:id="@+id/tv_operation_type"
-        android:layout_width="60dp"
-        android:layout_height="40dp"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="@string/str_type"
+        android:text="订单撮合"
         android:textColor="@color/black"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -25,35 +24,36 @@
     <TextView
         android:id="@+id/tv_operation_content"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:gravity="center|left"
         android:text="@string/str_content"
         android:textColor="@color/black"
         app:layout_constraintLeft_toRightOf="@+id/tv_operation_type"
-        app:layout_constraintRight_toLeftOf="@+id/tv_operation_time"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/tv_operation_price"/>
 
     <TextView
         android:id="@+id/tv_operation_price"
         android:layout_width="0dp"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:gravity="center|left"
         android:text="@string/str_price"
         android:textColor="@color/black"
         app:layout_constraintTop_toBottomOf="@+id/tv_operation_content"
         app:layout_constraintLeft_toRightOf="@+id/tv_operation_type"
-        app:layout_constraintRight_toLeftOf="@+id/tv_operation_time"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tv_operation_time"/>
 
     <TextView
         android:id="@+id/tv_operation_time"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:gravity="center"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center|left"
         android:text="@string/str_time"
         android:textColor="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_operation_price"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/tv_operation_type"/>
 </android.support.constraint.ConstraintLayout>

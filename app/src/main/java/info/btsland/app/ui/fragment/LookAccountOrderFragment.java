@@ -2,6 +2,7 @@ package info.btsland.app.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,7 +52,7 @@ public class LookAccountOrderFragment extends Fragment implements LookActivity.R
             listView.setLayoutManager(new LinearLayoutManager(getActivity()));
             OperationRecyclerViewAdapter rlvOperationAdapter = new OperationRecyclerViewAdapter();
             listView.setAdapter(rlvOperationAdapter);
-            listView.setItemAnimator(null);
+            listView.addItemDecoration(new DividerItemDecoration(getActivity(),DividerItemDecoration.VERTICAL));
             lookActivity= (LookActivity) getActivity();
             account_object accountObject = lookActivity.accountMap.get(lookActivity.name);
             rlvOperationAdapter.setList(accountObject.listHistoryObject);

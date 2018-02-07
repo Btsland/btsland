@@ -82,43 +82,6 @@ public class LookAccountAssetFragment extends Fragment implements LookActivity.R
         rowAdapter=new AssetRowAdapter(getActivity());
         listView.setAdapter(rowAdapter);
         rowAdapter.setAsset(iAssets);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<object_id<asset_object>> assetObjects=new ArrayList<>();
-
-                for (int i=0;i<assets.size();i++){
-                    Log.i(TAG, "run: assetObjects:"+assetObjects.size()+"assets:"+assets.size()+"i:"+i);
-                    assetObjects.add(assets.get(i).asset_id);
-                }
-                try {
-                    List<asset_object> assetObjects1 = BtslandApplication.getMarketStat().mWebsocketApi.get_assets(assetObjects);
-                    for(int i=0;i<assetObjects1.size();i++){
-                        Double total=BtslandApplication.getMarketStat().mWebsocketApi.getAssetTotalByAccountAndCoin(lookActivity.name,assetObjects1.get(i).symbol);
-                        if(BtslandApplication.chargeUnit.equals(assetObjects1.get(i).symbol )){
-                            iAssets.get(i).totalCNY =total;
-                            handler.sendEmptyMessage(1);
-                        }else {
-                            MarketTicker ticker = BtslandApplication.getMarketStat().mWebsocketApi.get_ticker(BtslandApplication.chargeUnit,assetObjects1.get(i).symbol);
-                            Log.i(TAG, "run: ticker:"+ticker);
-                            if(ticker.latest!="inf") {
-                                iAssets.get(i).totalCNY = NumericUtil.parseDouble(ticker.latest) * total;
-                                handler.sendEmptyMessage(1);
-                            }
-                        }
-                    }
-
-                } catch (NetworkStatusException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
 
     }
-    private Handler handler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-            rowAdapter.setAsset(iAssets);
-        }
-    };
 }

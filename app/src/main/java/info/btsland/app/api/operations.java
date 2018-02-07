@@ -18,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
+import info.btsland.app.BtslandApplication;
+
 import static info.btsland.app.api.config.GRAPHENE_BLOCKCHAIN_PRECISION;
 
 
@@ -706,6 +708,7 @@ public class operations {
             public List<authority> get_required_authorities() {
                 return new ArrayList<>();
             }
+
 
             @Override
             public List<object_id<account_object>> get_required_active_authorities() {

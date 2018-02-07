@@ -110,6 +110,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
+                    android:id="@+id/tv_dealer_excDet_item_realNo_table"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="付款帐号："
@@ -136,6 +137,7 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp">
                 <TextView
+                    android:id="@+id/tv_dealer_excDet_item_realType_table"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="付款类型："

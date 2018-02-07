@@ -6,7 +6,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.constraint.ConstraintLayout;
 import android.text.Html;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -149,7 +151,6 @@ public class MarketRowAdapter extends BaseAdapter {
             tvAdd.setVisibility(View.GONE);
             clBack.setVisibility(View.VISIBLE);
         }
-
         rowOnClickListener clickListener=new rowOnClickListener(i);
         convertView.setOnClickListener(clickListener);
         return convertView;
@@ -173,58 +174,32 @@ public class MarketRowAdapter extends BaseAdapter {
                 if(mCurTime-mLastTime<300){//双击事件
                     mCurTime =0;
                     mLastTime = 0;
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("result",2);
-                    bundle.putInt("index",index);
-                    //Log.i(TAG, "onClick: market:"+market);
-                    message.setData(bundle);
+                    message.what=2;
+                    message.obj=index;
                     handler.sendMessage(message);
                 }else{//单击事件
-                    Toast.makeText(context,"双击可进入详情界面",Toast.LENGTH_SHORT).show();
-                    Bundle bundle=new Bundle();
-                    bundle.putInt("result",1);
-                    bundle.putInt("index",index);
-                    //Log.i(TAG, "onClick: market:"+market);
-                    message.setData(bundle);
+                    Toast.makeText(context,"双击可进入交易详情界面",Toast.LENGTH_SHORT).show();
+                    message.what=1;
+                    message.obj=index;
                     handler.sendMessage(message);
                 }
-            }else {
-                Bundle bundle=new Bundle();
-                bundle.putInt("result",3);
-                bundle.putInt("index",index);
-                //Log.i(TAG, "onClick: market:"+market);
-                message.setData(bundle);
-                handler.sendMessage(message);
             }
-
         }
     }
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            Bundle bundle=msg.getData();
-            int i=bundle.getInt("index");
-            MarketTicker market;
+            int i= (int) msg.obj;
+            MarketTicker market = null;
             if(i<markets.size()){
                 market = markets.get(i);
-            }else {
-                market=null;
             }
-            switch (bundle.getInt("result")) {
+            switch (msg.what) {
                 case 1:
                     itemClickListener.onClick(i,market);
-                    //simpleKFragment.drawK(market);
                     break;
                 case 2:
                     itemClickListener.dblClick(i,market);
-                    //Log.i(TAG, "handleMessage: market:"+market);
-                    //MarketDetailedActivity.startAction(context,market,1);
-                    break;
-                case 3:
-                    itemClickListener.onClick(i,market);
-                    //Log.i(TAG, "handleMessage: market:"+market);
-                    //MarketDetailedActivity.startAction(context,market,1);
                     break;
             }
         }

@@ -337,7 +337,7 @@ public class ExchangeDetailedActivity extends AppCompatActivity {
                                 to=note.getDealerId();
                                 vol= String.valueOf(note.getAssetNum());
                                 symbol="CNY";
-                                memo="btsland C2C提现:"+note.getRemarkCode();
+                                memo="btsland U2U提现:"+note.getRemarkCode();
                                 ToDealerTranDialog toDealerTranDialog=new ToDealerTranDialog(ExchangeDetailedActivity.this,from,to,vol,symbol,memo);
                                 toDealerTranDialog.setListener(new ToDealerTranDialog.OnDialogInterationListener() {
                                     @Override

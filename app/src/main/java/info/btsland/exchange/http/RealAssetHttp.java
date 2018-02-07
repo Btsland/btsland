@@ -57,4 +57,13 @@ public class RealAssetHttp extends C2CHttp {
         paramMap.put("dealerId",dealerId);
         post(action,paramMap,callback);
     }
+
+    public static void queryRealAssetByRealNo(String dealerId,String realNo,String realType,Callback callback){
+        String action="/realAsset/queryRealAssetByRealNo";
+        Map<String,String> paramMap=new HashMap<>();
+        paramMap.put("dealerId",dealerId);
+        paramMap.put("realNo",realNo);
+        paramMap.put("realType",realType);
+        post(action,paramMap,callback);
+    }
 }

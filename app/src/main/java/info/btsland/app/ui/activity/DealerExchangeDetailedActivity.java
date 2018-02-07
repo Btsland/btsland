@@ -47,7 +47,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
     private TextView tvDealerId;
     private TextView tvAccount;
     private WebView wbPho;
+    private TextView tvRealNoTable;
     private TextView tvRealNo;
+    private TextView tvRealTypeTable;
     private TextView tvRealType;
     private TextView tvNum;
     private TextView tvNum2;
@@ -86,7 +88,9 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         tvDealerId=findViewById(R.id.tv_dealer_excDet_item_dealerId);
         tvAccount=findViewById(R.id.tv_dealer_excDet_item_account);
         wbPho=findViewById(R.id.wb_dealer_excDet_item_account_pho);
+        tvRealNoTable=findViewById(R.id.tv_dealer_excDet_item_realNo_table);
         tvRealNo=findViewById(R.id.tv_dealer_excDet_item_realNo);
+        tvRealTypeTable=findViewById(R.id.tv_dealer_excDet_item_realType_table);
         tvRealType=findViewById(R.id.tv_dealer_excDet_item_realType);
         tvNum=findViewById(R.id.tv_dealer_excDet_item_num);
         tvNum2=findViewById(R.id.tv_dealer_excDet_item_num2);
@@ -119,7 +123,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         Gson gson = gsonBuilder.create();
         note = gson.fromJson(json,Note.class);
         if(note!=null){
-            handler.sendEmptyMessage(1);
+            handler.sendEmptyMessage(-2);
         }
 
     }
@@ -142,7 +146,11 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         if(note!=null){
             if(note.getAssetCoin().equals("CNY")){
                 tvType.setText("充值");
+                tvRealNoTable.setText("用户付款账号：");
+                tvRealTypeTable.setText("用户付款类型：");
             }else if(note.getAssetCoin().equals("RMB")){
+                tvRealNoTable.setText("用户收款账号：");
+                tvRealTypeTable.setText("用户收款类型：");
                 tvType.setText("提现");
             }
             if(note.getDealerId()!=null){
@@ -153,11 +161,14 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
             }
             tvAccount.setText(note.getAccount());
             fillInPho();
-            tvRealNo.setText(note.getRealNo());
+            if(note.realAsset!=null){
+                tvRealNo.setText(note.getRealNo()+note.realAsset.getName());
+            }else {
+                tvRealNo.setText(note.getRealNo());
+            }
             String depict="未知";
             if(note.getRealDepict()!=null&&!note.getRealDepict().equals("")){
                 int a=note.getRealDepict().indexOf("(");
-
                 if(a!=-1){
                     depict=note.getRealDepict().substring(0,a);
                 }else {
@@ -230,8 +241,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                                     } else {
                                                         int a= Integer.parseInt(json);
                                                         if (a > 0) {
-                                                            handler.sendEmptyMessage(10);
-                                                            handler.sendEmptyMessage(1);
+                                                            handler.sendEmptyMessage(a);
                                                         }
                                                     }
                                                 }
@@ -285,8 +295,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                             } else {
                                                 int a = Integer.parseInt(json);
                                                 if (a > 0) {
-                                                    handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                    handler.sendEmptyMessage(a);
                                                 }
                                             }
                                         }
@@ -324,8 +333,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                             } else {
                                                 int a= Integer.parseInt(json);
                                                 if (a > 0) {
-                                                    handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                    handler.sendEmptyMessage(a);
                                                 }
                                             }
                                         }
@@ -371,8 +379,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                             } else {
                                                 int a= Integer.parseInt(json);
                                                 if (a > 0) {
-                                                    handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                    handler.sendEmptyMessage(a);
                                                 }
                                             }
                                         }
@@ -395,7 +402,11 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                     switch (BtslandApplication.dealer.getType()){
                         case UserTypeCode.DEALER:
                             tvConfirm.setVisibility(View.VISIBLE);
-                            tvConfirm.setText("确认已提议");
+                            if(note.getAssetCoin().equals("CNY")){
+                                tvConfirm.setText("确认已提议");
+                            }else if(note.getAssetCoin().equals("RMB")){
+                                tvConfirm.setText("确认已转账");
+                            }
                             tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -410,8 +421,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                             } else {
                                                 int a= Integer.parseInt(json);
                                                 if (a > 0) {
-                                                    handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                    handler.sendEmptyMessage(a);
                                                 }
                                             }
                                         }
@@ -442,7 +452,11 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                             break;
                         case UserTypeCode.ADMIN:
                             tvConfirm.setVisibility(View.VISIBLE);
-                            tvConfirm.setText("管理员确认提议");
+                            if(note.getAssetCoin().equals("CNY")){
+                                tvConfirm.setText("管理员确认提议");
+                            }else if(note.getAssetCoin().equals("RMB")){
+                                tvConfirm.setText("管理员确认转账");
+                            }
                             tvConfirm.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View view) {
@@ -458,7 +472,8 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                                 int a = Integer.parseInt(json);
                                                 if (a > 0) {
                                                     handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                }else {
+
                                                 }
                                             }
                                         }
@@ -508,8 +523,7 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
                                             } else {
                                                 int a= Integer.parseInt(json);
                                                 if (a > 0) {
-                                                    handler.sendEmptyMessage(10);
-                                                    handler.sendEmptyMessage(1);
+                                                    handler.sendEmptyMessage(a);
                                                 }
                                             }
                                         }
@@ -556,9 +570,13 @@ public class DealerExchangeDetailedActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             refurbish();
-            if(msg.what==10){
+            if(msg.what>0){
                 AppDialog appDialog=new AppDialog(DealerExchangeDetailedActivity.this);
                 appDialog.setMsg("订单更新成功！");
+                appDialog.show();
+            }else if(msg.what==-1) {
+                AppDialog appDialog=new AppDialog(DealerExchangeDetailedActivity.this);
+                appDialog.setMsg("订单更新失败！");
                 appDialog.show();
             }
         }

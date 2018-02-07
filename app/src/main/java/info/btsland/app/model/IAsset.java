@@ -8,6 +8,7 @@ import info.btsland.app.api.asset;
 import info.btsland.app.api.asset_object;
 import info.btsland.app.api.object_id;
 import info.btsland.app.exception.NetworkStatusException;
+import info.btsland.app.util.NumericUtil;
 
 /**
  * author：lw1000
@@ -94,7 +95,44 @@ public class IAsset implements Cloneable {
                 if(coinName.equals("BTS")){
                     total=usable+orders+borrow;//如果该资产是BTS，那么总额为可用额加挂单额加抵押额
                 }else {
-                    total=usable+orders;//如果该资产不是BTS，那么总额为可用额加挂单额
+                    total=usable+orders-borrow;//如果该资产不是BTS，那么总额为可用额加挂单额减去负债
+                }
+                //CNY计价方式
+                if (coinName != null && coinName.equals("CNY")) {
+                    //如果资产名称为CNY则直接计算总额
+                    totalCNY =total;
+                } else {
+                    //否则需要乘以当前的市场价
+                    try {
+                        MarketTicker ticker = BtslandApplication.getMarketStat().mWebsocketApi.get_ticker("CNY",coinName);
+                        Double price=0.0;
+                        if (ticker != null) {
+                            price = NumericUtil.parseDouble(ticker.latest);
+                        }
+                        totalCNY = total* price;
+
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                //BTS计价方式
+                if (coinName != null && coinName.equals("BTS")) {
+                    //如果资产名称为BTS则直接计算总额
+                    totalBTS = total;
+                } else {
+                    //否则需要乘以当前的市场价
+                    try {
+                        MarketTicker ticker =BtslandApplication.getMarketStat().mWebsocketApi.get_ticker("BTS", coinName);
+                        Double price =0.0;
+                        if (ticker == null) {
+                            price = NumericUtil.parseDouble(ticker.latest);
+                        }
+                        totalBTS = total * price;
+
+                    } catch (NetworkStatusException e) {
+                        e.printStackTrace();
+                    }
                 }
                 return true;
             }else {

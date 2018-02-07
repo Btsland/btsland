@@ -628,7 +628,7 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
         queryAllHaving=new QueryAllHaving();
         queryAllDealer=new QueryAllDealer();
         queryAllHelp=new QueryAllHelp();
-        Log.e(TAG, "init: " );
+//        Log.e(TAG, "init: " );
         queryAllHaving.start();
         queryAllClinch.start();
         queryAllDealer.setTime(10);
@@ -1148,8 +1148,10 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         } else {
                             List<Note> notes = gson.fromJson(json, new TypeToken<List<Note>>() {}.getType());
                             if (notes != null && notes.size() > 0) {
-                                helpUserMap.get(name).havingNotes = notes;
-                                HelpManageFragment.sendBroadcast(getInstance());
+                                if(helpUserMap.get(name)!=null) {
+                                    helpUserMap.get(name).havingNotes = notes;
+                                    HelpManageFragment.sendBroadcast(getInstance());
+                                }
                             }
                         }
                     }
@@ -1209,53 +1211,6 @@ public class BtslandApplication  extends MultiDexApplication implements MarketSt
                         for (int i = 0; i < assets.size(); i++) {
                             IAsset asset = new IAsset(assets.get(i));
                             if (asset != null) {
-                                //CNY计价方式
-                                if (asset.coinName != null && asset.coinName.equals("CNY")) {
-                                    //如果资产名称为CNY则直接计算总额
-                                    if (asset != null) {
-                                        asset.totalCNY = asset.total-asset.borrow;
-                                    } else {
-                                        asset.totalCNY = 0.0;
-                                    }
-                                } else {
-                                    //否则需要乘以当前的市场价
-                                    try {
-                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("CNY", asset.coinName);
-                                        if (ticker == null) {
-                                            continue;
-                                        }
-                                        Double price = NumericUtil.parseDouble(ticker.latest);
-                                        if (price != null) {
-                                            asset.totalCNY = asset.total* price;
-                                        }
-                                    } catch (NetworkStatusException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                //BTS计价方式
-                                if (asset.coinName != null && asset.coinName.equals("BTS")) {
-                                    //如果资产名称为BTS则直接计算总额
-                                    if (asset != null) {
-                                        asset.totalBTS = asset.total;
-                                    } else {
-                                        asset.totalBTS = 0.0;
-                                    }
-                                } else {
-                                    //否则需要乘以当前的市场价
-                                    try {
-                                        MarketTicker ticker = getMarketStat().mWebsocketApi.get_ticker("BTS", asset.coinName);
-                                        if (ticker == null) {
-                                            continue;
-                                        }
-                                        Double price = NumericUtil.parseDouble(ticker.latest);
-                                        if (price != null) {
-                                            asset.totalBTS = asset.total * price;
-                                        }
-                                    } catch (NetworkStatusException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
                                 iAssets.add(asset);
                             }
                             totalBTS += asset.totalBTS;

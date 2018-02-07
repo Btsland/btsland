@@ -1,7 +1,5 @@
 package info.btsland.app.api;
 
-
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -9,10 +7,6 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 import org.apache.commons.lang3.StringUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -458,7 +452,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nBroadcastId);
+        callObject.params.add(_nBroadcastId);
         callObject.params.add("broadcast_transaction");
         List<Object> listTransaction = new ArrayList<>();
         listTransaction.add(tx);
@@ -477,7 +471,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_global_properties");
 
         callObject.params.add(new ArrayList<>());
@@ -493,7 +487,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_dynamic_global_properties");
 
         callObject.params.add(new ArrayList<Object>());
@@ -529,7 +523,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_account_balances");
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
@@ -550,7 +544,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_full_accounts");
 
         List<Object> listParams = new ArrayList<>();
@@ -575,7 +569,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_proposed_transactions");
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
@@ -594,12 +588,12 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_named_account_balances");
 
         List<Object> listAccountBalancesParam = new ArrayList<>();
         listAccountBalancesParam.add(accountName);
-        listAccountBalancesParam.add(new ArrayList<Object>());
+        listAccountBalancesParam.add(new ArrayList<>());
         callObject.params.add(listAccountBalancesParam);
 
 
@@ -714,7 +708,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_limit_orders");
 
         List<Object> listParams = new ArrayList<>();
@@ -736,7 +730,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_trade_history");
 
         List<Object> listParams = new ArrayList<>();
@@ -762,7 +756,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_ticker");
 
         List<Object> listParams = new ArrayList<>();
@@ -783,7 +777,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_call_orders");
 
         List<Object> listParams = new ArrayList<>();
@@ -802,7 +796,7 @@ public class Websocket_api extends WebSocketListener {
         callObject.id = mnCallId.getAndIncrement();
         callObject.method = "call";
         callObject.params = new ArrayList<>();
-        callObject.params.add(BtslandApplication._nDatabaseId);
+        callObject.params.add(_nDatabaseId);
         callObject.params.add("get_margin_positions");
 
         List<Object> listParams = new ArrayList<>();

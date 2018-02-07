@@ -3,6 +3,8 @@ package info.btsland.app.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import info.btsland.app.BtslandApplication;
+
 public class BaseThread extends Thread {
     private static String TAG="BaseThread";
     private final static Logger logger = LoggerFactory.getLogger(BaseThread.class);
@@ -95,7 +97,7 @@ public class BaseThread extends Thread {
      * @throws
      */
     protected boolean preConditions() {
-        return true;
+        return BtslandApplication.isRefurbish;
     }
 
     /**

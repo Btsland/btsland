@@ -44,6 +44,8 @@ public class Note implements Serializable {
 
     private String dealerPhone;
 
+    public RealAsset realAsset;
+
     public String getDealerName() {
         return dealerName;
     }
